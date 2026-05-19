@@ -4,94 +4,1071 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Libertium — Guide découverte client</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root { --navy: #0f1f3d; --blue-mid: #2e5fa3; --blue-lt: #e8f0fb; --gold: #c8960c; --gold-lt: #fdf3d7; --gold-border: #f0c842; --text: #1a1a2e; --text-sec: #5a6480; --border: #e2e6f0; --bg: #f8f9fc; --radius: 12px; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
-.container { max-width: 780px; margin: 0 auto; }
-.card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-.step { display: none; } .step.active { display: block; }
-.chip { padding: 8px 16px; border-radius: 24px; border: 1px solid var(--border); cursor: pointer; display: inline-block; margin: 4px; font-size: 13px; }
-.chip.sel { background: var(--blue-mid); color: #fff; border-color: var(--blue-mid); }
-.btn { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; background: var(--blue-mid); color: #fff; font-weight: 500; }
-.ai-box { border: 1.5px solid var(--gold-border); border-radius: var(--radius); background: var(--gold-lt); padding: 15px; margin-top: 20px; }
-.ai-output { white-space: pre-wrap; font-size: 14px; margin-top: 10px; }
+:root {
+  --navy: #0f1f3d;
+  --blue: #1a3a6b;
+  --blue-mid: #2e5fa3;
+  --blue-lt: #e8f0fb;
+  --blue-border: #b5d4f4;
+  --gold: #c8960c;
+  --gold-lt: #fdf3d7;
+  --gold-border: #f0c842;
+  --ok: #1e6b3c;
+  --ok-lt: #eaf3de;
+  --warn: #9b6000;
+  --warn-lt: #fff3cd;
+  --danger: #a32d2d;
+  --danger-lt: #fcebeb;
+  --text: #1a1a2e;
+  --text-sec: #5a6480;
+  --text-hint: #9ba3b8;
+  --bg: #f8f9fc;
+  --bg-card: #ffffff;
+  --border: #e2e6f0;
+  --border-mid: #c8cedf;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 24px;
+  --shadow: 0 2px 12px rgba(15,31,61,.08);
+  --shadow-lg: 0 8px 32px rgba(15,31,61,.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--navy);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,.2);
+}
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: #fff;
+  letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-badge {
+  background: var(--gold);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.header-right {
+  font-size: 12px;
+  color: rgba(255,255,255,.5);
+}
+
+/* ── Layout ── */
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── API key setup ── */
+.api-setup {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.api-setup h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  color: var(--navy);
+  margin-bottom: .5rem;
+}
+.api-setup p {
+  font-size: 13px;
+  color: var(--text-sec);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.api-input-row {
+  display: flex;
+  gap: 10px;
+}
+.api-input-row input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+  transition: border-color .15s;
+}
+.api-input-row input:focus { border-color: var(--blue-mid); }
+.api-note {
+  font-size: 11px;
+  color: var(--text-hint);
+  margin-top: .75rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* ── Main card ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* ── Progress ── */
+.progress-wrap {
+  padding: 1.25rem 1.75rem .5rem;
+  background: var(--bg-card);
+}
+.progress-bar {
+  display: flex;
+  gap: 5px;
+  margin-bottom: .75rem;
+}
+.progress-step {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background .3s;
+}
+.progress-step.done { background: var(--blue-mid); }
+.progress-step.active { background: var(--gold); }
+.progress-label {
+  font-size: 11px;
+  color: var(--text-hint);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* ── Step header ── */
+.step-header {
+  padding: 1.25rem 1.75rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blue-lt);
+  color: var(--blue-mid);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--blue-border);
+}
+.step-num.gold {
+  background: var(--gold-lt);
+  color: var(--gold);
+  border-color: var(--gold-border);
+}
+.step-title { font-size: 17px; font-weight: 600; color: var(--navy); }
+.step-sub { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
+
+/* ── Step body ── */
+.step-body { padding: 1.25rem 1.75rem; }
+
+.q-block { margin-bottom: 1.25rem; }
+.q-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-sec);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 10px;
+}
+
+/* ── Chips ── */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-mid);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--bg-card);
+  user-select: none;
+}
+.chip:hover {
+  border-color: var(--blue-mid);
+  color: var(--blue-mid);
+  background: var(--blue-lt);
+}
+.chip.sel {
+  background: var(--blue-lt);
+  border-color: var(--blue-mid);
+  color: var(--blue);
+  font-weight: 500;
+}
+
+/* ── Nav ── */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.75rem 1.5rem;
+  border-top: 1px solid var(--border);
+  margin-top: .5rem;
+}
+.btn {
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-mid);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--bg-card);
+  color: var(--text);
+  transition: all .15s;
+}
+.btn:hover { background: var(--bg); border-color: var(--border); }
+.btn.primary {
+  background: var(--blue-mid);
+  color: #fff;
+  border-color: var(--blue-mid);
+}
+.btn.primary:hover { background: var(--blue); border-color: var(--blue); }
+.btn.gold {
+  background: var(--gold);
+  color: #fff;
+  border-color: var(--gold);
+}
+.btn.gold:hover { opacity: .9; }
+.btn.outline-blue {
+  background: transparent;
+  color: var(--blue-mid);
+  border-color: var(--blue-border);
+}
+.btn.outline-blue:hover { background: var(--blue-lt); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── Step visibility ── */
+.step { display: none; }
+.step.active { display: block; }
+
+/* ── Result ── */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.score-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.sc-label { font-size: 11px; color: var(--text-hint); margin-bottom: 4px; }
+.sc-val { font-size: 15px; font-weight: 600; color: var(--navy); }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-hint);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 10px;
+  margin-top: 1.25rem;
+}
+
+.summary-table {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 14px;
+  margin-bottom: .5rem;
+}
+.sum-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.sum-row:last-child { border-bottom: none; }
+.sum-key { color: var(--text-sec); }
+.sum-val { font-weight: 500; color: var(--navy); text-align: right; max-width: 60%; }
+
+/* Style du lien conteneur de la carte de recommandation */
+.reco-link {
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+.reco-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  background: var(--bg-card);
+  transition: all .2s ease-in-out;
+  position: relative;
+}
+.reco-card:hover { 
+  box-shadow: var(--shadow); 
+  border-color: var(--blue-mid);
+  transform: translateY(-2px);
+}
+.reco-card.top { border-color: var(--blue-mid); border-width: 1.5px; }
+.reco-card.top:hover { border-color: var(--blue); }
+.reco-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.reco-name { font-size: 15px; font-weight: 600; color: var(--navy); }
+.reco-brand { font-size: 12px; color: var(--text-sec); margin-bottom: 6px; }
+.reco-why { font-size: 13px; color: var(--text-sec); line-height: 1.55; margin-bottom: 10px; }
+.reco-action-hint { 
+  font-size: 11px; 
+  color: var(--blue-mid); 
+  font-weight: 500; 
+  display: flex; 
+  align-items: center; 
+  gap: 4px; 
+  margin-top: 8px;
+}
+.badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge.best { background: var(--blue-lt); color: var(--blue); }
+.badge.alt { background: var(--bg); color: var(--text-hint); border: 1px solid var(--border); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  color: var(--text-sec);
+  background: var(--bg);
+}
+.tag.match {
+  border-color: var(--blue-border);
+  color: var(--blue);
+  background: var(--blue-lt);
+}
+
+/* ── AI Argumentaire ── */
+.ai-box {
+  border: 1.5px solid var(--gold-border);
+  border-radius: var(--radius);
+  background: var(--gold-lt);
+  overflow: hidden;
+  margin-top: 1.25rem;
+}
+.ai-box-header {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ai-box-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--warn);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ai-box-body {
+  display: none;
+  padding: 0 18px 18px;
+}
+.ai-box-body.open { display: block; }
+.ai-output {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+  min-height: 80px;
+  white-space: pre-wrap;
+}
+.ai-output.loading { color: var(--text-hint); font-style: italic; }
+.ai-output h3 { font-size: 13px; font-weight: 600; color: var(--navy); margin: 12px 0 6px; }
+.ai-output h3:first-child { margin-top: 0; }
+.ai-output ul { padding-left: 18px; margin: 4px 0 8px; }
+.ai-output li { margin-bottom: 4px; }
+.ai-output strong { color: var(--navy); }
+
+/* ── Loader ── */
+.loader {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--gold-border);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Divider ── */
+hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .container { padding: 1rem 1rem 3rem; }
+  .step-body, .step-nav, .step-header, .progress-wrap { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .api-input-row { flex-direction: column; }
+}
+
+/* ── Animations ── */
+.card { animation: fadeUp .3s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.step.active { animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="card">
-    <div id="steps-container">
-      <div class="step active" id="s1">
-        <h3>1. Qui voyage ?</h3>
-        <div class="chips" data-k="voyageurs">
-          <span class="chip" onclick="toggle(this, 'voyageurs', 'Solo')">Solo</span>
-          <span class="chip" onclick="toggle(this, 'voyageurs', 'Couple')">Couple</span>
-          <span class="chip" onclick="toggle(this, 'voyageurs', 'Famille')">Famille</span>
-        </div>
-        <button class="btn" onclick="nextStep(2)">Suivant</button>
-      </div>
+<div class="header">
+  <div class="logo">
+    Libertium
+    <span class="logo-badge">Guide commercial</span>
+  </div>
+  <div class="header-right">Découverte client — Outil interne</div>
+</div>
 
-      <div class="step" id="s2">
-        <h3>2. Type de véhicule</h3>
-        <div class="chips" data-k="type">
-          <span class="chip" onclick="toggle(this, 'type', 'Van')">Van / Fourgon</span>
-          <span class="chip" onclick="toggle(this, 'type', 'Profilé')">Profilé</span>
-          <span class="chip" onclick="toggle(this, 'type', 'Intégral')">Intégral</span>
+<div class="container">
+
+  <div class="api-setup" id="api-setup">
+    <h2>Configuration initiale</h2>
+    <p>
+      Entrez votre clé API Anthropic pour activer la génération d'argumentaires commerciaux personnalisés.
+      Votre clé est stockée uniquement dans ce navigateur (localStorage) et n'est jamais envoyée à d'autres serveurs.
+    </p>
+    <div class="api-input-row">
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
+      <button class="btn primary" onclick="saveKey()">Enregistrer</button>
+    </div>
+    <div class="api-note">
+      🔒 Stockée localement — jamais transmise à des tiers · Obtenez votre clé sur console.anthropic.com
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="prog"></div>
+      <div class="progress-label" id="prog-label">Étape 1 sur 4</div>
+    </div>
+
+    <div class="step active" id="s1">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Qui voyage ?</div>
+          <div class="step-sub">Composition et besoins du groupe</div>
         </div>
-        <button class="btn" onclick="showResults()">Voir recommandation</button>
+      </div>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Vous partez…</div>
+          <div class="chips" data-k="voyageurs" data-m="0">
+            <div class="chip" data-v="solo">Seul(e)</div>
+            <div class="chip" data-v="couple">En couple</div>
+            <div class="chip" data-v="famille_young">Famille (enfants &lt; 6 ans)</div>
+            <div class="chip" data-v="famille_ado">Famille (enfants / ados)</div>
+            <div class="chip" data-v="seniors">Couple retraité(e)s</div>
+            <div class="chip" data-v="amis">Entre amis</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Nombre de couchages nécessaires</div>
+          <div class="chips" data-k="couchages" data-m="0">
+            <div class="chip" data-v="2">2</div>
+            <div class="chip" data-v="3">3</div>
+            <div class="chip" data-v="4">4</div>
+            <div class="chip" data-v="5plus">5 ou plus</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Contraintes de mobilité ?</div>
+          <div class="chips" data-k="mobilite" data-m="0">
+            <div class="chip" data-v="non">Aucune</div>
+            <div class="chip" data-v="escalier">Difficultés à monter / descendre</div>
+            <div class="chip" data-v="pmr">Accessibilité renforcée</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <div></div>
+        <button class="btn primary" onclick="goNext()">Suivant →</button>
+      </div>
+    </div>
+
+    <div class="step" id="s2">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Comment et où voyagez-vous ?</div>
+          <div class="step-sub">Style de voyage et destinations</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Fréquence d'utilisation prévue</div>
+          <div class="chips" data-k="freq" data-m="0">
+            <div class="chip" data-v="weekends">Weekends + quelques semaines</div>
+            <div class="chip" data-v="vacances">Grandes vacances uniquement</div>
+            <div class="chip" data-v="intensif">Intensif — plus de 60 jours / an</div>
+            <div class="chip" data-v="fulltime">Full-time / nomadisme</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Routes et destinations (plusieurs choix)</div>
+          <div class="chips" data-k="routes" data-m="1">
+            <div class="chip" data-v="autoroute">Grands axes / autoroutes</div>
+            <div class="chip" data-v="campagne">Campagne / villages</div>
+            <div class="chip" data-v="montagne">Montagne / routes étroites</div>
+            <div class="chip" data-v="littoral">Bord de mer</div>
+            <div class="chip" data-v="europe">Grand tour Europe</div>
+            <div class="chip" data-v="aventure">Hors des sentiers battus</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Mode de séjour (plusieurs choix)</div>
+          <div class="chips" data-k="sejour" data-m="1">
+            <div class="chip" data-v="camping">Campings avec branchements</div>
+            <div class="chip" data-v="aire">Aires de services</div>
+            <div class="chip" data-v="sauvage">Étapes sauvages / liberté</div>
+            <div class="chip" data-v="long">Longs séjours sur place</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="goPrev()">← Retour</button>
+        <button class="btn primary" onclick="goNext()">Suivant →</button>
       </div>
     </div>
 
     <div class="step" id="s3">
-      <h3>Résultat & Argumentaire</h3>
-      <div id="reco-result"></div>
-      <div class="ai-box">
-        <div style="font-weight:bold; color:var(--gold);">✦ Argumentaire expert</div>
-        <div id="ai-output" class="ai-output">Cliquez pour générer l'argumentaire personnalisé.</div>
-        <button class="btn" id="gen-btn" onclick="generateNativeArg()" style="background:var(--gold); margin-top:10px;">Générer l'argumentaire</button>
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Vos priorités à bord</div>
+          <div class="step-sub">Ce qui est vraiment indispensable</div>
+        </div>
       </div>
-      <br><button class="btn" onclick="location.reload()">Nouveau client</button>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Équipements indispensables (plusieurs choix)</div>
+          <div class="chips" data-k="must" data-m="1">
+            <div class="chip" data-v="lit_fixe">Lit fixe permanent</div>
+            <div class="chip" data-v="lits_jumeaux">Lits jumeaux séparés</div>
+            <div class="chip" data-v="garage">Garage vélos / motos</div>
+            <div class="chip" data-v="douche_sep">Douche et WC séparés</div>
+            <div class="chip" data-v="grand_salon">Grand salon</div>
+            <div class="chip" data-v="cuisine">Cuisine équipée</div>
+            <div class="chip" data-v="solaire">Panneaux solaires</div>
+            <div class="chip" data-v="chauffage">Chauffage puissant</div>
+            <div class="chip" data-v="vue_pano">Vue panoramique conduite</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Rapport à la conduite</div>
+          <div class="chips" data-k="conduite" data-m="0">
+            <div class="chip" data-v="compact">Compact et facile avant tout</div>
+            <div class="chip" data-v="equilibre">Bon équilibre taille / confort</div>
+            <div class="chip" data-v="grand">Grand gabarit — pas de souci</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Autonomie souhaitée</div>
+          <div class="chips" data-k="autonomie" data-m="0">
+            <div class="chip" data-v="faible">Toujours raccordé</div>
+            <div class="chip" data-v="moyenne">2–3 jours autonome</div>
+            <div class="chip" data-v="haute">Autonomie maximale</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="goPrev()">← Retour</button>
+        <button class="btn primary" onclick="goNext()">Suivant →</button>
+      </div>
     </div>
-  </div>
-</div>
 
-<script>
-const D = { voyageurs: '', type: '' };
+    <div class="step" id="s4">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Budget et financement</div>
+          <div class="step-sub">Enveloppe et état du véhicule souhaité</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Budget envisagé</div>
+          <div class="chips" data-k="budget" data-m="0">
+            <div class="chip" data-v="m25">Moins de 25 000 €</div>
+            <div class="chip" data-v="25_45">25 000 — 45 000 €</div>
+            <div class="chip" data-v="45_65">45 000 — 65 000 €</div>
+            <div class="chip" data-v="65_90">65 000 — 90 000 €</div>
+            <div class="chip" data-v="p90">Plus de 90 000 €</div>
+            <div class="chip" data-v="nsp">Non défini</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Neuf ou occasion ?</div>
+          <div class="chips" data-k="etat" data-m="0">
+            <div class="chip" data-v="neuf">Neuf — garantie constructeur</div>
+            <div class="chip" data-v="occasion">Occasion — priorité au budget</div>
+            <div class="chip" data-v="indiff">Les deux — selon rapport qualité/prix</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Financement envisagé (plusieurs choix)</div>
+          <div class="chips" data-k="fin" data-m="1">
+            <div class="chip" data-v="comptant">Comptant</div>
+            <div class="chip" data-v="credit">Crédit classique</div>
+            <div class="chip" data-v="loa">LOA / leasing</div>
+            <div class="chip" data-v="reprise">Avec reprise de mon véhicule</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="goPrev()">← Retour</button>
+        <button class="btn primary" onclick="showResults()">Voir la recommandation ✦</button>
+      </div>
+    </div>
 
-function toggle(el, key, val) {
-  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
-  el.classList.add('sel');
-  D[key] = val;
+    <div class="step" id="s5">
+      <div class="step-header">
+        <div class="step-num gold">✓</div>
+        <div>
+          <div class="step-title">Recommandation Libertium</div>
+          <div class="step-sub">Basée sur les besoins du client · libertium.fr</div>
+        </div>
+      </div>
+      <div class="step-body">
+
+        <div class="score-grid" id="scores"></div>
+
+        <div class="section-label">Récapitulatif profil client</div>
+        <div class="summary-table" id="summary"></div>
+
+        <div class="section-label">Véhicules recommandés (Cliquez sur une carte pour voir les fiches descriptives)</div>
+        <div id="recos"></div>
+
+        <div class="ai-box" id="ai-box">
+          <div class="ai-box-header">
+            <div class="ai-box-title">
+              ✦ Argumentaire commercial personnalisé
+            </div>
+            <button class="btn gold" id="ai-btn" onclick="generateArg()">Générer avec Claude</button>
+          </div>
+          <div class="ai-box-body" id="ai-body">
+            <div class="ai-output" id="ai-output"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:1rem;padding:14px 16px;background:var(--blue-lt);border:1px solid var(--blue-border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+          <div style="font-size:13px;color:var(--blue);">
+            <strong>Rechercher en stock</strong> — Voir les annonces disponibles sur libertium.fr
+          </div>
+          <a id="stock-link" href="https://www.libertium.fr/vehicule/camping-car" target="_blank" class="btn outline-blue" style="text-decoration:none;font-size:13px;">
+            Voir le stock →
+          </a>
+        </div>
+
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="resetAll()">↺ Nouveau client</button>
+        <button class="btn primary" onclick="copyProfile()">Copier le profil</button>
+      </div>
+    </div>
+
+  </div></div><script>
+// ── État ──────────────────────────────────────────────────────────────────────
+const D = {};
+let currentStep = 1;
+const TOTAL_STEPS = 4;
+
+// ── Clé API ───────────────────────────────────────────────────────────────────
+function saveKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key.startsWith('sk-ant')) {
+    alert('Clé invalide — elle doit commencer par sk-ant-...');
+    return;
+  }
+  localStorage.setItem('anthropic_key', key);
+  document.getElementById('api-setup').style.display = 'none';
+  document.getElementById('api-key-input').value = '';
 }
 
-function nextStep(n) {
+// Masquer la config si clé déjà présente
+window.addEventListener('DOMContentLoaded', () => {
+  if (getKey()) document.getElementById('api-setup').style.display = 'none';
+  initChips();
+  updateProgress();
+});
+
+function getKey() {
+  return localStorage.getItem('anthropic_key') || '';
+}
+
+// ── Chips ─────────────────────────────────────────────────────────────────────
+function initChips() {
+  document.querySelectorAll('.chips').forEach(g => {
+    const multi = g.dataset.m === '1';
+    const key = g.dataset.k;
+    if (!D[key]) D[key] = multi ? [] : null;
+    g.querySelectorAll('.chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const v = c.dataset.v;
+        if (multi) {
+          if (!D[key]) D[key] = [];
+          const i = D[key].indexOf(v);
+          if (i >= 0) { D[key].splice(i, 1); c.classList.remove('sel'); }
+          else { D[key].push(v); c.classList.add('sel'); }
+        } else {
+          D[key] = v;
+          g.querySelectorAll('.chip').forEach(x => x.classList.remove('sel'));
+          c.classList.add('sel');
+        }
+      });
+    });
+  });
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+function showStep(n) {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('s'+n).classList.add('active');
+  document.getElementById('s' + n).classList.add('active');
+  currentStep = n;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+function goNext() { showStep(currentStep + 1); }
+function goPrev() { showStep(currentStep - 1); }
+
+function updateProgress() {
+  const bar = document.getElementById('prog');
+  bar.innerHTML = '';
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const d = document.createElement('div');
+    d.className = 'progress-step' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+    bar.appendChild(d);
+  }
+  const lbl = document.getElementById('prog-label');
+  if (currentStep <= TOTAL_STEPS) lbl.textContent = `Étape ${currentStep} sur ${TOTAL_STEPS}`;
+  else lbl.textContent = 'Synthèse du profil';
+}
+
+// ── Labels ────────────────────────────────────────────────────────────────────
+const LBL = {
+  voyageurs: { solo:'Seul(e)', couple:'Couple', famille_young:'Famille (jeunes enfants)', famille_ado:'Famille (enfants/ados)', seniors:'Couple retraité', amis:'Entre amis' },
+  budget: { m25:'< 25 000 €', '25_45':'25–45 000 €', '45_65':'45–65 000 €', '65_90':'65–90 000 €', p90:'> 90 000 €', nsp:'Non défini' },
+  etat: { neuf:'Neuf', occasion:'Occasion', indiff:'Neuf ou occasion' },
+  freq: { weekends:'Weekends + semaines', vacances:'Grandes vacances', intensif:'Intensif >60j/an', fulltime:'Full-time' },
+  conduite: { compact:'Compact / facile', equilibre:'Équilibré', grand:'Grand gabarit OK' },
+  autonomie: { faible:'Toujours raccordé', moyenne:'2–3 jours', haute:'Autonomie max' },
+  mobilite: { non:'Aucune', escalier:'Difficultés montée/descente', pmr:'PMR' },
+};
+
+const MUST_LABELS = {
+  lit_fixe:'Lit fixe', lits_jumeaux:'Lits jumeaux', garage:'Garage',
+  douche_sep:'Douche séparée', grand_salon:'Grand salon', cuisine:'Cuisine',
+  solaire:'Solaire', chauffage:'Chauffage', vue_pano:'Vue panoramique'
+};
+
+function lbl(k, fb = '—') {
+  const v = D[k];
+  if (!v) return fb;
+  if (Array.isArray(v)) return v.map(x => LBL[k] ? LBL[k][x] || x : x).join(', ') || fb;
+  return LBL[k] ? LBL[k][v] || v : v;
+}
+
+// ── Résultats ─────────────────────────────────────────────────────────────────
 function showResults() {
-  nextStep(3);
-  document.getElementById('reco-result').innerHTML = `<h4>Catégorie sélectionnée : ${D.type}</h4>`;
+  updateProgress();
+  showStep(5);
+
+  // Scores
+  document.getElementById('scores').innerHTML = `
+    <div class="score-card"><div class="sc-label">Profil</div><div class="sc-val">${lbl('voyageurs')}</div></div>
+    <div class="score-card"><div class="sc-label">Couchages</div><div class="sc-val">${D.couchages || '—'}</div></div>
+    <div class="score-card"><div class="sc-label">Budget</div><div class="sc-val">${lbl('budget')}</div></div>
+    <div class="score-card"><div class="sc-label">État</div><div class="sc-val">${lbl('etat')}</div></div>
+  `;
+
+  // Récapitulatif
+  const must = (D.must || []).map(x => MUST_LABELS[x] || x).join(' · ') || '—';
+  const routes = (D.routes || []).map(x => ({ autoroute:'Autoroutes', campagne:'Campagne', montagne:'Montagne', littoral:'Littoral', europe:'Tour Europe', aventure:'Off-road' }[x] || x)).join(', ') || '—';
+  const fin = (D.fin || []).map(x => ({ comptant:'Comptant', credit:'Crédit', loa:'LOA', reprise:'Avec reprise' }[x] || x)).join(', ') || '—';
+
+  document.getElementById('summary').innerHTML = [
+    ['Voyageurs', lbl('voyageurs')], ['Couchages', D.couchages || '—'],
+    ['Fréquence', lbl('freq')], ['Destinations', routes],
+    ['Mode de séjour', lbl('sejour', '—')], ['Équipements clés', must],
+    ['Conduite', lbl('conduite')], ['Autonomie', lbl('autonomie')],
+    ['Budget', lbl('budget')], ['État véhicule', lbl('etat')],
+    ['Financement', fin],
+  ].map(([k, v]) => `<div class="sum-row"><span class="sum-key">${k}</span><span class="sum-val">${v}</span></div>`).join('');
+
+  // Recommandations cliquables avec redirections
+  document.getElementById('recos').innerHTML = buildRecos().map((r, i) => `
+    <a href="https://www.libertium.fr/vehicule/${r.slug}" target="_blank" class="reco-link" title="Voir les fiches descriptives de la catégorie ${r.type} sur libertium.fr">
+      <div class="reco-card ${i === 0 ? 'top' : ''}">
+        <div class="reco-head">
+          <div>
+            <div class="reco-name">${r.type}</div>
+            <div class="reco-brand">${r.brands}</div>
+          </div>
+          <span class="badge ${i === 0 ? 'best' : 'alt'}">${i === 0 ? 'Idéal pour ce profil' : 'Alternative'}</span>
+        </div>
+        <div class="reco-why">${r.why}</div>
+        <div class="tags">${r.tags.map(t => `<span class="tag${t.m ? ' match' : ''}">${t.l}</span>`).join('')}</div>
+        <div class="reco-action-hint">
+          <span>Ouvrir les fiches descriptives du stock</span> ↗
+        </div>
+      </div>
+    </a>
+  `).join('');
+
+  // Lien stock principal mis à jour de manière dynamique
+  const recos = buildRecos();
+  const slug = recos[0] ? recos[0].slug : 'camping-car';
+  document.getElementById('stock-link').href = `https://www.libertium.fr/vehicule/${slug}`;
 }
 
-function generateNativeArg() {
-  const output = document.getElementById('ai-output');
-  const btn = document.getElementById('gen-btn');
-  btn.disabled = true;
-  output.textContent = "Analyse des besoins en cours...";
+function buildRecos() {
+  const v = D.voyageurs, nb = D.couchages, m = D.must || [], b = D.budget,
+        c = D.conduite, r = D.routes || [], e = D.etat, fr = D.freq;
 
-  setTimeout(() => {
-    const db = {
-      "Van": { arg: "Le roi de l'agilité. Parfait pour les escapades improvisées et le stationnement urbain.", obj: "Objection 'Espace' : C'est le choix de l'aventure réelle. L'agencement permet une vie dedans-dehors unique." },
-      "Profilé": { arg: "Le compromis parfait entre habitabilité et compacité.", obj: "Objection 'Conduite' : Grâce à ses dimensions maîtrisées, il se conduit comme une berline." },
-      "Intégral": { arg: "Le confort absolu avec une vue panoramique sur la route.", obj: "Objection 'Budget' : C'est un investissement plaisir qui conserve une valeur de revente exceptionnelle." }
-    };
-    const data = db[D.type] || { arg: "Un excellent choix polyvalent.", obj: "Nous avons des solutions adaptées à chaque usage." };
-    output.innerHTML = `<strong>Points forts :</strong> ${data.arg}<br><br><strong>Réponse aux objections :</strong> ${data.obj}`;
-    btn.textContent = "Généré ✅";
-  }, 600);
+  const recos = [];
+  const wantCompact = c === 'compact' || r.includes('montagne') || fr === 'fulltime' || v === 'solo';
+  const wantBig = nb === '5plus' || v === 'famille_ado' || m.includes('garage') || m.includes('vue_pano');
+  const wantLux = b === '65_90' || b === 'p90';
+  const wantFamily = v === 'famille_young' || v === 'famille_ado' || nb === '5plus' || nb === '4';
+  const wantCarav = b === 'm25' || (b === '25_45' && !wantCompact);
+
+  if (wantCompact || fr === 'fulltime' || (nb === '2' && !wantBig)) {
+    const br = b === 'm25' ? 'CI Kyros Go, Font Vendôme Rando Camp' :
+               b === '45_65' ? 'Adria Twin, Bavaria Nomade, Chausson X' :
+               b === '65_90' || b === 'p90' ? 'Bürstner B66 (éd. 66 ans), Adria Twin SGX, Hymer' : 'Chausson X, CI Kyros';
+    recos.push({ type:'Van / Fourgon aménagé', brands: br, slug:'van-fourgon-amenage',
+      why:'Compact, agile, facile à stationner. Idéal pour les routes de montagne, le nomadisme ou les city-breaks. Moins de 6,5 m — accès aux parkings couverts.',
+      tags:[{l:'< 6,5 m', m:wantCompact},{l:'Facile à conduire',m:c==='compact'},{l:'Nomadisme',m:fr==='fulltime'},{l:'Permis B',m:false}] });
+  }
+
+  if (!wantFamily || nb === '2' || nb === '3') {
+    const br = e === 'occasion' ? 'Chausson, Challenger, Rimor (occasion)' :
+               b === '45_65' ? 'Chausson X 550, Rimor Kilig 66, MC Louis Yearling' :
+               b === '65_90' ? 'Bürstner Ixeo, Adria Matrix, Rapido 65th' :
+               b === 'p90' ? 'Carthago C-Tourer, Challenger Genesis' : 'CI Horon Go, Challenger';
+    recos.push({ type:'Camping-car profilé', brands: br, slug:'camping-car/profile',
+      why:'Le meilleur compromis du marché : aérodynamique, lit permanent, salle d\'eau complète. Idéal couples et petites familles. Large gamme de 40 à 90 k€.',
+      tags:[{l:'6–7,5 m',m:c==='equilibre'},{l:'Lit permanent',m:m.includes('lit_fixe')},{l:'Lits jumeaux dispo',m:m.includes('lits_jumeaux')},{l:'Large gamme',m:true}] });
+  }
+
+  if (wantFamily && (nb === '4' || nb === '5plus')) {
+    recos.push({ type:'Camping-car capucine', brands:'Rimor Kilig 9, CI Horon Go Capucine, Challenger C256', slug:'camping-car/capucine',
+      why:'Lit capucine au-dessus de la cabine — couchage supplémentaire idéal pour les familles. Jusqu\'à 7 couchages. Coin repas spacieux et salle d\'eau complète.',
+      tags:[{l:'4 à 7 couchages',m:wantFamily},{l:'Famille',m:true},{l:'Lit capucine',m:true},{l:'< 7 m',m:false}] });
+  }
+
+  if (wantBig || wantLux || m.includes('vue_pano')) {
+    const br = b === 'p90' ? 'Carthago C-Compactline, Eden Camp 740H (AL-KO)' :
+               b === '65_90' ? 'CI Magis, Challenger Genesis, Bürstner Ixeo It' : 'CI Magis, Challenger';
+    recos.push({ type:'Camping-car intégral', brands: br, slug:'camping-car/integral',
+      why:'Habitabilité maximale, cabine intégrée, vision panoramique. Chambre isolée, grand salon, cuisine complète. Garage à vélos possible sur 7,5 m+.',
+      tags:[{l:'> 7 m',m:wantBig},{l:'Vue panoramique',m:m.includes('vue_pano')},{l:'Grand confort',m:wantLux},{l:'Garage possible',m:m.includes('garage')}] });
+  }
+
+  if (wantCarav) {
+    recos.push({ type:'Caravane', brands:'Caravelair Alba / Sport Line (n°1 France), Bürstner, Adria Altea', slug:'caravane',
+      why:'Budget le plus accessible (à partir de 20 000 €). Laisser sur site, repartir en voiture. Idéal familles et primo-accédants.',
+      tags:[{l:'Dès 20 000 €',m:b==='m25'},{l:'Laisser sur place',m:true},{l:'Nécessite attelage',m:false}] });
+  }
+
+  if (recos.length === 0) {
+    recos.push({ type:'Camping-car profilé — toutes gammes', brands:'CI, Chausson, Challenger, Bürstner, Adria', slug:'camping-car',
+      why:'Le profilé reste la valeur sûre du réseau Libertium. Excellent compromis sur tous les plans.',
+      tags:[{l:'Polyvalent',m:true},{l:'Large gamme',m:true}] });
+  }
+
+  return recos.slice(0, 3);
+}
+
+// ── Génération argumentaire ───────────────────────────────────────────────────
+async function generateArg() {
+  const key = getKey();
+  if (!key) {
+    alert('Clé API non configurée. Rechargez la page et entrez votre clé Anthropic.');
+    return;
+  }
+
+  const btn = document.getElementById('ai-btn');
+  const body = document.getElementById('ai-body');
+  const output = document.getElementById('ai-output');
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader"></span> Génération en cours…';
+  body.classList.add('open');
+  output.className = 'ai-output loading';
+  output.textContent = 'Claude analyse le profil client et prépare votre argumentaire…';
+
+  const recos = buildRecos();
+  const must = (D.must || []).map(x => MUST_LABELS[x] || x).join(', ') || 'non précisé';
+  const routes = (D.routes || []).map(x => ({ autoroute:'grands axes', campagne:'campagne', montagne:'montagne', littoral:'littoral', europe:'tour Europe', aventure:'hors-piste' }[x] || x)).join(', ') || 'non précisé';
+
+  const prompt = `Tu es un conseiller commercial expert chez Libertium, le premier réseau de vente de véhicules de loisirs en France (67 concessions, groupe Trigano).
+
+Profil du client découvert :
+- Voyageurs : ${lbl('voyageurs')}
+- Couchages souhaités : ${D.couchages || 'non précisé'}
+- Fréquence d'utilisation : ${lbl('freq')}
+- Destinations / routes : ${routes}
+- Mode de séjour : ${lbl('sejour', 'non précisé')}
+- Équipements indispensables : ${must}
+- Rapport à la conduite : ${lbl('conduite')}
+- Autonomie souhaitée : ${lbl('autonomie')}
+- Budget : ${lbl('budget')}
+- État véhicule : ${lbl('etat')}
+- Financement envisagé : ${(D.fin || []).join(', ') || 'non précisé'}
+- Contraintes mobilité : ${lbl('mobilite')}
+
+Véhicule recommandé : ${recos[0] ? recos[0].type : 'à définir'}
+Marques suggérées : ${recos[0] ? recos[0].brands : '—'}
+
+Génère un argumentaire commercial structuré en 4 parties :
+
+### 1. Points forts à valoriser
+Les 3-4 arguments les plus percutants pour ce profil, en lien direct avec ses besoins exprimés.
+
+### 2. Questions de rebond
+3 questions à poser pour approfondir la découverte et créer du désir.
+
+### 3. Objections à anticiper
+Les 2-3 objections les plus probables pour ce profil et comment les traiter.
+
+### 4. Proposition de closing
+Une phrase de closing naturelle et personnalisée pour proposer l'essai ou la visite en concession.
+
+Sois concis, orienté résultat, et utilise un ton professionnel mais chaleureux.`;
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `Erreur HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || '';
+
+    output.className = 'ai-output';
+    output.innerHTML = formatResponse(text);
+    btn.innerHTML = '↺ Régénérer';
+    btn.disabled = false;
+
+  } catch (err) {
+    output.className = 'ai-output';
+    output.textContent = `Erreur : ${err.message}. Vérifiez votre clé API et votre connexion.`;
+    btn.innerHTML = 'Réessayer';
+    btn.disabled = false;
+  }
+}
+
+function formatResponse(text) {
+  return text
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
+    .replace(/\n{2,}/g, '\n');
+}
+
+// ── Utilitaires ───────────────────────────────────────────────────────────────
+function resetAll() {
+  Object.keys(D).forEach(k => delete D[k]);
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+  document.getElementById('ai-body').classList.remove('open');
+  document.getElementById('ai-output').textContent = '';
+  document.getElementById('ai-btn').innerHTML = 'Générer avec Claude';
+  document.getElementById('ai-btn').disabled = false;
+  showStep(1);
+}
+
+function copyProfile() {
+  const must = (D.must || []).map(x => MUST_LABELS[x] || x).join(', ') || '—';
+  const routes = (D.routes || []).map(x => x).join(', ') || '—';
+  const text = `=== PROFIL CLIENT LIBERTIUM ===
+Voyageurs : ${lbl('voyageurs')}
+Couchages : ${D.couchages || '—'}
+Fréquence : ${lbl('freq')}
+Destinations : ${routes}
+Équipements : ${must}
+Budget : ${lbl('budget')}
+État : ${lbl('etat')}
+Financement : ${(D.fin || []).join(', ') || '—'}
+Véhicule recommandé : ${buildRecos()[0]?.type || '—'}
+`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Copié !';
+    setTimeout(() => btn.textContent = 'Copier le profil', 2000);
+  });
 }
 </script>
 </body>
