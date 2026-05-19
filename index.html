@@ -49,10 +49,10 @@
       min-width:0;
     }
     .brand-logo{
-      width:72px;
-      height:72px;
+      width:74px;
+      height:74px;
       border-radius:16px;
-      background:#f1f5f9;
+      background:#fff;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -66,9 +66,7 @@
       object-fit:contain;
       display:block;
     }
-    .brand-text{
-      min-width:0;
-    }
+    .brand-text{min-width:0}
     .brand-text h1{
       margin:0;
       font-size:24px;
@@ -247,7 +245,7 @@
   <div class="topbar">
     <div class="brand">
       <div class="brand-logo">
-        <img src="logo-libertium-seclin.png" alt="Logo Libertium Seclin" onerror="this.style.display='none';">
+        <img src="https://www.libertium.fr/sites/default/files/logo_libertium.svg" alt="Logo Libertium Seclin">
       </div>
       <div class="brand-text">
         <h1>Libertium Seclin Lestringuez</h1>
@@ -596,7 +594,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-const STORAGE_KEY='libertium_widget_v6';
+const STORAGE_KEY='libertium_widget_v7';
 const form=document.getElementById('leadForm');
 const statusEl=document.getElementById('status');
 const ids=[
@@ -621,8 +619,19 @@ const deptList=[
 ['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d’Or'],['22','Côtes-d’Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['59','Nord'],['60','Oise'],['61','Orne'],['62','Pas-de-Calais'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d’Oise']
 ];
 function initDept(){deptSelect.innerHTML='<option value="">—</option>'+deptList.map(([code,name])=>`<option value="${code}">${code} - ${name}</option>`).join('');}
-async function resolvePostal(code){const c=(code||'').trim();if(!/^\\d{5}$/.test(c)){setVille('');return;}try{const r=await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(c)}&type=municipality&limit=20`);const j=await r.json();const feats=(j.features||[]).filter(f=>String(f.properties.postcode||'').split(',').includes(c));if(feats.length){const names=[...new Set(feats.map(f=>f.properties.city).filter(Boolean))];setVille(names.join(' / '));}else{setVille('');}}catch(e){setVille('');}}
 function setVille(v){document.getElementById('ville').value=v||''}
+async function resolvePostal(code){
+  const c=(code||'').trim();
+  if(!/^\d{5}$/.test(c)){setVille('');return;}
+  try{
+    const r=await fetch(`https://geo.api.gouv.fr/communes?codePostal=${encodeURIComponent(c)}&fields=nom,code&format=json&geometry=centre`);
+    const j=await r.json();
+    const names=[...new Set((j||[]).map(x=>x.nom).filter(Boolean))];
+    setVille(names.join(' / '));
+  }catch(e){
+    setVille('');
+  }
+}
 function safeData(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch{return{}}}
 function saveData(data){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));statusEl.textContent='Données sauvegardées localement.'}
 function readForm(){const data={};ids.forEach(id=>{const el=document.getElementById(id);data[id]=el?el.value:''});return data}
@@ -632,25 +641,151 @@ function clientName(d){return [fmt(d.civilite),fmt(d.prenom),fmt(d.nom)].filter(
 function contactLine(d){return [fmt(d.telephone),fmt(d.mobile),fmt(d.email)].filter(Boolean).join(' · ')||'—'}
 function addressLine(d){return [fmt(d.adresse1),fmt(d.adresse2),[fmt(d.codePostal),fmt(d.ville)].filter(Boolean).join(' '),fmt(d.departement),fmt(d.pays)].filter(Boolean).join(', ')||'—'}
 function profileLine(d){return [fmt(d.voyageurs),fmt(d.usage),fmt(d.compacite),fmt(d.priorite)].filter(Boolean).join(' · ')||'—'}
-function budgetFit(vehicleKey,budget){const b=fmt(budget);const map={van:{'Moins de 40 000 €':22,'40 000 à 60 000 €':20,'60 000 à 80 000 €':10,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':8},fourgon:{'Moins de 40 000 €':8,'40 000 à 60 000 €':18,'60 000 à 80 000 €':20,'80 000 à 100 000 €':8,'Plus de 100 000 €':0,'Non défini':10},profile:{'Moins de 40 000 €':0,'40 000 à 60 000 €':8,'60 000 à 80 000 €':20,'80 000 à 100 000 €':22,'Plus de 100 000 €':14,'Non défini':10},integral:{'Moins de 40 000 €':0,'40 000 à 60 000 €':0,'60 000 à 80 000 €':8,'80 000 à 100 000 €':20,'Plus de 100 000 €':22,'Non défini':10},capucine:{'Moins de 40 000 €':20,'40 000 à 60 000 €':22,'60 000 à 80 000 €':10,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':8},caravane:{'Moins de 40 000 €':24,'40 000 à 60 000 €':18,'60 000 à 80 000 €':6,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':12}};return(map[vehicleKey]&&map[vehicleKey][b])||0}
-function computeCommercialScore(d){let s=0;if(fmt(d.delai)==='Immédiat')s+=25;else if(fmt(d.delai)==='1 à 3 mois')s+=18;else if(fmt(d.delai)==='3 à 6 mois')s+=10;else if(fmt(d.delai)==='6 mois et plus')s+=4;else if(fmt(d.delai)==='Se renseigne')s+=2;if(fmt(d.decisionnaire))s+=12;if(fmt(d.reprise)==='Oui')s+=8;if(fmt(d.reprise)==='À étudier')s+=4;if(fmt(d.besoin).length>25)s+=6;if(fmt(d.notes).length>25)s+=4;if(fmt(d.email))s+=5;if(fmt(d.telephone)||fmt(d.mobile))s+=5;return Math.min(100,s)}
-function scoreVehicle(v,d){let s=budgetFit(v.key,d.budget);const voyageurs=fmt(d.voyageurs),usage=fmt(d.usage),comp=fmt(d.compacite),couchages=fmt(d.couchages),sdb=fmt(d.sdb),auton=fmt(d.autonomie),saison=fmt(d.saison),permis=fmt(d.permis),priorite=fmt(d.priorite);if(v.key==='van'){if(voyageurs==='1 à 2')s+=26;if(usage==='Itinérance fréquente')s+=22;if(comp==='Très compacte')s+=24;if(priorite==='Maniabilité')s+=14;if(d.conduite==='Ville et routes étroites')s+=10;if(sdb==='Optionnelle')s+=6;if(voyageurs==='7 et +')s-=50;if(usage==='Séjours stationnaires')s-=18}if(v.key==='fourgon'){if(voyageurs==='1 à 2'||voyageurs==='3 à 4')s+=18;if(usage==='Mixte'||usage==='Week-ends'||usage==='Vacances longues')s+=16;if(comp==='Compacte'||comp==='Standard')s+=14;if(couchages==='Lit permanent'||couchages==='Lits jumeaux'||couchages==='Lit central')s+=12;if(sdb==='Souhaitée'||sdb==='Indispensable')s+=8;if(priorite==='Équipement')s+=6;if(voyageurs==='7 et +')s-=35}if(v.key==='profile'){if(voyageurs==='2 à 4')s+=20;if(usage==='Vacances longues'||usage==='Mixte')s+=18;if(comp==='Standard'||comp==='Grand confort')s+=18;if(couchages==='Lit central'||couchages==='Lit pavillon'||couchages==='Lits jumeaux')s+=14;if(sdb==='Indispensable'||sdb==='Souhaitée')s+=10;if(priorite==='Confort'||priorite==='Équipement')s+=12;if(auton==='Élevée'||auton==='Très élevée')s+=8;if(saison==='Toute saison'||saison==='Montagne / hiver')s+=8}if(v.key==='integral'){if(voyageurs==='2 à 4')s+=18;if(usage==='Vacances longues'||usage==='Séjours stationnaires')s+=18;if(comp==='Grand confort')s+=22;if(priorite==='Confort')s+=16;if(auton==='Élevée'||auton==='Très élevée')s+=8;if(saison==='Toute saison'||saison==='Montagne / hiver')s+=10;if(voyageurs==='7 et +')s-=30}if(v.key==='capucine'){if(voyageurs==='5 à 6'||voyageurs==='7 et +')s+=30;if(priorite==='Volume')s+=16;if(usage==='Vacances longues'||usage==='Séjours stationnaires')s+=12;if(couchages==='Lit dinette'||couchages==='Peu importe')s+=8;if(comp==='Très compacte')s-=30}if(v.key==='caravane'){if(usage==='Séjours stationnaires')s+=24;if(priorite==='Prix')s+=18;if(permis==='Remorquage souhaité')s+=20;if(auton==='Faible'||auton==='Moyenne')s+=8;if(comp==='Très compacte')s-=14}return Math.max(0,Math.min(100,s))}
+function budgetFit(vehicleKey,budget){
+  const b=fmt(budget);
+  const map={
+    van:{'Moins de 40 000 €':22,'40 000 à 60 000 €':20,'60 000 à 80 000 €':10,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':8},
+    fourgon:{'Moins de 40 000 €':8,'40 000 à 60 000 €':18,'60 000 à 80 000 €':20,'80 000 à 100 000 €':8,'Plus de 100 000 €':0,'Non défini':10},
+    profile:{'Moins de 40 000 €':0,'40 000 à 60 000 €':8,'60 000 à 80 000 €':20,'80 000 à 100 000 €':22,'Plus de 100 000 €':14,'Non défini':10},
+    integral:{'Moins de 40 000 €':0,'40 000 à 60 000 €':0,'60 000 à 80 000 €':8,'80 000 à 100 000 €':20,'Plus de 100 000 €':22,'Non défini':10},
+    capucine:{'Moins de 40 000 €':20,'40 000 à 60 000 €':22,'60 000 à 80 000 €':10,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':8},
+    caravane:{'Moins de 40 000 €':24,'40 000 à 60 000 €':18,'60 000 à 80 000 €':6,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':12}
+  };
+  return (map[vehicleKey]&&map[vehicleKey][b])||0;
+}
+function computeCommercialScore(d){
+  let s=0;
+  if(fmt(d.delai)==='Immédiat')s+=25; else if(fmt(d.delai)==='1 à 3 mois')s+=18; else if(fmt(d.delai)==='3 à 6 mois')s+=10; else if(fmt(d.delai)==='6 mois et plus')s+=4; else if(fmt(d.delai)==='Se renseigne')s+=2;
+  if(fmt(d.decisionnaire))s+=12;
+  if(fmt(d.reprise)==='Oui')s+=8;
+  if(fmt(d.reprise)==='À étudier')s+=4;
+  if(fmt(d.besoin).length>25)s+=6;
+  if(fmt(d.notes).length>25)s+=4;
+  if(fmt(d.email))s+=5;
+  if(fmt(d.telephone)||fmt(d.mobile))s+=5;
+  return Math.min(100,s);
+}
+function scoreVehicle(v,d){
+  let s=budgetFit(v.key,d.budget);
+  const voyageurs=fmt(d.voyageurs),usage=fmt(d.usage),comp=fmt(d.compacite),couchages=fmt(d.couchages),sdb=fmt(d.sdb),auton=fmt(d.autonomie),saison=fmt(d.saison),permis=fmt(d.permis),priorite=fmt(d.priorite);
+  if(v.key==='van'){if(voyageurs==='1 à 2')s+=26;if(usage==='Itinérance fréquente')s+=22;if(comp==='Très compacte')s+=24;if(priorite==='Maniabilité')s+=14;if(d.conduite==='Ville et routes étroites')s+=10;if(sdb==='Optionnelle')s+=6;if(voyageurs==='7 et +')s-=50;if(usage==='Séjours stationnaires')s-=18}
+  if(v.key==='fourgon'){if(voyageurs==='1 à 2'||voyageurs==='3 à 4')s+=18;if(usage==='Mixte'||usage==='Week-ends'||usage==='Vacances longues')s+=16;if(comp==='Compacte'||comp==='Standard')s+=14;if(couchages==='Lit permanent'||couchages==='Lits jumeaux'||couchages==='Lit central')s+=12;if(sdb==='Souhaitée'||sdb==='Indispensable')s+=8;if(priorite==='Équipement')s+=6;if(voyageurs==='7 et +')s-=35}
+  if(v.key==='profile'){if(voyageurs==='2 à 4')s+=20;if(usage==='Vacances longues'||usage==='Mixte')s+=18;if(comp==='Standard'||comp==='Grand confort')s+=18;if(couchages==='Lit central'||couchages==='Lit pavillon'||couchages==='Lits jumeaux')s+=14;if(sdb==='Indispensable'||sdb==='Souhaitée')s+=10;if(priorite==='Confort'||priorite==='Équipement')s+=12;if(auton==='Élevée'||auton==='Très élevée')s+=8;if(saison==='Toute saison'||saison==='Montagne / hiver')s+=8}
+  if(v.key==='integral'){if(voyageurs==='2 à 4')s+=18;if(usage==='Vacances longues'||usage==='Séjours stationnaires')s+=18;if(comp==='Grand confort')s+=22;if(priorite==='Confort')s+=16;if(auton==='Élevée'||auton==='Très élevée')s+=8;if(saison==='Toute saison'||saison==='Montagne / hiver')s+=10;if(voyageurs==='7 et +')s-=30}
+  if(v.key==='capucine'){if(voyageurs==='5 à 6'||voyageurs==='7 et +')s+=30;if(priorite==='Volume')s+=16;if(usage==='Vacances longues'||usage==='Séjours stationnaires')s+=12;if(couchages==='Lit dinette'||couchages==='Peu importe')s+=8;if(comp==='Très compacte')s-=30}
+  if(v.key==='caravane'){if(usage==='Séjours stationnaires')s+=24;if(priorite==='Prix')s+=18;if(permis==='Remorquage souhaité')s+=20;if(auton==='Faible'||auton==='Moyenne')s+=8;if(comp==='Très compacte')s-=14}
+  return Math.max(0,Math.min(100,s))
+}
 function rankVehicles(d){return vehicles.map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score)}
 function classifyLead(score){if(score>=80)return{label:'Très chaud',cls:'score-high'};if(score>=60)return{label:'Qualifié',cls:'score-mid'};if(score>=35)return{label:'À creuser',cls:'score-low'};return{label:'Faible intention',cls:'score-low'}}
-function summaryText(d){const lines=[];if(d.besoin)lines.push(`Besoin : ${d.besoin}`);if(d.notes)lines.push(`Notes : ${d.notes}`);if(d.delai)lines.push(`Délai : ${d.delai}`);if(d.decisionnaire)lines.push(`Décisionnaire : ${d.decisionnaire}`);if(d.reprise)lines.push(`Reprise : ${d.reprise}`);if(d.reprType||d.reprMarque||d.reprModele)lines.push(`Véhicule à reprendre : ${[d.reprType,d.reprMarque,d.reprModele,d.reprAnnee,d.reprKm,d.reprEtat].filter(Boolean).join(' · ')}`);if(d.reprInfos)lines.push(`Infos complémentaires reprise : ${d.reprInfos}`);return lines.join('\\n\\n')||'Renseigne les champs à gauche pour générer une recommandation.'}
+function summaryText(d){
+  const lines=[];
+  if(d.besoin)lines.push(`Besoin : ${d.besoin}`);
+  if(d.notes)lines.push(`Notes : ${d.notes}`);
+  if(d.delai)lines.push(`Délai : ${d.delai}`);
+  if(d.decisionnaire)lines.push(`Décisionnaire : ${d.decisionnaire}`);
+  if(d.reprise)lines.push(`Reprise : ${d.reprise}`);
+  if(d.reprType||d.reprMarque||d.reprModele)lines.push(`Véhicule à reprendre : ${[d.reprType,d.reprMarque,d.reprModele,d.reprAnnee,d.reprKm,d.reprEtat].filter(Boolean).join(' · ')}`);
+  if(d.reprInfos)lines.push(`Infos complémentaires reprise : ${d.reprInfos}`);
+  return lines.join('\\n\\n')||'Renseigne les champs à gauche pour générer une recommandation.';
+}
 function chipsFromData(d){return ['achat','budget','voyageurs','usage','compacite','priorite','saison','permis','sdb','autonomie','departement'].map(id=>fmt(d[id])).filter(Boolean)}
-function explain(v,d){const c=[];const b=fmt(d.budget);if(b)c.push(`budget : ${b}`);if(fmt(d.voyageurs))c.push(`voyageurs : ${fmt(d.voyageurs)}`);if(fmt(d.usage))c.push(`usage : ${fmt(d.usage)}`);if(fmt(d.compacite))c.push(`compacité : ${fmt(d.compacite)}`);if(fmt(d.priorite))c.push(`priorité : ${fmt(d.priorite)}`);if(fmt(d.saison))c.push(`saison : ${fmt(d.saison)}`);const logic=[];if(v.key==='van'){logic.push('Le format van est adapté à un besoin très compact et à des déplacements fréquents.');if(b==='Moins de 40 000 €'||b==='40 000 à 60 000 €')logic.push('Le budget est cohérent avec une entrée de gamme ou un véhicule d’occasion.')}if(v.key==='fourgon')logic.push('Le fourgon garde un bon équilibre entre confort, volume et maniabilité.');if(v.key==='profile')logic.push('Le profilé répond bien aux clients qui veulent un vrai niveau de confort sans aller sur un intégral.');if(v.key==='integral')logic.push('L’intégral est le choix premium dès que le confort et l’espace prennent le dessus.');if(v.key==='capucine')logic.push('La capucine reste la plus logique dès qu’il faut beaucoup de couchages.');if(v.key==='caravane')logic.push('La caravane est pertinente quand le budget est serré et que le séjour stationnaire domine.');return [...logic,c.length?`Critères saisis : ${c.join(' · ')}`:null].filter(Boolean).join(' ')}
-function updateAll(){const d=readForm();const commercialScore=computeCommercialScore(d);const lead=classifyLead(commercialScore);const ranked=rankVehicles(d);document.getElementById('pvClient').textContent=clientName(d);document.getElementById('pvContact').textContent=contactLine(d);document.getElementById('pvAddress').textContent=addressLine(d);document.getElementById('pvBudget').textContent=fmt(d.budget)||'—';document.getElementById('pvProfile').textContent=profileLine(d);document.getElementById('score').value=commercialScore||'';document.getElementById('pvSummary').textContent=summaryText(d);document.getElementById('chips').innerHTML=chipsFromData(d).map(c=>`<span class=\"chip\">${escapeHtml(c)}</span>`).join('');const best=ranked[0];document.getElementById('topExplanation').innerHTML=best?`<strong><a href=\"${best.url}\" target=\"_blank\" rel=\"noopener\">${best.title}</a></strong><br>${explain(best,d)}`:'—';document.getElementById('results').innerHTML=ranked.slice(0,5).map((v,idx)=>`<div class=\"result\"><div class=\"result-head\"><div><div class=\"score-badge ${v.score>=70?'score-high':v.score>=40?'score-mid':'score-low'}\">Top ${idx+1} · ${v.score}/100</div><h4 style=\"margin-top:8px;\"><a href=\"${v.url}\" target=\"_blank\" rel=\"noopener\">${v.title}</a></h4><div class=\"hint\">${v.family}</div></div><div class=\"small\">${lead.label}</div></div><div class=\"product-meta\">${v.features.map(f=>`<span class=\"meta\">${escapeHtml(f)}</span>`).join('')}</div><p><strong>Argument :</strong> ${escapeHtml(explain(v,d))}</p><p><strong>Lien :</strong> <a href=\"${v.url}\" target=\"_blank\" rel=\"noopener\">${v.url}</a></p></div>`).join('');statusEl.textContent=`Score commercial : ${commercialScore}/100 · ${lead.label}`;toggleRepriseFields()}
-function escapeHtml(str){return String(str).replace(/[&<>\"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[s]))}
+function explain(v,d){
+  const c=[];
+  const b=fmt(d.budget);
+  if(b)c.push(`budget : ${b}`);
+  if(fmt(d.voyageurs))c.push(`voyageurs : ${fmt(d.voyageurs)}`);
+  if(fmt(d.usage))c.push(`usage : ${fmt(d.usage)}`);
+  if(fmt(d.compacite))c.push(`compacité : ${fmt(d.compacite)}`);
+  if(fmt(d.priorite))c.push(`priorité : ${fmt(d.priorite)}`);
+  if(fmt(d.saison))c.push(`saison : ${fmt(d.saison)}`);
+  const logic=[];
+  if(v.key==='van'){logic.push('Le format van est adapté à un besoin très compact et à des déplacements fréquents.');if(b==='Moins de 40 000 €'||b==='40 000 à 60 000 €')logic.push('Le budget est cohérent avec une entrée de gamme ou un véhicule d’occasion.')}
+  if(v.key==='fourgon')logic.push('Le fourgon garde un bon équilibre entre confort, volume et maniabilité.');
+  if(v.key==='profile')logic.push('Le profilé répond bien aux clients qui veulent un vrai niveau de confort sans aller sur un intégral.');
+  if(v.key==='integral')logic.push('L’intégral est le choix premium dès que le confort et l’espace prennent le dessus.');
+  if(v.key==='capucine')logic.push('La capucine reste la plus logique dès qu’il faut beaucoup de couchages.');
+  if(v.key==='caravane')logic.push('La caravane est pertinente quand le budget est serré et que le séjour stationnaire domine.');
+  return [...logic,c.length?`Critères saisis : ${c.join(' · ')}`:null].filter(Boolean).join(' ');
+}
+function updateAll(){
+  const d=readForm();
+  const commercialScore=computeCommercialScore(d);
+  const lead=classifyLead(commercialScore);
+  const ranked=rankVehicles(d);
+  document.getElementById('pvClient').textContent=clientName(d);
+  document.getElementById('pvContact').textContent=contactLine(d);
+  document.getElementById('pvAddress').textContent=addressLine(d);
+  document.getElementById('pvBudget').textContent=fmt(d.budget)||'—';
+  document.getElementById('pvProfile').textContent=profileLine(d);
+  document.getElementById('score').value=commercialScore||'';
+  document.getElementById('pvSummary').textContent=summaryText(d);
+  document.getElementById('chips').innerHTML=chipsFromData(d).map(c=>`<span class="chip">${escapeHtml(c)}</span>`).join('');
+  const best=ranked[0];
+  document.getElementById('topExplanation').innerHTML=best?`<strong><a href="${best.url}" target="_blank" rel="noopener">${best.title}</a></strong><br>${explain(best,d)}`:'—';
+  document.getElementById('results').innerHTML=ranked.slice(0,5).map((v,idx)=>`<div class="result"><div class="result-head"><div><div class="score-badge ${v.score>=70?'score-high':v.score>=40?'score-mid':'score-low'}">Top ${idx+1} · ${v.score}/100</div><h4 style="margin-top:8px;"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4><div class="hint">${v.family}</div></div><div class="small">${lead.label}</div></div><div class="product-meta">${v.features.map(f=>`<span class="meta">${escapeHtml(f)}</span>`).join('')}</div><p><strong>Argument :</strong> ${escapeHtml(explain(v,d))}</p><p><strong>Lien :</strong> <a href="${v.url}" target="_blank" rel="noopener">${v.url}</a></p></div>`).join('');
+  statusEl.textContent=`Score commercial : ${commercialScore}/100 · ${lead.label}`;
+}
+function escapeHtml(str){return String(str).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[s]))}
 function generatePDF(){const element=document.getElementById('summaryBlock');html2pdf().set({margin:8,filename:'resume-widget-vehicule-loisir.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(element).save()}
 function toggleRepriseFields(){const on=fmt(repriseEl.value)==='Oui';repriseFields.classList.toggle('show',on)}
-async function resolvePostal(code){const c=(code||'').trim();if(!/^\\d{5}$/.test(c)){setVille('');return;}try{const r=await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(c)}&type=municipality&limit=20`);const j=await r.json();const feats=(j.features||[]).filter(f=>String(f.properties.postcode||'').split(',').includes(c));if(feats.length){const names=[...new Set(feats.map(f=>f.properties.city).filter(Boolean))];setVille(names.join(' / '));}else{setVille('');}}catch(e){setVille('')}}
-function setVille(v){document.getElementById('ville').value=v||''}
-function onPostalInput(){const code=document.getElementById('codePostal').value;resolvePostal(code).then(()=>{saveData(readForm());updateAll()})}
-function attach(){ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;const ev=(el.tagName==='TEXTAREA'||el.tagName==='INPUT')?'input':'change';el.addEventListener(ev,()=>{if(id==='codePostal')return;if(id==='reprise'){toggleRepriseFields()}saveData(readForm());updateAll()})});document.getElementById('btnSave').addEventListener('click',()=>{saveData(readForm());updateAll()});document.getElementById('btnPrint').addEventListener('click',()=>window.print());document.getElementById('btnPdf').addEventListener('click',generatePDF);document.getElementById('btnPdfInline').addEventListener('click',generatePDF);document.getElementById('btnReset').addEventListener('click',()=>{if(!confirm('Réinitialiser toutes les données ?'))return;localStorage.removeItem(STORAGE_KEY);form.reset();document.getElementById('pays').value='France';document.getElementById('ville').value='';toggleRepriseFields();updateAll();statusEl.textContent='Données effacées.'});document.getElementById('codePostal').addEventListener('blur',onPostalInput);document.getElementById('codePostal').addEventListener('change',onPostalInput);document.getElementById('reprise').addEventListener('change',()=>{toggleRepriseFields();saveData(readForm());updateAll()})}
+async function resolvePostal(code){
+  const c=(code||'').trim();
+  if(!/^\\d{5}$/.test(c)){setVille('');return;}
+  try{
+    const r=await fetch(`https://geo.api.gouv.fr/communes?codePostal=${encodeURIComponent(c)}&fields=nom,code&format=json&geometry=centre`);
+    const j=await r.json();
+    const names=[...new Set((j||[]).map(x=>x.nom).filter(Boolean))];
+    setVille(names.join(' / '));
+  }catch(e){
+    setVille('');
+  }
+}
+function onPostalInput(){
+  const code=document.getElementById('codePostal').value;
+  resolvePostal(code).then(()=>{saveData(readForm());updateAll()});
+}
+function attach(){
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const ev=(el.tagName==='TEXTAREA'||el.tagName==='INPUT')?'input':'change';
+    el.addEventListener(ev,()=>{
+      if(id==='codePostal')return;
+      if(id==='reprise')toggleRepriseFields();
+      saveData(readForm());
+      updateAll();
+    });
+  });
+  document.getElementById('btnSave').addEventListener('click',()=>{saveData(readForm());updateAll()});
+  document.getElementById('btnPrint').addEventListener('click',()=>window.print());
+  document.getElementById('btnPdf').addEventListener('click',generatePDF);
+  document.getElementById('btnPdfInline').addEventListener('click',generatePDF);
+  document.getElementById('btnReset').addEventListener('click',()=>{
+    if(!confirm('Réinitialiser toutes les données ?'))return;
+    localStorage.removeItem(STORAGE_KEY);
+    form.reset();
+    document.getElementById('pays').value='France';
+    document.getElementById('ville').value='';
+    toggleRepriseFields();
+    updateAll();
+    statusEl.textContent='Données effacées.';
+  });
+  document.getElementById('codePostal').addEventListener('blur',onPostalInput);
+  document.getElementById('codePostal').addEventListener('change',onPostalInput);
+  document.getElementById('reprise').addEventListener('change',()=>{
+    toggleRepriseFields();
+    saveData(readForm());
+    updateAll();
+  });
+}
 initDept();
 attach();
-document.addEventListener('DOMContentLoaded',()=>{fillForm(safeData());toggleRepriseFields();statusEl.textContent='Données restaurées depuis le navigateur.'});
+document.addEventListener('DOMContentLoaded',()=>{
+  fillForm(safeData());
+  toggleRepriseFields();
+  statusEl.textContent='Données restaurées depuis le navigateur.';
+});
 </script>
 </body>
 </html>
