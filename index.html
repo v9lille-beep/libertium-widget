@@ -7,7 +7,7 @@
   <style>
     :root{
       --bg:#f4f7fb;
-      --panel:#ffffff;
+      --panel:#fff;
       --panel-2:#f8fbff;
       --text:#172033;
       --muted:#64748b;
@@ -20,7 +20,6 @@
       --shadow:0 14px 34px rgba(15,23,42,.08);
       --radius:18px;
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
     body{
@@ -28,9 +27,7 @@
       background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);
       color:var(--text);
     }
-
     .page{max-width:1440px;margin:0 auto;padding:24px}
-
     .topbar{
       display:flex;
       justify-content:space-between;
@@ -43,7 +40,6 @@
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-
     .brand{
       flex:1;
       display:flex;
@@ -52,7 +48,6 @@
       padding:18px 20px;
       min-width:0;
     }
-
     .brand-logo{
       width:72px;
       height:72px;
@@ -65,31 +60,26 @@
       border:1px solid #e2e8f0;
       flex-shrink:0;
     }
-
     .brand-logo img{
       width:100%;
       height:100%;
       object-fit:contain;
       display:block;
     }
-
     .brand-text{
       min-width:0;
     }
-
     .brand-text h1{
       margin:0;
       font-size:24px;
       line-height:1.1;
     }
-
     .brand-text p{
       margin:6px 0 0;
       color:var(--muted);
       line-height:1.45;
       font-size:14px;
     }
-
     .contact-box{
       width:360px;
       display:flex;
@@ -100,7 +90,6 @@
       background:#fff;
       border-left:1px solid var(--border);
     }
-
     .contact-row{
       display:flex;
       align-items:center;
@@ -113,7 +102,6 @@
       font-weight:700;
       color:#1f2937;
     }
-
     .contact-row.primary{
       background:#dc2626;
       color:#fff;
@@ -121,7 +109,6 @@
       justify-content:center;
       font-size:16px;
     }
-
     .contact-icon{
       width:22px;
       height:22px;
@@ -131,7 +118,6 @@
       justify-content:center;
       font-size:18px;
     }
-
     .header{
       display:flex;
       justify-content:space-between;
@@ -139,12 +125,10 @@
       gap:16px;
       margin-bottom:20px;
     }
-
     .title{margin:0;font-size:28px;line-height:1.1}
     .subtitle{margin:8px 0 0;color:var(--muted)}
     .status{margin-top:8px;font-size:14px;color:var(--muted)}
     .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-
     button{
       border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;
       transition:transform .12s ease,background .15s ease,opacity .15s ease;font-size:14px
@@ -156,7 +140,6 @@
     .btn-success{background:#dcfce7;color:#166534}
     .btn-danger{background:#fee2e2;color:#991b1b}
     .btn-warning{background:#ffedd5;color:#9a3412}
-
     .grid{display:grid;grid-template-columns:1.1fr .95fr;gap:20px}
     .card{
       background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
@@ -166,7 +149,6 @@
     .section{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #edf2f7}
     .section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
     .section h3{margin:0 0 12px;font-size:15px;color:#0f172a}
-
     .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     .field{display:flex;flex-direction:column;gap:6px}
     .field.full{grid-column:1/-1}
@@ -184,7 +166,6 @@
     .chip{
       border-radius:999px;padding:7px 10px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700
     }
-
     .right-sticky{position:sticky;top:16px;align-self:start}
     .preview-line{
       display:grid;grid-template-columns:145px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid #eef2f7;font-size:14px
@@ -195,14 +176,12 @@
       background:var(--panel-2);border:1px dashed #c7d6f5;border-radius:14px;padding:14px;margin-top:14px
     }
     .summary-box p{margin:0;line-height:1.55;white-space:pre-wrap}
-
     .recommend-top{
       margin-top:16px;background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
       border:1px solid #dbe3ee;border-radius:16px;padding:14px
     }
     .recommend-top h3{margin:0 0 8px}
     .recommend-top p{margin:0;color:#334155;line-height:1.55}
-
     .results{margin-top:16px;display:grid;gap:12px}
     .result{
       border:1px solid #dbe3ee;border-radius:14px;padding:14px;background:#fff
@@ -220,22 +199,28 @@
     .score-high{background:#ecfdf5;color:#166534}
     .score-mid{background:#eff6ff;color:#1d4ed8}
     .score-low{background:#fff7ed;color:#9a3412}
-
     .product-meta{
       display:flex;flex-wrap:wrap;gap:8px;margin-top:8px
     }
     .meta{
       border-radius:999px;background:#f1f5f9;color:#334155;padding:6px 10px;font-size:12px;font-weight:700
     }
-
     .pdf-box{
       margin-top:16px;border:1px solid #dbe3ee;border-radius:16px;padding:14px;background:#fff
     }
     .pdf-box h3{margin:0 0 8px}
     .pdf-box p{margin:0 0 12px;color:#334155;line-height:1.5}
     .small{font-size:12px;color:var(--muted)}
-
-    @media (max-width: 1040px){
+    .reprise-fields{
+      margin-top:10px;
+      padding:12px;
+      border:1px dashed #cbd5e1;
+      border-radius:12px;
+      background:#f8fbff;
+      display:none;
+    }
+    .reprise-fields.show{display:block}
+    @media (max-width:1040px){
       .grid{grid-template-columns:1fr}
       .header{flex-direction:column}
       .topbar{flex-direction:column}
@@ -244,7 +229,6 @@
       .preview-line{grid-template-columns:1fr;gap:4px}
       .right-sticky{position:static}
     }
-
     @media print{
       body{background:#fff}
       .page{max-width:none;padding:0}
@@ -260,30 +244,19 @@
 </head>
 <body>
 <div class="page">
-
   <div class="topbar">
     <div class="brand">
       <div class="brand-logo">
-        <img src="logo-libertium-seclin.png" alt="Logo Libertium Seclin" onerror="this.style.display='none';" />
+        <img src="logo-libertium-seclin.png" alt="Logo Libertium Seclin" onerror="this.style.display='none';">
       </div>
       <div class="brand-text">
         <h1>Libertium Seclin Lestringuez</h1>
-        <p>
-          205 Avenue de la République<br>
-          59113 SECLIN<br>
-          <strong>contact.seclin@libertium.fr</strong>
-        </p>
+        <p>205 Avenue de la République<br>59113 SECLIN<br><strong>contact.seclin@libertium.fr</strong></p>
       </div>
     </div>
     <div class="contact-box">
-      <div class="contact-row primary">
-        <span class="contact-icon">✉</span>
-        <span>Contactez-nous</span>
-      </div>
-      <div class="contact-row">
-        <span class="contact-icon">☎</span>
-        <span>03 20 32 25 99</span>
-      </div>
+      <div class="contact-row primary"><span class="contact-icon">✉</span><span>Contactez-nous</span></div>
+      <div class="contact-row"><span class="contact-icon">☎</span><span>03 20 32 25 99</span></div>
     </div>
   </div>
 
@@ -375,15 +348,15 @@
           </div>
           <div class="field">
             <label for="codePostal">Code postal</label>
-            <input id="codePostal" type="text" />
+            <input id="codePostal" type="text" inputmode="numeric" />
           </div>
           <div class="field">
             <label for="ville">Ville</label>
-            <input id="ville" type="text" />
+            <input id="ville" type="text" readonly />
           </div>
           <div class="field">
-            <label for="region">Région</label>
-            <input id="region" type="text" />
+            <label for="departement">Département</label>
+            <select id="departement"></select>
           </div>
           <div class="field">
             <label for="pays">Pays</label>
@@ -404,6 +377,7 @@
               <option>60 000 à 80 000 €</option>
               <option>80 000 à 100 000 €</option>
               <option>Plus de 100 000 €</option>
+              <option>Non défini</option>
             </select>
           </div>
           <div class="field">
@@ -416,7 +390,7 @@
             </select>
           </div>
           <div class="field">
-            <label for="voyageurs">Voyageurs</label>
+            <label for="voyageurs">Nombre de voyageurs</label>
             <select id="voyageurs">
               <option value="">—</option>
               <option>1 à 2</option>
@@ -534,13 +508,14 @@
         <h3>Qualification complémentaire</h3>
         <div class="form-grid">
           <div class="field">
-            <label for="delai">Délai d’achat</label>
+            <label for="delai">Délai d'achat</label>
             <select id="delai">
               <option value="">—</option>
               <option>Immédiat</option>
               <option>1 à 3 mois</option>
               <option>3 à 6 mois</option>
               <option>6 mois et plus</option>
+              <option>Se renseigne</option>
             </select>
           </div>
           <div class="field">
@@ -558,7 +533,41 @@
           </div>
           <div class="field">
             <label for="score">Score commercial</label>
-            <input id="score" type="number" min="0" max="100" />
+            <input id="score" type="number" min="0" max="100" readonly />
+          </div>
+        </div>
+
+        <div class="reprise-fields" id="repriseFields">
+          <h3 style="margin-top:0;">Véhicule à reprendre</h3>
+          <div class="form-grid">
+            <div class="field">
+              <label for="reprType">Type</label>
+              <input id="reprType" type="text" placeholder="Camping-car, van, fourgon, caravane..." />
+            </div>
+            <div class="field">
+              <label for="reprMarque">Marque</label>
+              <input id="reprMarque" type="text" />
+            </div>
+            <div class="field">
+              <label for="reprModele">Modèle</label>
+              <input id="reprModele" type="text" />
+            </div>
+            <div class="field">
+              <label for="reprAnnee">Année</label>
+              <input id="reprAnnee" type="text" />
+            </div>
+            <div class="field">
+              <label for="reprKm">Kilométrage</label>
+              <input id="reprKm" type="text" />
+            </div>
+            <div class="field">
+              <label for="reprEtat">État général</label>
+              <input id="reprEtat" type="text" />
+            </div>
+            <div class="field full">
+              <label for="reprInfos">Infos complémentaires</label>
+              <textarea id="reprInfos"></textarea>
+            </div>
           </div>
         </div>
       </div>
@@ -566,26 +575,15 @@
 
     <div class="card right-sticky" id="summaryBlock">
       <h2>Aperçu et recommandation</h2>
-
       <div class="preview-line"><strong>Client</strong><span id="pvClient">—</span></div>
       <div class="preview-line"><strong>Contact</strong><span id="pvContact">—</span></div>
       <div class="preview-line"><strong>Adresse</strong><span id="pvAddress">—</span></div>
       <div class="preview-line"><strong>Budget</strong><span id="pvBudget">—</span></div>
       <div class="preview-line"><strong>Profil</strong><span id="pvProfile">—</span></div>
-
-      <div class="summary-box">
-        <p id="pvSummary">Renseigne les champs à gauche pour générer une recommandation.</p>
-      </div>
-
+      <div class="summary-box"><p id="pvSummary">Renseigne les champs à gauche pour générer une recommandation.</p></div>
       <div class="chips" id="chips"></div>
-
-      <div class="recommend-top">
-        <h3>Meilleure recommandation</h3>
-        <p id="topExplanation">—</p>
-      </div>
-
+      <div class="recommend-top"><h3>Meilleure recommandation</h3><p id="topExplanation">—</p></div>
       <div class="results" id="results"></div>
-
       <div class="pdf-box">
         <h3>Export PDF</h3>
         <p>Le résumé ci-dessous peut être exporté en PDF pour être transmis au client ou conservé dans le dossier.</p>
@@ -598,303 +596,61 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  const STORAGE_KEY = 'libertium_widget_v4';
-  const form = document.getElementById('leadForm');
-  const statusEl = document.getElementById('status');
-
-  const ids = [
-    'civilite','typeClient','prenom','nom','societe','fonction','telephone','mobile','email','siteWeb',
-    'adresse1','adresse2','codePostal','ville','region','pays',
-    'budget','achat','voyageurs','usage','compacite','conduite','couchages','sdb','autonomie','saison',
-    'permis','priorite','besoin','notes','delai','decisionnaire','reprise','score'
-  ];
-
-  const vehicles = [
-    { key:'van', title:'Van aménagé', url:'https://www.libertium.fr/vehicule/van-amenage', family:'Van', features:['compact','itinérance','1 à 2 personnes'] },
-    { key:'fourgon', title:'Fourgon aménagé', url:'https://www.libertium.fr/vehicule/van-fourgon-amenage', family:'Fourgon', features:['polyvalent','gabarit raisonnable','2 à 4 personnes'] },
-    { key:'profile', title:'Camping-car profilé', url:'https://www.libertium.fr/vehicule/camping-car/profile', family:'Camping-car profilé', features:['confort','usage régulier','2 à 4 personnes'] },
-    { key:'integral', title:'Camping-car intégral', url:'https://www.libertium.fr/vehicule/camping-car/integral', family:'Camping-car intégral', features:['grand confort','séjours longs','budget supérieur'] },
-    { key:'capucine', title:'Camping-car capucine', url:'https://www.libertium.fr/vehicule/camping-car/capucine', family:'Camping-car capucine', features:['famille','plusieurs couchages','volume'] },
-    { key:'caravane', title:'Caravane', url:'https://www.libertium.fr/vehicule', family:'Caravane', features:['budget optimisé','stationnaire','remorquage'] }
-  ];
-
-  function safeData(){
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
-    catch { return {}; }
-  }
-
-  function saveData(data){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    statusEl.textContent = 'Données sauvegardées localement.';
-  }
-
-  function readForm(){
-    const data = {};
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      data[id] = el ? el.value : '';
-    });
-    return data;
-  }
-
-  function fillForm(data){
-    ids.forEach(id => {
-      const el = document.getElementById(id);
-      if (el && Object.prototype.hasOwnProperty.call(data, id)) el.value = data[id] ?? '';
-    });
-    updateAll();
-  }
-
-  function fmt(v){ return (v || '').trim(); }
-
-  function clientName(d){
-    return [fmt(d.civilite), fmt(d.prenom), fmt(d.nom)].filter(Boolean).join(' ') || '—';
-  }
-
-  function contactLine(d){
-    return [fmt(d.telephone), fmt(d.mobile), fmt(d.email)].filter(Boolean).join(' · ') || '—';
-  }
-
-  function addressLine(d){
-    return [fmt(d.adresse1), fmt(d.adresse2), [fmt(d.codePostal), fmt(d.ville)].filter(Boolean).join(' '), fmt(d.region), fmt(d.pays)]
-      .filter(Boolean).join(', ') || '—';
-  }
-
-  function profileLine(d){
-    return [fmt(d.voyageurs), fmt(d.usage), fmt(d.compacite), fmt(d.priorite)].filter(Boolean).join(' · ') || '—';
-  }
-
-  function budgetScore(d){
-    const b = fmt(d.budget);
-    if (b === 'Moins de 40 000 €') return 10;
-    if (b === '40 000 à 60 000 €') return 22;
-    if (b === '60 000 à 80 000 €') return 36;
-    if (b === '80 000 à 100 000 €') return 48;
-    if (b === 'Plus de 100 000 €') return 60;
-    return 0;
-  }
-
-  function budgetFit(vehicleKey, budget){
-    const b = fmt(budget);
-    const map = {
-      van: {'Moins de 40 000 €': 22, '40 000 à 60 000 €': 20, '60 000 à 80 000 €': 10, '80 000 à 100 000 €': 0, 'Plus de 100 000 €': 0},
-      fourgon: {'Moins de 40 000 €': 8, '40 000 à 60 000 €': 18, '60 000 à 80 000 €': 20, '80 000 à 100 000 €': 8, 'Plus de 100 000 €': 0},
-      profile: {'Moins de 40 000 €': 0, '40 000 à 60 000 €': 8, '60 000 à 80 000 €': 20, '80 000 à 100 000 €': 22, 'Plus de 100 000 €': 14},
-      integral: {'Moins de 40 000 €': 0, '40 000 à 60 000 €': 0, '60 000 à 80 000 €': 8, '80 000 à 100 000 €': 20, 'Plus de 100 000 €': 22},
-      capucine: {'Moins de 40 000 €': 20, '40 000 à 60 000 €': 22, '60 000 à 80 000 €': 10, '80 000 à 100 000 €': 0, 'Plus de 100 000 €': 0},
-      caravane: {'Moins de 40 000 €': 24, '40 000 à 60 000 €': 18, '60 000 à 80 000 €': 6, '80 000 à 100 000 €': 0, 'Plus de 100 000 €': 0}
-    };
-    return (map[vehicleKey] && map[vehicleKey][b]) || 0;
-  }
-
-  function computeCommercialScore(d){
-    let s = 0;
-    if (fmt(d.delai)==='Immédiat') s += 25;
-    else if (fmt(d.delai)==='1 à 3 mois') s += 18;
-    else if (fmt(d.delai)==='3 à 6 mois') s += 10;
-    else if (fmt(d.delai)==='6 mois et plus') s += 4;
-
-    if (fmt(d.decisionnaire)) s += 12;
-    if (fmt(d.reprise)==='Oui') s += 8;
-    if (fmt(d.reprise)==='À étudier') s += 4;
-    if (fmt(d.besoin).length > 25) s += 6;
-    if (fmt(d.notes).length > 25) s += 4;
-    if (fmt(d.email)) s += 5;
-    if (fmt(d.telephone) || fmt(d.mobile)) s += 5;
-
-    return Math.min(100, s);
-  }
-
-  function scoreVehicle(v, d){
-    let s = budgetFit(v.key, d.budget);
-
-    const voyageurs = fmt(d.voyageurs);
-    const usage = fmt(d.usage);
-    const comp = fmt(d.compacite);
-    const couchages = fmt(d.couchages);
-    const sdb = fmt(d.sdb);
-    const auton = fmt(d.autonomie);
-    const saison = fmt(d.saison);
-    const permis = fmt(d.permis);
-    const priorite = fmt(d.priorite);
-
-    if (v.key === 'van') {
-      if (voyageurs === '1 à 2') s += 26;
-      if (usage === 'Itinérance fréquente') s += 22;
-      if (comp === 'Très compacte') s += 24;
-      if (priorite === 'Maniabilité') s += 14;
-      if (d.conduite === 'Ville et routes étroites') s += 10;
-      if (sdb === 'Optionnelle') s += 6;
-      if (voyageurs === '7 et +') s -= 50;
-      if (usage === 'Séjours stationnaires') s -= 18;
-    }
-
-    if (v.key === 'fourgon') {
-      if (voyageurs === '1 à 2' || voyageurs === '3 à 4') s += 18;
-      if (usage === 'Mixte' || usage === 'Week-ends' || usage === 'Vacances longues') s += 16;
-      if (comp === 'Compacte' || comp === 'Standard') s += 14;
-      if (couchages === 'Lit permanent' || couchages === 'Lits jumeaux' || couchages === 'Lit central') s += 12;
-      if (sdb === 'Souhaitée' || sdb === 'Indispensable') s += 8;
-      if (priorite === 'Équipement') s += 6;
-      if (voyageurs === '7 et +') s -= 35;
-    }
-
-    if (v.key === 'profile') {
-      if (voyageurs === '2 à 4') s += 20;
-      if (usage === 'Vacances longues' || usage === 'Mixte') s += 18;
-      if (comp === 'Standard' || comp === 'Grand confort') s += 18;
-      if (couchages === 'Lit central' || couchages === 'Lit pavillon' || couchages === 'Lits jumeaux') s += 14;
-      if (sdb === 'Indispensable' || sdb === 'Souhaitée') s += 10;
-      if (priorite === 'Confort' || priorite === 'Équipement') s += 12;
-      if (auton === 'Élevée' || auton === 'Très élevée') s += 8;
-      if (saison === 'Toute saison' || saison === 'Montagne / hiver') s += 8;
-    }
-
-    if (v.key === 'integral') {
-      if (voyageurs === '2 à 4') s += 18;
-      if (usage === 'Vacances longues' || usage === 'Séjours stationnaires') s += 18;
-      if (comp === 'Grand confort') s += 22;
-      if (priorite === 'Confort') s += 16;
-      if (auton === 'Élevée' || auton === 'Très élevée') s += 8;
-      if (saison === 'Toute saison' || saison === 'Montagne / hiver') s += 10;
-      if (voyageurs === '7 et +') s -= 30;
-    }
-
-    if (v.key === 'capucine') {
-      if (voyageurs === '5 à 6' || voyageurs === '7 et +') s += 30;
-      if (priorite === 'Volume') s += 16;
-      if (usage === 'Vacances longues' || usage === 'Séjours stationnaires') s += 12;
-      if (couchages === 'Lit dinette' || couchages === 'Peu importe') s += 8;
-      if (comp === 'Très compacte') s -= 30;
-    }
-
-    if (v.key === 'caravane') {
-      if (usage === 'Séjours stationnaires') s += 24;
-      if (priorite === 'Prix') s += 18;
-      if (permis === 'Remorquage souhaité') s += 20;
-      if (auton === 'Faible' || auton === 'Moyenne') s += 8;
-      if (comp === 'Très compacte') s -= 14;
-    }
-
-    return Math.max(0, Math.min(100, s));
-  }
-
-  function rankVehicles(d){
-    return vehicles
-      .map(v => ({...v, score: scoreVehicle(v, d)}))
-      .sort((a,b) => b.score - a.score);
-  }
-
-  function classifyLead(score){
-    if (score >= 80) return { label:'Très chaud', cls:'score-high' };
-    if (score >= 60) return { label:'Qualifié', cls:'score-mid' };
-    if (score >= 35) return { label:'À creuser', cls:'score-low' };
-    return { label:'Faible intention', cls:'score-low' };
-  }
-
-  function summaryText(d){
-    const lines = [];
-    if (d.besoin) lines.push(`Besoin : ${d.besoin}`);
-    if (d.notes) lines.push(`Notes : ${d.notes}`);
-    if (d.delai) lines.push(`Délai : ${d.delai}`);
-    if (d.decisionnaire) lines.push(`Décisionnaire : ${d.decisionnaire}`);
-    if (d.reprise) lines.push(`Reprise : ${d.reprise}`);
-    return lines.join('\n\n') || 'Renseigne les champs à gauche pour générer une recommandation.';
-  }
-
-  function chipsFromData(d){
-    return ['achat','budget','voyageurs','usage','compacite','priorite','saison','permis','sdb','autonomie']
-      .map(id => fmt(d[id]))
-      .filter(Boolean);
-  }
-
-  function explain(v, d){
-    const c = [];
-    const b = fmt(d.budget);
-    if (b) c.push(`budget : ${b}`);
-    if (fmt(d.voyageurs)) c.push(`voyageurs : ${fmt(d.voyageurs)}`);
-    if (fmt(d.usage)) c.push(`usage : ${fmt(d.usage)}`);
-    if (fmt(d.compacite)) c.push(`compacité : ${fmt(d.compacite)}`);
-    if (fmt(d.priorite)) c.push(`priorité : ${fmt(d.priorite)}`);
-    if (fmt(d.saison)) c.push(`saison : ${fmt(d.saison)}`);
-
-    const logic = [];
-    if (v.key === 'van') {
-      logic.push('Le format van est adapté à un besoin très compact et à des déplacements fréquents.');
-      if (b === 'Moins de 40 000 €' || b === '40 000 à 60 000 €') logic.push('Le budget est cohérent avec une entrée de gamme ou un véhicule d’occasion.');
-    }
-    if (v.key === 'fourgon') logic.push('Le fourgon garde un bon équilibre entre confort, volume et maniabilité.');
-    if (v.key === 'profile') logic.push('Le profilé répond bien aux clients qui veulent un vrai niveau de confort sans aller sur un intégral.');
-    if (v.key === 'integral') logic.push('L’intégral est le choix premium dès que le confort et l’espace prennent le dessus.');
-    if (v.key === 'capucine') logic.push('La capucine reste la plus logique dès qu’il faut beaucoup de couchages.');
-    if (v.key === 'caravane') logic.push('La caravane est pertinente quand le budget est serré et que le séjour stationnaire domine.');
-
-    return [...logic, c.length ? `Critères saisis: ${c.join(' · ')}` : null].filter(Boolean).join(' ');
-  }
-
-  function updateAll(){
-    const d = readForm();
-    const commercialScore = computeCommercialScore(d);
-    const lead = classifyLead(commercialScore);
-    const ranked = rankVehicles(d);
-
-    document.getElementById('pvClient').textContent = clientName(d);
-    document.getElementById('pvContact').textContent = contactLine(d);
-    document.getElementById('pvAddress').textContent = addressLine(d);
-    document.getElementById('pvBudget').textContent = fmt(d.budget) || '—';
-    document.getElementById('pvProfile').textContent = profileLine(d);
-    document.getElementById('score').value = commercialScore || '';
-
-    document.getElementById('pvSummary').textContent = summaryText(d);
-    document.getElementById('chips').innerHTML = chipsFromData(d).map(c => `<span class="chip">${escapeHtml(c)}</span>`).join('');
-
-    const best = ranked[0];
-    document.getElementById('topExplanation').innerHTML = best
-      ? `<strong><a href="${best.url}" target="_blank" rel="noopener">${best.title}</a></strong><br>${explain(best, d)}`
-      : '—';
-
-    document.getElementById('results').innerHTML = ranked.slice(0,5).map((v, idx) => `
-      <div class="result">
-        <div class="result-head">
-          <div>
-            <div class="score-badge ${v.score >= 70 ? 'score-high' : v.score >= 40 ? 'score-mid' : 'score-low'}">
-              Top ${idx+1} · ${v.score}/100
-            </div>
-            <h4 style="margin-top:8px;"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4>
-            <div class="hint">${v.family}</div>
-          </div>
-          <div class="small">${lead.label}</div>
-        </div>
-        <div class="product-meta">
-          ${v.features.map(f => `<span class="meta">${escapeHtml(f)}</span>`).join('')}
-        </div>
-        <p><strong>Argument :</strong> ${escapeHtml(explain(v, d))}</p>
-        <p><strong>Lien :</strong> <a href="${v.url}" target="_blank" rel="noopener">${v.url}</a></p>
-      </div>
-    `).join('');
-
-    statusEl.textContent = `Score commercial: ${commercialScore}/100 · ${lead.label}`;
-  }
-
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, s => ({
-      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-    }[s]));
-  }
-
-  function generatePDF(){
-    const element = document.getElementById('summaryBlock');
-    const opt = {
-      margin: 8,
-      filename: 'resume-widget-vehicule-loisir.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    fillForm(safeData());
-    statusEl.textContent = 'Données restaurées depuis le navigateur.';
- 
+const STORAGE_KEY='libertium_widget_v6';
+const form=document.getElementById('leadForm');
+const statusEl=document.getElementById('status');
+const ids=[
+  'civilite','typeClient','prenom','nom','societe','fonction','telephone','mobile','email','siteWeb',
+  'adresse1','adresse2','codePostal','ville','departement','pays','budget','achat','voyageurs','usage',
+  'compacite','conduite','couchages','sdb','autonomie','saison','permis','priorite','besoin','notes',
+  'delai','decisionnaire','reprise','score','reprType','reprMarque','reprModele','reprAnnee','reprKm',
+  'reprEtat','reprInfos'
+];
+const vehicles=[
+  {key:'van',title:'Van aménagé',url:'https://www.libertium.fr/vehicule/van-amenage',family:'Van',features:['compact','itinérance','1 à 2 personnes']},
+  {key:'fourgon',title:'Fourgon aménagé',url:'https://www.libertium.fr/vehicule/van-fourgon-amenage',family:'Fourgon',features:['polyvalent','gabarit raisonnable','2 à 4 personnes']},
+  {key:'profile',title:'Camping-car profilé',url:'https://www.libertium.fr/vehicule/camping-car/profile',family:'Camping-car profilé',features:['confort','usage régulier','2 à 4 personnes']},
+  {key:'integral',title:'Camping-car intégral',url:'https://www.libertium.fr/vehicule/camping-car/integral',family:'Camping-car intégral',features:['grand confort','séjours longs','budget supérieur']},
+  {key:'capucine',title:'Camping-car capucine',url:'https://www.libertium.fr/vehicule/camping-car/capucine',family:'Camping-car capucine',features:['famille','plusieurs couchages','volume']},
+  {key:'caravane',title:'Caravane',url:'https://www.libertium.fr/vehicule',family:'Caravane',features:['budget optimisé','stationnaire','remorquage']}
+];
+const deptSelect=document.getElementById('departement');
+const repriseEl=document.getElementById('reprise');
+const repriseFields=document.getElementById('repriseFields');
+const deptList=[
+['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d’Or'],['22','Côtes-d’Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['59','Nord'],['60','Oise'],['61','Orne'],['62','Pas-de-Calais'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d’Oise']
+];
+function initDept(){deptSelect.innerHTML='<option value="">—</option>'+deptList.map(([code,name])=>`<option value="${code}">${code} - ${name}</option>`).join('');}
+async function resolvePostal(code){const c=(code||'').trim();if(!/^\\d{5}$/.test(c)){setVille('');return;}try{const r=await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(c)}&type=municipality&limit=20`);const j=await r.json();const feats=(j.features||[]).filter(f=>String(f.properties.postcode||'').split(',').includes(c));if(feats.length){const names=[...new Set(feats.map(f=>f.properties.city).filter(Boolean))];setVille(names.join(' / '));}else{setVille('');}}catch(e){setVille('');}}
+function setVille(v){document.getElementById('ville').value=v||''}
+function safeData(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch{return{}}}
+function saveData(data){localStorage.setItem(STORAGE_KEY,JSON.stringify(data));statusEl.textContent='Données sauvegardées localement.'}
+function readForm(){const data={};ids.forEach(id=>{const el=document.getElementById(id);data[id]=el?el.value:''});return data}
+function fillForm(data){ids.forEach(id=>{const el=document.getElementById(id);if(el&&Object.prototype.hasOwnProperty.call(data,id))el.value=data[id]??''});toggleRepriseFields();updateAll()}
+function fmt(v){return (v||'').trim()}
+function clientName(d){return [fmt(d.civilite),fmt(d.prenom),fmt(d.nom)].filter(Boolean).join(' ')||'—'}
+function contactLine(d){return [fmt(d.telephone),fmt(d.mobile),fmt(d.email)].filter(Boolean).join(' · ')||'—'}
+function addressLine(d){return [fmt(d.adresse1),fmt(d.adresse2),[fmt(d.codePostal),fmt(d.ville)].filter(Boolean).join(' '),fmt(d.departement),fmt(d.pays)].filter(Boolean).join(', ')||'—'}
+function profileLine(d){return [fmt(d.voyageurs),fmt(d.usage),fmt(d.compacite),fmt(d.priorite)].filter(Boolean).join(' · ')||'—'}
+function budgetFit(vehicleKey,budget){const b=fmt(budget);const map={van:{'Moins de 40 000 €':22,'40 000 à 60 000 €':20,'60 000 à 80 000 €':10,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':8},fourgon:{'Moins de 40 000 €':8,'40 000 à 60 000 €':18,'60 000 à 80 000 €':20,'80 000 à 100 000 €':8,'Plus de 100 000 €':0,'Non défini':10},profile:{'Moins de 40 000 €':0,'40 000 à 60 000 €':8,'60 000 à 80 000 €':20,'80 000 à 100 000 €':22,'Plus de 100 000 €':14,'Non défini':10},integral:{'Moins de 40 000 €':0,'40 000 à 60 000 €':0,'60 000 à 80 000 €':8,'80 000 à 100 000 €':20,'Plus de 100 000 €':22,'Non défini':10},capucine:{'Moins de 40 000 €':20,'40 000 à 60 000 €':22,'60 000 à 80 000 €':10,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':8},caravane:{'Moins de 40 000 €':24,'40 000 à 60 000 €':18,'60 000 à 80 000 €':6,'80 000 à 100 000 €':0,'Plus de 100 000 €':0,'Non défini':12}};return(map[vehicleKey]&&map[vehicleKey][b])||0}
+function computeCommercialScore(d){let s=0;if(fmt(d.delai)==='Immédiat')s+=25;else if(fmt(d.delai)==='1 à 3 mois')s+=18;else if(fmt(d.delai)==='3 à 6 mois')s+=10;else if(fmt(d.delai)==='6 mois et plus')s+=4;else if(fmt(d.delai)==='Se renseigne')s+=2;if(fmt(d.decisionnaire))s+=12;if(fmt(d.reprise)==='Oui')s+=8;if(fmt(d.reprise)==='À étudier')s+=4;if(fmt(d.besoin).length>25)s+=6;if(fmt(d.notes).length>25)s+=4;if(fmt(d.email))s+=5;if(fmt(d.telephone)||fmt(d.mobile))s+=5;return Math.min(100,s)}
+function scoreVehicle(v,d){let s=budgetFit(v.key,d.budget);const voyageurs=fmt(d.voyageurs),usage=fmt(d.usage),comp=fmt(d.compacite),couchages=fmt(d.couchages),sdb=fmt(d.sdb),auton=fmt(d.autonomie),saison=fmt(d.saison),permis=fmt(d.permis),priorite=fmt(d.priorite);if(v.key==='van'){if(voyageurs==='1 à 2')s+=26;if(usage==='Itinérance fréquente')s+=22;if(comp==='Très compacte')s+=24;if(priorite==='Maniabilité')s+=14;if(d.conduite==='Ville et routes étroites')s+=10;if(sdb==='Optionnelle')s+=6;if(voyageurs==='7 et +')s-=50;if(usage==='Séjours stationnaires')s-=18}if(v.key==='fourgon'){if(voyageurs==='1 à 2'||voyageurs==='3 à 4')s+=18;if(usage==='Mixte'||usage==='Week-ends'||usage==='Vacances longues')s+=16;if(comp==='Compacte'||comp==='Standard')s+=14;if(couchages==='Lit permanent'||couchages==='Lits jumeaux'||couchages==='Lit central')s+=12;if(sdb==='Souhaitée'||sdb==='Indispensable')s+=8;if(priorite==='Équipement')s+=6;if(voyageurs==='7 et +')s-=35}if(v.key==='profile'){if(voyageurs==='2 à 4')s+=20;if(usage==='Vacances longues'||usage==='Mixte')s+=18;if(comp==='Standard'||comp==='Grand confort')s+=18;if(couchages==='Lit central'||couchages==='Lit pavillon'||couchages==='Lits jumeaux')s+=14;if(sdb==='Indispensable'||sdb==='Souhaitée')s+=10;if(priorite==='Confort'||priorite==='Équipement')s+=12;if(auton==='Élevée'||auton==='Très élevée')s+=8;if(saison==='Toute saison'||saison==='Montagne / hiver')s+=8}if(v.key==='integral'){if(voyageurs==='2 à 4')s+=18;if(usage==='Vacances longues'||usage==='Séjours stationnaires')s+=18;if(comp==='Grand confort')s+=22;if(priorite==='Confort')s+=16;if(auton==='Élevée'||auton==='Très élevée')s+=8;if(saison==='Toute saison'||saison==='Montagne / hiver')s+=10;if(voyageurs==='7 et +')s-=30}if(v.key==='capucine'){if(voyageurs==='5 à 6'||voyageurs==='7 et +')s+=30;if(priorite==='Volume')s+=16;if(usage==='Vacances longues'||usage==='Séjours stationnaires')s+=12;if(couchages==='Lit dinette'||couchages==='Peu importe')s+=8;if(comp==='Très compacte')s-=30}if(v.key==='caravane'){if(usage==='Séjours stationnaires')s+=24;if(priorite==='Prix')s+=18;if(permis==='Remorquage souhaité')s+=20;if(auton==='Faible'||auton==='Moyenne')s+=8;if(comp==='Très compacte')s-=14}return Math.max(0,Math.min(100,s))}
+function rankVehicles(d){return vehicles.map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score)}
+function classifyLead(score){if(score>=80)return{label:'Très chaud',cls:'score-high'};if(score>=60)return{label:'Qualifié',cls:'score-mid'};if(score>=35)return{label:'À creuser',cls:'score-low'};return{label:'Faible intention',cls:'score-low'}}
+function summaryText(d){const lines=[];if(d.besoin)lines.push(`Besoin : ${d.besoin}`);if(d.notes)lines.push(`Notes : ${d.notes}`);if(d.delai)lines.push(`Délai : ${d.delai}`);if(d.decisionnaire)lines.push(`Décisionnaire : ${d.decisionnaire}`);if(d.reprise)lines.push(`Reprise : ${d.reprise}`);if(d.reprType||d.reprMarque||d.reprModele)lines.push(`Véhicule à reprendre : ${[d.reprType,d.reprMarque,d.reprModele,d.reprAnnee,d.reprKm,d.reprEtat].filter(Boolean).join(' · ')}`);if(d.reprInfos)lines.push(`Infos complémentaires reprise : ${d.reprInfos}`);return lines.join('\\n\\n')||'Renseigne les champs à gauche pour générer une recommandation.'}
+function chipsFromData(d){return ['achat','budget','voyageurs','usage','compacite','priorite','saison','permis','sdb','autonomie','departement'].map(id=>fmt(d[id])).filter(Boolean)}
+function explain(v,d){const c=[];const b=fmt(d.budget);if(b)c.push(`budget : ${b}`);if(fmt(d.voyageurs))c.push(`voyageurs : ${fmt(d.voyageurs)}`);if(fmt(d.usage))c.push(`usage : ${fmt(d.usage)}`);if(fmt(d.compacite))c.push(`compacité : ${fmt(d.compacite)}`);if(fmt(d.priorite))c.push(`priorité : ${fmt(d.priorite)}`);if(fmt(d.saison))c.push(`saison : ${fmt(d.saison)}`);const logic=[];if(v.key==='van'){logic.push('Le format van est adapté à un besoin très compact et à des déplacements fréquents.');if(b==='Moins de 40 000 €'||b==='40 000 à 60 000 €')logic.push('Le budget est cohérent avec une entrée de gamme ou un véhicule d’occasion.')}if(v.key==='fourgon')logic.push('Le fourgon garde un bon équilibre entre confort, volume et maniabilité.');if(v.key==='profile')logic.push('Le profilé répond bien aux clients qui veulent un vrai niveau de confort sans aller sur un intégral.');if(v.key==='integral')logic.push('L’intégral est le choix premium dès que le confort et l’espace prennent le dessus.');if(v.key==='capucine')logic.push('La capucine reste la plus logique dès qu’il faut beaucoup de couchages.');if(v.key==='caravane')logic.push('La caravane est pertinente quand le budget est serré et que le séjour stationnaire domine.');return [...logic,c.length?`Critères saisis : ${c.join(' · ')}`:null].filter(Boolean).join(' ')}
+function updateAll(){const d=readForm();const commercialScore=computeCommercialScore(d);const lead=classifyLead(commercialScore);const ranked=rankVehicles(d);document.getElementById('pvClient').textContent=clientName(d);document.getElementById('pvContact').textContent=contactLine(d);document.getElementById('pvAddress').textContent=addressLine(d);document.getElementById('pvBudget').textContent=fmt(d.budget)||'—';document.getElementById('pvProfile').textContent=profileLine(d);document.getElementById('score').value=commercialScore||'';document.getElementById('pvSummary').textContent=summaryText(d);document.getElementById('chips').innerHTML=chipsFromData(d).map(c=>`<span class=\"chip\">${escapeHtml(c)}</span>`).join('');const best=ranked[0];document.getElementById('topExplanation').innerHTML=best?`<strong><a href=\"${best.url}\" target=\"_blank\" rel=\"noopener\">${best.title}</a></strong><br>${explain(best,d)}`:'—';document.getElementById('results').innerHTML=ranked.slice(0,5).map((v,idx)=>`<div class=\"result\"><div class=\"result-head\"><div><div class=\"score-badge ${v.score>=70?'score-high':v.score>=40?'score-mid':'score-low'}\">Top ${idx+1} · ${v.score}/100</div><h4 style=\"margin-top:8px;\"><a href=\"${v.url}\" target=\"_blank\" rel=\"noopener\">${v.title}</a></h4><div class=\"hint\">${v.family}</div></div><div class=\"small\">${lead.label}</div></div><div class=\"product-meta\">${v.features.map(f=>`<span class=\"meta\">${escapeHtml(f)}</span>`).join('')}</div><p><strong>Argument :</strong> ${escapeHtml(explain(v,d))}</p><p><strong>Lien :</strong> <a href=\"${v.url}\" target=\"_blank\" rel=\"noopener\">${v.url}</a></p></div>`).join('');statusEl.textContent=`Score commercial : ${commercialScore}/100 · ${lead.label}`;toggleRepriseFields()}
+function escapeHtml(str){return String(str).replace(/[&<>\"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'}[s]))}
+function generatePDF(){const element=document.getElementById('summaryBlock');html2pdf().set({margin:8,filename:'resume-widget-vehicule-loisir.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(element).save()}
+function toggleRepriseFields(){const on=fmt(repriseEl.value)==='Oui';repriseFields.classList.toggle('show',on)}
+async function resolvePostal(code){const c=(code||'').trim();if(!/^\\d{5}$/.test(c)){setVille('');return;}try{const r=await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(c)}&type=municipality&limit=20`);const j=await r.json();const feats=(j.features||[]).filter(f=>String(f.properties.postcode||'').split(',').includes(c));if(feats.length){const names=[...new Set(feats.map(f=>f.properties.city).filter(Boolean))];setVille(names.join(' / '));}else{setVille('');}}catch(e){setVille('')}}
+function setVille(v){document.getElementById('ville').value=v||''}
+function onPostalInput(){const code=document.getElementById('codePostal').value;resolvePostal(code).then(()=>{saveData(readForm());updateAll()})}
+function attach(){ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;const ev=(el.tagName==='TEXTAREA'||el.tagName==='INPUT')?'input':'change';el.addEventListener(ev,()=>{if(id==='codePostal')return;if(id==='reprise'){toggleRepriseFields()}saveData(readForm());updateAll()})});document.getElementById('btnSave').addEventListener('click',()=>{saveData(readForm());updateAll()});document.getElementById('btnPrint').addEventListener('click',()=>window.print());document.getElementById('btnPdf').addEventListener('click',generatePDF);document.getElementById('btnPdfInline').addEventListener('click',generatePDF);document.getElementById('btnReset').addEventListener('click',()=>{if(!confirm('Réinitialiser toutes les données ?'))return;localStorage.removeItem(STORAGE_KEY);form.reset();document.getElementById('pays').value='France';document.getElementById('ville').value='';toggleRepriseFields();updateAll();statusEl.textContent='Données effacées.'});document.getElementById('codePostal').addEventListener('blur',onPostalInput);document.getElementById('codePostal').addEventListener('change',onPostalInput);document.getElementById('reprise').addEventListener('change',()=>{toggleRepriseFields();saveData(readForm());updateAll()})}
+initDept();
+attach();
+document.addEventListener('DOMContentLoaded',()=>{fillForm(safeData());toggleRepriseFields();statusEl.textContent='Données restaurées depuis le navigateur.'});
+</script>
+</body>
+</html>
