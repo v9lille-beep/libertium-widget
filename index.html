@@ -1,805 +1,563 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Libertium — Guide découverte client</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Libertium Smart Matcher</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --navy: #0f1f3d;
-  --blue: #1a3a6b;
-  --blue-mid: #2e5fa3;
-  --blue-lt: #e8f0fb;
-  --blue-border: #b5d4f4;
-  --gold: #c8960c;
-  --gold-lt: #fdf3d7;
-  --gold-border: #f0c842;
-  --ok: #1e6b3c;
-  --ok-lt: #eaf3de;
-  --warn: #9b6000;
-  --warn-lt: #fff3cd;
-  --danger: #a32d2d;
-  --danger-lt: #fcebeb;
-  --text: #1a1a2e;
-  --text-sec: #5a6480;
-  --text-hint: #9ba3b8;
-  --bg: #f8f9fc;
-  --bg-card: #ffffff;
-  --border: #e2e6f0;
-  --border-mid: #c8cedf;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-pill: 24px;
-  --shadow: 0 2px 12px rgba(15,31,61,.08);
-  --shadow-lg: 0 8px 32px rgba(15,31,61,.14);
+:root{
+  --bg:#0f172a;
+  --card:#111827;
+  --card2:#1f2937;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --line:#334155;
+  --primary:#2563eb;
+  --primary2:#1d4ed8;
+  --ok:#10b981;
+  --warn:#f59e0b;
+  --radius:18px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.6;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:linear-gradient(180deg,#020617,#0f172a);
+  color:var(--text);
+  font-family:Inter,sans-serif;
 }
 
-/* ── Header ── */
-.header {
-  background: var(--navy);
-  padding: 0 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 16px rgba(0,0,0,.2);
-}
-.logo {
-  font-family: 'DM Serif Display', serif;
-  font-size: 20px;
-  color: #fff;
-  letter-spacing: .02em;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.logo-badge {
-  background: var(--gold);
-  color: #fff;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-}
-.header-right {
-  font-size: 12px;
-  color: rgba(255,255,255,.5);
+.container{
+  width:min(1180px,92%);
+  margin:auto;
+  padding:32px 0 60px;
 }
 
-/* ── Layout ── */
-.container {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+.hero{
+  background:linear-gradient(135deg,#1e293b,#0f172a);
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:40px;
+  margin-bottom:28px;
+  box-shadow:0 20px 50px rgba(0,0,0,.35);
 }
 
-/* ── API key setup ── */
-.api-setup {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2rem;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--shadow);
-}
-.api-setup h2 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 18px;
-  color: var(--navy);
-  margin-bottom: .5rem;
-}
-.api-setup p {
-  font-size: 13px;
-  color: var(--text-sec);
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-.api-input-row {
-  display: flex;
-  gap: 10px;
-}
-.api-input-row input {
-  flex: 1;
-  padding: 10px 14px;
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-sm);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--text);
-  background: var(--bg);
-  outline: none;
-  transition: border-color .15s;
-}
-.api-input-row input:focus { border-color: var(--blue-mid); }
-.api-note {
-  font-size: 11px;
-  color: var(--text-hint);
-  margin-top: .75rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.hero h1{
+  margin:0 0 10px;
+  font-size:42px;
 }
 
-/* ── Main card ── */
-.card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+.hero p{
+  color:var(--muted);
+  max-width:800px;
+  line-height:1.7;
 }
 
-/* ── Progress ── */
-.progress-wrap {
-  padding: 1.25rem 1.75rem .5rem;
-  background: var(--bg-card);
-}
-.progress-bar {
-  display: flex;
-  gap: 5px;
-  margin-bottom: .75rem;
-}
-.progress-step {
-  flex: 1;
-  height: 3px;
-  border-radius: 2px;
-  background: var(--border);
-  transition: background .3s;
-}
-.progress-step.done { background: var(--blue-mid); }
-.progress-step.active { background: var(--gold); }
-.progress-label {
-  font-size: 11px;
-  color: var(--text-hint);
-  text-transform: uppercase;
-  letter-spacing: .06em;
+.grid{
+  display:grid;
+  grid-template-columns:420px 1fr;
+  gap:24px;
 }
 
-/* ── Step header ── */
-.step-header {
-  padding: 1.25rem 1.75rem 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-.step-num {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--blue-lt);
-  color: var(--blue-mid);
-  font-size: 14px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid var(--blue-border);
-}
-.step-num.gold {
-  background: var(--gold-lt);
-  color: var(--gold);
-  border-color: var(--gold-border);
-}
-.step-title { font-size: 17px; font-weight: 600; color: var(--navy); }
-.step-sub { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
-
-/* ── Step body ── */
-.step-body { padding: 1.25rem 1.75rem; }
-
-.q-block { margin-bottom: 1.25rem; }
-.q-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-sec);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  margin-bottom: 10px;
+.card{
+  background:rgba(17,24,39,.9);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:24px;
+  backdrop-filter:blur(8px);
 }
 
-/* ── Chips ── */
-.chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip {
-  padding: 8px 16px;
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border-mid);
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text);
-  cursor: pointer;
-  transition: all .15s;
-  background: var(--bg-card);
-  user-select: none;
-}
-.chip:hover {
-  border-color: var(--blue-mid);
-  color: var(--blue-mid);
-  background: var(--blue-lt);
-}
-.chip.sel {
-  background: var(--blue-lt);
-  border-color: var(--blue-mid);
-  color: var(--blue);
-  font-weight: 500;
+h2{
+  margin-top:0;
+  font-size:22px;
 }
 
-/* ── Nav ── */
-.step-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.75rem 1.5rem;
-  border-top: 1px solid var(--border);
-  margin-top: .5rem;
-}
-.btn {
-  padding: 10px 22px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-mid);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  background: var(--bg-card);
-  color: var(--text);
-  transition: all .15s;
-}
-.btn:hover { background: var(--bg); border-color: var(--border); }
-.btn.primary {
-  background: var(--blue-mid);
-  color: #fff;
-  border-color: var(--blue-mid);
-}
-.btn.primary:hover { background: var(--blue); border-color: var(--blue); }
-.btn.gold {
-  background: var(--gold);
-  color: #fff;
-  border-color: var(--gold);
-}
-.btn.gold:hover { opacity: .9; }
-.btn.outline-blue {
-  background: transparent;
-  color: var(--blue-mid);
-  border-color: var(--blue-border);
-}
-.btn.outline-blue:hover { background: var(--blue-lt); }
-.btn:disabled { opacity: .4; cursor: not-allowed; }
-
-/* ── Step visibility ── */
-.step { display: none; }
-.step.active { display: block; }
-
-/* ── Result ── */
-.score-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 10px;
-  margin-bottom: 1.25rem;
-}
-.score-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 12px 14px;
-}
-.sc-label { font-size: 11px; color: var(--text-hint); margin-bottom: 4px; }
-.sc-val { font-size: 15px; font-weight: 600; color: var(--navy); }
-
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-hint);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  margin-bottom: 10px;
-  margin-top: 1.25rem;
+.section{
+  margin-bottom:24px;
 }
 
-.summary-table {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 4px 14px;
-  margin-bottom: .5rem;
-}
-.sum-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-.sum-row:last-child { border-bottom: none; }
-.sum-key { color: var(--text-sec); }
-.sum-val { font-weight: 500; color: var(--navy); text-align: right; max-width: 60%; }
-
-.reco-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  margin-bottom: 12px;
-  background: var(--bg-card);
-  transition: box-shadow .2s;
-  position: relative;
-}
-.reco-card:hover { box-shadow: var(--shadow); }
-.reco-card.top { border-color: var(--blue-mid); border-width: 1.5px; }
-.reco-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-.reco-name { font-size: 15px; font-weight: 600; color: var(--navy); }
-.reco-brand { font-size: 12px; color: var(--text-sec); margin-bottom: 6px; }
-.reco-why { font-size: 13px; color: var(--text-sec); line-height: 1.55; margin-bottom: 10px; }
-.badge {
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: var(--radius-pill);
-  font-weight: 600;
-  white-space: nowrap;
-}
-.badge.best { background: var(--blue-lt); color: var(--blue); }
-.badge.alt { background: var(--bg); color: var(--text-hint); border: 1px solid var(--border); }
-.tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag {
-  font-size: 11px;
-  padding: 3px 9px;
-  border-radius: 5px;
-  border: 1px solid var(--border);
-  color: var(--text-sec);
-  background: var(--bg);
-}
-.tag.match {
-  border-color: var(--blue-border);
-  color: var(--blue);
-  background: var(--blue-lt);
-}
-.score-indicator {
-  position: absolute;
-  bottom: 16px;
-  right: 18px;
-  font-size: 11px;
-  color: var(--text-hint);
-  font-weight: 500;
+.label{
+  display:block;
+  margin-bottom:8px;
+  color:#cbd5e1;
+  font-size:14px;
 }
 
-/* ── AI Argumentaire ── */
-.ai-box {
-  border: 1.5px solid var(--gold-border);
-  border-radius: var(--radius);
-  background: var(--gold-lt);
-  overflow: hidden;
-  margin-top: 1.25rem;
-}
-.ai-box-header {
-  padding: 14px 18px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-.ai-box-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--warn);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.ai-box-body {
-  display: none;
-  padding: 0 18px 18px;
-}
-.ai-box-body.open { display: block; }
-.ai-output {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 16px;
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--text);
-  min-height: 80px;
-  white-space: pre-wrap;
-}
-.ai-output.loading { color: var(--text-hint); font-style: italic; }
-.ai-output h3 { font-size: 13px; font-weight: 600; color: var(--navy); margin: 12px 0 6px; }
-.ai-output h3:first-child { margin-top: 0; }
-.ai-output ul { padding-left: 18px; margin: 4px 0 8px; }
-.ai-output li { margin-bottom: 4px; }
-.ai-output strong { color: var(--navy); }
-
-/* ── Loader ── */
-.loader {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--gold-border);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin .7s linear infinite;
-  vertical-align: middle;
-  margin-right: 6px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── Divider ── */
-hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
-
-/* ── Responsive ── */
-@media (max-width: 600px) {
-  .container { padding: 1rem 1rem 3rem; }
-  .step-body, .step-nav, .step-header, .progress-wrap { padding-left: 1.25rem; padding-right: 1.25rem; }
-  .api-input-row { flex-direction: column; }
+select,input{
+  width:100%;
+  padding:14px;
+  background:#0f172a;
+  border:1px solid #334155;
+  color:white;
+  border-radius:12px;
+  font-size:15px;
 }
 
-/* ── Animations ── */
-.card { animation: fadeUp .3s ease; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.step.active { animation: fadeIn .2s ease; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+button{
+  border:none;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.primary{
+  width:100%;
+  padding:16px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  color:white;
+  font-weight:700;
+  font-size:15px;
+}
+
+.primary:hover{
+  transform:translateY(-1px);
+}
+
+.vehicle{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:18px;
+  background:#0b1220;
+}
+
+.vehicle-top{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:flex-start;
+}
+
+.score{
+  background:#0b3a22;
+  color:#6ee7b7;
+  border:1px solid #14532d;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.vehicle h3{
+  margin:0 0 6px;
+}
+
+.price{
+  font-size:28px;
+  font-weight:800;
+  margin:12px 0;
+}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:12px;
+}
+
+.tag{
+  border:1px solid #334155;
+  color:#cbd5e1;
+  border-radius:999px;
+  padding:6px 10px;
+  font-size:12px;
+}
+
+.pitch{
+  margin-top:16px;
+  padding:16px;
+  border-radius:14px;
+  background:#111827;
+  border:1px solid #1e3a8a;
+  color:#dbeafe;
+  line-height:1.7;
+}
+
+.config{
+  margin-top:18px;
+  background:#0b1220;
+  border:1px dashed #334155;
+  padding:14px;
+  border-radius:12px;
+  color:#94a3b8;
+  font-size:13px;
+  line-height:1.7;
+}
+
+.code{
+  background:black;
+  padding:10px;
+  border-radius:8px;
+  overflow:auto;
+  margin-top:10px;
+  font-family:monospace;
+  color:#93c5fd;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:999px;
+  padding:8px 12px;
+  margin-bottom:16px;
+  color:#cbd5e1;
+  font-size:13px;
+}
+
+.notice{
+  background:#3b2f07;
+  color:#fde68a;
+  border:1px solid #92400e;
+  padding:14px;
+  border-radius:14px;
+  margin-bottom:20px;
+  line-height:1.6;
+}
+
+a{
+  color:#93c5fd;
+}
+
+@media(max-width:980px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="logo">
-    Libertium
-    <span class="logo-badge">Guide commercial</span>
-  </div>
-  <div class="header-right">Découverte client — Outil interne</div>
-</div>
-
 <div class="container">
 
-  <div class="api-setup" id="api-setup">
-    <h2>Configuration initiale</h2>
+  <div class="hero">
+    <div class="badge">⚡ Version GitHub Pages • Sans clé API • Matching intelligent</div>
+    <h1>Libertium Smart Matcher</h1>
     <p>
-      Entrez votre clé API Anthropic pour activer la génération d'argumentaires commerciaux personnalisés.
-      Votre clé est stockée uniquement dans ce navigateur (localStorage) et n'est jamais envoyée à d'autres serveurs.
+      Version avancée du configurateur Libertium : matching automatique du stock,
+      scoring intelligent, argumentaire commercial automatique, publication GitHub Pages,
+      et architecture prête pour scraping live via proxy.
     </p>
-    <div class="api-input-row">
-      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
-      <button class="btn primary" onclick="saveKey()">Enregistrer</button>
-    </div>
-    <div class="api-note">
-      🔒 Stockée localement — jamais transmise à des tiers · Obtenez votre clé sur console.anthropic.com
-    </div>
   </div>
 
-  <div class="card">
+  <div class="grid">
 
-    <div class="progress-wrap">
-      <div class="progress-bar" id="prog"></div>
-      <div class="progress-label" id="prog-label">Étape 1 sur 4</div>
+    <div class="card">
+
+      <h2>Profil client</h2>
+
+      <div class="section">
+        <label class="label">Voyageurs</label>
+        <select id="voyageurs">
+          <option value="couple">Couple</option>
+          <option value="famille">Famille</option>
+          <option value="solo">Solo</option>
+          <option value="seniors">Seniors</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label class="label">Budget max</label>
+        <input id="budget" type="number" value="70000"/>
+      </div>
+
+      <div class="section">
+        <label class="label">Style de conduite</label>
+        <select id="conduite">
+          <option value="compact">Compact</option>
+          <option value="equilibre">Équilibré</option>
+          <option value="grand">Grand confort</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label class="label">Priorité</label>
+        <select id="priority">
+          <option value="autonomie">Autonomie</option>
+          <option value="famille">Famille</option>
+          <option value="premium">Premium</option>
+          <option value="budget">Budget</option>
+        </select>
+      </div>
+
+      <button class="primary" onclick="runMatcher()">
+        Lancer le matching intelligent
+      </button>
+
+      <div class="config">
+        <strong>Architecture recommandée :</strong><br><br>
+
+        Front GitHub Pages → Proxy Cloudflare Worker → libertium.fr
+
+        <div class="code">
+const API_ENDPOINT =
+"https://TON-WORKER.workers.dev/search";
+        </div>
+
+        Aucun backend classique nécessaire.<br>
+        Aucun serveur VPS.<br>
+        Aucun coût IA.
+      </div>
+
     </div>
 
-    <div class="step active" id="s1">
-      <div class="step-header">
-        <div class="step-num">1</div>
+    <div class="card">
+
+      <div class="notice">
+        Cette démo utilise un stock simulé.<br><br>
+
+        Pour le vrai mode LIVE :
+        branche simplement un proxy scraping (Cloudflare Worker,
+        Netlify Function ou Vercel Edge Function).
+      </div>
+
+      <h2>Recommandations</h2>
+
+      <div id="results"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const API_ENDPOINT = null;
+
+/*
+Mettre ici :
+https://xxx.workers.dev/search
+
+Le proxy doit retourner :
+
+[
+ {
+   title,
+   brand,
+   price,
+   type,
+   url,
+   tags:[]
+ }
+]
+*/
+
+/* =========================================================
+   STOCK DEMO
+========================================================= */
+
+const DEMO_STOCK = [
+
+{
+ title:"Adria Twin Supreme 640",
+ brand:"Adria",
+ price:72900,
+ type:"Van",
+ url:"https://www.libertium.fr/",
+ tags:["compact","premium","autonomie","couple"]
+},
+
+{
+ title:"Chausson 640 Titanium",
+ brand:"Chausson",
+ price:68900,
+ type:"Profilé",
+ url:"https://www.libertium.fr/",
+ tags:["equilibre","famille","garage"]
+},
+
+{
+ title:"Rimor Kilig 9",
+ brand:"Rimor",
+ price:57900,
+ type:"Capucine",
+ url:"https://www.libertium.fr/",
+ tags:["famille","budget","6 couchages"]
+},
+
+{
+ title:"Carthago C-Tourer",
+ brand:"Carthago",
+ price:119000,
+ type:"Intégral",
+ url:"https://www.libertium.fr/",
+ tags:["premium","grand","autonomie"]
+}
+
+];
+
+/* =========================================================
+   MATCHING ENGINE
+========================================================= */
+
+function scoreVehicle(v, profile){
+
+  let score = 0;
+
+  if(v.price <= profile.budget) score += 30;
+  else score -= 20;
+
+  if(v.tags.includes(profile.priority)) score += 40;
+
+  if(v.tags.includes(profile.conduite)) score += 20;
+
+  if(profile.voyageurs === "famille" && v.tags.includes("famille"))
+    score += 25;
+
+  if(profile.voyageurs === "couple" && v.tags.includes("couple"))
+    score += 25;
+
+  return score;
+}
+
+/* =========================================================
+   ARGUMENTAIRE AUTO
+========================================================= */
+
+function buildPitch(v, profile){
+
+  let txt = "";
+
+  if(profile.voyageurs === "famille"){
+    txt += `
+Ce modèle est particulièrement adapté aux voyages familiaux grâce
+à son espace de vie généreux et sa modularité.
+`;
+  }
+
+  if(profile.priority === "autonomie"){
+    txt += `
+Son niveau d’autonomie permet plusieurs jours hors camping,
+ce qui correspond parfaitement au besoin exprimé.
+`;
+  }
+
+  if(profile.priority === "premium"){
+    txt += `
+La finition premium et le confort de conduite créent une forte
+valeur perçue en concession.
+`;
+  }
+
+  txt += `
+Le rapport équipement / prix est cohérent avec votre enveloppe
+budgétaire et votre fréquence d’utilisation.
+`;
+
+  return txt.trim();
+}
+
+/* =========================================================
+   FETCH LIVE
+========================================================= */
+
+async function fetchVehicles(){
+
+  if(!API_ENDPOINT){
+    return DEMO_STOCK;
+  }
+
+  try{
+    const r = await fetch(API_ENDPOINT);
+    return await r.json();
+  }catch(e){
+    console.error(e);
+    return DEMO_STOCK;
+  }
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+async function runMatcher(){
+
+  const profile = {
+    voyageurs:document.getElementById("voyageurs").value,
+    budget:Number(document.getElementById("budget").value),
+    conduite:document.getElementById("conduite").value,
+    priority:document.getElementById("priority").value
+  };
+
+  const vehicles = await fetchVehicles();
+
+  const ranked = vehicles
+    .map(v => ({
+      ...v,
+      score:scoreVehicle(v, profile),
+      pitch:buildPitch(v, profile)
+    }))
+    .sort((a,b)=>b.score-a.score);
+
+  render(ranked);
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+
+function render(list){
+
+  const el = document.getElementById("results");
+
+  if(!list.length){
+    el.innerHTML = "Aucun résultat";
+    return;
+  }
+
+  el.innerHTML = list.map(v => `
+    <div class="vehicle">
+
+      <div class="vehicle-top">
+
         <div>
-          <div class="step-title">Qui voyage ?</div>
-          <div class="step-sub">Composition et besoins du groupe</div>
+          <h3>${v.title}</h3>
+          <div>${v.brand} • ${v.type}</div>
         </div>
+
+        <div class="score">
+          Match ${v.score}%
+        </div>
+
       </div>
-      <div class="step-body">
-        <div class="q-block">
-          <div class="q-label">Vous partez…</div>
-          <div class="chips" data-k="voyageurs" data-m="0">
-            <div class="chip" data-v="solo">Seul(e)</div>
-            <div class="chip" data-v="couple">En couple</div>
-            <div class="chip" data-v="famille_young">Famille (enfants &lt; 6 ans)</div>
-            <div class="chip" data-v="famille_ado">Famille (enfants / ados)</div>
-            <div class="chip" data-v="seniors">Couple retraité(e)s</div>
-            <div class="chip" data-v="amis">Entre amis</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Nombre de couchages nécessaires</div>
-          <div class="chips" data-k="couchages" data-m="0">
-            <div class="chip" data-v="2">2 couchages</div>
-            <div class="chip" data-v="3">3 couchages</div>
-            <div class="chip" data-v="4">4 couchages</div>
-            <div class="chip" data-v="5plus">5 ou plus</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Contraintes de mobility ?</div>
-          <div class="chips" data-k="mobilite" data-m="0">
-            <div class="chip" data-v="non">Aucune</div>
-            <div class="chip" data-v="escalier">Difficultés à monter / descendre</div>
-            <div class="chip" data-v="pmr">Accessibilité renforcée (PMR)</div>
-          </div>
-        </div>
+
+      <div class="price">
+        ${v.price.toLocaleString("fr-FR")} €
       </div>
-      <div class="step-nav">
-        <div></div>
-        <button class="btn primary" onclick="goNext()">Suivant →</button>
+
+      <div class="tags">
+        ${v.tags.map(t=>`<div class="tag">${t}</div>`).join("")}
       </div>
+
+      <div class="pitch">
+        ${v.pitch}
+      </div>
+
+      <div style="margin-top:16px;">
+        <a href="${v.url}" target="_blank">
+          Voir l’annonce →
+        </a>
+      </div>
+
     </div>
+  `).join("");
+}
 
-    <div class="step" id="s2">
-      <div class="step-header">
-        <div class="step-num">2</div>
-        <div>
-          <div class="step-title">Comment et où voyagez-vous ?</div>
-          <div class="step-sub">Style de voyage et destinations</div>
-        </div>
-      </div>
-      <div class="step-body">
-        <div class="q-block">
-          <div class="q-label">Fréquence d'utilisation prévue</div>
-          <div class="chips" data-k="freq" data-m="0">
-            <div class="chip" data-v="weekends">Weekends + quelques semaines</div>
-            <div class="chip" data-v="vacances">Grandes vacances uniquement</div>
-            <div class="chip" data-v="intensif">Intensif — plus de 60 jours / an</div>
-            <div class="chip" data-v="fulltime">Full-time / nomadisme</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Routes et destinations (plusieurs choix)</div>
-          <div class="chips" data-k="routes" data-m="1">
-            <div class="chip" data-v="autoroute">Grands axes / autoroutes</div>
-            <div class="chip" data-v="campagne">Campagne / villages</div>
-            <div class="chip" data-v="montagne">Montagne / routes étroites</div>
-            <div class="chip" data-v="littoral">Bord de mer</div>
-            <div class="chip" data-v="europe">Grand tour Europe</div>
-            <div class="chip" data-v="aventure">Hors des sentiers battus</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Mode de séjour (plusieurs choix)</div>
-          <div class="chips" data-k="sejour" data-m="1">
-            <div class="chip" data-v="camping">Campings avec branchements</div>
-            <div class="chip" data-v="aire">Aires de services</div>
-            <div class="chip" data-v="sauvage">Étapes sauvages / liberté</div>
-            <div class="chip" data-v="long">Longs séjours sur place</div>
-          </div>
-        </div>
-      </div>
-      <div class="step-nav">
-        <button class="btn" onclick="goPrev()">← Retour</button>
-        <button class="btn primary" onclick="goNext()">Suivant →</button>
-      </div>
-    </div>
+runMatcher();
 
-    <div class="step" id="s3">
-      <div class="step-header">
-        <div class="step-num">3</div>
-        <div>
-          <div class="step-title">Vos priorités à bord</div>
-          <div class="step-sub">Ce qui est vraiment indispensable</div>
-        </div>
-      </div>
-      <div class="step-body">
-        <div class="q-block">
-          <div class="q-label">Équipements indispensables (plusieurs choix)</div>
-          <div class="chips" data-k="must" data-m="1">
-            <div class="chip" data-v="lit_fixe">Lit fixe permanent</div>
-            <div class="chip" data-v="lits_jumeaux">Lits jumeaux séparés</div>
-            <div class="chip" data-v="garage">Garage vélos / motos</div>
-            <div class="chip" data-v="douche_sep">Douche et WC séparés</div>
-            <div class="chip" data-v="grand_salon">Grand salon</div>
-            <div class="chip" data-v="cuisine">Cuisine équipée</div>
-            <div class="chip" data-v="solaire">Panneaux solaires</div>
-            <div class="chip" data-v="chauffage">Chauffage puissant</div>
-            <div class="chip" data-v="vue_pano">Vue panoramique conduite</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Rapport à la conduite</div>
-          <div class="chips" data-k="conduite" data-m="0">
-            <div class="chip" data-v="compact">Compact et facile avant tout</div>
-            <div class="chip" data-v="equilibre">Bon équilibre taille / confort</div>
-            <div class="chip" data-v="grand">Grand gabarit — pas de souci</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Autonomie souhaitée</div>
-          <div class="chips" data-k="autonomie" data-m="0">
-            <div class="chip" data-v="faible">Toujours raccordé</div>
-            <div class="chip" data-v="moyenne">2–3 jours autonome</div>
-            <div class="chip" data-v="haute">Autonomie maximale</div>
-          </div>
-        </div>
-      </div>
-      <div class="step-nav">
-        <button class="btn" onclick="goPrev()">← Retour</button>
-        <button class="btn primary" onclick="goNext()">Suivant →</button>
-      </div>
-    </div>
+</script>
 
-    <div class="step" id="s4">
-      <div class="step-header">
-        <div class="step-num">4</div>
-        <div>
-          <div class="step-title">Budget et financement</div>
-          <div class="step-sub">Enveloppe et état du véhicule souhaité</div>
-        </div>
-      </div>
-      <div class="step-body">
-        <div class="q-block">
-          <div class="q-label">Budget envisagé</div>
-          <div class="chips" data-k="budget" data-m="0">
-            <div class="chip" data-v="m25">Moins de 25 000 €</div>
-            <div class="chip" data-v="25_45">25 000 — 45 000 €</div>
-            <div class="chip" data-v="45_65">45 000 — 65 000 €</div>
-            <div class="chip" data-v="65_90">65 000 — 90 000 €</div>
-            <div class="chip" data-v="p90">Plus de 90 000 €</div>
-            <div class="chip" data-v="nsp">Non défini</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Neuf ou occasion ?</div>
-          <div class="chips" data-k="etat" data-m="0">
-            <div class="chip" data-v="neuf">Neuf — garantie constructeur</div>
-            <div class="chip" data-v="occasion">Occasion — priorité au budget</div>
-            <div class="chip" data-v="indiff">Les deux — selon rapport qualité/prix</div>
-          </div>
-        </div>
-        <div class="q-block">
-          <div class="q-label">Financement envisagé (plusieurs choix)</div>
-          <div class="chips" data-k="fin" data-m="1">
-            <div class="chip" data-v="comptant">Comptant</div>
-            <div class="chip" data-v="credit">Crédit classique</div>
-            <div class="chip" data-v="loa">LOA / leasing</div>
-            <div class="chip" data-v="reprise">Avec reprise de mon véhicule</div>
-          </div>
-        </div>
-      </div>
-      <div class="step-nav">
-        <button class="btn" onclick="goPrev()">← Retour</button>
-        <button class="btn primary" onclick="showResults()">Voir la recommandation ✦</button>
-      </div>
-    </div>
-
-    <div class="step" id="s5">
-      <div class="step-header">
-        <div class="step-num gold">✓</div>
-        <div>
-          <div class="step-title">Recommandation Libertium</div>
-          <div class="step-sub">Sélection personnalisée des 3 meilleures catégories</div>
-        </div>
-      </div>
-      <div class="step-body">
-
-        <div class="score-grid" id="scores"></div>
-
-        <div class="section-label">Récapitulatif profil client</div>
-        <div class="summary-table" id="summary"></div>
-
-        <div class="section-label">Top 3 des catégories recommandées</div>
-        <div id="recos"></div>
-
-        <div class="ai-box" id="ai-box">
-          <div class="ai-box-header">
-            <div class="ai-box-title">
-              ✦ Argumentaire commercial personnalisé
-            </div>
-            <button class="btn gold" id="ai-btn" onclick="generateArg()">Générer avec Claude</button>
-          </div>
-          <div class="ai-box-body" id="ai-body">
-            <div class="ai-output" id="ai-output"></div>
-          </div>
-        </div>
-
-        <div style="margin-top:1rem;padding:14px 16px;background:var(--blue-lt);border:1px solid var(--blue-border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
-          <div style="font-size:13px;color:var(--blue);">
-            <strong>Rechercher en stock</strong> — Voir les annonces disponibles sur libertium.fr
-          </div>
-          <a id="stock-link" href="https://www.libertium.fr/vehicule/camping-car" target="_blank" class="btn outline-blue" style="text-decoration:none;font-size:13px;">
-            Voir le stock →
-          </a>
-        </div>
-
-      </div>
-      <div class="step-nav">
-        <button class="btn" onclick="resetAll()">↺ Nouveau client</button>
-        <button class="btn primary" onclick="copyProfile()">Copier le profil</button>
-      </div>
-    </div>
-
-  </div></div><script>
-// ── État ──────────────────────────────────────────────────────────────────────
-const D = {};
-let currentStep = 1;
-const TOTAL_STEPS = 4;
-
-// ── Base de Données des Véhicules Libetium ────────────────────────────────────
-// Un catalogue propre qui permet d'évaluer finement la compatibilité
-const VEHICLE_CATALOG = [
-  {
-    id: 'van',
-    type: 'Van / Fourgon aménagé',
-    slug: 'van-fourgon-amenage',
-    brands: 'Adria Twin, Font Vendôme, Chausson X, Bavaria Nomade, CI Kyros',
-    why: 'Idéal pour l\'agilité et la discrétion. Ultra compact (moins de 6.5m), il passe partout en montagne ou en ville. Parfait pour les couples actifs ou les nomades.',
-    baseTags: ['Gabarit compact', 'Passe-partout', 'Permis B'],
-    // Définition des règles de scoring
-    evalScore: (d) => {
-      let score = 0;
-      if (d.voyageurs === 'solo' || d.voyageurs === 'couple') score += 25;
-      if (d.conduite === 'compact') score += 25;
-      if (d.couchages === '2') score += 15;
-      if (d.freq === 'fulltime' || d.freq === 'weekends') score += 15;
-      if (d.routes && d.routes.includes('montagne')) score += 15;
-      if (d.routes && d.routes.includes('aventure')) score += 15;
-      if (d.sejour && d.sejour.includes('sauvage')) score += 15;
-      if (d.budget === '45_65' || d.budget === '25_45') score += 10;
-      // Contraintes négatives
-      if (d.couchages === '5plus' || d.voyageurs === 'famille_ado') score -= 30;
-      if (d.must && d.must.includes('grand_salon')) score -= 15;
-      if (d.mobilite === 'escalier' || d.mobilite === 'pmr') score -= 20;
-      return score;
-    }
-  },
-  {
-    id: 'profile',
-    type: 'Camping-car Profilé',
-    slug: 'camping-car/profil%C3%A9',
-    brands: 'Chausson, Challenger, McLouis Yearling, Rimor Kilig, Adria Matrix',
-    why: 'Le compromis parfait du marché français. Il associe un vrai lit fixe à l\'arrière, une douche confortable et une bonne isolation, sans être trop lourd à conduire.',
-    baseTags: ['Lit permanent', 'Polyvalent', 'Grand public'],
-    evalScore: (d) => {
-      let score = 15; // Base neutre solide
-      if (d.voyageurs === 'couple' || d.voyageurs === 'seniors' || d.voyageurs === 'famille_young') score += 20;
-      if (d.conduite === 'equilibre') score += 20;
-      if (d.couchages === '2' || d.couchages === '3' || d.couchages === '4') score += 15;
-      if (d.budget === '45_65' || d.budget === '65_90') score += 15;
-      if (d.must && d.must.includes('lit_fixe')) score += 15;
-      if (d.must && d.must.includes('lits_jumeaux')) score += 15;
-      if (d.sejour && d.sejour.includes('aire') || d.sejour && d.sejour.includes('camping')) score += 10;
-      // Contraintes négatives
-      if (d.conduite === 'compact') score -= 10;
-      if (d.couchages === '5plus') score -= 20;
-      return score;
-    }
-  },
-  {
-    id: 'integral',
-    type: 'Camping-car Intégral',
-    slug: 'camping-car/int%C3%A9gral',
-    brands: 'Carthago, Rapido, Bürstner Ixeo, Eden Camp, Benimar Amphitryon',
-    why: 'Le très grand confort routier et résidentiel. Son pare-brise panoramique unique offre un plaisir de conduite inégalé. Intérieur spacieux avec salon ouvert.',
-    baseTags: ['Vision panoramique', 'Haut de gamme', 'Espace XXL'],
-    evalScore: (d) => {
-      let score = 0;
-      if (d.voyageurs === 'seniors' || d.voyageurs === 'couple') score += 20;
-      if (d.budget === '65_90' || d.budget === 'p90') score += 30;
-      if (d.must && d.must.includes('vue_pano')) score += 30;
-      if (d.must && d.must.includes('grand_salon')) score += 15;
-      if (d.conduite === 'grand') score += 20;
-      if (d.freq === 'intensif' || d.freq === 'fulltime') score += 15;
-      if (d.autonomie === 'haute') score += 15;
-      // Contraintes négatives
-      if (d.budget === 'm25' || d.budget === '25_45') score -= 40;
-      if (d.conduite === 'compact') score -= 25;
-      return score;
-    }
-  },
-  {
-    id: 'capucine',
-    type: 'Camping-car Capucine',
-    slug: 'camping-car/capucine',
-    brands: 'Rimor Kilig 9, CI Horon Capucine, Roller Team Chronos',
-    why: 'Le roi des voyages en tribu. Son lit fixe haut suspendu au-dessus de la cabine libère un espace de vie immense au sol avec de nombreux lits superposés.',
-    baseTags: ['Idéal Famille', 'Jusqu\'à 7 couchages', 'Volume max'],
-    evalScore: (d) => {
-      let score = 0;
-      if (d.voyageurs === 'famille_ado' || d.voyageurs === 'famille_young' || d.voyageurs === 'amis') score +=
+</body>
+</html>
