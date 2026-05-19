@@ -1,870 +1,477 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Libertium · Guide Découverte Client</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
-
-<!-- ═══════════════════════════════════════
-     CSS ÉCRAN
-═══════════════════════════════════════ -->
-<style>
-:root{
-  --ink:#0d1b2a;--ink2:#2c3e50;--ink3:#5a6a7e;--ink4:#94a3b8;
-  --paper:#f5f7fb;--card:#fff;
-  --red:#c0392b;--red-lt:#fdf2f0;--red-bd:#e8786d;
-  --gold:#c8960c;--gold-lt:#fdf6e3;--gold-d:#9b6700;
-  --blue:#1e3a5f;--blue-m:#2563a8;--blue-lt:#ebf3fd;
-  --green:#1a6b3c;--green-lt:#edf7f2;
-  --border:#e4e8f0;--border2:#cdd5e0;
-  --r:10px;--rlg:16px;--rp:999px;
-  --sh:0 1px 4px rgba(13,27,42,.06),0 4px 16px rgba(13,27,42,.08);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Sora',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.6}
-
-/* HEADER */
-.hdr{background:var(--ink);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:sticky;top:0;z-index:300;border-bottom:2px solid var(--red)}
-.logo{display:flex;align-items:center;gap:12px}
-.logo-t{font-family:'Playfair Display',serif;font-size:19px;color:#fff}
-.logo-b{background:var(--red);color:#fff;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 9px;border-radius:var(--rp)}
-.hdr-meta{font-size:11px;color:rgba(255,255,255,.35)}
-
-/* LAYOUT */
-.outer{max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
-
-/* PROGRESS */
-.prog{display:flex;align-items:flex-start;position:relative;margin-bottom:.5rem}
-.prog::before{content:'';position:absolute;top:13px;left:14px;right:14px;height:2px;background:var(--border);z-index:0}
-.prog::after{content:'';position:absolute;top:13px;left:14px;height:2px;background:var(--red);z-index:1;transition:width .35s ease;width:var(--pw,0%)}
-.ps{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;z-index:2}
-.ps-d{width:28px;height:28px;border-radius:50%;background:var(--card);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--ink4);transition:all .25s}
-.ps-l{font-size:10px;color:var(--ink4);text-transform:uppercase;letter-spacing:.05em;transition:color .2s;text-align:center}
-.ps.done .ps-d{background:var(--ink);border-color:var(--ink);color:#fff}
-.ps.active .ps-d{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 0 0 4px rgba(192,57,43,.15)}
-.ps.done .ps-l,.ps.active .ps-l{color:var(--ink)}
-
-/* CARD */
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--rlg);box-shadow:var(--sh);overflow:hidden}
-.step{display:none}
-.step.active{display:block;animation:fu .22s ease}
-@keyframes fu{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
-
-/* STEP HEADER */
-.sh{padding:1.75rem 2rem .25rem;display:flex;align-items:flex-start;gap:16px}
-.si{width:44px;height:44px;border-radius:var(--r);background:var(--red-lt);border:1px solid var(--red-bd);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.si.g{background:var(--gold-lt);border-color:var(--gold)}
-.st{font-size:18px;font-weight:600;color:var(--ink);margin-bottom:2px}
-.ss{font-size:13px;color:var(--ink3)}
-
-/* BODY */
-.sb{padding:.5rem 2rem 1.25rem}
-.qb{margin-bottom:1.4rem}
-.ql{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:10px}
-
-/* CHIPS */
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{padding:8px 16px;border-radius:var(--rp);border:1.5px solid var(--border2);font-family:'Sora',sans-serif;font-size:13px;color:var(--ink2);background:var(--card);cursor:pointer;user-select:none;transition:all .15s}
-.chip:hover{border-color:var(--red-bd);color:var(--red);background:var(--red-lt)}
-.chip.sel{background:var(--red-lt);border-color:var(--red);color:var(--red);font-weight:500}
-
-/* INPUTS */
-.inp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.inp-group{display:flex;flex-direction:column;gap:6px}
-.inp-group.full{grid-column:1/-1}
-.inp-group label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3)}
-.inp-group input,.inp-group textarea,.inp-group select{
-  padding:9px 13px;border-radius:var(--r);border:1.5px solid var(--border2);
-  font-family:'Sora',sans-serif;font-size:13px;color:var(--ink);
-  background:var(--card);outline:none;transition:border-color .15s;
-  width:100%
-}
-.inp-group input:focus,.inp-group textarea:focus{border-color:var(--red)}
-.inp-group textarea{resize:vertical;min-height:80px;line-height:1.6}
-
-/* NAV */
-.sn{padding:.75rem 2rem 1.75rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px}
-.btn{padding:10px 22px;border-radius:var(--r);border:1.5px solid var(--border2);font-family:'Sora',sans-serif;font-size:13px;font-weight:500;cursor:pointer;background:var(--card);color:var(--ink2);transition:all .15s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
-.btn:hover{background:var(--paper);border-color:var(--border)}
-.btn.prim{background:var(--red);color:#fff;border-color:var(--red)}
-.btn.prim:hover{background:var(--ink2);border-color:var(--ink2)}
-.btn.dark{background:var(--ink);color:#fff;border-color:var(--ink)}
-.btn.dark:hover{background:var(--ink2)}
-.btn.green{background:var(--green);color:#fff;border-color:var(--green)}
-.btn.green:hover{opacity:.9}
-.btn.ghost{background:transparent;color:var(--red);border-color:var(--red-bd)}
-.btn.ghost:hover{background:var(--red);color:#fff}
-.btn:disabled{opacity:.38;cursor:not-allowed}
-
-/* RÉSULTAT */
-.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.5rem}
-.sc{background:var(--paper);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px}
-.sc-l{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink4);margin-bottom:4px}
-.sc-v{font-size:16px;font-weight:600;color:var(--ink)}
-.slbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink4);margin:1.5rem 0 10px;display:flex;align-items:center;gap:8px}
-.slbl::after{content:'';flex:1;height:1px;background:var(--border)}
-
-/* RECAP */
-.recap{background:var(--paper);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
-.rr{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid var(--border);font-size:13px}
-.rr:last-child{border-bottom:none}
-.rk{color:var(--ink3)}.rv{font-weight:500;color:var(--ink);text-align:right;max-width:58%}
-
-/* RECOS */
-.rc{border:1.5px solid var(--border);border-radius:var(--rlg);padding:18px 20px;background:var(--card);transition:all .2s;position:relative;padding-left:24px;margin-bottom:12px}
-.rc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:var(--rlg) 0 0 var(--rlg);background:var(--border)}
-.rc.top{border-color:rgba(192,57,43,.3)}.rc.top::before{background:var(--red)}
-.rc:hover{box-shadow:var(--sh)}
-.rc-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:3px}
-.rc-t{font-size:15px;font-weight:600;color:var(--ink)}
-.rc-b{font-size:12px;color:var(--ink3);margin-bottom:7px}
-.rc-w{font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:10px}
-.bdg{font-size:11px;font-weight:600;padding:3px 10px;border-radius:var(--rp);white-space:nowrap;flex-shrink:0}
-.bdg.b{background:var(--red-lt);color:var(--red)}
-.bdg.s{background:var(--paper);color:var(--ink4);border:1px solid var(--border)}
-.tags{display:flex;flex-wrap:wrap;gap:6px}
-.tg{font-size:11px;padding:3px 9px;border-radius:5px;border:1px solid var(--border);color:var(--ink3);background:var(--paper)}
-.tg.hit{border-color:var(--red-bd);color:var(--red);background:var(--red-lt)}
-
-/* STOCK BLOC */
-.stk-bloc{border:1.5px solid var(--gold);border-radius:var(--rlg);background:var(--gold-lt);overflow:hidden;margin-top:1.5rem}
-.stk-hd{padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.stk-title{font-size:14px;font-weight:600;color:var(--gold-d);display:flex;align-items:center;gap:8px}
-.stk-bd{display:none;padding:0 18px 18px}
-.stk-bd.open{display:block}
-
-/* Liens directs */
-.link-list{display:flex;flex-direction:column;gap:8px}
-.lk{display:flex;align-items:center;gap:12px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 16px;text-decoration:none;color:var(--ink2);transition:all .15s;cursor:pointer}
-.lk:hover{border-color:var(--blue-m);box-shadow:var(--sh);color:var(--blue-m)}
-.lk-icon{font-size:22px;flex-shrink:0}
-.lk-txt strong{display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:1px}
-.lk-txt span{font-size:12px;color:var(--ink3)}
-.lk-url{font-size:11px;color:var(--ink4);font-family:monospace;margin-top:3px;word-break:break-all}
-.lk-arr{margin-left:auto;font-size:18px;color:var(--ink4);flex-shrink:0}
-
-.url-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;margin-bottom:12px}
-.url-box strong{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--gold-d);display:block;margin-bottom:4px}
-.url-box code{font-size:11px;color:var(--ink3);word-break:break-all;font-family:monospace;line-height:1.6}
-
-.stk-note{font-size:12px;color:var(--gold-d);background:rgba(200,150,12,.1);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;line-height:1.5}
-
-/* ARGUMENTAIRE */
-.arg-bloc{border:1px solid var(--border);border-radius:var(--rlg);background:var(--card);overflow:hidden;margin-top:1rem}
-.arg-hd{padding:12px 18px;background:var(--paper);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.arg-tt{font-size:13px;font-weight:600;color:var(--ink)}
-.arg-bd{padding:16px 18px;display:none}
-.arg-bd.open{display:block}
-.a-sec{margin-bottom:16px}
-.a-sec:last-child{margin-bottom:0}
-.a-h{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:8px}
-.ai{font-size:13px;color:var(--ink2);line-height:1.65;padding:8px 12px;border-radius:var(--r);border-left:3px solid var(--border);margin-bottom:6px;background:var(--paper)}
-.ai:last-child{margin-bottom:0}
-.ai.g{border-left-color:var(--green);background:var(--green-lt)}
-.ai.a{border-left-color:var(--gold);background:var(--gold-lt)}
-.ai.b{border-left-color:var(--blue-m);background:var(--blue-lt)}
-.ai strong{color:var(--ink);display:block;font-size:12px;margin-bottom:2px}
-.closing-box{background:var(--ink);color:#fff;border-radius:var(--r);padding:14px 16px;font-size:14px;font-style:italic;line-height:1.75}
-.closing-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-style:normal;display:block}
-
-/* BARRE BAS */
-.bbar{padding:1rem 2rem 1.75rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);flex-wrap:wrap;gap:8px}
-
-/* RESPONSIVE */
-@media(max-width:600px){
-  .outer{padding:1.5rem 1rem 4rem}
-  .sh,.sb,.sn,.bbar{padding-left:1.25rem;padding-right:1.25rem}
-  .ps-l{display:none}
-  .inp-grid{grid-template-columns:1fr}
-}
-</style>
-
-<!-- ═══════════════════════════════════════
-     CSS IMPRESSION (PDF via window.print)
-═══════════════════════════════════════ -->
-<style>
-@media print {
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-  /* Masquer tout sauf la fiche */
-  .hdr, .prog-wrap, .step:not(.active) { display: none !important; }
-  .outer { padding: 0 !important; max-width: 100% !important; }
-  .card { box-shadow: none !important; border: none !important; border-radius: 0 !important; }
-  .bbar, .sn, .stk-bloc, .arg-bloc, #print-btn, .btn { display: none !important; }
-  .stk-bd, .arg-bd { display: none !important; }
-
-  /* En-tête print */
-  .print-header { display: flex !important; }
-
-  /* Mise en page */
-  body { font-size: 11pt; background: #fff; color: #000; font-family: Arial, sans-serif; }
-  .sh { padding: 0 0 12pt !important; border-bottom: 2pt solid #c0392b; margin-bottom: 12pt; }
-  .sb { padding: 0 !important; }
-  .si { display: none; }
-
-  /* Scores en ligne */
-  .scores { grid-template-columns: repeat(4, 1fr) !important; gap: 6pt !important; margin-bottom: 12pt !important; }
-  .sc { padding: 6pt 8pt !important; border: 1pt solid #e0e0e0 !important; }
-  .sc-l { font-size: 7pt !important; }
-  .sc-v { font-size: 11pt !important; }
-
-  /* Récap */
-  .rr { padding: 4pt 8pt !important; font-size: 10pt !important; }
-  .slbl { font-size: 8pt !important; margin: 8pt 0 6pt !important; }
-
-  /* Recos */
-  .rc { padding: 8pt 10pt 8pt 14pt !important; margin-bottom: 6pt !important; break-inside: avoid; }
-  .rc-t { font-size: 11pt !important; }
-  .rc-w { font-size: 10pt !important; }
-  .tg { font-size: 8pt !important; padding: 1pt 5pt !important; }
-
-  /* Coordonnées client */
-  .print-client { display: block !important; }
-
-  /* Commentaires */
-  .print-comments { display: block !important; }
-
-  /* Page breaks */
-  .page-break { page-break-before: always; }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Libertium · Fiche Découverte Client (Interne)</title>
+  <style>
+    /* Reset et base */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      color: #2c5282;
+      text-align: center;
+      border-bottom: 2px solid #2c5282;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      color: #4299e1;
+      margin-top: 30px;
+      border-left: 4px solid #4299e1;
+      padding-left: 10px;
+    }
+    .section {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .radio-option, .checkbox-option {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      background: #f0f4ff;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .radio-option:hover, .checkbox-option:hover {
+      background: #e0e7ff;
+    }
+    .radio-option input, .checkbox-option input {
+      margin-right: 8px;
+    }
+    /* Bouton d'impression */
+    .print-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #2c5282;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 20px auto;
+    }
+    .print-btn:hover {
+      background: #1a365d;
+    }
+    /* Résumé */
+    .summary {
+      background: #e6fffa;
+      border-left: 4px solid #00a693;
+      padding: 15px;
+      margin: 20px 0;
+      display: none; /* Masqué par défaut */
+    }
+    .summary h3 {
+      margin-top: 0;
+      color: #00a693;
+    }
+    /* Style pour l'impression */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+        max-width: none;
+      }
+      .section, .summary {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+      }
+      .print-btn, .radio-option:hover, .checkbox-option:hover {
+        display: none !important;
+      }
+      h1, h2 {
+        color: black;
+        border: none;
+      }
+      .no-print {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
+  <h1>Libertium · Fiche Découverte Client</h1>
 
-<!-- EN-TÊTE IMPRESSION (masqué à l'écran) -->
-<div class="print-header" style="display:none;align-items:center;justify-content:space-between;padding:0 0 12pt;border-bottom:2pt solid #c0392b;margin-bottom:16pt">
-  <div>
-    <div style="font-family:'Playfair Display',serif;font-size:20pt;font-weight:700;color:#0d1b2a">Libertium</div>
-    <div style="font-size:9pt;color:#5a6a7e;text-transform:uppercase;letter-spacing:.1em">Fiche Découverte Client</div>
-  </div>
-  <div style="text-align:right;font-size:9pt;color:#5a6a7e" id="print-date"></div>
-</div>
+  <!-- Bouton d'impression (visible à l'écran seulement) -->
+  <button class="print-btn no-print" onclick="window.print()">🖨️ Imprimer la fiche</button>
 
-<header class="hdr">
-  <div class="logo"><div class="logo-t">Libertium</div><span class="logo-b">Guide commercial</span></div>
-  <div class="hdr-meta">Outil interne · Découverte client</div>
-</header>
-
-<div class="outer">
-<div class="card">
-
-  <!-- PROGRESS -->
-  <div class="prog-wrap" style="padding:1.5rem 2rem .75rem;border-bottom:1px solid var(--border)">
-    <div class="prog" id="prog">
-      <div class="ps active" data-n="1"><div class="ps-d">1</div><div class="ps-l">Qui voyage</div></div>
-      <div class="ps" data-n="2"><div class="ps-d">2</div><div class="ps-l">Comment</div></div>
-      <div class="ps" data-n="3"><div class="ps-d">3</div><div class="ps-l">À bord</div></div>
-      <div class="ps" data-n="4"><div class="ps-d">4</div><div class="ps-l">Budget</div></div>
-      <div class="ps" data-n="5"><div class="ps-d">5</div><div class="ps-l">Coordonnées</div></div>
-      <div class="ps" data-n="6"><div class="ps-d">✦</div><div class="ps-l">Résultat</div></div>
-    </div>
+  <!-- Résumé (mis à jour dynamiquement) -->
+  <div class="summary" id="summary">
+    <h3>📋 Récapitulatif des réponses</h3>
+    <p id="summary-content">Aucune réponse enregistrée.</p>
   </div>
 
-  <!-- ══ S1 — QUI VOYAGE ══ -->
-  <div class="step active" id="s1">
-    <div class="sh"><div class="si">👥</div><div><div class="st">Qui voyage ?</div><div class="ss">Profil et composition du groupe</div></div></div>
-    <div class="sb">
-      <div class="qb"><div class="ql">Vous partez…</div>
-        <div class="chips" data-k="v" data-m="0">
-          <div class="chip" data-v="solo">Seul(e)</div>
-          <div class="chip" data-v="couple">En couple</div>
-          <div class="chip" data-v="fy">Famille · enfants &lt; 6 ans</div>
-          <div class="chip" data-v="fa">Famille · enfants / ados</div>
-          <div class="chip" data-v="sr">Couple retraité(e)s</div>
-          <div class="chip" data-v="ami">Entre amis</div>
-        </div></div>
-      <div class="qb"><div class="ql">Couchages nécessaires</div>
-        <div class="chips" data-k="nb" data-m="0">
-          <div class="chip" data-v="2">2</div><div class="chip" data-v="3">3</div>
-          <div class="chip" data-v="4">4</div><div class="chip" data-v="5">5+</div>
-        </div></div>
-      <div class="qb"><div class="ql">Contraintes mobilité</div>
-        <div class="chips" data-k="mob" data-m="0">
-          <div class="chip" data-v="0">Aucune</div>
-          <div class="chip" data-v="esc">Difficultés monter/descendre</div>
-          <div class="chip" data-v="pmr">Accessibilité renforcée</div>
-        </div></div>
-    </div>
-    <div class="sn"><div></div><button class="btn prim" onclick="goN()">Suivant →</button></div>
-  </div>
-
-  <!-- ══ S2 — COMMENT & OÙ ══ -->
-  <div class="step" id="s2">
-    <div class="sh"><div class="si">🗺️</div><div><div class="st">Comment et où voyagez-vous ?</div><div class="ss">Style, destinations, mode de séjour</div></div></div>
-    <div class="sb">
-      <div class="qb"><div class="ql">Fréquence d'utilisation</div>
-        <div class="chips" data-k="freq" data-m="0">
-          <div class="chip" data-v="wk">Weekends + quelques semaines</div>
-          <div class="chip" data-v="vac">Grandes vacances uniquement</div>
-          <div class="chip" data-v="int">Intensif · + 60 jours/an</div>
-          <div class="chip" data-v="ft">Full-time / nomadisme</div>
-        </div></div>
-      <div class="qb"><div class="ql">Routes et destinations · plusieurs choix</div>
-        <div class="chips" data-k="routes" data-m="1">
-          <div class="chip" data-v="aut">Grands axes</div>
-          <div class="chip" data-v="camp">Campagne · villages</div>
-          <div class="chip" data-v="mont">Montagne · routes étroites</div>
-          <div class="chip" data-v="mer">Bord de mer</div>
-          <div class="chip" data-v="eu">Grand tour Europe</div>
-          <div class="chip" data-v="av">Hors sentiers battus</div>
-        </div></div>
-      <div class="qb"><div class="ql">Mode de séjour · plusieurs choix</div>
-        <div class="chips" data-k="sej" data-m="1">
-          <div class="chip" data-v="cp">Campings avec branchements</div>
-          <div class="chip" data-v="aire">Aires de services</div>
-          <div class="chip" data-v="lib">Étapes sauvages · liberté totale</div>
-          <div class="chip" data-v="long">Longs séjours sur place</div>
-        </div></div>
-    </div>
-    <div class="sn"><button class="btn" onclick="goP()">← Retour</button><button class="btn prim" onclick="goN()">Suivant →</button></div>
-  </div>
-
-  <!-- ══ S3 — À BORD ══ -->
-  <div class="step" id="s3">
-    <div class="sh"><div class="si">🛏️</div><div><div class="st">Vos priorités à bord</div><div class="ss">Équipements et confort indispensables</div></div></div>
-    <div class="sb">
-      <div class="qb"><div class="ql">Indispensables · plusieurs choix</div>
-        <div class="chips" data-k="must" data-m="1">
-          <div class="chip" data-v="lf">Lit fixe permanent</div>
-          <div class="chip" data-v="lj">Lits jumeaux séparés</div>
-          <div class="chip" data-v="gar">Garage vélos / motos</div>
-          <div class="chip" data-v="dou">Douche et WC séparés</div>
-          <div class="chip" data-v="sal">Grand salon</div>
-          <div class="chip" data-v="cui">Cuisine équipée</div>
-          <div class="chip" data-v="sol">Panneaux solaires</div>
-          <div class="chip" data-v="chf">Chauffage hiver</div>
-          <div class="chip" data-v="pan">Vue panoramique conduite</div>
-        </div></div>
-      <div class="qb"><div class="ql">Rapport à la conduite</div>
-        <div class="chips" data-k="cond" data-m="0">
-          <div class="chip" data-v="cpct">Compact et facile avant tout</div>
-          <div class="chip" data-v="eq">Bon équilibre taille / confort</div>
-          <div class="chip" data-v="gd">Grand gabarit · pas de souci</div>
-        </div></div>
-      <div class="qb"><div class="ql">Autonomie souhaitée</div>
-        <div class="chips" data-k="auto" data-m="0">
-          <div class="chip" data-v="fbl">Toujours raccordé</div>
-          <div class="chip" data-v="moy">2–3 jours autonome</div>
-          <div class="chip" data-v="hte">Autonomie maximale</div>
-        </div></div>
-    </div>
-    <div class="sn"><button class="btn" onclick="goP()">← Retour</button><button class="btn prim" onclick="goN()">Suivant →</button></div>
-  </div>
-
-  <!-- ══ S4 — BUDGET ══ -->
-  <div class="step" id="s4">
-    <div class="sh"><div class="si">💶</div><div><div class="st">Budget et financement</div><div class="ss">Enveloppe et état du véhicule</div></div></div>
-    <div class="sb">
-      <div class="qb"><div class="ql">Budget envisagé</div>
-        <div class="chips" data-k="bud" data-m="0">
-          <div class="chip" data-v="m25">Moins de 25 000 €</div>
-          <div class="chip" data-v="b25">25 000 — 45 000 €</div>
-          <div class="chip" data-v="b45">45 000 — 65 000 €</div>
-          <div class="chip" data-v="b65">65 000 — 90 000 €</div>
-          <div class="chip" data-v="p90">Plus de 90 000 €</div>
-          <div class="chip" data-v="nsp">Non défini</div>
-        </div></div>
-      <div class="qb"><div class="ql">Neuf ou occasion ?</div>
-        <div class="chips" data-k="etat" data-m="0">
-          <div class="chip" data-v="N">Neuf · garantie constructeur</div>
-          <div class="chip" data-v="O">Occasion · priorité au budget</div>
-          <div class="chip" data-v="I">Les deux · meilleur rapport qualité/prix</div>
-        </div></div>
-      <div class="qb"><div class="ql">Financement · plusieurs choix</div>
-        <div class="chips" data-k="fin" data-m="1">
-          <div class="chip" data-v="cpt">Comptant</div>
-          <div class="chip" data-v="cred">Crédit classique</div>
-          <div class="chip" data-v="loa">LOA / leasing</div>
-          <div class="chip" data-v="rep">Avec reprise véhicule</div>
-        </div></div>
-    </div>
-    <div class="sn"><button class="btn" onclick="goP()">← Retour</button><button class="btn prim" onclick="goN()">Suivant →</button></div>
-  </div>
-
-  <!-- ══ S5 — COORDONNÉES CLIENT ══ -->
-  <div class="step" id="s5">
-    <div class="sh"><div class="si">📋</div><div><div class="st">Coordonnées du client</div><div class="ss">Informations de contact et remarques (optionnel)</div></div></div>
-    <div class="sb">
-      <div class="inp-grid">
-        <div class="inp-group"><label>Prénom</label><input type="text" id="c-prenom" placeholder="Prénom"></div>
-        <div class="inp-group"><label>Nom</label><input type="text" id="c-nom" placeholder="Nom de famille"></div>
-        <div class="inp-group"><label>Téléphone</label><input type="tel" id="c-tel" placeholder="06 xx xx xx xx"></div>
-        <div class="inp-group"><label>Email</label><input type="email" id="c-email" placeholder="email@exemple.fr"></div>
-        <div class="inp-group"><label>Ville / Code postal</label><input type="text" id="c-ville" placeholder="Lille, 59000"></div>
-        <div class="inp-group"><label>Délai d'achat envisagé</label>
-          <select id="c-delai">
-            <option value="">— Sélectionner —</option>
-            <option>Cette semaine</option>
-            <option>Dans le mois</option>
-            <option>Sous 3 mois</option>
-            <option>Sous 6 mois</option>
-            <option>Long terme</option>
-          </select>
-        </div>
-        <div class="inp-group full"><label>Commentaires / Observations libres</label>
-          <textarea id="c-comment" placeholder="Ex : a déjà loué un profilé en 2023, craint la hauteur dans les parkings, conjoint réticent sur le budget, intéressé par une reprise de son Adria 2019…"></textarea>
-        </div>
-        <div class="inp-group"><label>Vendeur référent</label><input type="text" id="c-vendeur" placeholder="Prénom du conseiller"></div>
-        <div class="inp-group"><label>Date de découverte</label><input type="date" id="c-date"></div>
+  <!-- Section 1: Qui voyage -->
+  <div class="section">
+    <h2>👥 Qui voyage ?</h2>
+    <div class="form-group">
+      <label>Profil et composition du groupe</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="profil" value="Seul(e)" onchange="updateSummary()"> Seul(e)
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="profil" value="En couple" onchange="updateSummary()"> En couple
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="profil" value="Famille · enfants < 6 ans" onchange="updateSummary()"> Famille · enfants &lt; 6 ans
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="profil" value="Famille · enfants / ados" onchange="updateSummary()"> Famille · enfants / ados
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="profil" value="Couple retraité(e)s" onchange="updateSummary()"> Couple retraité(e)s
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="profil" value="Entre amis" onchange="updateSummary()"> Entre amis
+        </label>
       </div>
     </div>
-    <div class="sn"><button class="btn" onclick="goP()">← Retour</button><button class="btn prim" onclick="showRes()">Voir la recommandation ✦</button></div>
-  </div>
-
-  <!-- ══ S6 — RÉSULTAT ══ -->
-  <div class="step" id="s6">
-    <div class="sh"><div class="si g">✦</div><div><div class="st">Recommandation personnalisée</div><div class="ss">Véhicule idéal · stock Libertium · argumentaire</div></div></div>
-    <div class="sb">
-
-      <!-- COORDONNÉES (affiché en résultat) -->
-      <div id="client-recap" style="margin-bottom:1rem"></div>
-
-      <div class="scores" id="scores"></div>
-
-      <div class="slbl">Récapitulatif découverte</div>
-      <div class="recap" id="recap"></div>
-
-      <div class="slbl">Véhicules recommandés</div>
-      <div id="recos"></div>
-
-      <!-- STOCK LIBERTIUM -->
-      <div class="stk-bloc">
-        <div class="stk-hd">
-          <div class="stk-title">🔍 Stock Libertium · Liens directs filtrés</div>
-          <button class="btn dark" id="stk-btn" onclick="toggleStock()">Voir les liens ↓</button>
-        </div>
-        <div class="stk-bd" id="stk-bd"></div>
+    <div class="form-group">
+      <label>Couchages nécessaires</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="couchages" value="2" onchange="updateSummary()"> 2
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="couchages" value="3" onchange="updateSummary()"> 3
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="couchages" value="4" onchange="updateSummary()"> 4
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="couchages" value="5+" onchange="updateSummary()"> 5+
+        </label>
       </div>
-
-      <!-- ARGUMENTAIRE -->
-      <div class="arg-bloc">
-        <div class="arg-hd">
-          <div class="arg-tt">💬 Argumentaire commercial personnalisé</div>
-          <button class="btn ghost" id="arg-btn" onclick="genArg()">Générer</button>
-        </div>
-        <div class="arg-bd" id="arg-bd"></div>
-      </div>
-
     </div>
-    <div class="bbar">
-      <button class="btn" onclick="resetAll()">↺ Nouveau client</button>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" onclick="copyProf()">📋 Copier</button>
-        <button class="btn green" id="print-btn" onclick="doPrint()">🖨️ Exporter PDF</button>
+    <div class="form-group">
+      <label>Contraintes mobilité</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="mobilite" value="Aucune" onchange="updateSummary()"> Aucune
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="mobilite" value="Difficultés monter/descendre" onchange="updateSummary()"> Difficultés monter/descendre
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="mobilite" value="Accessibilité renforcée" onchange="updateSummary()"> Accessibilité renforcée
+        </label>
       </div>
     </div>
   </div>
 
-</div><!-- /card -->
-</div><!-- /outer -->
+  <!-- Section 2: Comment et où voyagez-vous ? -->
+  <div class="section">
+    <h2>🗺️ Comment et où voyagez-vous ?</h2>
+    <div class="form-group">
+      <label>Fréquence d'utilisation</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="frequence" value="Weekends + quelques semaines" onchange="updateSummary()"> Weekends + quelques semaines
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="frequence" value="Grands vacances uniquement" onchange="updateSummary()"> Grandes vacances uniquement
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="frequence" value="Intensif · + 60 jours/an" onchange="updateSummary()"> Intensif · + 60 jours/an
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="frequence" value="Full-time / nomadisme" onchange="updateSummary()"> Full-time / nomadisme
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Routes et destinations (plusieurs choix possibles)</label>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" name="destinations" value="Grands axes" onchange="updateSummary()"> Grands axes
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="destinations" value="Campagne · villages" onchange="updateSummary()"> Campagne · villages
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="destinations" value="Montagne · routes étroites" onchange="updateSummary()"> Montagne · routes étroites
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="destinations" value="Bord de mer" onchange="updateSummary()"> Bord de mer
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="destinations" value="Grand tour Europe" onchange="updateSummary()"> Grand tour Europe
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="destinations" value="Hors sentiers battus" onchange="updateSummary()"> Hors sentiers battus
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Mode de séjour (plusieurs choix possibles)</label>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" name="sejour" value="Campings avec branchements" onchange="updateSummary()"> Campings avec branchements
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="sejour" value="Aires de services" onchange="updateSummary()"> Aires de services
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="sejour" value="Étapes sauvages · liberté totale" onchange="updateSummary()"> Étapes sauvages · liberté totale
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="sejour" value="Longs séjours sur place" onchange="updateSummary()"> Longs séjours sur place
+        </label>
+      </div>
+    </div>
+  </div>
 
-<script>
-// ════════════════════════════════════════
-// ÉTAT & LABELS
-// ════════════════════════════════════════
-const D={};
-let cur=1;
-const TOTAL=5;
+  <!-- Section 3: Vos priorités à bord -->
+  <div class="section">
+    <h2>🛏️ Vos priorités à bord</h2>
+    <div class="form-group">
+      <label>Équipements et confort indispensables (plusieurs choix possibles)</label>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Lit fixe permanent" onchange="updateSummary()"> Lit fixe permanent
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Lits jumeaux séparés" onchange="updateSummary()"> Lits jumeaux séparés
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Garage vélos / motos" onchange="updateSummary()"> Garage vélos / motos
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Douche et WC séparés" onchange="updateSummary()"> Douche et WC séparés
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Grand salon" onchange="updateSummary()"> Grand salon
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Cuisine équipée" onchange="updateSummary()"> Cuisine équipée
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Panneaux solaires" onchange="updateSummary()"> Panneaux solaires
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Chauffage hiver" onchange="updateSummary()"> Chauffage hiver
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="equipements" value="Vue panoramique conduite" onchange="updateSummary()"> Vue panoramique conduite
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Rapport à la conduite</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="conduite" value="Compact et facile avant tout" onchange="updateSummary()"> Compact et facile avant tout
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="conduite" value="Bon équilibre taille / confort" onchange="updateSummary()"> Bon équilibre taille / confort
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="conduite" value="Grand gabarit · pas de souci" onchange="updateSummary()"> Grand gabarit · pas de souci
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Autonomie souhaitée</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="autonomie" value="Toujours raccordé" onchange="updateSummary()"> Toujours raccordé
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="autonomie" value="2–3 jours autonome" onchange="updateSummary()"> 2–3 jours autonome
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="autonomie" value="Autonomie maximale" onchange="updateSummary()"> Autonomie maximale
+        </label>
+      </div>
+    </div>
+  </div>
 
-const VL={
-  v:{solo:'Seul(e)',couple:'Couple',fy:'Famille (jeunes enfants)',fa:'Famille (enfants/ados)',sr:'Couple retraité',ami:'Entre amis'},
-  bud:{m25:'< 25 000 €',b25:'25–45 000 €',b45:'45–65 000 €',b65:'65–90 000 €',p90:'> 90 000 €',nsp:'Non défini'},
-  etat:{N:'Neuf',O:'Occasion',I:'Neuf ou occasion'},
-  freq:{wk:'Weekends + semaines',vac:'Grandes vacances',int:'Intensif >60j/an',ft:'Full-time'},
-  cond:{cpct:'Compact / facile',eq:'Équilibré',gd:'Grand gabarit OK'},
-  auto:{fbl:'Toujours raccordé',moy:'2–3 jours',hte:'Autonomie max'},
-};
-const ML={lf:'Lit fixe',lj:'Lits jumeaux',gar:'Garage',dou:'Douche séparée',sal:'Grand salon',cui:'Cuisine',sol:'Solaire',chf:'Chauffage',pan:'Vue panoramique'};
+  <!-- Section 4: Budget et financement -->
+  <div class="section">
+    <h2>💶 Budget et financement</h2>
+    <div class="form-group">
+      <label>Budget envisagé</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="budget" value="Moins de 25 000 €" onchange="updateSummary()"> Moins de 25 000 €
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="budget" value="25 000 — 45 000 €" onchange="updateSummary()"> 25 000 — 45 000 €
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="budget" value="45 000 — 65 000 €" onchange="updateSummary()"> 45 000 — 65 000 €
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="budget" value="65 000 — 90 000 €" onchange="updateSummary()"> 65 000 — 90 000 €
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="budget" value="Plus de 90 000 €" onchange="updateSummary()"> Plus de 90 000 €
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="budget" value="Non défini" onchange="updateSummary()"> Non défini
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Neuf ou occasion ?</label>
+      <div class="radio-group">
+        <label class="radio-option">
+          <input type="radio" name="neuf-occasion" value="Neuf · garantie constructeur" onchange="updateSummary()"> Neuf · garantie constructeur
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="neuf-occasion" value="Occasion · priorité au budget" onchange="updateSummary()"> Occasion · priorité au budget
+        </label>
+        <label class="radio-option">
+          <input type="radio" name="neuf-occasion" value="Les deux · meilleur rapport qualité/prix" onchange="updateSummary()"> Les deux · meilleur rapport qualité/prix
+        </label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Financement (plusieurs choix possibles)</label>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" name="financement" value="Comptant" onchange="updateSummary()"> Comptant
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="financement" value="Crédit classique" onchange="updateSummary()"> Crédit classique
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="financement" value="LOA / leasing" onchange="updateSummary()"> LOA / leasing
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" name="financement" value="Avec reprise véhicule" onchange="updateSummary()"> Avec reprise véhicule
+        </label>
+      </div>
+    </div>
+  </div>
 
-function lbl(k,fb='—'){
-  const v=D[k];if(!v)return fb;
-  if(Array.isArray(v))return v.map(x=>VL[k]?.[x]||x).join(', ')||fb;
-  return VL[k]?.[v]||v;
-}
+  <!-- Section 5: Coordonnées du client -->
+  <div class="section">
+    <h2>📋 Coordonnées du client</h2>
+    <div class="form-group">
+      <label>Prénom</label>
+      <input type="text" name="prenom" class="w-full p-2 border rounded" onchange="updateSummary()">
+    </div>
+    <div class="form-group">
+      <label>Nom</label>
+      <input type="text" name="nom" class="w-full p-2 border rounded" onchange="updateSummary()">
+    </div>
+    <div class="form-group">
+      <label>Téléphone</label>
+      <input type="tel" name="telephone" class="w-full p-2 border rounded" onchange="updateSummary()">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" class="w-full p-2 border rounded" onchange="updateSummary()">
+    </div>
+    <div class="form-group">
+      <label>Ville / Code postal</label>
+      <input type="text" name="ville" class="w-full p-2 border rounded" onchange="updateSummary()">
+    </div>
+    <div class="form-group">
+      <label>Délai d'achat envisagé</label>
+      <select name="delai" class="w-full p-2 border rounded" onchange="updateSummary()">
+        <option value="">— Sélectionner —</option>
+        <option value="Cette semaine">Cette semaine</option>
+        <option value="Dans le mois">Dans le mois</option>
+        <option value="Sous 3 mois">Sous 3 mois</option>
+        <option value="Sous 6 mois">Sous 6 mois</option>
+        <option value="Long terme">Long terme</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Commentaires / Observations libres</label>
+      <textarea name="commentaires" class="w-full p-2 border rounded" rows="4" onchange="updateSummary()"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Vendeur référent</label>
+      <input type="text" name="vendeur" class="w-full p-2 border rounded" onchange="updateSummary()">
+    </div>
+    <div class="form-group">
+      <label>Date de découverte</label>
+      <input type="date" name="date" class="w-full p-2 border rounded" onchange="updateSummary()">
+    </div>
+  </div>
 
-// ════════════════════════════════════════
-// CHIPS
-// ════════════════════════════════════════
-document.querySelectorAll('.chips').forEach(g=>{
-  const multi=g.dataset.m==='1',key=g.dataset.k;
-  if(!D[key])D[key]=multi?[]:null;
-  g.querySelectorAll('.chip').forEach(c=>{
-    c.addEventListener('click',()=>{
-      const v=c.dataset.v;
-      if(multi){
-        if(!D[key])D[key]=[];
-        const i=D[key].indexOf(v);
-        if(i>=0){D[key].splice(i,1);c.classList.remove('sel')}
-        else{D[key].push(v);c.classList.add('sel')}
-      }else{
-        D[key]=v;
-        g.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));
-        c.classList.add('sel');
+  <!-- Section Récapitulative (pour impression) -->
+  <div class="section" id="recap-section">
+    <h2>✅ Récapitulatif Découverte</h2>
+    <div class="form-group">
+      <label>Véhicules recommandés</label>
+      <textarea name="vehicules-recommandes" class="w-full p-2 border rounded" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label>🔍 Stock Libertium · Liens directs filtrés</label>
+      <textarea name="liens-stock" class="w-full p-2 border rounded" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+      <label>💬 Argumentaire commercial personnalisé</label>
+      <textarea name="argumentaire" class="w-full p-2 border rounded" rows="5"></textarea>
+    </div>
+  </div>
+
+  <script>
+    // Mise à jour du résumé en temps réel
+    function updateSummary() {
+      const summary = document.getElementById('summary-content');
+      let summaryText = [];
+
+      // Récupérer toutes les réponses
+      document.querySelectorAll('input:checked, select, textarea, input[type="text"], input[type="email"], input[type="tel"]').forEach(el => {
+        if (el.type === 'radio' || el.type === 'checkbox') {
+          if (el.checked) {
+            const label = el.parentElement.textContent.trim();
+            summaryText.push(`• ${label}`);
+          }
+        } else if (el.type === 'text' || el.type === 'email' || el.type === 'tel' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
+          if (el.value) {
+            const label = el.previousElementSibling.textContent.replace(':', '').trim();
+            summaryText.push(`• ${label}: ${el.value}`);
+          }
+        }
+      });
+
+      if (summaryText.length > 0) {
+        summary.innerHTML = `<h3>📋 Récapitulatif des réponses</h3><p>${summaryText.join('<br>')}</p>`;
+        summary.style.display = 'block';
+      } else {
+        summary.innerHTML = `<h3>📋 Récapitulatif des réponses</h3><p>Aucune réponse enregistrée.</p>`;
       }
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      // Masquer le résumé par défaut
+      document.getElementById('summary').style.display = 'none';
     });
-  });
-});
-
-// Pré-remplir la date du jour
-document.addEventListener('DOMContentLoaded',()=>{
-  const today=new Date().toISOString().split('T')[0];
-  document.getElementById('c-date').value=today;
-});
-
-// ════════════════════════════════════════
-// NAVIGATION
-// ════════════════════════════════════════
-function showStep(n){
-  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s'+n).classList.add('active');
-  cur=n;
-  document.querySelectorAll('.ps').forEach(p=>{
-    const s=+p.dataset.n;
-    p.classList.toggle('done',s<n);
-    p.classList.toggle('active',s===n);
-  });
-  const pct=Math.min(100,((n-1)/TOTAL)*100);
-  document.getElementById('prog').style.setProperty('--pw',pct+'%');
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-function goN(){showStep(cur+1)}
-function goP(){showStep(cur-1)}
-showStep(1);
-
-// ════════════════════════════════════════
-// RECOMMANDATIONS
-// ════════════════════════════════════════
-function buildRecos(){
-  const v=D.v,nb=D.nb,m=D.must||[],b=D.bud,c=D.cond,r=D.routes||[],e=D.etat,fr=D.freq;
-  const res=[];
-  const compact=c==='cpct'||r.includes('mont')||fr==='ft'||v==='solo';
-  const big=nb==='5'||v==='fa'||m.includes('gar')||m.includes('pan');
-  const lux=b==='b65'||b==='p90';
-  const fam=v==='fy'||v==='fa'||nb==='5'||nb==='4';
-  const carav=b==='m25'||(b==='b25'&&!compact);
-
-  if(compact||fr==='ft'||(nb==='2'&&!big)){
-    const br=b==='m25'?'CI Kyros Go, Font Vendôme':b==='b45'?'Adria Twin, Bavaria Nomade, Chausson X':(b==='b65'||b==='p90')?'Bürstner B66, Adria Twin SGX':'Chausson X, CI Kyros';
-    res.push({type:'Van / Fourgon aménagé',brands:br,slug:'van-fourgon-amenage',why:"Compact, agile, facile à stationner. Idéal montagne, nomadisme, city-break. Moins de 6,5 m.",tags:[{l:'< 6,5 m',h:compact},{l:'Facile à conduire',h:c==='cpct'},{l:'Nomadisme',h:fr==='ft'},{l:'Permis B',h:false}]});
-  }
-  if(!fam||nb==='2'||nb==='3'){
-    const br=e==='O'?'Chausson, Challenger, Rimor (occasion)':b==='b45'?'Chausson X 550, Rimor Kilig 66, MC Louis':b==='b65'?'Bürstner Ixeo, Adria Matrix, Rapido':b==='p90'?'Carthago C-Tourer, Challenger Genesis':'CI Horon Go, Challenger';
-    res.push({type:'Camping-car profilé',brands:br,slug:'camping-car%2Fprofil%C3%A9',why:"Meilleur compromis : aérodynamique, lit permanent, salle d'eau complète. Gamme 40–90 k€.",tags:[{l:'6–7,5 m',h:c==='eq'},{l:'Lit permanent',h:m.includes('lf')},{l:'Lits jumeaux',h:m.includes('lj')},{l:'Large gamme',h:true}]});
-  }
-  if(fam&&(nb==='4'||nb==='5')){
-    res.push({type:'Camping-car capucine',brands:'Rimor Kilig 9, CI Horon Go Capucine, Challenger C256',slug:'camping-car%2Fcapucine',why:"Lit capucine au-dessus de la cabine — idéal famille. Jusqu'à 7 couchages.",tags:[{l:'4–7 couchages',h:fam},{l:'Famille',h:true},{l:'Lit capucine',h:true}]});
-  }
-  if(big||lux||m.includes('pan')){
-    const br=b==='p90'?'Carthago C-Compactline, Eden Camp 740H':b==='b65'?'CI Magis, Challenger Genesis, Bürstner Ixeo':'CI Magis, Challenger';
-    res.push({type:'Camping-car intégral',brands:br,slug:'camping-car%2Fint%C3%A9gral',why:"Habitabilité maximale, vision panoramique, chambre isolée. Garage possible sur 7,5 m+.",tags:[{l:'> 7 m',h:big},{l:'Vue panoramique',h:m.includes('pan')},{l:'Grand confort',h:lux},{l:'Garage',h:m.includes('gar')}]});
-  }
-  if(carav){
-    res.push({type:'Caravane',brands:'Caravelair Alba/Sport Line (n°1 Fr.), Bürstner, Adria Altea',slug:'caravane',why:"Dès 20 000 €. Laisser sur site, repartir en voiture. Idéal familles et primo-accédants.",tags:[{l:'Dès 20 000 €',h:b==='m25'},{l:'Laisser sur place',h:true},{l:'Nécessite attelage',h:false}]});
-  }
-  if(!res.length)res.push({type:'Camping-car profilé',brands:'CI, Chausson, Challenger, Bürstner',slug:'camping-car',why:'La valeur sûre du réseau Libertium — excellent compromis sur tous les plans.',tags:[{l:'Polyvalent',h:true}]});
-  return res.slice(0,3);
-}
-
-// ════════════════════════════════════════
-// URL LIBERTIUM — construction correcte
-// ════════════════════════════════════════
-function buildURL(reco){
-  // Slug décodé pour URL propre
-  const slug=decodeURIComponent(reco.slug);
-  const base='https://www.libertium.fr/vehicule/'+slug;
-
-  // Paramètres de filtre observés sur libertium.fr
-  const p=[];
-  if(D.etat==='N') p.push('etat=Neuf');
-  else if(D.etat==='O') p.push('etat=Occasion');
-
-  const bmap={m25:[0,25000],b25:[25000,45000],b45:[45000,65000],b65:[65000,90000],p90:[90000,0]};
-  const range=bmap[D.bud];
-  if(range&&D.bud!=='nsp'){
-    if(range[0]>0) p.push('prix_min='+range[0]);
-    if(range[1]>0) p.push('prix_max='+range[1]);
-  }
-  if(D.nb&&D.nb!=='nsp') p.push('nb_couchages='+D.nb);
-
-  return base+(p.length?'?'+p.join('&'):'');
-}
-
-// ════════════════════════════════════════
-// AFFICHAGE RÉSULTAT
-// ════════════════════════════════════════
-function showRes(){
-  showStep(6);
-
-  // Coordonnées client
-  const prenom=document.getElementById('c-prenom').value.trim();
-  const nom=document.getElementById('c-nom').value.trim();
-  const tel=document.getElementById('c-tel').value.trim();
-  const email=document.getElementById('c-email').value.trim();
-  const ville=document.getElementById('c-ville').value.trim();
-  const delai=document.getElementById('c-delai').value;
-  const comment=document.getElementById('c-comment').value.trim();
-  const vendeur=document.getElementById('c-vendeur').value.trim();
-  const date=document.getElementById('c-date').value;
-
-  const hasClient=prenom||nom||tel||email;
-  if(hasClient){
-    document.getElementById('client-recap').innerHTML=`
-      <div style="background:var(--blue-lt);border:1px solid var(--blue-m);border-radius:var(--r);padding:14px 16px;margin-bottom:4px">
-        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue-m);margin-bottom:8px">👤 Client</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;font-size:13px">
-          ${(prenom||nom)?`<div><span style="color:var(--ink3)">Nom :</span> <strong>${prenom} ${nom}</strong></div>`:''}
-          ${tel?`<div><span style="color:var(--ink3)">Tél :</span> <strong>${tel}</strong></div>`:''}
-          ${email?`<div><span style="color:var(--ink3)">Email :</span> <strong>${email}</strong></div>`:''}
-          ${ville?`<div><span style="color:var(--ink3)">Ville :</span> <strong>${ville}</strong></div>`:''}
-          ${delai?`<div><span style="color:var(--ink3)">Délai :</span> <strong>${delai}</strong></div>`:''}
-          ${vendeur?`<div><span style="color:var(--ink3)">Conseiller :</span> <strong>${vendeur}</strong></div>`:''}
-          ${date?`<div><span style="color:var(--ink3)">Date :</span> <strong>${new Date(date).toLocaleDateString('fr-FR')}</strong></div>`:''}
-        </div>
-        ${comment?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue-m)">Commentaires</span><div style="font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.6">${comment.replace(/\n/g,'<br>')}</div></div>`:''}
-      </div>`;
-  } else {
-    document.getElementById('client-recap').innerHTML='';
-  }
-
-  // Scores
-  document.getElementById('scores').innerHTML=`
-    <div class="sc"><div class="sc-l">Profil</div><div class="sc-v">${lbl('v')}</div></div>
-    <div class="sc"><div class="sc-l">Couchages</div><div class="sc-v">${lbl('nb')}</div></div>
-    <div class="sc"><div class="sc-l">Budget</div><div class="sc-v">${lbl('bud')}</div></div>
-    <div class="sc"><div class="sc-l">État</div><div class="sc-v">${lbl('etat')}</div></div>`;
-
-  // Récap
-  const must=(D.must||[]).map(x=>ML[x]||x).join(' · ')||'—';
-  const routes=(D.routes||[]).map(x=>({aut:'Autoroutes',camp:'Campagne',mont:'Montagne',mer:'Littoral',eu:'Tour Europe',av:'Off-road'}[x]||x)).join(', ')||'—';
-  const fin=(D.fin||[]).map(x=>({cpt:'Comptant',cred:'Crédit',loa:'LOA',rep:'Avec reprise'}[x]||x)).join(', ')||'—';
-
-  document.getElementById('recap').innerHTML=[
-    ['Voyageurs',lbl('v')],['Couchages',lbl('nb')],['Fréquence',lbl('freq')],
-    ['Destinations',routes],['Équipements',must],['Conduite',lbl('cond')],
-    ['Autonomie',lbl('auto')],['Budget',lbl('bud')],['État',lbl('etat')],['Financement',fin]
-  ].map(([k,v])=>`<div class="rr"><span class="rk">${k}</span><span class="rv">${v}</span></div>`).join('');
-
-  // Recos
-  document.getElementById('recos').innerHTML=buildRecos().map((r,i)=>`
-    <div class="rc${i===0?' top':''}">
-      <div class="rc-h"><div><div class="rc-t">${r.type}</div></div>
-        <span class="bdg ${i===0?'b':'s'}">${i===0?'✦ Idéal pour ce profil':'Alternative'}</span></div>
-      <div class="rc-b">📍 ${r.brands}</div>
-      <div class="rc-w">${r.why}</div>
-      <div class="tags">${r.tags.map(t=>`<span class="tg${t.h?' hit':''}">${t.l}</span>`).join('')}</div>
-    </div>`).join('');
-
-  // Reset stock/arg
-  document.getElementById('stk-bd').innerHTML='';
-  document.getElementById('stk-bd').classList.remove('open');
-  document.getElementById('stk-btn').textContent='Voir les liens ↓';
-  document.getElementById('arg-bd').innerHTML='';
-  document.getElementById('arg-bd').classList.remove('open');
-  document.getElementById('arg-btn').textContent='Générer';
-  document.getElementById('arg-btn').disabled=false;
-}
-
-// ════════════════════════════════════════
-// STOCK — LIENS DIRECTS (sans iframe)
-// ════════════════════════════════════════
-function toggleStock(){
-  const bd=document.getElementById('stk-bd');
-  const btn=document.getElementById('stk-btn');
-  if(bd.classList.contains('open')){
-    bd.classList.remove('open');
-    btn.textContent='Voir les liens ↓';
-    return;
-  }
-
-  const recos=buildRecos();
-  const r0=recos[0];
-  const url0=buildURL(r0);
-
-  bd.innerHTML=`
-    <div class="stk-note">
-      💡 Libertium.fr bloque l'intégration dans d'autres pages (protection standard des sites web).
-      Cliquez sur un lien ci-dessous — vous arrivez directement sur les véhicules filtrés selon le profil du client.
-    </div>
-    <div class="url-box">
-      <strong>URL filtrée construite sur les critères client</strong>
-      <code>${url0}</code>
-    </div>
-    <div class="link-list">
-      ${recos.map((r,i)=>{
-        const url=buildURL(r);
-        const icons=['🥇','🥈','🥉'];
-        const etats=D.etat==='N'?'Neuf':D.etat==='O'?'Occasion':'Neuf ou occasion';
-        return `<a class="lk" href="${url}" target="_blank" rel="noopener noreferrer">
-          <span class="lk-icon">${icons[i]||'🔗'}</span>
-          <div class="lk-txt">
-            <strong>${r.type}</strong>
-            <span>${r.brands.split(',')[0].trim()} · ${lbl('bud')} · ${etats}</span>
-            <div class="lk-url">${url}</div>
-          </div>
-          <span class="lk-arr">↗</span>
-        </a>`;
-      }).join('')}
-    </div>
-    <div style="margin-top:12px;text-align:right">
-      <a class="btn dark" href="https://www.libertium.fr/vehicule" target="_blank" rel="noopener noreferrer" style="text-decoration:none;display:inline-flex">
-        Voir tout le stock Libertium ↗
-      </a>
-    </div>`;
-
-  bd.classList.add('open');
-  btn.textContent='Masquer ↑';
-}
-
-// ════════════════════════════════════════
-// ARGUMENTAIRE LOCAL
-// ════════════════════════════════════════
-function genArg(){
-  const btn=document.getElementById('arg-btn');
-  const bd=document.getElementById('arg-bd');
-  btn.disabled=true;btn.textContent='⏳…';
-  setTimeout(()=>{
-    bd.innerHTML=buildArg();
-    bd.classList.add('open');
-    btn.textContent='↺ Régénérer';btn.disabled=false;
-  },350);
-}
-
-function buildArg(){
-  const v=D.v,nb=D.nb,m=D.must||[],b=D.bud,c=D.cond,r=D.routes||[],
-        sej=D.sej||[],au=D.auto,e=D.etat,fr=D.freq,fin=D.fin||[];
-
-  const pf=[];
-  if(v==='couple'||v==='sr'){
-    if(m.includes('lf'))pf.push({c:'g',t:'Confort immédiat',d:"Le lit fixe permanent évite toute manipulation — vous montez à bord, vous dormez. Critère n°1 des couples qui voyagent régulièrement."});
-    if(m.includes('lj'))pf.push({c:'g',t:'Indépendance de sommeil',d:"Les lits jumeaux séparés sont plébiscités — chacun son espace, sans déranger l'autre. Souvent sous-estimé à l'achat, adoré dès le premier voyage."});
-  }
-  if(v==='fy'||v==='fa'){
-    pf.push({c:'g',t:'Liberté familiale totale',d:`Avec ${lbl('nb')} couchages, toute la famille part sans compromis. Fini les hôtels hors de prix — la liberté de s'arrêter où on veut, quand on veut.`});
-    if(nb==='5'||nb==='4')pf.push({c:'g',t:'Espace enfants optimisé',d:"Couchages superposés que les enfants adorent — les parents apprécient la séparation espace vie / nuit."});
-  }
-  if(v==='sr')pf.push({c:'g',t:'Liberté sans contrainte',d:"Plus besoin de réserver, porter des valises, respecter les horaires. Le camping-car s'adapte à votre rythme."});
-  if(v==='solo'||fr==='ft')pf.push({c:'g',t:'Économie réelle',d:"Sur usage intensif, le coût par nuit descend à 15–25 € en comptant l'amortissement, vs 80–150 € pour un hôtel moyen."});
-  if(r.includes('mont'))pf.push({c:'g',t:'Liberté en montagne',d:"Pas de problème de disponibilité en haute saison. Vous dormez au pied des pistes, repartez à l'aube avant la foule."});
-  if(r.includes('mer'))pf.push({c:'g',t:'Spots préservés',d:"Les campings en bord de mer se réservent des mois à l'avance. Avec une aire de services, accès aux spots encore préservés."});
-  if(sej.includes('lib')||au==='hte')pf.push({c:'g',t:'Autonomie réelle',d:"Les modèles solaires offrent 3–5 jours d'autonomie complète — eau, énergie, chauffage — sans dépendance aux bornes."});
-  if(e==='O')pf.push({c:'g',t:'Rapport valeur/budget',d:"L'occasion Libertium, c'est un véhicule contrôlé + Assistance 24 mois incluse — la tranquillité du neuf au prix de l'occasion."});
-  if(fin.includes('loa'))pf.push({c:'g',t:'LOA : rouler sans immobiliser',d:"Dès 300–500 €/mois, changer de véhicule tous les 4–5 ans, déduire les loyers en activité professionnelle."});
-  if(fin.includes('rep'))pf.push({c:'g',t:'Reprise intégrée',d:"Libertium reprend votre véhicule en déduction directe — opération transparente qui améliore votre reste à payer."});
-  if(!pf.length)pf.push({c:'g',t:'67 concessions · 1 réseau',d:"Assistance 24/7 incluse 2 ans, ateliers agréés Fiat Professional et Ford partout en France."});
-
-  const qs=[];
-  if(!D.v)qs.push("Qui partirait avec vous — les enfants, le conjoint ? Ça change tout sur l'implantation.");
-  else if(v==='couple'||v==='sr')qs.push("Vous avez déjà dormi dans un camping-car ? Un weekend d'essai vous aiderait à vous projeter concrètement.");
-  else if(v==='fy'||v==='fa')qs.push("Quel âge ont vos enfants exactement ? Ça influence l'implantation idéale — capucine, lits superposés ou dinette convertible.");
-  if(!b||b==='nsp')qs.push("Vous avez une idée de la mensualité confortable ? C'est souvent plus parlant que le prix affiché.");
-  else if(b==='m25'||b==='b25')qs.push("Avez-vous pensé à l'occasion récente ? Des modèles 2–3 ans en état irréprochable, garantie encore active, pour bien moins que le neuf.");
-  if(r.includes('mont'))qs.push("Vous envisagez les Alpes, les Pyrénées ou le Massif Central ? Ça influence le choix du gabarit.");
-  if(sej.includes('lib')||au==='hte')qs.push("Des étapes sans électricité prévues ? Il faut regarder l'option solaire + batterie ensemble.");
-  if(fin.includes('rep'))qs.push("Quel type de véhicule à reprendre ? Je peux vous donner une estimation rapide maintenant.");
-  if(qs.length<3)qs.push("Qu'est-ce qui vous a donné envie de franchir le pas aujourd'hui ?");
-
-  const obs=[];
-  if(c==='cpct'||r.includes('mont'))obs.push({c:'a',q:"« C'est grand à conduire… »",r:"C'est la crainte n°1 — elle disparaît après le premier kilomètre. La plupart de nos clients rappellent pour dire qu'ils ont été surpris. On propose aussi des stages de conduite VDL."});
-  if(!b||b==='nsp'||b==='m25')obs.push({c:'a',q:"« C'est un gros budget… »",r:"Regardons ça ensemble. Un crédit 7 ans sur 45 000 € = ~580 €/mois. Soustrayez vos dépenses actuelles en hôtels et locations de vacances — souvent la différence est nulle."});
-  obs.push({c:'a',q:"« Je vais réfléchir… »",r:"C'est normal pour un achat de cette importance. Je propose un créneau d'essai sans engagement — une heure à bord d'un modèle adapté, la décision se prend d'elle-même."});
-  if(v==='fy'||v==='fa')obs.push({c:'a',q:"« Et avec des enfants, c'est praticable ? »",r:"C'est l'un des usages les plus adaptés. Pas de valises, votre cuisine, votre rythme. Des milliers de familles disent que leur premier voyage a révolutionné leurs vacances."});
-
-  const closings={
-    fy:"Je vous propose de venir avec les enfants en fin de semaine — ils vont adorer visiter le véhicule. Je vous réserve un créneau ?",
-    fa:"Les ados adorent avoir leur espace à bord. Venez essayer avec eux, leur avis pèsera. Samedi matin ?",
-    couple:"Le mieux c'est qu'on fasse l'essai ensemble — une heure sur route et vous saurez. Je vous bloque un créneau cette semaine ?",
-    sr:"Beaucoup de nos clients retraités nous disent que c'est le meilleur achat de leur vie. Qu'est-ce qui vous empêche de franchir le pas cette semaine ?",
-    solo:"Pour un usage solo intensif, vous rentabilisez très vite. On fait les chiffres ensemble ?",
-    ami:"Pour des voyages entre amis c'est imbattable — coûts partagés, chacun a son espace. Je vous montre les modèles qui s'y prêtent ?",
-  };
-  const closing=closings[v]||"Ce profil correspond exactement à ce qu'on a en stock. On fait une visite — je vous garde le véhicule le temps que vous en parliez entre vous ?";
-
-  const ri=items=>items.map(it=>`<div class="ai ${it.c||''}">${it.t?`<strong>${it.t}</strong>`:''}${it.d||it.r||''}</div>`).join('');
-  return `
-    <div class="a-sec"><div class="a-h">✦ Points forts à valoriser</div>${ri(pf.slice(0,4))}</div>
-    <div class="a-sec"><div class="a-h">? Questions de rebond</div>${qs.slice(0,3).map(q=>`<div class="ai b">${q}</div>`).join('')}</div>
-    <div class="a-sec"><div class="a-h">! Objections à anticiper</div>${ri(obs.slice(0,3))}</div>
-    <div class="a-sec"><div class="a-h">→ Closing</div><div class="closing-box"><span class="closing-lbl">Phrase personnalisée</span>"${closing}"</div></div>`;
-}
-
-// ════════════════════════════════════════
-// EXPORT PDF (window.print + @media print)
-// ════════════════════════════════════════
-function doPrint(){
-  // S'assurer que l'argumentaire est généré
-  const argBd=document.getElementById('arg-bd');
-  if(!argBd.classList.contains('open')||!argBd.innerHTML){
-    argBd.innerHTML=buildArg();
-    argBd.classList.add('open');
-  }
-  // S'assurer que le stock est visible
-  const stkBd=document.getElementById('stk-bd');
-  if(!stkBd.classList.contains('open')||!stkBd.innerHTML){
-    toggleStock();
-  }
-  // Mettre à jour la date d'impression
-  document.getElementById('print-date').textContent=
-    'Généré le '+new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
-
-  // Petit délai pour le rendu, puis print
-  setTimeout(()=>window.print(),200);
-}
-
-// ════════════════════════════════════════
-// UTILITAIRES
-// ════════════════════════════════════════
-function resetAll(){
-  Object.keys(D).forEach(k=>delete D[k]);
-  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
-  ['c-prenom','c-nom','c-tel','c-email','c-ville','c-comment','c-vendeur'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.value='';
-  });
-  document.getElementById('c-delai').value='';
-  const today=new Date().toISOString().split('T')[0];
-  document.getElementById('c-date').value=today;
-  ['stk-bd','arg-bd'].forEach(id=>{
-    document.getElementById(id).innerHTML='';
-    document.getElementById(id).classList.remove('open');
-  });
-  document.getElementById('arg-btn').textContent='Générer';
-  document.getElementById('arg-btn').disabled=false;
-  document.getElementById('stk-btn').textContent='Voir les liens ↓';
-  showStep(1);
-}
-
-function copyProf(){
-  const must=(D.must||[]).map(x=>ML[x]||x).join(', ')||'—';
-  const prenom=document.getElementById('c-prenom').value.trim();
-  const nom=document.getElementById('c-nom').value.trim();
-  const tel=document.getElementById('c-tel').value.trim();
-  const email=document.getElementById('c-email').value.trim();
-  const comment=document.getElementById('c-comment').value.trim();
-  const vendeur=document.getElementById('c-vendeur').value.trim();
-  const date=document.getElementById('c-date').value;
-
-  const text=`=== FICHE CLIENT LIBERTIUM ===
-${prenom||nom?`Client : ${prenom} ${nom}\n`:''}${tel?`Tél : ${tel}\n`:''}${email?`Email : ${email}\n`:''}${comment?`Commentaires : ${comment}\n`:''}${vendeur?`Conseiller : ${vendeur}\n`:''}${date?`Date : ${new Date(date).toLocaleDateString('fr-FR')}\n`:''}
-=== DÉCOUVERTE ===
-Voyageurs : ${lbl('v')}
-Couchages : ${lbl('nb')}
-Fréquence : ${lbl('freq')}
-Destinations : ${(D.routes||[]).join(', ')||'—'}
-Équipements : ${must}
-Budget : ${lbl('bud')}
-État : ${lbl('etat')}
-Financement : ${(D.fin||[]).join(', ')||'—'}
-
-=== RECOMMANDATION ===
-${buildRecos().map((r,i)=>`${i===0?'✦ ':''}${r.type} — ${r.brands}\n  URL : ${buildURL(r)}`).join('\n')}`;
-
-  navigator.clipboard.writeText(text).then(()=>{
-    const btn=event.target,orig=btn.textContent;
-    btn.textContent='✓ Copié !';setTimeout(()=>btn.textContent=orig,2000);
-  });
-}
-</script>
+  </script>
 </body>
 </html>
