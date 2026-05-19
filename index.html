@@ -3,93 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Libertium — Guide commercial</title>
+<title>Libertium — Guide découverte client</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
-:root { --navy: #0f1f3d; --blue-mid: #2e5fa3; --gold: #c8960c; --bg: #f8f9fc; --border: #e2e6f0; }
-body { font-family: sans-serif; background: var(--bg); padding: 20px; line-height: 1.5; }
-.container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-.step { display: none; }
-.step.active { display: block; }
-.btn { background: var(--blue-mid); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; }
-.chip { display: inline-block; padding: 8px 12px; margin: 4px; border: 1px solid var(--border); border-radius: 20px; cursor: pointer; }
-.chip.sel { background: var(--blue-mid); color: white; }
-.reco-card { border: 1px solid var(--border); padding: 15px; margin: 10px 0; border-radius: 8px; }
-.arg-box { background: #fdf3d7; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #f0c842; }
+:root { --navy: #0f1f3d; --blue-mid: #2e5fa3; --blue-lt: #e8f0fb; --gold: #c8960c; --gold-lt: #fdf3d7; --gold-border: #f0c842; --text: #1a1a2e; --text-sec: #5a6480; --border: #e2e6f0; --bg: #f8f9fc; --radius: 12px; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); padding: 20px; }
+.container { max-width: 780px; margin: 0 auto; }
+.card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+.step { display: none; } .step.active { display: block; }
+.chip { padding: 8px 16px; border-radius: 24px; border: 1px solid var(--border); cursor: pointer; display: inline-block; margin: 4px; font-size: 13px; }
+.chip.sel { background: var(--blue-mid); color: #fff; border-color: var(--blue-mid); }
+.btn { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; background: var(--blue-mid); color: #fff; font-weight: 500; }
+.ai-box { border: 1.5px solid var(--gold-border); border-radius: var(--radius); background: var(--gold-lt); padding: 15px; margin-top: 20px; }
+.ai-output { white-space: pre-wrap; font-size: 14px; margin-top: 10px; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div id="steps-container">
-    <div class="step active" id="s1">
-      <h3>1. Quel type de voyageur êtes-vous ?</h3>
-      <div class="chips" data-k="type">
-        <span class="chip" onclick="select(this, 'Van')">Van / Fourgon</span>
-        <span class="chip" onclick="select(this, 'Profilé')">Camping-car Profilé</span>
-        <span class="chip" onclick="select(this, 'Intégral')">Camping-car Intégral</span>
+  <div class="card">
+    <div id="steps-container">
+      <div class="step active" id="s1">
+        <h3>1. Qui voyage ?</h3>
+        <div class="chips" data-k="voyageurs">
+          <span class="chip" onclick="toggle(this, 'voyageurs', 'Solo')">Solo</span>
+          <span class="chip" onclick="toggle(this, 'voyageurs', 'Couple')">Couple</span>
+          <span class="chip" onclick="toggle(this, 'voyageurs', 'Famille')">Famille</span>
+        </div>
+        <button class="btn" onclick="nextStep(2)">Suivant</button>
       </div>
-      <br><button class="btn" onclick="showResult()">Voir la recommandation</button>
-    </div>
-  </div>
 
-  <div id="result-container" class="step">
-    <div id="reco-list"></div>
-    <div id="argumentaire" class="arg-box"></div>
-    <br><button class="btn" onclick="location.reload()">Recommencer</button>
+      <div class="step" id="s2">
+        <h3>2. Type de véhicule</h3>
+        <div class="chips" data-k="type">
+          <span class="chip" onclick="toggle(this, 'type', 'Van')">Van / Fourgon</span>
+          <span class="chip" onclick="toggle(this, 'type', 'Profilé')">Profilé</span>
+          <span class="chip" onclick="toggle(this, 'type', 'Intégral')">Intégral</span>
+        </div>
+        <button class="btn" onclick="showResults()">Voir recommandation</button>
+      </div>
+    </div>
+
+    <div class="step" id="s3">
+      <h3>Résultat & Argumentaire</h3>
+      <div id="reco-result"></div>
+      <div class="ai-box">
+        <div style="font-weight:bold; color:var(--gold);">✦ Argumentaire expert</div>
+        <div id="ai-output" class="ai-output">Cliquez pour générer l'argumentaire personnalisé.</div>
+        <button class="btn" id="gen-btn" onclick="generateNativeArg()" style="background:var(--gold); margin-top:10px;">Générer l'argumentaire</button>
+      </div>
+      <br><button class="btn" onclick="location.reload()">Nouveau client</button>
+    </div>
   </div>
 </div>
 
 <script>
-let selectedType = "";
+const D = { voyageurs: '', type: '' };
 
-function select(el, type) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
+function toggle(el, key, val) {
+  el.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
   el.classList.add('sel');
-  selectedType = type;
+  D[key] = val;
 }
 
-function showResult() {
-  document.getElementById('steps-container').style.display = 'none';
-  document.getElementById('result-container').style.display = 'block';
-  
-  const links = {
-    "Van": "https://www.libertium.fr/vehicule/van",
-    "Profilé": "https://www.libertium.fr/vehicule/camping-car/profile",
-    "Intégral": "https://www.libertium.fr/vehicule/camping-car/integral"
-  };
+function nextStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+}
 
-  const args = {
-    "Van": {
-      arg: "Le choix de la liberté totale. Sa compacité permet d'accéder partout, même en centre-ville, tout en conservant un confort moderne.",
-      obj: "Objection 'C'est petit' : C'est le prix de l'agilité. Nos modèles optimisent chaque cm² pour une expérience nomade authentique."
-    },
-    "Profilé": {
-      arg: "Le compromis parfait. Aérodynamisme pour réduire la consommation et confort intérieur supérieur pour les longs séjours.",
-      obj: "Objection 'C'est long à manœuvrer' : Grâce aux caméras de recul grand angle, la prise en main est aussi simple qu'une grosse berline."
-    },
-    "Intégral": {
-      arg: "Le summum du confort. Une visibilité panoramique exceptionnelle et une habitabilité sans égale pour les voyageurs exigeants.",
-      obj: "Objection 'C'est un gros budget' : C'est un investissement plaisir qui offre une valeur de revente nettement supérieure sur le marché."
-    }
-  };
+function showResults() {
+  nextStep(3);
+  document.getElementById('reco-result').innerHTML = `<h4>Catégorie sélectionnée : ${D.type}</h4>`;
+}
 
-  const data = args[selectedType] || { arg: "Un véhicule polyvalent.", obj: "Aucune objection majeure." };
-  
-  document.getElementById('reco-list').innerHTML = `
-    <div class="reco-card">
-      <h3>${selectedType}</h3>
-      <a href="${links[selectedType]}" target="_blank" class="btn">Voir les fiches ${selectedType}</a>
-    </div>
-  `;
-  
-  document.getElementById('argumentaire').innerHTML = `
-    <h3>Arguments commerciaux</h3>
-    <p>${data.arg}</p>
-    <h3>Réponse aux objections</h3>
-    <p><strong>Client :</strong> ${data.obj}</p>
-  `;
+function generateNativeArg() {
+  const output = document.getElementById('ai-output');
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  output.textContent = "Analyse des besoins en cours...";
+
+  setTimeout(() => {
+    const db = {
+      "Van": { arg: "Le roi de l'agilité. Parfait pour les escapades improvisées et le stationnement urbain.", obj: "Objection 'Espace' : C'est le choix de l'aventure réelle. L'agencement permet une vie dedans-dehors unique." },
+      "Profilé": { arg: "Le compromis parfait entre habitabilité et compacité.", obj: "Objection 'Conduite' : Grâce à ses dimensions maîtrisées, il se conduit comme une berline." },
+      "Intégral": { arg: "Le confort absolu avec une vue panoramique sur la route.", obj: "Objection 'Budget' : C'est un investissement plaisir qui conserve une valeur de revente exceptionnelle." }
+    };
+    const data = db[D.type] || { arg: "Un excellent choix polyvalent.", obj: "Nous avons des solutions adaptées à chaque usage." };
+    output.innerHTML = `<strong>Points forts :</strong> ${data.arg}<br><br><strong>Réponse aux objections :</strong> ${data.obj}`;
+    btn.textContent = "Généré ✅";
+  }, 600);
 }
 </script>
-
 </body>
 </html>
