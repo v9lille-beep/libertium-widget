@@ -339,6 +339,7 @@ body {
   margin-bottom: 12px;
   background: var(--bg-card);
   transition: box-shadow .2s;
+  position: relative;
 }
 .reco-card:hover { box-shadow: var(--shadow); }
 .reco-card.top { border-color: var(--blue-mid); border-width: 1.5px; }
@@ -368,6 +369,14 @@ body {
   border-color: var(--blue-border);
   color: var(--blue);
   background: var(--blue-lt);
+}
+.score-indicator {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  font-size: 11px;
+  color: var(--text-hint);
+  font-weight: 500;
 }
 
 /* ── AI Argumentaire ── */
@@ -459,7 +468,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
 
 <div class="container">
 
-  <!-- API Key setup -->
   <div class="api-setup" id="api-setup">
     <h2>Configuration initiale</h2>
     <p>
@@ -475,18 +483,13 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
     </div>
   </div>
 
-  <!-- Widget principal -->
   <div class="card">
 
-    <!-- Barre de progression -->
     <div class="progress-wrap">
       <div class="progress-bar" id="prog"></div>
       <div class="progress-label" id="prog-label">Étape 1 sur 4</div>
     </div>
 
-    <!-- ════════════════════════════════════
-         ÉTAPE 1 — QUI VOYAGE ?
-    ════════════════════════════════════ -->
     <div class="step active" id="s1">
       <div class="step-header">
         <div class="step-num">1</div>
@@ -510,18 +513,18 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
         <div class="q-block">
           <div class="q-label">Nombre de couchages nécessaires</div>
           <div class="chips" data-k="couchages" data-m="0">
-            <div class="chip" data-v="2">2</div>
-            <div class="chip" data-v="3">3</div>
-            <div class="chip" data-v="4">4</div>
+            <div class="chip" data-v="2">2 couchages</div>
+            <div class="chip" data-v="3">3 couchages</div>
+            <div class="chip" data-v="4">4 couchages</div>
             <div class="chip" data-v="5plus">5 ou plus</div>
           </div>
         </div>
         <div class="q-block">
-          <div class="q-label">Contraintes de mobilité ?</div>
+          <div class="q-label">Contraintes de mobility ?</div>
           <div class="chips" data-k="mobilite" data-m="0">
             <div class="chip" data-v="non">Aucune</div>
             <div class="chip" data-v="escalier">Difficultés à monter / descendre</div>
-            <div class="chip" data-v="pmr">Accessibilité renforcée</div>
+            <div class="chip" data-v="pmr">Accessibilité renforcée (PMR)</div>
           </div>
         </div>
       </div>
@@ -531,9 +534,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
       </div>
     </div>
 
-    <!-- ════════════════════════════════════
-         ÉTAPE 2 — OÙ ET COMMENT ?
-    ════════════════════════════════════ -->
     <div class="step" id="s2">
       <div class="step-header">
         <div class="step-num">2</div>
@@ -579,9 +579,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
       </div>
     </div>
 
-    <!-- ════════════════════════════════════
-         ÉTAPE 3 — PRIORITÉS À BORD
-    ════════════════════════════════════ -->
     <div class="step" id="s3">
       <div class="step-header">
         <div class="step-num">3</div>
@@ -628,9 +625,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
       </div>
     </div>
 
-    <!-- ════════════════════════════════════
-         ÉTAPE 4 — BUDGET
-    ════════════════════════════════════ -->
     <div class="step" id="s4">
       <div class="step-header">
         <div class="step-num">4</div>
@@ -675,15 +669,12 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
       </div>
     </div>
 
-    <!-- ════════════════════════════════════
-         RÉSULTAT
-    ════════════════════════════════════ -->
     <div class="step" id="s5">
       <div class="step-header">
         <div class="step-num gold">✓</div>
         <div>
           <div class="step-title">Recommandation Libertium</div>
-          <div class="step-sub">Basée sur les besoins du client · libertium.fr</div>
+          <div class="step-sub">Sélection personnalisée des 3 meilleures catégories</div>
         </div>
       </div>
       <div class="step-body">
@@ -693,10 +684,9 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
         <div class="section-label">Récapitulatif profil client</div>
         <div class="summary-table" id="summary"></div>
 
-        <div class="section-label">Véhicules recommandés</div>
+        <div class="section-label">Top 3 des catégories recommandées</div>
         <div id="recos"></div>
 
-        <!-- Bloc argumentaire IA -->
         <div class="ai-box" id="ai-box">
           <div class="ai-box-header">
             <div class="ai-box-title">
@@ -709,7 +699,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
           </div>
         </div>
 
-        <!-- Lien stock -->
         <div style="margin-top:1rem;padding:14px 16px;background:var(--blue-lt);border:1px solid var(--blue-border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
           <div style="font-size:13px;color:var(--blue);">
             <strong>Rechercher en stock</strong> — Voir les annonces disponibles sur libertium.fr
@@ -726,347 +715,91 @@ hr { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
       </div>
     </div>
 
-  </div><!-- /card -->
-</div><!-- /container -->
-
-<script>
+  </div></div><script>
 // ── État ──────────────────────────────────────────────────────────────────────
 const D = {};
 let currentStep = 1;
 const TOTAL_STEPS = 4;
 
-// ── Clé API ───────────────────────────────────────────────────────────────────
-function saveKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key.startsWith('sk-ant')) {
-    alert('Clé invalide — elle doit commencer par sk-ant-...');
-    return;
-  }
-  localStorage.setItem('anthropic_key', key);
-  document.getElementById('api-setup').style.display = 'none';
-  document.getElementById('api-key-input').value = '';
-}
-
-function getKey() {
-  return localStorage.getItem('anthropic_key') || '';
-}
-
-// Masquer la config si clé déjà présente
-window.addEventListener('DOMContentLoaded', () => {
-  if (getKey()) document.getElementById('api-setup').style.display = 'none';
-  initChips();
-  updateProgress();
-});
-
-// ── Chips ─────────────────────────────────────────────────────────────────────
-function initChips() {
-  document.querySelectorAll('.chips').forEach(g => {
-    const multi = g.dataset.m === '1';
-    const key = g.dataset.k;
-    if (!D[key]) D[key] = multi ? [] : null;
-    g.querySelectorAll('.chip').forEach(c => {
-      c.addEventListener('click', () => {
-        const v = c.dataset.v;
-        if (multi) {
-          if (!D[key]) D[key] = [];
-          const i = D[key].indexOf(v);
-          if (i >= 0) { D[key].splice(i, 1); c.classList.remove('sel'); }
-          else { D[key].push(v); c.classList.add('sel'); }
-        } else {
-          D[key] = v;
-          g.querySelectorAll('.chip').forEach(x => x.classList.remove('sel'));
-          c.classList.add('sel');
-        }
-      });
-    });
-  });
-}
-
-// ── Navigation ────────────────────────────────────────────────────────────────
-function showStep(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('s' + n).classList.add('active');
-  currentStep = n;
-  updateProgress();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function goNext() { showStep(currentStep + 1); }
-function goPrev() { showStep(currentStep - 1); }
-
-function updateProgress() {
-  const bar = document.getElementById('prog');
-  bar.innerHTML = '';
-  for (let i = 1; i <= TOTAL_STEPS; i++) {
-    const d = document.createElement('div');
-    d.className = 'progress-step' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
-    bar.appendChild(d);
-  }
-  const lbl = document.getElementById('prog-label');
-  if (currentStep <= TOTAL_STEPS) lbl.textContent = `Étape ${currentStep} sur ${TOTAL_STEPS}`;
-  else lbl.textContent = 'Synthèse du profil';
-}
-
-// ── Labels ────────────────────────────────────────────────────────────────────
-const LBL = {
-  voyageurs: { solo:'Seul(e)', couple:'Couple', famille_young:'Famille (jeunes enfants)', famille_ado:'Famille (enfants/ados)', seniors:'Couple retraité', amis:'Entre amis' },
-  budget: { m25:'< 25 000 €', '25_45':'25–45 000 €', '45_65':'45–65 000 €', '65_90':'65–90 000 €', p90:'> 90 000 €', nsp:'Non défini' },
-  etat: { neuf:'Neuf', occasion:'Occasion', indiff:'Neuf ou occasion' },
-  freq: { weekends:'Weekends + semaines', vacances:'Grandes vacances', intensif:'Intensif >60j/an', fulltime:'Full-time' },
-  conduite: { compact:'Compact / facile', equilibre:'Équilibré', grand:'Grand gabarit OK' },
-  autonomie: { faible:'Toujours raccordé', moyenne:'2–3 jours', haute:'Autonomie max' },
-  mobilite: { non:'Aucune', escalier:'Difficultés montée/descente', pmr:'PMR' },
-};
-
-const MUST_LABELS = {
-  lit_fixe:'Lit fixe', lits_jumeaux:'Lits jumeaux', garage:'Garage',
-  douche_sep:'Douche séparée', grand_salon:'Grand salon', cuisine:'Cuisine',
-  solaire:'Solaire', chauffage:'Chauffage', vue_pano:'Vue panoramique'
-};
-
-function lbl(k, fb = '—') {
-  const v = D[k];
-  if (!v) return fb;
-  if (Array.isArray(v)) return v.map(x => LBL[k] ? LBL[k][x] || x : x).join(', ') || fb;
-  return LBL[k] ? LBL[k][v] || v : v;
-}
-
-// ── Résultats ─────────────────────────────────────────────────────────────────
-function showResults() {
-  updateProgress();
-  showStep(5);
-
-  // Scores
-  document.getElementById('scores').innerHTML = `
-    <div class="score-card"><div class="sc-label">Profil</div><div class="sc-val">${lbl('voyageurs')}</div></div>
-    <div class="score-card"><div class="sc-label">Couchages</div><div class="sc-val">${D.couchages || '—'}</div></div>
-    <div class="score-card"><div class="sc-label">Budget</div><div class="sc-val">${lbl('budget')}</div></div>
-    <div class="score-card"><div class="sc-label">État</div><div class="sc-val">${lbl('etat')}</div></div>
-  `;
-
-  // Récapitulatif
-  const must = (D.must || []).map(x => MUST_LABELS[x] || x).join(' · ') || '—';
-  const routes = (D.routes || []).map(x => ({ autoroute:'Autoroutes', campagne:'Campagne', montagne:'Montagne', littoral:'Littoral', europe:'Tour Europe', aventure:'Off-road' }[x] || x)).join(', ') || '—';
-  const fin = (D.fin || []).map(x => ({ comptant:'Comptant', credit:'Crédit', loa:'LOA', reprise:'Avec reprise' }[x] || x)).join(', ') || '—';
-
-  document.getElementById('summary').innerHTML = [
-    ['Voyageurs', lbl('voyageurs')], ['Couchages', D.couchages || '—'],
-    ['Fréquence', lbl('freq')], ['Destinations', routes],
-    ['Mode de séjour', lbl('sejour', '—')], ['Équipements clés', must],
-    ['Conduite', lbl('conduite')], ['Autonomie', lbl('autonomie')],
-    ['Budget', lbl('budget')], ['État véhicule', lbl('etat')],
-    ['Financement', fin],
-  ].map(([k, v]) => `<div class="sum-row"><span class="sum-key">${k}</span><span class="sum-val">${v}</span></div>`).join('');
-
-  // Recommandations
-  document.getElementById('recos').innerHTML = buildRecos().map((r, i) => `
-    <div class="reco-card ${i === 0 ? 'top' : ''}">
-      <div class="reco-head">
-        <div>
-          <div class="reco-name">${r.type}</div>
-          <div class="reco-brand">${r.brands}</div>
-        </div>
-        <span class="badge ${i === 0 ? 'best' : 'alt'}">${i === 0 ? 'Idéal pour ce profil' : 'Alternative'}</span>
-      </div>
-      <div class="reco-why">${r.why}</div>
-      <div class="tags">${r.tags.map(t => `<span class="tag${t.m ? ' match' : ''}">${t.l}</span>`).join('')}</div>
-    </div>
-  `).join('');
-
-  // Lien stock
-  const recos = buildRecos();
-  const slug = recos[0] ? recos[0].slug : 'camping-car';
-  document.getElementById('stock-link').href = `https://www.libertium.fr/vehicule/${slug}`;
-}
-
-function buildRecos() {
-  const v = D.voyageurs, nb = D.couchages, m = D.must || [], b = D.budget,
-        c = D.conduite, au = D.autonomie, r = D.routes || [], e = D.etat, fr = D.freq;
-
-  const recos = [];
-  const wantCompact = c === 'compact' || r.includes('montagne') || fr === 'fulltime' || v === 'solo';
-  const wantBig = nb === '5plus' || v === 'famille_ado' || m.includes('garage') || m.includes('vue_pano');
-  const wantLux = b === '65_90' || b === 'p90';
-  const wantFamily = v === 'famille_young' || v === 'famille_ado' || nb === '5plus' || nb === '4';
-  const wantCarav = b === 'm25' || (b === '25_45' && !wantCompact);
-
-  if (wantCompact || fr === 'fulltime' || (nb === '2' && !wantBig)) {
-    const br = b === 'm25' ? 'CI Kyros Go, Font Vendôme Rando Camp' :
-               b === '45_65' ? 'Adria Twin, Bavaria Nomade, Chausson X' :
-               b === '65_90' || b === 'p90' ? 'Bürstner B66 (éd. 66 ans), Adria Twin SGX, Hymer' : 'Chausson X, CI Kyros';
-    recos.push({ type:'Van / Fourgon aménagé', brands: br + ' — libertium.fr', slug:'van-fourgon-amenage',
-      why:'Compact, agile, facile à stationner. Idéal pour les routes de montagne, le nomadisme ou les city-breaks. Moins de 6,5 m — accès aux parkings couverts.',
-      tags:[{l:'< 6,5 m', m:wantCompact},{l:'Facile à conduire',m:c==='compact'},{l:'Nomadisme',m:fr==='fulltime'},{l:'Permis B',m:false}] });
-  }
-
-  if (!wantFamily || nb === '2' || nb === '3') {
-    const br = e === 'occasion' ? 'Chausson, Challenger, Rimor (occasion)' :
-               b === '45_65' ? 'Chausson X 550, Rimor Kilig 66, MC Louis Yearling' :
-               b === '65_90' ? 'Bürstner Ixeo, Adria Matrix, Rapido 65th' :
-               b === 'p90' ? 'Carthago C-Tourer, Challenger Genesis' : 'CI Horon Go, Challenger';
-    recos.push({ type:'Camping-car profilé', brands: br + ' — libertium.fr', slug:'camping-car/profil%C3%A9',
-      why:'Le meilleur compromis du marché : aérodynamique, lit permanent, salle d\'eau complète. Idéal couples et petites familles. Large gamme de 40 à 90 k€.',
-      tags:[{l:'6–7,5 m',m:c==='equilibre'},{l:'Lit permanent',m:m.includes('lit_fixe')},{l:'Lits jumeaux dispo',m:m.includes('lits_jumeaux')},{l:'Large gamme',m:true}] });
-  }
-
-  if (wantFamily && (nb === '4' || nb === '5plus')) {
-    recos.push({ type:'Camping-car capucine', brands:'Rimor Kilig 9, CI Horon Go Capucine, Challenger C256 — libertium.fr', slug:'camping-car/capucine',
-      why:'Lit capucine au-dessus de la cabine — couchage supplémentaire idéal pour les familles. Jusqu\'à 7 couchages. Coin repas spacieux et salle d\'eau complète.',
-      tags:[{l:'4 à 7 couchages',m:wantFamily},{l:'Famille',m:true},{l:'Lit capucine',m:true},{l:'< 7 m',m:false}] });
-  }
-
-  if (wantBig || wantLux || m.includes('vue_pano')) {
-    const br = b === 'p90' ? 'Carthago C-Compactline, Eden Camp 740H (AL-KO)' :
-               b === '65_90' ? 'CI Magis, Challenger Genesis, Bürstner Ixeo It' : 'CI Magis, Challenger';
-    recos.push({ type:'Camping-car intégral', brands: br + ' — libertium.fr', slug:'camping-car/int%C3%A9gral',
-      why:'Habitabilité maximale, cabine intégrée, vision panoramique. Chambre isolée, grand salon, cuisine complète. Garage à vélos possible sur 7,5 m+.',
-      tags:[{l:'> 7 m',m:wantBig},{l:'Vue panoramique',m:m.includes('vue_pano')},{l:'Grand confort',m:wantLux},{l:'Garage possible',m:m.includes('garage')}] });
-  }
-
-  if (wantCarav) {
-    recos.push({ type:'Caravane', brands:'Caravelair Alba / Sport Line (n°1 France), Bürstner, Adria Altea — libertium.fr', slug:'caravane',
-      why:'Budget le plus accessible (à partir de 20 000 €). Laisser sur site, repartir en voiture. Idéal familles et primo-accédants.',
-      tags:[{l:'Dès 20 000 €',m:b==='m25'},{l:'Laisser sur place',m:true},{l:'Nécessite attelage',m:false}] });
-  }
-
-  if (recos.length === 0) {
-    recos.push({ type:'Camping-car profilé — toutes gammes', brands:'CI, Chausson, Challenger, Bürstner, Adria — libertium.fr', slug:'camping-car',
-      why:'Le profilé reste la valeur sûre du réseau Libertium. Excellent compromis sur tous les plans.',
-      tags:[{l:'Polyvalent',m:true},{l:'Large gamme',m:true}] });
-  }
-
-  return recos.slice(0, 3);
-}
-
-// ── Génération argumentaire ───────────────────────────────────────────────────
-async function generateArg() {
-  const key = getKey();
-  if (!key) {
-    alert('Clé API non configurée. Rechargez la page et entrez votre clé Anthropic.');
-    return;
-  }
-
-  const btn = document.getElementById('ai-btn');
-  const body = document.getElementById('ai-body');
-  const output = document.getElementById('ai-output');
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loader"></span> Génération en cours…';
-  body.classList.add('open');
-  output.className = 'ai-output loading';
-  output.textContent = 'Claude analyse le profil client et prépare votre argumentaire…';
-
-  const recos = buildRecos();
-  const must = (D.must || []).map(x => MUST_LABELS[x] || x).join(', ') || 'non précisé';
-  const routes = (D.routes || []).map(x => ({ autoroute:'grands axes', campagne:'campagne', montagne:'montagne', littoral:'littoral', europe:'tour Europe', aventure:'hors-piste' }[x] || x)).join(', ') || 'non précisé';
-
-  const prompt = `Tu es un conseiller commercial expert chez Libertium, le premier réseau de vente de véhicules de loisirs en France (67 concessions, groupe Trigano).
-
-Profil du client découvert :
-- Voyageurs : ${lbl('voyageurs')}
-- Couchages souhaités : ${D.couchages || 'non précisé'}
-- Fréquence d'utilisation : ${lbl('freq')}
-- Destinations / routes : ${routes}
-- Mode de séjour : ${lbl('sejour', 'non précisé')}
-- Équipements indispensables : ${must}
-- Rapport à la conduite : ${lbl('conduite')}
-- Autonomie souhaitée : ${lbl('autonomie')}
-- Budget : ${lbl('budget')}
-- État véhicule : ${lbl('etat')}
-- Financement envisagé : ${(D.fin || []).join(', ') || 'non précisé'}
-- Contraintes mobilité : ${lbl('mobilite')}
-
-Véhicule recommandé : ${recos[0] ? recos[0].type : 'à définir'}
-Marques suggérées : ${recos[0] ? recos[0].brands : '—'}
-
-Génère un argumentaire commercial structuré en 4 parties :
-
-### 1. Points forts à valoriser
-Les 3-4 arguments les plus percutants pour ce profil, en lien direct avec ses besoins exprimés.
-
-### 2. Questions de rebond
-3 questions à poser pour approfondir la découverte et créer du désir.
-
-### 3. Objections à anticiper
-Les 2-3 objections les plus probables pour ce profil et comment les traiter.
-
-### 4. Proposition de closing
-Une phrase de closing naturelle et personnalisée pour proposer l'essai ou la visite en concession.
-
-Sois concis, orienté résultat, et utilise un ton professionnel mais chaleureux.`;
-
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    if (!response.ok) {
-      const err = await response.json();
-      throw new Error(err.error?.message || `Erreur HTTP ${response.status}`);
+// ── Base de Données des Véhicules Libetium ────────────────────────────────────
+// Un catalogue propre qui permet d'évaluer finement la compatibilité
+const VEHICLE_CATALOG = [
+  {
+    id: 'van',
+    type: 'Van / Fourgon aménagé',
+    slug: 'van-fourgon-amenage',
+    brands: 'Adria Twin, Font Vendôme, Chausson X, Bavaria Nomade, CI Kyros',
+    why: 'Idéal pour l\'agilité et la discrétion. Ultra compact (moins de 6.5m), il passe partout en montagne ou en ville. Parfait pour les couples actifs ou les nomades.',
+    baseTags: ['Gabarit compact', 'Passe-partout', 'Permis B'],
+    // Définition des règles de scoring
+    evalScore: (d) => {
+      let score = 0;
+      if (d.voyageurs === 'solo' || d.voyageurs === 'couple') score += 25;
+      if (d.conduite === 'compact') score += 25;
+      if (d.couchages === '2') score += 15;
+      if (d.freq === 'fulltime' || d.freq === 'weekends') score += 15;
+      if (d.routes && d.routes.includes('montagne')) score += 15;
+      if (d.routes && d.routes.includes('aventure')) score += 15;
+      if (d.sejour && d.sejour.includes('sauvage')) score += 15;
+      if (d.budget === '45_65' || d.budget === '25_45') score += 10;
+      // Contraintes négatives
+      if (d.couchages === '5plus' || d.voyageurs === 'famille_ado') score -= 30;
+      if (d.must && d.must.includes('grand_salon')) score -= 15;
+      if (d.mobilite === 'escalier' || d.mobilite === 'pmr') score -= 20;
+      return score;
     }
-
-    const data = await response.json();
-    const text = data.content?.[0]?.text || '';
-
-    output.className = 'ai-output';
-    output.innerHTML = formatResponse(text);
-    btn.innerHTML = '↺ Régénérer';
-    btn.disabled = false;
-
-  } catch (err) {
-    output.className = 'ai-output';
-    output.textContent = `Erreur : ${err.message}. Vérifiez votre clé API et votre connexion.`;
-    btn.innerHTML = 'Réessayer';
-    btn.disabled = false;
-  }
-}
-
-function formatResponse(text) {
-  return text
-    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`)
-    .replace(/\n{2,}/g, '\n');
-}
-
-// ── Utilitaires ───────────────────────────────────────────────────────────────
-function resetAll() {
-  Object.keys(D).forEach(k => delete D[k]);
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('sel'));
-  document.getElementById('ai-body').classList.remove('open');
-  document.getElementById('ai-output').textContent = '';
-  document.getElementById('ai-btn').innerHTML = 'Générer avec Claude';
-  document.getElementById('ai-btn').disabled = false;
-  showStep(1);
-}
-
-function copyProfile() {
-  const must = (D.must || []).map(x => MUST_LABELS[x] || x).join(', ') || '—';
-  const routes = (D.routes || []).map(x => x).join(', ') || '—';
-  const text = `=== PROFIL CLIENT LIBERTIUM ===
-Voyageurs : ${lbl('voyageurs')}
-Couchages : ${D.couchages || '—'}
-Fréquence : ${lbl('freq')}
-Destinations : ${routes}
-Équipements : ${must}
-Budget : ${lbl('budget')}
-État : ${lbl('etat')}
-Financement : ${(D.fin || []).join(', ') || '—'}
-Véhicule recommandé : ${buildRecos()[0]?.type || '—'}
-`;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
-    btn.textContent = '✓ Copié !';
-    setTimeout(() => btn.textContent = 'Copier le profil', 2000);
-  });
-}
-</script>
-</body>
-</html>
+  },
+  {
+    id: 'profile',
+    type: 'Camping-car Profilé',
+    slug: 'camping-car/profil%C3%A9',
+    brands: 'Chausson, Challenger, McLouis Yearling, Rimor Kilig, Adria Matrix',
+    why: 'Le compromis parfait du marché français. Il associe un vrai lit fixe à l\'arrière, une douche confortable et une bonne isolation, sans être trop lourd à conduire.',
+    baseTags: ['Lit permanent', 'Polyvalent', 'Grand public'],
+    evalScore: (d) => {
+      let score = 15; // Base neutre solide
+      if (d.voyageurs === 'couple' || d.voyageurs === 'seniors' || d.voyageurs === 'famille_young') score += 20;
+      if (d.conduite === 'equilibre') score += 20;
+      if (d.couchages === '2' || d.couchages === '3' || d.couchages === '4') score += 15;
+      if (d.budget === '45_65' || d.budget === '65_90') score += 15;
+      if (d.must && d.must.includes('lit_fixe')) score += 15;
+      if (d.must && d.must.includes('lits_jumeaux')) score += 15;
+      if (d.sejour && d.sejour.includes('aire') || d.sejour && d.sejour.includes('camping')) score += 10;
+      // Contraintes négatives
+      if (d.conduite === 'compact') score -= 10;
+      if (d.couchages === '5plus') score -= 20;
+      return score;
+    }
+  },
+  {
+    id: 'integral',
+    type: 'Camping-car Intégral',
+    slug: 'camping-car/int%C3%A9gral',
+    brands: 'Carthago, Rapido, Bürstner Ixeo, Eden Camp, Benimar Amphitryon',
+    why: 'Le très grand confort routier et résidentiel. Son pare-brise panoramique unique offre un plaisir de conduite inégalé. Intérieur spacieux avec salon ouvert.',
+    baseTags: ['Vision panoramique', 'Haut de gamme', 'Espace XXL'],
+    evalScore: (d) => {
+      let score = 0;
+      if (d.voyageurs === 'seniors' || d.voyageurs === 'couple') score += 20;
+      if (d.budget === '65_90' || d.budget === 'p90') score += 30;
+      if (d.must && d.must.includes('vue_pano')) score += 30;
+      if (d.must && d.must.includes('grand_salon')) score += 15;
+      if (d.conduite === 'grand') score += 20;
+      if (d.freq === 'intensif' || d.freq === 'fulltime') score += 15;
+      if (d.autonomie === 'haute') score += 15;
+      // Contraintes négatives
+      if (d.budget === 'm25' || d.budget === '25_45') score -= 40;
+      if (d.conduite === 'compact') score -= 25;
+      return score;
+    }
+  },
+  {
+    id: 'capucine',
+    type: 'Camping-car Capucine',
+    slug: 'camping-car/capucine',
+    brands: 'Rimor Kilig 9, CI Horon Capucine, Roller Team Chronos',
+    why: 'Le roi des voyages en tribu. Son lit fixe haut suspendu au-dessus de la cabine libère un espace de vie immense au sol avec de nombreux lits superposés.',
+    baseTags: ['Idéal Famille', 'Jusqu\'à 7 couchages', 'Volume max'],
+    evalScore: (d) => {
+      let score = 0;
+      if (d.voyageurs === 'famille_ado' || d.voyageurs === 'famille_young' || d.voyageurs === 'amis') score +=
