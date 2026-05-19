@@ -7,29 +7,33 @@
   <style>
     :root{
       --bg:#f4f7fb;
-      --card:#fff;
+      --panel:#ffffff;
+      --panel-2:#f8fbff;
       --text:#172033;
       --muted:#64748b;
       --primary:#0f62fe;
-      --primary-dark:#003ecb;
+      --primary-dark:#0043ce;
       --success:#16a34a;
       --danger:#dc2626;
+      --warning:#c2410c;
       --border:#d8e1ee;
-      --shadow:0 12px 30px rgba(15,23,42,.08);
-      --radius:16px;
+      --shadow:0 14px 34px rgba(15,23,42,.08);
+      --radius:18px;
     }
+
     *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
     body{
-      margin:0;
       font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
       background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);
       color:var(--text);
     }
-    .page{max-width:1320px;margin:0 auto;padding:24px}
+
+    .page{max-width:1420px;margin:0 auto;padding:24px}
     .header{
       display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px
     }
-    .title{margin:0;font-size:28px;line-height:1.15}
+    .title{margin:0;font-size:28px;line-height:1.1}
     .subtitle{margin:8px 0 0;color:var(--muted)}
     .status{margin-top:8px;font-size:14px;color:var(--muted)}
     .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
@@ -43,15 +47,18 @@
     .btn-secondary{background:#e8eef8;color:var(--text)}
     .btn-success{background:#dcfce7;color:#166534}
     .btn-danger{background:#fee2e2;color:#991b1b}
-    .grid{display:grid;grid-template-columns:1.15fr .95fr;gap:20px}
+    .btn-warning{background:#ffedd5;color:#9a3412}
+
+    .grid{display:grid;grid-template-columns:1.1fr .95fr;gap:20px}
     .card{
-      background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+      background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);
       box-shadow:var(--shadow);padding:20px
     }
     .card h2{margin:0 0 16px;font-size:18px}
     .section{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #edf2f7}
     .section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
     .section h3{margin:0 0 12px;font-size:15px;color:#0f172a}
+
     .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     .field{display:flex;flex-direction:column;gap:6px}
     .field.full{grid-column:1/-1}
@@ -65,51 +72,69 @@
       border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,98,254,.12)
     }
     .hint{font-size:12px;color:var(--muted)}
-    .right-sticky{position:sticky;top:16px;align-self:start}
-    .preview-line{
-      display:grid;grid-template-columns:160px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid #eef2f7;font-size:14px
-    }
-    .preview-line strong{color:#334155}
-    .preview-line:last-child{border-bottom:0}
-    .summary-box{
-      background:#f8fbff;border:1px dashed #c7d6f5;border-radius:14px;padding:14px;margin-top:14px
-    }
-    .summary-box p{margin:0;line-height:1.55;white-space:pre-wrap}
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
     .chip{
       border-radius:999px;padding:7px 10px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700
     }
-    .results{margin-top:16px;display:grid;gap:12px}
-    .result{
-      border:1px solid #dbe3ee;border-radius:14px;padding:14px;background:#fff
+
+    .right-sticky{position:sticky;top:16px;align-self:start}
+    .preview-line{
+      display:grid;grid-template-columns:145px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid #eef2f7;font-size:14px
     }
-    .result h4{margin:0 0 6px;font-size:15px}
-    .result a{color:var(--primary);text-decoration:none;font-weight:700}
-    .result p{margin:8px 0 0;color:#334155;line-height:1.5;font-size:14px}
-    .result ul{margin:8px 0 0 18px;color:#334155;font-size:14px}
-    .badge{
-      display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:#f1f5f9;color:#334155;
-      padding:6px 10px;font-size:12px;font-weight:700;margin-bottom:8px
+    .preview-line strong{color:#334155}
+    .preview-line:last-child{border-bottom:0}
+    .summary-box{
+      background:var(--panel-2);border:1px dashed #c7d6f5;border-radius:14px;padding:14px;margin-top:14px
     }
-    .match{
-      background:#ecfdf5;color:#166534
-    }
-    .warn{
-      background:#fff7ed;color:#9a3412
-    }
+    .summary-box p{margin:0;line-height:1.55;white-space:pre-wrap}
+
     .recommend-top{
-      background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
+      margin-top:16px;background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);
       border:1px solid #dbe3ee;border-radius:16px;padding:14px
     }
     .recommend-top h3{margin:0 0 8px}
     .recommend-top p{margin:0;color:#334155;line-height:1.55}
-    @media (max-width:980px){
+
+    .results{margin-top:16px;display:grid;gap:12px}
+    .result{
+      border:1px solid #dbe3ee;border-radius:14px;padding:14px;background:#fff
+    }
+    .result-head{
+      display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap
+    }
+    .result h4{margin:0;font-size:15px}
+    .result a{color:var(--primary);text-decoration:none;font-weight:800}
+    .result p{margin:8px 0 0;color:#334155;line-height:1.5;font-size:14px}
+    .result ul{margin:8px 0 0 18px;color:#334155;font-size:14px}
+    .score-badge{
+      display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800
+    }
+    .score-high{background:#ecfdf5;color:#166534}
+    .score-mid{background:#eff6ff;color:#1d4ed8}
+    .score-low{background:#fff7ed;color:#9a3412}
+
+    .product-meta{
+      display:flex;flex-wrap:wrap;gap:8px;margin-top:8px
+    }
+    .meta{
+      border-radius:999px;background:#f1f5f9;color:#334155;padding:6px 10px;font-size:12px;font-weight:700
+    }
+
+    .pdf-box{
+      margin-top:16px;border:1px solid #dbe3ee;border-radius:16px;padding:14px;background:#fff
+    }
+    .pdf-box h3{margin:0 0 8px}
+    .pdf-box p{margin:0 0 12px;color:#334155;line-height:1.5}
+    .small{font-size:12px;color:var(--muted)}
+
+    @media (max-width: 1040px){
       .grid{grid-template-columns:1fr}
       .header{flex-direction:column}
       .form-grid{grid-template-columns:1fr}
       .preview-line{grid-template-columns:1fr;gap:4px}
       .right-sticky{position:static}
     }
+
     @media print{
       body{background:#fff}
       .page{max-width:none;padding:0}
@@ -118,7 +143,7 @@
       .card{box-shadow:none;border:0;border-radius:0;padding:0}
       input,select,textarea{border:0;padding:0;appearance:none;-webkit-appearance:none}
       textarea{min-height:auto}
-      .summary-box,.result,.recommend-top{border:1px solid #cbd5e1;background:#fff}
+      .summary-box,.result,.recommend-top,.pdf-box{border:1px solid #cbd5e1;background:#fff}
       a{color:#111827;text-decoration:none}
     }
   </style>
@@ -127,12 +152,13 @@
 <div class="page">
   <div class="header">
     <div>
-      <h1 class="title">Widget d’aide à la découverte véhicule de loisir</h1>
-      <p class="subtitle">Qualification client, auto-save, recommandation des 5 meilleurs véhicules et impression.</p>
+      <h1 class="title">Widget d’aide à la découverte véhicule de loisirs</h1>
+      <p class="subtitle">Auto-save, scoring strict, fiches produits, recommandations argumentées et export PDF.</p>
       <div class="status" id="status">Chargement des données…</div>
     </div>
     <div class="toolbar">
       <button class="btn-secondary" id="btnPrint">Print</button>
+      <button class="btn-primary" id="btnPdf">Export PDF</button>
       <button class="btn-success" id="btnSave">Sauvegarde locale</button>
       <button class="btn-danger" id="btnReset">Réinitialiser</button>
     </div>
@@ -401,7 +427,7 @@
       </div>
     </form>
 
-    <div class="card right-sticky">
+    <div class="card right-sticky" id="summaryBlock">
       <h2>Aperçu et recommandation</h2>
 
       <div class="preview-line"><strong>Client</strong><span id="pvClient">—</span></div>
@@ -416,18 +442,26 @@
 
       <div class="chips" id="chips"></div>
 
-      <div class="recommend-top" style="margin-top:16px;">
-        <h3>Véhicule le plus adapté</h3>
+      <div class="recommend-top">
+        <h3>Meilleure recommandation</h3>
         <p id="topExplanation">—</p>
       </div>
 
       <div class="results" id="results"></div>
+
+      <div class="pdf-box">
+        <h3>Export PDF</h3>
+        <p>Le résumé ci-dessous peut être exporté en PDF pour l’envoyer au client ou l’ajouter au dossier commercial.</p>
+        <button class="btn-warning no-print" id="btnPdfInline">Générer le PDF du résumé</button>
+        <p class="small">Le PDF reprend l’aperçu, le scoring, le top 5 et les arguments de recommandation.</p>
+      </div>
     </div>
   </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  const STORAGE_KEY = 'libertium_widget_v2';
+  const STORAGE_KEY = 'libertium_widget_v3';
   const form = document.getElementById('leadForm');
   const statusEl = document.getElementById('status');
 
@@ -438,56 +472,176 @@
     'permis','priorite','besoin','notes','delai','decisionnaire','reprise','score'
   ];
 
-  const vehicleTypes = {
-    van: {
-      title: 'Van aménagé',
-      url: 'https://www.libertium.fr/vehicule/van-amenage',
-      why: 'Idéal pour une recherche de compacité, de maniabilité et d’itinérance. Libertium annonce une offre large de vans aménagés disponibles en France, neufs et d’occasion [web:41].',
-      tags: ['Très compact', 'Ville / routes étroites', '1 à 2 personnes', 'Itinérance']
+  const vehicles = [
+    {
+      key:'van',
+      title:'Van aménagé',
+      url:'https://www.libertium.fr/vehicule/van-amenage',
+      family:'Van',
+      maxScore:100,
+      features:['compact','itinérance','1 à 2 personnes'],
+      conditions:d=>(
+        points(0,
+          d.voyageurs==='1 à 2' ? 28 : 0,
+          d.usage==='Itinérance fréquente' ? 28 : 0,
+          d.compacite==='Très compacte' ? 22 : d.compacite==='Compacte' ? 18 : 0,
+          d.conduite==='Ville et routes étroites' ? 10 : 0,
+          d.priorite==='Maniabilité' ? 14 : 0,
+          d.sdb==='Optionnelle' ? 6 : 0,
+          d.saison==='Été uniquement' ? 4 : 0,
+          d.autonomie==='Faible' || d.autonomie==='Moyenne' ? 4 : 0,
+          d.budget==='Moins de 40 000 €' || d.budget==='40 000 à 60 000 €' ? 4 : 0,
+          d.usage==='Séjours stationnaires' ? -18 : 0,
+          d.voyageurs==='7 et +' ? -50 : 0
+        )
+      ),
+      reason:d=>[
+        d.compacite?.includes('compact') ? 'compacité recherchée' : null,
+        d.voyageurs==='1 à 2' ? 'configuration adaptée à un couple' : null,
+        d.usage==='Itinérance fréquente' ? 'usage itinérant cohérent' : null,
+        d.priorite==='Maniabilité' ? 'maniabilité prioritaire' : null
+      ].filter(Boolean)
     },
-    fourgon: {
-      title: 'Fourgon aménagé',
-      url: 'https://www.libertium.fr/vehicule/van-fourgon-amenage',
-      why: 'Bon compromis entre volume intérieur et gabarit raisonnable, pertinent pour des usages mixtes et des couples ou petits foyers. Libertium met en avant sa gamme de vans et fourgons aménagés en stock [web:46].',
-      tags: ['Polyvalent', 'Compromis volume / gabarit', '2 à 4 personnes']
+    {
+      key:'fourgon',
+      title:'Fourgon aménagé',
+      url:'https://www.libertium.fr/vehicule/van-fourgon-amenage',
+      family:'Fourgon',
+      maxScore:100,
+      features:['polyvalent','gabarit raisonnable','2 à 4 personnes'],
+      conditions:d=>(
+        points(0,
+          (d.voyageurs==='1 à 2' || d.voyageurs==='3 à 4') ? 22 : 0,
+          (d.usage==='Mixte' || d.usage==='Week-ends' || d.usage==='Vacances longues') ? 22 : 0,
+          (d.compacite==='Compacte' || d.compacite==='Standard') ? 18 : 0,
+          (d.couchages==='Lit permanent' || d.couchages==='Lits jumeaux' || d.couchages==='Lit central') ? 14 : 0,
+          (d.sdb==='Souhaitée' || d.sdb==='Indispensable') ? 8 : 0,
+          (d.saison==='Mi-saison' || d.saison==='Toute saison') ? 8 : 0,
+          d.priorite==='Équipement' ? 8 : 0,
+          d.priorite==='Confort' ? 6 : 0,
+          d.voyageurs==='7 et +' ? -35 : 0
+        )
+      ),
+      reason:d=>[
+        (d.usage==='Mixte' || d.usage==='Week-ends') ? 'usage polyvalent' : null,
+        (d.compacite==='Compacte' || d.compacite==='Standard') ? 'gabarit équilibré' : null,
+        (d.couchages==='Lit permanent' || d.couchages==='Lits jumeaux' || d.couchages==='Lit central') ? 'configuration couchage cohérente' : null
+      ].filter(Boolean)
     },
-    profile: {
-      title: 'Camping-car profilé',
-      url: 'https://www.libertium.fr/vehicule/camping-car/profile',
-      why: 'Recommandé pour ceux qui cherchent confort, lits bien définis et usage régulier, sans aller sur un gabarit trop imposant. La gamme profilé Libertium couvre plusieurs marques et configurations, avec des modèles compacts ou à lit central [web:39][web:42].',
-      tags: ['Confort', 'Usage régulier', '2 à 4 personnes']
+    {
+      key:'profile',
+      title:'Camping-car profilé',
+      url:'https://www.libertium.fr/vehicule/camping-car/profile',
+      family:'Camping-car profilé',
+      maxScore:100,
+      features:['confort','usage régulier','2 à 4 personnes'],
+      conditions:d=>(
+        points(0,
+          (d.voyageurs==='2 à 4' || d.voyageurs==='3 à 4') ? 22 : 0,
+          (d.usage==='Vacances longues' || d.usage==='Mixte') ? 20 : 0,
+          (d.compacite==='Standard' || d.compacite==='Grand confort') ? 18 : 0,
+          (d.couchages==='Lit central' || d.couchages==='Lit pavillon' || d.couchages==='Lits jumeaux') ? 16 : 0,
+          (d.sdb==='Indispensable' || d.sdb==='Souhaitée') ? 10 : 0,
+          (d.priorite==='Confort' || d.priorite==='Équipement') ? 12 : 0,
+          (d.autonomie==='Élevée' || d.autonomie==='Très élevée') ? 8 : 0,
+          (d.saison==='Toute saison' || d.saison==='Montagne / hiver') ? 8 : 0,
+          (d.budget==='60 000 à 80 000 €' || d.budget==='80 000 à 100 000 €' || d.budget==='Plus de 100 000 €') ? 6 : 0
+        )
+      ),
+      reason:d=>[
+        (d.priorite==='Confort' || d.priorite==='Équipement') ? 'confort recherché' : null,
+        (d.usage==='Vacances longues' || d.usage==='Mixte') ? 'usage compatible avec un profilé' : null,
+        (d.couchages==='Lit central' || d.couchages==='Lits jumeaux' || d.couchages==='Lit pavillon') ? 'couchages adaptés' : null
+      ].filter(Boolean)
     },
-    integral: {
-      title: 'Camping-car intégral',
-      url: 'https://www.libertium.fr/vehicule/camping-car/integral',
-      why: 'Cohérent pour un client qui privilégie le confort maximal, une vraie sensation d’espace et des séjours longs. C’est la catégorie à privilégier si le budget est plus élevé et si la contrainte de gabarit est faible.',
-      tags: ['Grand confort', 'Séjours longs', 'Budget élevé']
+    {
+      key:'integral',
+      title:'Camping-car intégral',
+      url:'https://www.libertium.fr/vehicule/camping-car/integral',
+      family:'Camping-car intégral',
+      maxScore:100,
+      features:['grand confort','séjours longs','budget supérieur'],
+      conditions:d=>(
+        points(0,
+          (d.voyageurs==='2 à 4') ? 18 : 0,
+          (d.usage==='Vacances longues' || d.usage==='Séjours stationnaires') ? 22 : 0,
+          d.compacite==='Grand confort' ? 26 : 0,
+          d.priorite==='Confort' ? 16 : 0,
+          d.autonomie==='Élevée' || d.autonomie==='Très élevée' ? 10 : 0,
+          d.saison==='Toute saison' || d.saison==='Montagne / hiver' ? 8 : 0,
+          d.budget==='80 000 à 100 000 €' || d.budget==='Plus de 100 000 €' ? 18 : 0,
+          d.voyageurs==='7 et +' ? -28 : 0
+        )
+      ),
+      reason:d=>[
+        d.priorite==='Confort' ? 'niveau de confort recherché élevé' : null,
+        d.usage==='Vacances longues' || d.usage==='Séjours stationnaires' ? 'format pertinent pour de longs séjours' : null,
+        d.compacite==='Grand confort' ? 'attente d’espace importante' : null
+      ].filter(Boolean)
     },
-    capucine: {
-      title: 'Camping-car capucine',
-      url: 'https://www.libertium.fr/vehicule/camping-car/capucine',
-      why: 'Très pertinent pour les familles ou groupes qui veulent plusieurs couchages permanents sans complexifier trop l’usage. C’est souvent le meilleur choix quand le nombre de voyageurs est élevé et que la priorité est le volume utile.',
-      tags: ['Famille', 'Beaucoup de couchages', 'Volume']
+    {
+      key:'capucine',
+      title:'Camping-car capucine',
+      url:'https://www.libertium.fr/vehicule/camping-car/capucine',
+      family:'Camping-car capucine',
+      maxScore:100,
+      features:['famille','plusieurs couchages','volume'],
+      conditions:d=>(
+        points(0,
+          (d.voyageurs==='5 à 6' || d.voyageurs==='7 et +') ? 34 : 0,
+          d.priorite==='Volume' ? 18 : 0,
+          (d.usage==='Vacances longues' || d.usage==='Séjours stationnaires') ? 14 : 0,
+          d.sdb==='Indispensable' ? 8 : 0,
+          d.couchages==='Lit dinette' || d.couchages==='Peu importe' ? 6 : 0,
+          d.budget==='Moins de 40 000 €' || d.budget==='40 000 à 60 000 €' ? 8 : 0,
+          d.compacite==='Très compacte' ? -30 : 0
+        )
+      ),
+      reason:d=>[
+        (d.voyageurs==='5 à 6' || d.voyageurs==='7 et +') ? 'nombre de voyageurs élevé' : null,
+        d.priorite==='Volume' ? 'volume intérieur prioritaire' : null,
+        (d.usage==='Vacances longues' || d.usage==='Séjours stationnaires') ? 'usage familial de longue durée' : null
+      ].filter(Boolean)
     },
-    caravane: {
-      title: 'Caravane',
-      url: 'https://www.libertium.fr/vehicule/caravane',
-      why: 'Intéressante si le client souhaite optimiser le budget, conserver son véhicule tracteur et privilégier le stationnement au camping. Libertium met également en avant les caravanes dans ses nouveautés et son stock [web:30][web:33].',
-      tags: ['Budget optimisé', 'Remorquage', 'Stationnaire']
+    {
+      key:'caravane',
+      title:'Caravane',
+      url:'https://www.libertium.fr/vehicule',
+      family:'Caravane',
+      maxScore:100,
+      features:['budget optimisé','stationnaire','remorquage'],
+      conditions:d=>(
+        points(0,
+          (d.usage==='Séjours stationnaires') ? 28 : 0,
+          d.priorite==='Prix' ? 18 : 0,
+          d.permis==='Remorquage souhaité' ? 22 : 0,
+          (d.autonomie==='Faible' || d.autonomie==='Moyenne') ? 6 : 0,
+          (d.voyageurs==='3 à 4' || d.voyageurs==='5 à 6') ? 8 : 0,
+          d.budget==='Moins de 40 000 €' || d.budget==='40 000 à 60 000 €' ? 16 : 0,
+          d.compacite==='Très compacte' ? -14 : 0
+        )
+      ),
+      reason:d=>[
+        d.priorite==='Prix' ? 'recherche de budget optimisé' : null,
+        d.permis==='Remorquage souhaité' ? 'remorquage souhaité' : null,
+        d.usage==='Séjours stationnaires' ? 'usage stationnaire adapté' : null
+      ].filter(Boolean)
     }
-  };
+  ];
 
-  function safeData() {
+  function points(base, ...vals){ return vals.reduce((a,b)=>a+b, base); }
+
+  function safeData(){
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
     catch { return {}; }
   }
 
-  function saveData(data) {
+  function saveData(data){
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
     statusEl.textContent = 'Données sauvegardées localement.';
   }
 
-  function readForm() {
+  function readForm(){
     const data = {};
     ids.forEach(id => {
       const el = document.getElementById(id);
@@ -496,7 +650,7 @@
     return data;
   }
 
-  function fillForm(data) {
+  function fillForm(data){
     ids.forEach(id => {
       const el = document.getElementById(id);
       if (el && Object.prototype.hasOwnProperty.call(data, id)) el.value = data[id] ?? '';
@@ -504,213 +658,151 @@
     updateAll();
   }
 
-  function fmt(v) { return (v || '').trim(); }
+  function fmt(v){ return (v || '').trim(); }
 
-  function profileSummary(d) {
-    const parts = [];
-    if (fmt(d.voyageurs)) parts.push(d.voyageurs);
-    if (fmt(d.usage)) parts.push(d.usage);
-    if (fmt(d.compacite)) parts.push(d.compacite);
-    if (fmt(d.saison)) parts.push(d.saison);
-    if (fmt(d.priorite)) parts.push(`priorité ${d.priorite}`);
-    return parts.join(' · ') || '—';
+  function clientName(d){
+    return [fmt(d.civilite), fmt(d.prenom), fmt(d.nom)].filter(Boolean).join(' ') || '—';
   }
 
-  function scoreVehicle(type, d) {
-    let score = 0;
-    const add = n => score += n;
-
-    const voyageurs = fmt(d.voyageurs);
-    const usage = fmt(d.usage);
-    const comp = fmt(d.compacite);
-    const couch = fmt(d.couchages);
-    const sdb = fmt(d.sdb);
-    const auton = fmt(d.autonomie);
-    const saison = fmt(d.saison);
-    const budget = fmt(d.budget);
-    const priorite = fmt(d.priorite);
-    const permis = fmt(d.permis);
-
-    if (type === 'van') {
-      if (voyageurs === '1 à 2') add(28);
-      if (usage === 'Itinérance fréquente') add(28);
-      if (comp === 'Très compacte' || comp === 'Compacte') add(30);
-      if (saison === 'Été uniquement' || saison === 'Mi-saison') add(8);
-      if (priorite === 'Maniabilité') add(20);
-      if (permis === 'Permis B sans contrainte') add(8);
-      if (sdb === 'Optionnelle') add(8);
-      if (budget === 'Moins de 40 000 €' || budget === '40 000 à 60 000 €') add(8);
-      if (usage === 'Séjours stationnaires') add(-12);
-    }
-
-    if (type === 'fourgon') {
-      if (voyageurs === '1 à 2' || voyageurs === '3 à 4') add(26);
-      if (usage === 'Mixte' || usage === 'Week-ends' || usage === 'Vacances longues') add(22);
-      if (comp === 'Compacte' || comp === 'Standard') add(24);
-      if (couch === 'Lit permanent' || couch === 'Lits jumeaux' || couch === 'Lit central') add(14);
-      if (priorite === 'Polyvalence') add(10);
-      if (sdb === 'Souhaitée' || sdb === 'Indispensable') add(8);
-      if (auton === 'Moyenne' || auton === 'Élevée') add(6);
-      if (saison === 'Mi-saison' || saison === 'Toute saison') add(6);
-    }
-
-    if (type === 'profile') {
-      if (voyageurs === '2 à 4') add(28);
-      if (usage === 'Vacances longues' || usage === 'Mixte') add(24);
-      if (comp === 'Standard' || comp === 'Grand confort') add(22);
-      if (couch === 'Lit central' || couch === 'Lit pavillon' || couch === 'Lits jumeaux') add(16);
-      if (sdb === 'Indispensable' || sdb === 'Souhaitée') add(12);
-      if (priorite === 'Confort' || priorite === 'Équipement') add(14);
-      if (auton === 'Élevée' || auton === 'Très élevée') add(10);
-      if (saison === 'Toute saison' || saison === 'Montagne / hiver') add(10);
-      if (budget === '60 000 à 80 000 €' || budget === '80 000 à 100 000 €' || budget === 'Plus de 100 000 €') add(8);
-    }
-
-    if (type === 'integral') {
-      if (voyageurs === '2 à 4') add(20);
-      if (usage === 'Vacances longues' || usage === 'Séjours stationnaires') add(22);
-      if (comp === 'Grand confort') add(30);
-      if (priorite === 'Confort' || priorite === 'Équipement') add(18);
-      if (auton === 'Élevée' || auton === 'Très élevée') add(10);
-      if (saison === 'Toute saison' || saison === 'Montagne / hiver') add(10);
-      if (budget === '80 000 à 100 000 €' || budget === 'Plus de 100 000 €') add(18);
-      if (permis === 'Permis B, vigilance poids') add(4);
-    }
-
-    if (type === 'capucine') {
-      if (voyageurs === '5 à 6' || voyageurs === '7 et +') add(34);
-      if (usage === 'Vacances longues' || usage === 'Séjours stationnaires') add(18);
-      if (couch === 'Lit dinette' || couch === 'Peu importe') add(14);
-      if (priorite === 'Volume') add(20);
-      if (sdb === 'Indispensable') add(10);
-      if (budget === 'Moins de 40 000 €' || budget === '40 000 à 60 000 €') add(10);
-    }
-
-    if (type === 'caravane') {
-      if (budget === 'Moins de 40 000 €' || budget === '40 000 à 60 000 €') add(24);
-      if (usage === 'Séjours stationnaires') add(24);
-      if (priorite === 'Prix') add(18);
-      if (permis === 'Remorquage souhaité') add(22);
-      if (auton === 'Faible' || auton === 'Moyenne') add(8);
-      if (voyageurs === '3 à 4' || voyageurs === '5 à 6') add(8);
-      if (comp === 'Très compacte') add(-10);
-    }
-
-    return score;
+  function contactLine(d){
+    return [fmt(d.telephone), fmt(d.mobile), fmt(d.email)].filter(Boolean).join(' · ') || '—';
   }
 
-  function recommend(d) {
-    const scores = Object.keys(vehicleTypes).map(key => ({
-      key,
-      ...vehicleTypes[key],
-      score: scoreVehicle(key, d)
-    })).sort((a, b) => b.score - a.score);
-
-    return scores.slice(0, 5);
-  }
-
-  function explainChoice(item, d) {
-    const reasons = [];
-    const budget = fmt(d.budget);
-    const voyageurs = fmt(d.voyageurs);
-    const usage = fmt(d.usage);
-    const comp = fmt(d.compacite);
-    const priorite = fmt(d.priorite);
-    const saison = fmt(d.saison);
-
-    if (item.key === 'van') {
-      if (comp.includes('compact')) reasons.push('la compacité demandée correspond à ce format');
-      if (voyageurs === '1 à 2') reasons.push('le nombre de voyageurs est compatible');
-      if (usage.includes('Itinérance')) reasons.push('l’usage itinérant est un très bon cas d’usage');
-      if (priorite === 'Maniabilité') reasons.push('la maniabilité est clairement prioritaire');
-      if (saison === 'Été uniquement') reasons.push('un usage estival convient bien à ce segment');
-    }
-    if (item.key === 'fourgon') {
-      if (usage === 'Mixte') reasons.push('le besoin mixte favorise un bon compromis');
-      if (voyageurs === '3 à 4' || voyageurs === '1 à 2') reasons.push('la capacité reste adaptée');
-      if (comp === 'Compacte' || comp === 'Standard') reasons.push('le gabarit recherché correspond');
-      if (priorite === 'Équipement') reasons.push('on peut garder un niveau d’équipement intéressant');
-    }
-    if (item.key === 'profile') {
-      if (voyageurs === '3 à 4' || voyageurs === '2 à 4') reasons.push('le format répond bien à un couple ou une petite famille');
-      if (priorite === 'Confort' || priorite === 'Équipement') reasons.push('le confort demandé est au cœur de ce segment');
-      if (saison === 'Toute saison' || saison === 'Montagne / hiver') reasons.push('ce type de véhicule se prête mieux aux usages prolongés');
-    }
-    if (item.key === 'integral') {
-      if (priorite === 'Confort') reasons.push('c’est le segment le plus orienté grand confort');
-      if (comp === 'Grand confort') reasons.push('le niveau d’exigence annoncé correspond');
-      if (budget === '80 000 à 100 000 €' || budget === 'Plus de 100 000 €') reasons.push('le budget permet d’aller sur un modèle plus premium');
-    }
-    if (item.key === 'capucine') {
-      if (voyageurs === '5 à 6' || voyageurs === '7 et +') reasons.push('le nombre de couchages devient déterminant');
-      if (priorite === 'Volume') reasons.push('le volume intérieur est ici le critère central');
-      if (usage === 'Vacances longues' || usage === 'Séjours stationnaires') reasons.push('le format est pertinent pour des vacances familiales');
-    }
-    if (item.key === 'caravane') {
-      if (priorite === 'Prix') reasons.push('c’est souvent la solution la plus optimisable en budget');
-      if (usage === 'Séjours stationnaires') reasons.push('le besoin stationnaire correspond à la logique caravane');
-      if (fmt(d.permis) === 'Remorquage souhaité') reasons.push('le remorquage est explicitement recherché');
-    }
-    if (!reasons.length) reasons.push('les critères saisis laissent cette solution pertinente dans le top 5');
-
-    return reasons.slice(0,3).join('; ');
-  }
-
-  function updateAll() {
-    const d = readForm();
-    const client = [fmt(d.civilite), fmt(d.prenom), fmt(d.nom)].filter(Boolean).join(' ') || '—';
-    const contact = [fmt(d.telephone), fmt(d.mobile), fmt(d.email)].filter(Boolean).join(' · ') || '—';
-    const address = [fmt(d.adresse1), fmt(d.adresse2), [fmt(d.codePostal), fmt(d.ville)].filter(Boolean).join(' '), fmt(d.region), fmt(d.pays)]
+  function addressLine(d){
+    return [fmt(d.adresse1), fmt(d.adresse2), [fmt(d.codePostal), fmt(d.ville)].filter(Boolean).join(' '), fmt(d.region), fmt(d.pays)]
       .filter(Boolean).join(', ') || '—';
+  }
 
-    document.getElementById('pvClient').textContent = client;
-    document.getElementById('pvContact').textContent = contact;
-    document.getElementById('pvAddress').textContent = address;
+  function profileLine(d){
+    return [fmt(d.voyageurs), fmt(d.usage), fmt(d.compacite), fmt(d.priorite)].filter(Boolean).join(' · ') || '—';
+  }
+
+  function computeCommercialScore(d){
+    let s = 0;
+    if (fmt(d.delai)==='Immédiat') s += 20;
+    else if (fmt(d.delai)==='1 à 3 mois') s += 16;
+    else if (fmt(d.delai)==='3 à 6 mois') s += 10;
+    else if (fmt(d.delai)==='6 mois et plus') s += 4;
+
+    if (fmt(d.budget)) s += 15;
+    if (fmt(d.voyageurs)) s += 10;
+    if (fmt(d.usage)) s += 10;
+    if (fmt(d.permis)) s += 8;
+    if (fmt(d.decisionnaire)) s += 10;
+    if (fmt(d.reprise)==='Oui') s += 7;
+    if (fmt(d.reprise)==='À étudier') s += 4;
+    if (fmt(d.besoin).length > 25) s += 6;
+    if (fmt(d.notes).length > 25) s += 5;
+    if (fmt(d.email)) s += 5;
+    if (fmt(d.telephone) || fmt(d.mobile)) s += 5;
+
+    return Math.min(100, s);
+  }
+
+  function scoreVehicle(vehicle, d){
+    const raw = vehicle.conditions(d);
+    return Math.max(0, Math.min(100, raw));
+  }
+
+  function rankVehicles(d){
+    return vehicles
+      .map(v => ({...v, score: scoreVehicle(v,d)}))
+      .sort((a,b) => b.score - a.score);
+  }
+
+  function classifyLead(score){
+    if (score >= 80) return { label:'Très chaud', cls:'score-high' };
+    if (score >= 60) return { label:'Qualifié', cls:'score-mid' };
+    if (score >= 35) return { label:'À creuser', cls:'score-low' };
+    return { label:'Faible intention', cls:'score-low' };
+  }
+
+  function summaryText(d){
+    const lines = [];
+    if (d.besoin) lines.push(`Besoin : ${d.besoin}`);
+    if (d.notes) lines.push(`Notes : ${d.notes}`);
+    if (d.delai) lines.push(`Délai : ${d.delai}`);
+    if (d.decisionnaire) lines.push(`Décisionnaire : ${d.decisionnaire}`);
+    if (d.reprise) lines.push(`Reprise : ${d.reprise}`);
+    return lines.join('\n\n') || 'Renseigne les champs à gauche pour générer une recommandation.';
+  }
+
+  function chipsFromData(d){
+    return ['achat','voyageurs','usage','compacite','priorite','saison','permis','sdb','autonomie']
+      .map(id => fmt(d[id]))
+      .filter(Boolean);
+  }
+
+  function explain(vehicle, d){
+    const reasons = vehicle.reason(d);
+    const commercial = computeCommercialScore(d);
+    const lead = classifyLead(commercial);
+    const extra = [];
+    if (lead.label === 'Très chaud' && vehicle.score >= 70) extra.push('le projet est mature et ce véhicule colle au besoin');
+    if (fmt(d.budget)) extra.push(`budget positionné sur : ${d.budget}`);
+    return [...reasons, ...extra].filter(Boolean).slice(0,3).join('; ') || 'Le positionnement global du projet rend ce véhicule pertinent.';
+  }
+
+  function updateAll(){
+    const d = readForm();
+    const commercialScore = computeCommercialScore(d);
+    const lead = classifyLead(commercialScore);
+    const ranked = rankVehicles(d);
+
+    document.getElementById('pvClient').textContent = clientName(d);
+    document.getElementById('pvContact').textContent = contactLine(d);
+    document.getElementById('pvAddress').textContent = addressLine(d);
     document.getElementById('pvBudget').textContent = fmt(d.budget) || '—';
-    document.getElementById('pvProfile').textContent = profileSummary(d);
+    document.getElementById('pvProfile').textContent = profileLine(d);
+    document.getElementById('score').value = commercialScore || '';
 
-    const summary = [
-      d.besoin && `Besoin : ${d.besoin}`,
-      d.notes && `Notes : ${d.notes}`,
-      d.delai && `Délai : ${d.delai}`,
-      d.decisionnaire && `Décisionnaire : ${d.decisionnaire}`,
-      d.reprise && `Reprise : ${d.reprise}`,
-      d.score && `Score : ${d.score}`
-    ].filter(Boolean).join('\n\n');
+    document.getElementById('pvSummary').textContent = summaryText(d);
+    document.getElementById('chips').innerHTML = chipsFromData(d).map(c => `<span class="chip">${escapeHtml(c)}</span>`).join('');
 
-    document.getElementById('pvSummary').textContent = summary || 'Renseigne les champs à gauche pour générer une recommandation.';
+    const best = ranked[0];
+    document.getElementById('topExplanation').innerHTML = best
+      ? `<strong><a href="${best.url}" target="_blank" rel="noopener">${best.title}</a></strong><br>${explain(best, d)}`
+      : '—';
 
-    const chips = [];
-    ['achat','voyageurs','usage','compacite','priorite','saison','permis','sdb','autonomie'].forEach(id => {
-      if (fmt(d[id])) chips.push(fmt(d[id]));
-    });
-    document.getElementById('chips').innerHTML = chips.map(c => `<span class="chip">${escapeHtml(c)}</span>`).join('');
-
-    const recs = recommend(d);
-    const top = recs[0];
-    document.getElementById('topExplanation').innerHTML =
-      top ? `<strong><a href="${top.url}" target="_blank" rel="noopener">${top.title}</a></strong><br>${top.why}` : '—';
-
-    document.getElementById('results').innerHTML = recs.map((item, idx) => `
+    document.getElementById('results').innerHTML = ranked.slice(0,5).map((v, idx) => `
       <div class="result">
-        <div class="badge ${idx === 0 ? 'match' : ''}">Top ${idx + 1} · Score ${item.score}</div>
-        <h4><a href="${item.url}" target="_blank" rel="noopener">${item.title}</a></h4>
-        <div class="hint">${item.url}</div>
-        <p>${item.why}</p>
-        <p><strong>Pourquoi ce choix :</strong> ${escapeHtml(explainChoice(item, d))}</p>
-        <ul>
-          ${item.tags.map(t => `<li>${escapeHtml(t)}</li>`).join('')}
-        </ul>
+        <div class="result-head">
+          <div>
+            <div class="score-badge ${v.score >= 70 ? 'score-high' : v.score >= 40 ? 'score-mid' : 'score-low'}">
+              Top ${idx+1} · ${v.score}/100
+            </div>
+            <h4 style="margin-top:8px;"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4>
+            <div class="hint">${v.family}</div>
+          </div>
+          <div class="small">Fit client: ${lead.label}</div>
+        </div>
+        <div class="product-meta">
+          ${v.features.map(f => `<span class="meta">${escapeHtml(f)}</span>`).join('')}
+        </div>
+        <p><strong>Argument :</strong> ${escapeHtml(explain(v, d))}</p>
+        <p><strong>Lien :</strong> <a href="${v.url}" target="_blank" rel="noopener">${v.url}</a></p>
       </div>
     `).join('');
 
-    statusEl.textContent = 'Aperçu et recommandations mis à jour.';
+    statusEl.textContent = `Score commercial: ${commercialScore}/100 · ${lead.label}`;
   }
 
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, s => ({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
     }[s]));
+  }
+
+  function generatePDF(){
+    const element = document.getElementById('summaryBlock');
+    const opt = {
+      margin: 8,
+      filename: 'resume-widget-vehicule-loisir.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -721,14 +813,9 @@
   ids.forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
-    el.addEventListener(el.tagName === 'TEXTAREA' ? 'input' : 'change', () => {
-      const data = readForm();
-      saveData(data);
-      updateAll();
-    });
-    if (el.tagName === 'INPUT') el.addEventListener('input', () => {
-      const data = readForm();
-      saveData(data);
+    const evt = el.tagName === 'TEXTAREA' ? 'input' : (el.tagName === 'INPUT' ? 'input' : 'change');
+    el.addEventListener(evt, () => {
+      saveData(readForm());
       updateAll();
     });
   });
@@ -739,6 +826,8 @@
   });
 
   document.getElementById('btnPrint').addEventListener('click', () => window.print());
+  document.getElementById('btnPdf').addEventListener('click', generatePDF);
+  document.getElementById('btnPdfInline').addEventListener('click', generatePDF);
 
   document.getElementById('btnReset').addEventListener('click', () => {
     if (!confirm('Réinitialiser toutes les données ?')) return;
