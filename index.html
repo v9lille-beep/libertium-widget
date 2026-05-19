@@ -285,6 +285,15 @@ body {
 .btn.pdf-btn { background: #212529; color: white; border: none; }
 .btn.pdf-btn:hover { background: #000; }
 
+/* ── Injection dynamique pour PDF pour éviter les décalages de saut de page ── */
+.pdf-client-header {
+  display: none;
+  background: var(--navy);
+  color: white;
+  padding: 15px 20px;
+  font-size: 14px;
+}
+
 /* ── Step visibility ── */
 .step { display: none; }
 .step.active { display: block; }
@@ -332,7 +341,7 @@ body {
   <div class="header-right">Fiche Découverte Client Officielle</div>
 </div>
 
-<div class="container" id="printable-area">
+<div class="container">
 
   <div class="client-form-box" id="client-info-fields">
     <div class="q-label" style="color: var(--navy); font-size: 13px;">Coordonnées de l'opportunité client</div>
@@ -345,8 +354,11 @@ body {
     </div>
   </div>
 
-  <div class="card">
-    <div class="progress-wrap">
+  <div class="card" id="main-card-pdf">
+    
+    <div id="pdf-header-injection" class="pdf-client-header"></div>
+
+    <div class="progress-wrap" id="progress-container">
       <div class="progress-bar" id="prog"></div>
       <div class="progress-label" id="prog-label">Étape 1 sur 4</div>
     </div>
@@ -548,8 +560,8 @@ body {
         <div class="q-label" style="margin-top:15px;">Catégories suggérées</div>
         <div id="recos"></div>
 
-        <div class="q-label" style="margin-top:20px; color: var(--navy);">Consulter le catalogue en ligne (libertium.fr)</div>
-        <div class="sourcing-grid">
+        <div class="q-label" id="catalog-label" style="margin-top:20px; color: var(--navy);">Consulter le catalogue en ligne (libertium.fr)</div>
+        <div class="sourcing-grid" id="catalog-links">
           <div class="sourcing-item">
             <h4>Profilé</h4>
             <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/camping-car/profile" target="_blank">Voir Fiches ↗</a>
@@ -578,7 +590,7 @@ body {
         </div>
 
       </div>
-      <div class="step-nav">
+      <div class="step-nav" id="actions-nav">
         <button class="btn" onclick="resetAll()">↺ Nouveau client</button>
         <div style="display:flex; gap:8px;">
           <button class="btn print-btn" onclick="window.print();">🖨️ Imprimer</button>
@@ -758,23 +770,49 @@ function buildRecos() {
   return recos.slice(0, 2);
 }
 
+// Nouvelle fonction d'enregistrement PDF optimisée (Zéro page blanche)
 function savePDFLocal() {
-  const element = document.getElementById('printable-area');
-  const nomClient = document.getElementById('cust-nom').value.trim() || 'Fiche_Client';
-  const navBox = document.querySelector('.step-nav');
+  const element = document.getElementById('main-card-pdf');
   
-  if(navBox) navBox.style.display = 'none';
+  // Récupération des informations saisies pour l'en-tête du PDF et le nom de fichier
+  const nom = document.getElementById('cust-nom').value.trim().toUpperCase() || 'CLIENT';
+  const prenom = document.getElementById('cust-prenom').value.trim() || '';
+  const tel = document.getElementById('cust-tel').value.trim() || '—';
+  const email = document.getElementById('cust-email').value.trim() || '—';
+  const agence = document.getElementById('cust-agence').value.trim() || 'Réseau Libertium';
 
+  // Injection propre des informations dans la zone dédiée au PDF
+  const pdfHeader = document.getElementById('pdf-header-injection');
+  pdfHeader.innerHTML = `<strong>LIBERTIUM — FICHE DÉCOUVERTE</strong><br>Client : ${nom} ${prenom} | Tél : ${tel} | Email : ${email} | Concession : ${agence}`;
+  pdfHeader.style.display = 'block';
+
+  // Masquage temporaire des éléments superflus pour le PDF
+  const progContainer = document.getElementById('progress-container');
+  const navBox = document.getElementById('actions-nav');
+  const catLabel = document.getElementById('catalog-label');
+  const catLinks = document.getElementById('catalog-links');
+  
+  if (progContainer) progContainer.style.display = 'none';
+  if (navBox) navBox.style.display = 'none';
+  if (catLabel) catLabel.style.display = 'none';
+  if (catLinks) catLinks.style.display = 'none';
+
+  // Configuration stricte du moteur HTML2PDF
   const configuration = {
-    margin:       10,
-    filename:     `decouverte_libertium_${nomClient}.pdf`,
+    margin:       [10, 12, 10, 12], // Marges [haut, gauche, bas, droite]
+    filename:     `decouverte_libertium_${nom}.pdf`,
     image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS: true },
+    html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
   html2pdf().set(configuration).from(element).save().then(() => {
-    if(navBox) navBox.style.display = 'flex';
+    // Restauration de l'affichage normal sur l'écran après la génération
+    pdfHeader.style.display = 'none';
+    if (progContainer) progContainer.style.display = 'block';
+    if (navBox) navBox.style.display = 'flex';
+    if (catLabel) catLabel.style.display = 'block';
+    if (catLinks) catLinks.style.display = 'grid';
   });
 }
 
