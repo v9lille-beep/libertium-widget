@@ -1,290 +1,629 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Widget Découverte Client - Libertium</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        :root {
-            --primary-color: #004b6e; /* Bleu corporate Libertium */
-            --accent-color: #e30613;  /* Rouge accentuation */
-            --bg-light: #f4f7f9;
-            --text-dark: #333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Libertium — Guide découverte client & Fiches Véhicules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 20px;
-        }
+<style>
+:root {
+  --navy: #0f1f3d;
+  --blue: #1a3a6b;
+  --blue-mid: #2e5fa3;
+  --blue-lt: #e8f0fb;
+  --blue-border: #b5d4f4;
+  --gold: #c8960c;
+  --gold-lt: #fdf3d7;
+  --gold-border: #f0c842;
+  --ok: #1e6b3c;
+  --ok-lt: #eaf3de;
+  --warn: #9b6000;
+  --warn-lt: #fff3cd;
+  --danger: #a32d2d;
+  --danger-lt: #fcebeb;
+  --text: #1a1a2e;
+  --text-sec: #5a6480;
+  --text-hint: #9ba3b8;
+  --bg: #f8f9fc;
+  --bg-card: #ffffff;
+  --border: #e2e6f0;
+  --border-mid: #c8cedf;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-pill: 24px;
+  --shadow: 0 2px 12px rgba(15,31,61,.08);
+  --shadow-lg: 0 8px 32px rgba(15,31,61,.14);
+}
 
-        .widget-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .header-banner {
-            text-align: center;
-            border-bottom: 3px solid var(--primary-color);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
 
-        .header-banner h1 {
-            color: var(--primary-color);
-            margin: 0;
-            font-size: 24px;
-        }
+/* ── Header ── */
+.header {
+  background: var(--navy);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,.2);
+}
+.logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: #fff;
+  letter-spacing: .02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-badge {
+  background: var(--gold);
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.header-right {
+  font-size: 12px;
+  color: rgba(255,255,255,.5);
+}
 
-        .section-title {
-            color: var(--primary-color);
-            font-size: 18px;
-            border-left: 4px solid var(--accent-color);
-            padding-left: 10px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-        }
+/* ── Layout ── */
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+/* ── API key setup ── */
+.api-setup {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.api-setup h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  color: var(--navy);
+  margin-bottom: .5rem;
+}
+.api-setup p {
+  font-size: 13px;
+  color: var(--text-sec);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.api-input-row {
+  display: flex;
+  gap: 10px;
+}
+.api-input-row input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--bg);
+  outline: none;
+}
 
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+/* ── Formulaire Coordonnées Client ── */
+.client-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  margin-bottom: 1.5rem;
+}
+.input-field {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  background: #fff;
+}
+.input-field:focus { border-color: var(--blue-mid); }
 
-        input[type="text"], input[type="email"], select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+/* ── Main card ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
 
-        /* Agrandissement du champ commentaires demandé */
-        textarea.comment-field {
-            width: 100%;
-            height: 150px; /* Hauteur confortable */
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            resize: vertical;
-            box-sizing: border-box;
-            font-family: inherit;
-        }
+/* ── Progress ── */
+.progress-wrap {
+  padding: 1.25rem 1.75rem .5rem;
+  background: var(--bg-card);
+}
+.progress-bar {
+  display: flex;
+  gap: 5px;
+  margin-bottom: .75rem;
+}
+.progress-step {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background .3s;
+}
+.progress-step.done { background: var(--blue-mid); }
+.progress-step.active { background: var(--gold); }
+.progress-label {
+  font-size: 11px;
+  color: var(--text-hint);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
 
-        /* Grille des 5 types de modèles sourcés en direct */
-        .models-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 12px;
-            margin-top: 15px;
-        }
+/* ── Step header ── */
+.step-header {
+  padding: 1.25rem 1.75rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--blue-lt);
+  color: var(--blue-mid);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid var(--blue-border);
+}
+.step-num.gold {
+  background: var(--gold-lt);
+  color: var(--gold);
+  border-color: var(--gold-border);
+}
+.step-title { font-size: 17px; font-weight: 600; color: var(--navy); }
+.step-sub { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
 
-        .model-card {
-            background: #fff;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 12px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
+/* ── Step body ── */
+.step-body { padding: 1.25rem 1.75rem; }
 
-        .model-card:hover {
-            border-color: var(--primary-color);
-            background-color: #f9fbfd;
-        }
+.q-block { margin-bottom: 1.25rem; }
+.q-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-sec);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 10px;
+}
 
-        .model-card h4 {
-            margin: 0 0 10px 0;
-            color: var(--text-dark);
-            font-size: 14px;
-        }
+/* ── Chips ── */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-mid);
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--bg-card);
+  user-select: none;
+}
+.chip:hover {
+  border-color: var(--blue-mid);
+  color: var(--blue-mid);
+  background: var(--blue-lt);
+}
+.chip.sel {
+  background: var(--blue-lt);
+  border-color: var(--blue-mid);
+  color: var(--blue);
+  font-weight: 500;
+}
 
-        .btn-link {
-            display: inline-block;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+/* ── Zone de commentaire AGGRANDIE (Demande utilisateur) ── */
+.comment-section {
+  margin-top: 20px;
+}
+.comment-textarea {
+  width: 100%;
+  height: 160px;
+  padding: 14px;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  resize: vertical;
+  outline: none;
+}
+.comment-textarea:focus {
+  border-color: var(--blue-mid);
+}
 
-        .btn-link:hover {
-            background-color: #003752;
-        }
+/* ── Grille de liens Sourcing Live Libertium (5 types de modèles) ── */
+.live-sourcing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+.source-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.source-card:hover {
+  border-color: var(--blue-mid);
+  background: var(--blue-lt);
+}
+.source-card h4 {
+  font-size: 12px;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
 
-        /* Barre d'actions des boutons exports */
-        .actions-bar {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-        }
+/* ── Nav & Boutons ── */
+.step-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.75rem 1.5rem;
+  border-top: 1px solid var(--border);
+  margin-top: .5rem;
+}
+.btn {
+  padding: 10px 22px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-mid);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--bg-card);
+  color: var(--text);
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { background: var(--bg); border-color: var(--border); }
+.btn.primary { background: var(--blue-mid); color: #fff; border-color: var(--blue-mid); }
+.btn.primary:hover { background: var(--blue); border-color: var(--blue); }
+.btn.gold { background: var(--gold); color: #fff; border-color: var(--gold); }
+.btn.action-pdf { background-color: #212529; color: white; border: none; }
+.btn.action-pdf:hover { background-color: #000; }
+.btn.action-print { background-color: #6c757d; color: white; border: none; }
+.btn.action-print:hover { background-color: #5a6268; }
 
-        .btn-export {
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
+/* ── Step visibility ── */
+.step { display: none; }
+.step.active { display: block; }
 
-        .btn-print {
-            background-color: #6c757d;
-            color: white;
-        }
+/* ── Result ── */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 1.25rem;
+}
+.score-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.sc-label { font-size: 11px; color: var(--text-hint); margin-bottom: 4px; }
+.sc-val { font-size: 14px; font-weight: 600; color: var(--navy); }
 
-        .btn-print:hover {
-            background-color: #5a6268;
-        }
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-hint);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 10px;
+  margin-top: 1.25rem;
+}
 
-        .btn-save-pdf {
-            background-color: var(--accent-color);
-            color: white;
-        }
+.summary-table { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 14px; margin-bottom: .5rem; }
+.sum-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.sum-row:last-child { border-bottom: none; }
+.sum-key { color: var(--text-sec); }
+.sum-val { font-weight: 500; color: var(--navy); text-align: right; max-width: 60%; }
 
-        .btn-save-pdf:hover {
-            background-color: #c40510;
-        }
+/* ── AI Argumentaire ── */
+.ai-box { border: 1.5px solid var(--gold-border); border-radius: var(--radius); background: var(--gold-lt); overflow: hidden; margin-top: 1.25rem; }
+.ai-box-header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ai-box-title { font-size: 14px; font-weight: 600; color: var(--warn); }
+.ai-box-body { display: none; padding: 0 18px 18px; }
+.ai-box-body.open { display: block; }
+.ai-output { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
 
-        /* Styles spécifiques pour l'impression système standard */
-        @media print {
-            body { background: white; padding: 0; }
-            .widget-container { box-shadow: none; padding: 0; max-width: 100%; }
-            .actions-bar, .btn-link, .model-card { display: none !important; }
-            .models-grid { display: block; }
-            .comment-field { border: 1px solid #000; }
-        }
-    </style>
+/* Loader */
+.loader { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(3600deg); } }
+
+/* ── STYLES IMPRESSION SYSTEME CIBLÉ ── */
+@media print {
+  body { background: #fff; color: #000; }
+  .header, .api-setup, .step-nav, #api-setup, .ai-box, .source-card .btn, .progress-wrap { display: none !important; }
+  .card { border: none; box-shadow: none; }
+  .container { max-width: 100%; padding: 0; }
+  .comment-textarea { border: 1px solid #000; height: auto; min-height: 150px; }
+}
+</style>
 </head>
 <body>
 
-<div class="widget-container" id="capture-area">
-    <div class="header-banner">
-        <h1>Fiche Découverte Client - Libertium</h1>
-    </div>
-
-    <div class="section-title">Informations Client</div>
-    <div class="form-group">
-        <label for="client-name">Nom / Prénom du Client :</label>
-        <input type="text" id="client-name" placeholder="Ex: Jean Dupont">
-    </div>
-    <div class="form-group">
-        <label for="client-project">Type de projet / Besoins principaux :</label>
-        <select id="client-project">
-            <option value="famille">Voyage en Famille (Besoin d'espace)</option>
-            <option value="duo">Voyage en Couple (Compact & Agile)</option>
-            <option value="aventure">Aventure / Hors des sentiers battus</option>
-            <option value="premium">Confort Premium / Long cours</option>
-        </select>
-    </div>
-
-    <div class="section-title">Modèles Conseillés & Liens Fiches Véhicules</div>
-    <p style="font-size: 13px; color: #666; margin-top: -5px;">Cliquez pour ouvrir les fiches en direct sur le site Libertium :</p>
-    
-    <div class="models-grid">
-        <div class="model-card">
-            <h4>Camping-Cars Profilés</h4>
-            <p style="font-size: 11px; color:#666;">Le compromis idéal confort/profil aérodynamique.</p>
-            <span class="btn-link" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/profile')">Voir les fiches</span>
-        </div>
-
-        <div class="model-card">
-            <h4>Camping-Cars Intégraux</h4>
-            <p style="font-size: 11px; color:#666;">Espace de vie maximal et vue panoramique.</p>
-            <span class="btn-link" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/integral')">Voir les fiches</span>
-        </div>
-
-        <div class="model-card">
-            <h4>Fourgons Aménagés</h4>
-            <p style="font-size: 11px; color:#666;">Parfait équilibre entre compacité et commodités.</p>
-            <span class="btn-link" onclick="openPopUp('https://www.libertium.fr/vehicule/fourgon')">Voir les fiches</span>
-        </div>
-
-        <div class="model-card">
-            <h4>Vans Aménagés</h4>
-            <p style="font-size: 11px; color:#666;">Ultra-compact, passe-partout avec toit relevable.</p>
-            <span class="btn-link" onclick="openPopUp('https://www.libertium.fr/vehicule/van')">Voir les fiches</span>
-        </div>
-
-        <div class="model-card">
-            <h4>Camping-Cars Capucines</h4>
-            <p style="font-size: 11px; color:#666;">Idéal pour les familles avec son grand couchage haut.</p>
-            <span class="btn-link" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/capucine')">Voir les fiches</span>
-        </div>
-    </div>
-
-    <div class="section-title">Commentaires & Notes du Commercial</div>
-    <div class="form-group">
-        <textarea class="comment-field" id="commercial-notes" placeholder="Saisissez ici les détails de l'échange, les options retenues, le budget évoqué, le véhicule de reprise éventuel..."></textarea>
-    </div>
-
-    <div class="actions-bar">
-        <button class="btn-export btn-print" onclick="window.print();">
-            🖨️ Imprimer / Exporter PDF
-        </button>
-        <button class="btn-export btn-save-pdf" onclick="savePdfLocale();">
-            💾 Sauvegarder PDF Local
-        </button>
-    </div>
+<div class="header">
+  <div class="logo">
+    Libertium
+    <span class="logo-badge">Espace Commercial</span>
+  </div>
+  <div class="header-right">Découverte client multi-critères</div>
 </div>
 
-<script>
-    // Fonction pour ouvrir proprement les fiches véhicules dans un pop-up contrôlé
-    function openPopUp(url) {
-        const width = 1100;
-        const height = 800;
-        const left = (screen.width - width) / 2;
-        const top = (screen.height - height) / 2;
+<div class="container" id="widget-main-capture">
+
+  <div class="api-setup" id="api-setup">
+    <h2>Configuration initiale Claude AI</h2>
+    <p>Entrez la clé API Anthropic pour générer en concession les fiches d'arguments personnalisées.</p>
+    <div class="api-input-row">
+      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
+      <button class="btn primary" onclick="saveKey()">Enregistrer</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-bar" id="prog"></div>
+      <div class="progress-label" id="prog-label">Étape 1 sur 4</div>
+    </div>
+
+    <div class="step active" id="s1">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Fiche Client & Groupe</div>
+          <div class="step-sub">Saisie des informations de contact et voyageurs</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Coordonnées de contact</div>
+          <div class="client-info-grid">
+            <input type="text" id="c-nom" class="input-field" placeholder="Nom du client">
+            <input type="text" id="c-prenom" class="input-field" placeholder="Prénom">
+            <input type="text" id="c-phone" class="input-field" placeholder="Téléphone">
+            <input type="email" id="c-email" class="input-field" placeholder="Adresse Email">
+            <input type="text" id="c-concession" class="input-field" placeholder="Concession Libertium">
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-label">Composition de l'équipage</div>
+          <div class="chips" data-k="voyageurs" data-m="0">
+            <div class="chip" data-v="solo">Seul(e)</div>
+            <div class="chip" data-v="couple">En couple</div>
+            <div class="chip" data-v="famille_young">Famille (enfants &lt; 6 ans)</div>
+            <div class="chip" data-v="famille_ado">Famille (enfants / ados)</div>
+            <div class="chip" data-v="seniors">Couple retraités</div>
+            <div class="chip" data-v="amis">Entre amis</div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-label">Nombre de couchages requis</div>
+          <div class="chips" data-k="couchages" data-m="0">
+            <div class="chip" data-v="2">2 couchages</div>
+            <div class="chip" data-v="3">3 couchages</div>
+            <div class="chip" data-v="4">4 couchages</div>
+            <div class="chip" data-v="5plus">5 couchages ou +</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <div></div>
+        <button class="btn primary" onclick="goNext()">Suivant →</button>
+      </div>
+    </div>
+
+    <div class="step" id="s2">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Style de Vie & Voyages</div>
+          <div class="step-sub">Définir le type de routes et la fréquence d'utilisation</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Fréquence d'utilisation estimée</div>
+          <div class="chips" data-k="freq" data-m="0">
+            <div class="chip" data-v="weekends">Quelques weekends & courtes semaines</div>
+            <div class="chip" data-v="vacances">Uniquement pendant les congés annuels</div>
+            <div class="chip" data-v="intensif">Utilisation intensive (&gt; 60 jours/an)</div>
+            <div class="chip" data-v="fulltime">Nomadisme complet / Vie à bord</div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-label">Typologie de routes prévues (Multi-choix)</div>
+          <div class="chips" data-k="routes" data-m="1">
+            <div class="chip" data-v="autoroute">Autoroutes & Grands Axes</div>
+            <div class="chip" data-v="campagne">Campagne & Petites Routes</div>
+            <div class="chip" data-v="montagne">Montagne & Cols Sinueux</div>
+            <div class="chip" data-v="littoral">Bord de Mer & Côtes</div>
+            <div class="chip" data-v="europe">Road-trips en Europe</div>
+            <div class="chip" data-v="aventure">Expéditions Off-Road</div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-label">Hébergement privilégié</div>
+          <div class="chips" data-k="sejour" data-m="1">
+            <div class="chip" data-v="camping">Campings raccordés</div>
+            <div class="chip" data-v="aire">Aires de camping-car payantes</div>
+            <div class="chip" data-v="sauvage">Spots sauvages / Autonomie totale</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="goPrev()">← Retour</button>
+        <button class="btn primary" onclick="goNext()">Suivant →</button>
+      </div>
+    </div>
+
+    <div class="step" id="s3">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Priorités Confort & Ergonomie</div>
+          <div class="step-sub">Les indispensables à bord du véhicule</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Équipements jugés critiques (Multi-choix)</div>
+          <div class="chips" data-k="must" data-m="1">
+            <div class="chip" data-v="lit_fixe">Lit fixe central permanent</div>
+            <div class="chip" data-v="lits_jumeaux">Lits jumeaux modulables</div>
+            <div class="chip" data-v="garage">Soute de rangement garage (vélos)</div>
+            <div class="chip" data-v="douche_sep">Douche indépendante du WC</div>
+            <div class="chip" data-v="grand_salon">Grand salon face/face</div>
+            <div class="chip" data-v="solaire">Autonomie Solaire</div>
+            <div class="chip" data-v="vue_pano">Vision panoramique en cabine</div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-label">Aise face au gabarit de conduite</div>
+          <div class="chips" data-k="conduite" data-m="0">
+            <div class="chip" data-v="compact">Modèle ultra-compact recherché</div>
+            <div class="chip" data-v="equilibre">Équilibre confort/taille standard</div>
+            <div class="chip" data-v="grand">Aucune crainte face aux grands gabarits</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="goPrev()">← Retour</button>
+        <button class="btn primary" onclick="goNext()">Suivant →</button>
+      </div>
+    </div>
+
+    <div class="step" id="s4">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Enveloppe Budgétaire</div>
+          <div class="step-sub">Gamme de prix et type de transaction</div>
+        </div>
+      </div>
+      <div class="step-body">
+        <div class="q-block">
+          <div class="q-label">Budget prévu</div>
+          <div class="chips" data-k="budget" data-m="0">
+            <div class="chip" data-v="m25">Moins de 25 000 €</div>
+            <div class="chip" data-v="25_45">25 000 — 45 000 €</div>
+            <div class="chip" data-v="45_65">45 000 — 65 000 €</div>
+            <div class="chip" data-v="65_90">65 000 — 90 000 €</div>
+            <div class="chip" data-v="p90">Plus de 90 000 €</div>
+          </div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-label">État recherché</div>
+          <div class="chips" data-k="etat" data-m="0">
+            <div class="chip" data-v="neuf">Véhicule Neuf</div>
+            <div class="chip" data-v="occasion">Opportunité d'Occasion</div>
+            <div class="chip" data-v="indiff">Ouvert aux deux options</div>
+          </div>
+        </div>
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="goPrev()">← Retour</button>
+        <button class="btn primary" onclick="showResults()">Analyser & Générer la Synthèse ✦</button>
+      </div>
+    </div>
+
+    <div class="step" id="s5">
+      <div class="step-header">
+        <div class="step-num gold">✓</div>
+        <div>
+          <div class="step-title">Recommandation Stratégique Libertium</div>
+          <div class="step-sub" id="pdf-client-title">Fiche de synthèse commerciale</div>
+        </div>
+      </div>
+      <div class="step-body">
+
+        <div class="summary-table">
+          <div class="sum-row"><span class="sum-key">Nom du Client</span><span class="sum-val" id="lbl-nom">—</span></div>
+          <div class="sum-row"><span class="sum-key">Téléphone / Email</span><span class="sum-val" id="lbl-contact">—</span></div>
+          <div class="sum-row"><span class="sum-key">Point de vente</span><span class="sum-val" id="lbl-concession">—</span></div>
+        </div>
+
+        <div class="score-grid" id="scores"></div>
+
+        <div class="section-label">Synthèse complète des critères</div>
+        <div class="summary-table" id="summary"></div>
+
+        <div class="section-label">Sourcing Catalogue Direct (Ouverture Pop-up)</div>
+        <p style="font-size:12px; color:var(--text-sec); margin-bottom:8px;">Consulter instantanément les fiches véhicules correspondantes sur libertium.fr :</p>
         
-        window.open(
-            url, 
-            'FichesVehiculesLibertium', 
-            `width=${width},height=${height},top=${top},left=${left},scrollbars=yes,resizable=yes`
-        );
-    }
+        <div class="live-sourcing-grid">
+          <div class="source-card">
+            <h4>Profilé</h4>
+            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/profile')">Fiches Directes ↗</button>
+          </div>
+          <div class="source-card">
+            <h4>Intégral</h4>
+            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/integral')">Fiches Directes ↗</button>
+          </div>
+          <div class="source-card">
+            <h4>Fourgon</h4>
+            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/fourgon')">Fiches Directes ↗</button>
+          </div>
+          <div class="source-card">
+            <h4>Van</h4>
+            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/van')">Fiches Directes ↗</button>
+          </div>
+          <div class="source-card">
+            <h4>Capucine</h4>
+            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/capucine')">Fiches Directes ↗</button>
+          </div>
+        </div>
 
-    // Fonction de génération et sauvegarde PDF automatique en local
-    function savePdfLocale() {
-        const element = document.getElementById('capture-area');
-        
-        // Configuration de la mise en page PDF
-        const options = {
-            margin:       15,
-            filename:     'decouverte-client-libertium.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-
-        // Masquer temporairement la barre de boutons pendant la capture pure du PDF
-        const actionsBar = document.querySelector('.actions-bar');
-        actionsBar.style.display = 'none';
-
-        html2pdf().set(options).from(element).save().then(() => {
-            // Rétablir la barre d'actions après génération
-            actionsBar.style.display = 'flex';
-        });
-    }
-</script>
-
-</body>
-</html>
+        <div class="comment-section">
+          <div class="section-label">Notes,
