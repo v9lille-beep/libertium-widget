@@ -29,14 +29,122 @@
       color:var(--text);
     }
 
-    .page{max-width:1420px;margin:0 auto;padding:24px}
-    .header{
-      display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px
+    .page{max-width:1440px;margin:0 auto;padding:24px}
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:stretch;
+      gap:16px;
+      margin-bottom:20px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
+
+    .brand{
+      flex:1;
+      display:flex;
+      gap:16px;
+      align-items:center;
+      padding:18px 20px;
+      min-width:0;
+    }
+
+    .brand-logo{
+      width:72px;
+      height:72px;
+      border-radius:16px;
+      background:#f1f5f9;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      border:1px solid #e2e8f0;
+      flex-shrink:0;
+    }
+
+    .brand-logo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .brand-text{
+      min-width:0;
+    }
+
+    .brand-text h1{
+      margin:0;
+      font-size:24px;
+      line-height:1.1;
+    }
+
+    .brand-text p{
+      margin:6px 0 0;
+      color:var(--muted);
+      line-height:1.45;
+      font-size:14px;
+    }
+
+    .contact-box{
+      width:360px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:10px;
+      padding:18px 20px;
+      background:#fff;
+      border-left:1px solid var(--border);
+    }
+
+    .contact-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border-radius:12px;
+      padding:12px 14px;
+      background:#f8fbff;
+      border:1px solid #e2e8f0;
+      font-size:14px;
+      font-weight:700;
+      color:#1f2937;
+    }
+
+    .contact-row.primary{
+      background:#dc2626;
+      color:#fff;
+      border-color:#dc2626;
+      justify-content:center;
+      font-size:16px;
+    }
+
+    .contact-icon{
+      width:22px;
+      height:22px;
+      flex-shrink:0;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+    }
+
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      margin-bottom:20px;
+    }
+
     .title{margin:0;font-size:28px;line-height:1.1}
     .subtitle{margin:8px 0 0;color:var(--muted)}
     .status{margin-top:8px;font-size:14px;color:var(--muted)}
     .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
     button{
       border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;
       transition:transform .12s ease,background .15s ease,opacity .15s ease;font-size:14px
@@ -130,6 +238,8 @@
     @media (max-width: 1040px){
       .grid{grid-template-columns:1fr}
       .header{flex-direction:column}
+      .topbar{flex-direction:column}
+      .contact-box{width:100%;border-left:0;border-top:1px solid var(--border)}
       .form-grid{grid-template-columns:1fr}
       .preview-line{grid-template-columns:1fr;gap:4px}
       .right-sticky{position:static}
@@ -138,7 +248,7 @@
     @media print{
       body{background:#fff}
       .page{max-width:none;padding:0}
-      .toolbar,.status,.hint,.no-print{display:none !important}
+      .topbar,.toolbar,.status,.hint,.no-print{display:none !important}
       .grid{grid-template-columns:1fr}
       .card{box-shadow:none;border:0;border-radius:0;padding:0}
       input,select,textarea{border:0;padding:0;appearance:none;-webkit-appearance:none}
@@ -150,10 +260,37 @@
 </head>
 <body>
 <div class="page">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">
+        <img src="logo-libertium-seclin.png" alt="Logo Libertium Seclin" onerror="this.style.display='none';" />
+      </div>
+      <div class="brand-text">
+        <h1>Libertium Seclin Lestringuez</h1>
+        <p>
+          205 Avenue de la République<br>
+          59113 SECLIN<br>
+          <strong>contact.seclin@libertium.fr</strong>
+        </p>
+      </div>
+    </div>
+    <div class="contact-box">
+      <div class="contact-row primary">
+        <span class="contact-icon">✉</span>
+        <span>Contactez-nous</span>
+      </div>
+      <div class="contact-row">
+        <span class="contact-icon">☎</span>
+        <span>03 20 32 25 99</span>
+      </div>
+    </div>
+  </div>
+
   <div class="header">
     <div>
-      <h1 class="title">Widget d’aide à la découverte véhicule de loisirs</h1>
-      <p class="subtitle">Auto-save, scoring strict, fiches produits, recommandations argumentées et export PDF.</p>
+      <h2 class="title">Widget d’aide à la découverte véhicule de loisirs</h2>
+      <p class="subtitle">Auto-save, scoring dynamique basé sur le budget, fiches produits, recommandations argumentées et export PDF.</p>
       <div class="status" id="status">Chargement des données…</div>
     </div>
     <div class="toolbar">
@@ -451,9 +588,9 @@
 
       <div class="pdf-box">
         <h3>Export PDF</h3>
-        <p>Le résumé ci-dessous peut être exporté en PDF pour l’envoyer au client ou l’ajouter au dossier commercial.</p>
+        <p>Le résumé ci-dessous peut être exporté en PDF pour être transmis au client ou conservé dans le dossier.</p>
         <button class="btn-warning no-print" id="btnPdfInline">Générer le PDF du résumé</button>
-        <p class="small">Le PDF reprend l’aperçu, le scoring, le top 5 et les arguments de recommandation.</p>
+        <p class="small">Le PDF reprend l’aperçu, le scoring, le top 5 et les arguments.</p>
       </div>
     </div>
   </div>
@@ -461,7 +598,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-  const STORAGE_KEY = 'libertium_widget_v3';
+  const STORAGE_KEY = 'libertium_widget_v4';
   const form = document.getElementById('leadForm');
   const statusEl = document.getElementById('status');
 
@@ -473,163 +610,13 @@
   ];
 
   const vehicles = [
-    {
-      key:'van',
-      title:'Van aménagé',
-      url:'https://www.libertium.fr/vehicule/van-amenage',
-      family:'Van',
-      maxScore:100,
-      features:['compact','itinérance','1 à 2 personnes'],
-      conditions:d=>(
-        points(0,
-          d.voyageurs==='1 à 2' ? 28 : 0,
-          d.usage==='Itinérance fréquente' ? 28 : 0,
-          d.compacite==='Très compacte' ? 22 : d.compacite==='Compacte' ? 18 : 0,
-          d.conduite==='Ville et routes étroites' ? 10 : 0,
-          d.priorite==='Maniabilité' ? 14 : 0,
-          d.sdb==='Optionnelle' ? 6 : 0,
-          d.saison==='Été uniquement' ? 4 : 0,
-          d.autonomie==='Faible' || d.autonomie==='Moyenne' ? 4 : 0,
-          d.budget==='Moins de 40 000 €' || d.budget==='40 000 à 60 000 €' ? 4 : 0,
-          d.usage==='Séjours stationnaires' ? -18 : 0,
-          d.voyageurs==='7 et +' ? -50 : 0
-        )
-      ),
-      reason:d=>[
-        d.compacite?.includes('compact') ? 'compacité recherchée' : null,
-        d.voyageurs==='1 à 2' ? 'configuration adaptée à un couple' : null,
-        d.usage==='Itinérance fréquente' ? 'usage itinérant cohérent' : null,
-        d.priorite==='Maniabilité' ? 'maniabilité prioritaire' : null
-      ].filter(Boolean)
-    },
-    {
-      key:'fourgon',
-      title:'Fourgon aménagé',
-      url:'https://www.libertium.fr/vehicule/van-fourgon-amenage',
-      family:'Fourgon',
-      maxScore:100,
-      features:['polyvalent','gabarit raisonnable','2 à 4 personnes'],
-      conditions:d=>(
-        points(0,
-          (d.voyageurs==='1 à 2' || d.voyageurs==='3 à 4') ? 22 : 0,
-          (d.usage==='Mixte' || d.usage==='Week-ends' || d.usage==='Vacances longues') ? 22 : 0,
-          (d.compacite==='Compacte' || d.compacite==='Standard') ? 18 : 0,
-          (d.couchages==='Lit permanent' || d.couchages==='Lits jumeaux' || d.couchages==='Lit central') ? 14 : 0,
-          (d.sdb==='Souhaitée' || d.sdb==='Indispensable') ? 8 : 0,
-          (d.saison==='Mi-saison' || d.saison==='Toute saison') ? 8 : 0,
-          d.priorite==='Équipement' ? 8 : 0,
-          d.priorite==='Confort' ? 6 : 0,
-          d.voyageurs==='7 et +' ? -35 : 0
-        )
-      ),
-      reason:d=>[
-        (d.usage==='Mixte' || d.usage==='Week-ends') ? 'usage polyvalent' : null,
-        (d.compacite==='Compacte' || d.compacite==='Standard') ? 'gabarit équilibré' : null,
-        (d.couchages==='Lit permanent' || d.couchages==='Lits jumeaux' || d.couchages==='Lit central') ? 'configuration couchage cohérente' : null
-      ].filter(Boolean)
-    },
-    {
-      key:'profile',
-      title:'Camping-car profilé',
-      url:'https://www.libertium.fr/vehicule/camping-car/profile',
-      family:'Camping-car profilé',
-      maxScore:100,
-      features:['confort','usage régulier','2 à 4 personnes'],
-      conditions:d=>(
-        points(0,
-          (d.voyageurs==='2 à 4' || d.voyageurs==='3 à 4') ? 22 : 0,
-          (d.usage==='Vacances longues' || d.usage==='Mixte') ? 20 : 0,
-          (d.compacite==='Standard' || d.compacite==='Grand confort') ? 18 : 0,
-          (d.couchages==='Lit central' || d.couchages==='Lit pavillon' || d.couchages==='Lits jumeaux') ? 16 : 0,
-          (d.sdb==='Indispensable' || d.sdb==='Souhaitée') ? 10 : 0,
-          (d.priorite==='Confort' || d.priorite==='Équipement') ? 12 : 0,
-          (d.autonomie==='Élevée' || d.autonomie==='Très élevée') ? 8 : 0,
-          (d.saison==='Toute saison' || d.saison==='Montagne / hiver') ? 8 : 0,
-          (d.budget==='60 000 à 80 000 €' || d.budget==='80 000 à 100 000 €' || d.budget==='Plus de 100 000 €') ? 6 : 0
-        )
-      ),
-      reason:d=>[
-        (d.priorite==='Confort' || d.priorite==='Équipement') ? 'confort recherché' : null,
-        (d.usage==='Vacances longues' || d.usage==='Mixte') ? 'usage compatible avec un profilé' : null,
-        (d.couchages==='Lit central' || d.couchages==='Lits jumeaux' || d.couchages==='Lit pavillon') ? 'couchages adaptés' : null
-      ].filter(Boolean)
-    },
-    {
-      key:'integral',
-      title:'Camping-car intégral',
-      url:'https://www.libertium.fr/vehicule/camping-car/integral',
-      family:'Camping-car intégral',
-      maxScore:100,
-      features:['grand confort','séjours longs','budget supérieur'],
-      conditions:d=>(
-        points(0,
-          (d.voyageurs==='2 à 4') ? 18 : 0,
-          (d.usage==='Vacances longues' || d.usage==='Séjours stationnaires') ? 22 : 0,
-          d.compacite==='Grand confort' ? 26 : 0,
-          d.priorite==='Confort' ? 16 : 0,
-          d.autonomie==='Élevée' || d.autonomie==='Très élevée' ? 10 : 0,
-          d.saison==='Toute saison' || d.saison==='Montagne / hiver' ? 8 : 0,
-          d.budget==='80 000 à 100 000 €' || d.budget==='Plus de 100 000 €' ? 18 : 0,
-          d.voyageurs==='7 et +' ? -28 : 0
-        )
-      ),
-      reason:d=>[
-        d.priorite==='Confort' ? 'niveau de confort recherché élevé' : null,
-        d.usage==='Vacances longues' || d.usage==='Séjours stationnaires' ? 'format pertinent pour de longs séjours' : null,
-        d.compacite==='Grand confort' ? 'attente d’espace importante' : null
-      ].filter(Boolean)
-    },
-    {
-      key:'capucine',
-      title:'Camping-car capucine',
-      url:'https://www.libertium.fr/vehicule/camping-car/capucine',
-      family:'Camping-car capucine',
-      maxScore:100,
-      features:['famille','plusieurs couchages','volume'],
-      conditions:d=>(
-        points(0,
-          (d.voyageurs==='5 à 6' || d.voyageurs==='7 et +') ? 34 : 0,
-          d.priorite==='Volume' ? 18 : 0,
-          (d.usage==='Vacances longues' || d.usage==='Séjours stationnaires') ? 14 : 0,
-          d.sdb==='Indispensable' ? 8 : 0,
-          d.couchages==='Lit dinette' || d.couchages==='Peu importe' ? 6 : 0,
-          d.budget==='Moins de 40 000 €' || d.budget==='40 000 à 60 000 €' ? 8 : 0,
-          d.compacite==='Très compacte' ? -30 : 0
-        )
-      ),
-      reason:d=>[
-        (d.voyageurs==='5 à 6' || d.voyageurs==='7 et +') ? 'nombre de voyageurs élevé' : null,
-        d.priorite==='Volume' ? 'volume intérieur prioritaire' : null,
-        (d.usage==='Vacances longues' || d.usage==='Séjours stationnaires') ? 'usage familial de longue durée' : null
-      ].filter(Boolean)
-    },
-    {
-      key:'caravane',
-      title:'Caravane',
-      url:'https://www.libertium.fr/vehicule',
-      family:'Caravane',
-      maxScore:100,
-      features:['budget optimisé','stationnaire','remorquage'],
-      conditions:d=>(
-        points(0,
-          (d.usage==='Séjours stationnaires') ? 28 : 0,
-          d.priorite==='Prix' ? 18 : 0,
-          d.permis==='Remorquage souhaité' ? 22 : 0,
-          (d.autonomie==='Faible' || d.autonomie==='Moyenne') ? 6 : 0,
-          (d.voyageurs==='3 à 4' || d.voyageurs==='5 à 6') ? 8 : 0,
-          d.budget==='Moins de 40 000 €' || d.budget==='40 000 à 60 000 €' ? 16 : 0,
-          d.compacite==='Très compacte' ? -14 : 0
-        )
-      ),
-      reason:d=>[
-        d.priorite==='Prix' ? 'recherche de budget optimisé' : null,
-        d.permis==='Remorquage souhaité' ? 'remorquage souhaité' : null,
-        d.usage==='Séjours stationnaires' ? 'usage stationnaire adapté' : null
-      ].filter(Boolean)
-    }
+    { key:'van', title:'Van aménagé', url:'https://www.libertium.fr/vehicule/van-amenage', family:'Van', features:['compact','itinérance','1 à 2 personnes'] },
+    { key:'fourgon', title:'Fourgon aménagé', url:'https://www.libertium.fr/vehicule/van-fourgon-amenage', family:'Fourgon', features:['polyvalent','gabarit raisonnable','2 à 4 personnes'] },
+    { key:'profile', title:'Camping-car profilé', url:'https://www.libertium.fr/vehicule/camping-car/profile', family:'Camping-car profilé', features:['confort','usage régulier','2 à 4 personnes'] },
+    { key:'integral', title:'Camping-car intégral', url:'https://www.libertium.fr/vehicule/camping-car/integral', family:'Camping-car intégral', features:['grand confort','séjours longs','budget supérieur'] },
+    { key:'capucine', title:'Camping-car capucine', url:'https://www.libertium.fr/vehicule/camping-car/capucine', family:'Camping-car capucine', features:['famille','plusieurs couchages','volume'] },
+    { key:'caravane', title:'Caravane', url:'https://www.libertium.fr/vehicule', family:'Caravane', features:['budget optimisé','stationnaire','remorquage'] }
   ];
-
-  function points(base, ...vals){ return vals.reduce((a,b)=>a+b, base); }
 
   function safeData(){
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
@@ -677,36 +664,124 @@
     return [fmt(d.voyageurs), fmt(d.usage), fmt(d.compacite), fmt(d.priorite)].filter(Boolean).join(' · ') || '—';
   }
 
+  function budgetScore(d){
+    const b = fmt(d.budget);
+    if (b === 'Moins de 40 000 €') return 10;
+    if (b === '40 000 à 60 000 €') return 22;
+    if (b === '60 000 à 80 000 €') return 36;
+    if (b === '80 000 à 100 000 €') return 48;
+    if (b === 'Plus de 100 000 €') return 60;
+    return 0;
+  }
+
+  function budgetFit(vehicleKey, budget){
+    const b = fmt(budget);
+    const map = {
+      van: {'Moins de 40 000 €': 22, '40 000 à 60 000 €': 20, '60 000 à 80 000 €': 10, '80 000 à 100 000 €': 0, 'Plus de 100 000 €': 0},
+      fourgon: {'Moins de 40 000 €': 8, '40 000 à 60 000 €': 18, '60 000 à 80 000 €': 20, '80 000 à 100 000 €': 8, 'Plus de 100 000 €': 0},
+      profile: {'Moins de 40 000 €': 0, '40 000 à 60 000 €': 8, '60 000 à 80 000 €': 20, '80 000 à 100 000 €': 22, 'Plus de 100 000 €': 14},
+      integral: {'Moins de 40 000 €': 0, '40 000 à 60 000 €': 0, '60 000 à 80 000 €': 8, '80 000 à 100 000 €': 20, 'Plus de 100 000 €': 22},
+      capucine: {'Moins de 40 000 €': 20, '40 000 à 60 000 €': 22, '60 000 à 80 000 €': 10, '80 000 à 100 000 €': 0, 'Plus de 100 000 €': 0},
+      caravane: {'Moins de 40 000 €': 24, '40 000 à 60 000 €': 18, '60 000 à 80 000 €': 6, '80 000 à 100 000 €': 0, 'Plus de 100 000 €': 0}
+    };
+    return (map[vehicleKey] && map[vehicleKey][b]) || 0;
+  }
+
   function computeCommercialScore(d){
     let s = 0;
-    if (fmt(d.delai)==='Immédiat') s += 20;
-    else if (fmt(d.delai)==='1 à 3 mois') s += 16;
+    if (fmt(d.delai)==='Immédiat') s += 25;
+    else if (fmt(d.delai)==='1 à 3 mois') s += 18;
     else if (fmt(d.delai)==='3 à 6 mois') s += 10;
     else if (fmt(d.delai)==='6 mois et plus') s += 4;
 
-    if (fmt(d.budget)) s += 15;
-    if (fmt(d.voyageurs)) s += 10;
-    if (fmt(d.usage)) s += 10;
-    if (fmt(d.permis)) s += 8;
-    if (fmt(d.decisionnaire)) s += 10;
-    if (fmt(d.reprise)==='Oui') s += 7;
+    if (fmt(d.decisionnaire)) s += 12;
+    if (fmt(d.reprise)==='Oui') s += 8;
     if (fmt(d.reprise)==='À étudier') s += 4;
     if (fmt(d.besoin).length > 25) s += 6;
-    if (fmt(d.notes).length > 25) s += 5;
+    if (fmt(d.notes).length > 25) s += 4;
     if (fmt(d.email)) s += 5;
     if (fmt(d.telephone) || fmt(d.mobile)) s += 5;
 
     return Math.min(100, s);
   }
 
-  function scoreVehicle(vehicle, d){
-    const raw = vehicle.conditions(d);
-    return Math.max(0, Math.min(100, raw));
+  function scoreVehicle(v, d){
+    let s = budgetFit(v.key, d.budget);
+
+    const voyageurs = fmt(d.voyageurs);
+    const usage = fmt(d.usage);
+    const comp = fmt(d.compacite);
+    const couchages = fmt(d.couchages);
+    const sdb = fmt(d.sdb);
+    const auton = fmt(d.autonomie);
+    const saison = fmt(d.saison);
+    const permis = fmt(d.permis);
+    const priorite = fmt(d.priorite);
+
+    if (v.key === 'van') {
+      if (voyageurs === '1 à 2') s += 26;
+      if (usage === 'Itinérance fréquente') s += 22;
+      if (comp === 'Très compacte') s += 24;
+      if (priorite === 'Maniabilité') s += 14;
+      if (d.conduite === 'Ville et routes étroites') s += 10;
+      if (sdb === 'Optionnelle') s += 6;
+      if (voyageurs === '7 et +') s -= 50;
+      if (usage === 'Séjours stationnaires') s -= 18;
+    }
+
+    if (v.key === 'fourgon') {
+      if (voyageurs === '1 à 2' || voyageurs === '3 à 4') s += 18;
+      if (usage === 'Mixte' || usage === 'Week-ends' || usage === 'Vacances longues') s += 16;
+      if (comp === 'Compacte' || comp === 'Standard') s += 14;
+      if (couchages === 'Lit permanent' || couchages === 'Lits jumeaux' || couchages === 'Lit central') s += 12;
+      if (sdb === 'Souhaitée' || sdb === 'Indispensable') s += 8;
+      if (priorite === 'Équipement') s += 6;
+      if (voyageurs === '7 et +') s -= 35;
+    }
+
+    if (v.key === 'profile') {
+      if (voyageurs === '2 à 4') s += 20;
+      if (usage === 'Vacances longues' || usage === 'Mixte') s += 18;
+      if (comp === 'Standard' || comp === 'Grand confort') s += 18;
+      if (couchages === 'Lit central' || couchages === 'Lit pavillon' || couchages === 'Lits jumeaux') s += 14;
+      if (sdb === 'Indispensable' || sdb === 'Souhaitée') s += 10;
+      if (priorite === 'Confort' || priorite === 'Équipement') s += 12;
+      if (auton === 'Élevée' || auton === 'Très élevée') s += 8;
+      if (saison === 'Toute saison' || saison === 'Montagne / hiver') s += 8;
+    }
+
+    if (v.key === 'integral') {
+      if (voyageurs === '2 à 4') s += 18;
+      if (usage === 'Vacances longues' || usage === 'Séjours stationnaires') s += 18;
+      if (comp === 'Grand confort') s += 22;
+      if (priorite === 'Confort') s += 16;
+      if (auton === 'Élevée' || auton === 'Très élevée') s += 8;
+      if (saison === 'Toute saison' || saison === 'Montagne / hiver') s += 10;
+      if (voyageurs === '7 et +') s -= 30;
+    }
+
+    if (v.key === 'capucine') {
+      if (voyageurs === '5 à 6' || voyageurs === '7 et +') s += 30;
+      if (priorite === 'Volume') s += 16;
+      if (usage === 'Vacances longues' || usage === 'Séjours stationnaires') s += 12;
+      if (couchages === 'Lit dinette' || couchages === 'Peu importe') s += 8;
+      if (comp === 'Très compacte') s -= 30;
+    }
+
+    if (v.key === 'caravane') {
+      if (usage === 'Séjours stationnaires') s += 24;
+      if (priorite === 'Prix') s += 18;
+      if (permis === 'Remorquage souhaité') s += 20;
+      if (auton === 'Faible' || auton === 'Moyenne') s += 8;
+      if (comp === 'Très compacte') s -= 14;
+    }
+
+    return Math.max(0, Math.min(100, s));
   }
 
   function rankVehicles(d){
     return vehicles
-      .map(v => ({...v, score: scoreVehicle(v,d)}))
+      .map(v => ({...v, score: scoreVehicle(v, d)}))
       .sort((a,b) => b.score - a.score);
   }
 
@@ -728,19 +803,33 @@
   }
 
   function chipsFromData(d){
-    return ['achat','voyageurs','usage','compacite','priorite','saison','permis','sdb','autonomie']
+    return ['achat','budget','voyageurs','usage','compacite','priorite','saison','permis','sdb','autonomie']
       .map(id => fmt(d[id]))
       .filter(Boolean);
   }
 
-  function explain(vehicle, d){
-    const reasons = vehicle.reason(d);
-    const commercial = computeCommercialScore(d);
-    const lead = classifyLead(commercial);
-    const extra = [];
-    if (lead.label === 'Très chaud' && vehicle.score >= 70) extra.push('le projet est mature et ce véhicule colle au besoin');
-    if (fmt(d.budget)) extra.push(`budget positionné sur : ${d.budget}`);
-    return [...reasons, ...extra].filter(Boolean).slice(0,3).join('; ') || 'Le positionnement global du projet rend ce véhicule pertinent.';
+  function explain(v, d){
+    const c = [];
+    const b = fmt(d.budget);
+    if (b) c.push(`budget : ${b}`);
+    if (fmt(d.voyageurs)) c.push(`voyageurs : ${fmt(d.voyageurs)}`);
+    if (fmt(d.usage)) c.push(`usage : ${fmt(d.usage)}`);
+    if (fmt(d.compacite)) c.push(`compacité : ${fmt(d.compacite)}`);
+    if (fmt(d.priorite)) c.push(`priorité : ${fmt(d.priorite)}`);
+    if (fmt(d.saison)) c.push(`saison : ${fmt(d.saison)}`);
+
+    const logic = [];
+    if (v.key === 'van') {
+      logic.push('Le format van est adapté à un besoin très compact et à des déplacements fréquents.');
+      if (b === 'Moins de 40 000 €' || b === '40 000 à 60 000 €') logic.push('Le budget est cohérent avec une entrée de gamme ou un véhicule d’occasion.');
+    }
+    if (v.key === 'fourgon') logic.push('Le fourgon garde un bon équilibre entre confort, volume et maniabilité.');
+    if (v.key === 'profile') logic.push('Le profilé répond bien aux clients qui veulent un vrai niveau de confort sans aller sur un intégral.');
+    if (v.key === 'integral') logic.push('L’intégral est le choix premium dès que le confort et l’espace prennent le dessus.');
+    if (v.key === 'capucine') logic.push('La capucine reste la plus logique dès qu’il faut beaucoup de couchages.');
+    if (v.key === 'caravane') logic.push('La caravane est pertinente quand le budget est serré et que le séjour stationnaire domine.');
+
+    return [...logic, c.length ? `Critères saisis: ${c.join(' · ')}` : null].filter(Boolean).join(' ');
   }
 
   function updateAll(){
@@ -774,7 +863,7 @@
             <h4 style="margin-top:8px;"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4>
             <div class="hint">${v.family}</div>
           </div>
-          <div class="small">Fit client: ${lead.label}</div>
+          <div class="small">${lead.label}</div>
         </div>
         <div class="product-meta">
           ${v.features.map(f => `<span class="meta">${escapeHtml(f)}</span>`).join('')}
@@ -808,35 +897,4 @@
   document.addEventListener('DOMContentLoaded', () => {
     fillForm(safeData());
     statusEl.textContent = 'Données restaurées depuis le navigateur.';
-  });
-
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const evt = el.tagName === 'TEXTAREA' ? 'input' : (el.tagName === 'INPUT' ? 'input' : 'change');
-    el.addEventListener(evt, () => {
-      saveData(readForm());
-      updateAll();
-    });
-  });
-
-  document.getElementById('btnSave').addEventListener('click', () => {
-    saveData(readForm());
-    updateAll();
-  });
-
-  document.getElementById('btnPrint').addEventListener('click', () => window.print());
-  document.getElementById('btnPdf').addEventListener('click', generatePDF);
-  document.getElementById('btnPdfInline').addEventListener('click', generatePDF);
-
-  document.getElementById('btnReset').addEventListener('click', () => {
-    if (!confirm('Réinitialiser toutes les données ?')) return;
-    localStorage.removeItem(STORAGE_KEY);
-    form.reset();
-    document.getElementById('pays').value = 'France';
-    updateAll();
-    statusEl.textContent = 'Données effacées.';
-  });
-</script>
-</body>
-</html>
+ 
