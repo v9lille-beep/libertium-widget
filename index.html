@@ -238,8 +238,21 @@
             <div class="field"><label for="reprPtac">PTAC (en Kg)</label><input id="reprPtac" type="text" /></div>
             <div class="field"><label for="reprCvFisc">Chevaux fiscaux</label><input id="reprCvFisc" type="text" /></div>
             <div class="field"><label for="reprCvDin">Chevaux DIN</label><input id="reprCvDin" type="text" /></div>
-            <div class="field"><label>Boite de vitesse</label><div><label><input type="radio" name="reprBoite" value="Boite auto" checked> Boite auto</label> <label><input type="radio" name="reprBoite" value="Boite manuelle"> Boite manuelle</label></div></div>
-            <div class="field"><label>Énergie</label><div><label><input type="radio" name="reprEnergie" value="Diesel" checked> Diesel</label> <label><input type="radio" name="reprEnergie" value="Essence"> Essence</label> <label><input type="radio" name="reprEnergie" value="Hybride"> Hybride</label> <label><input type="radio" name="reprEnergie" value="Electrique"> Electrique</label></div></div>
+<div class="field">
+  <label for="reprBoite">Boite de vitesse</label>
+  <select id="reprBoite">
+    <option value="Boite auto" selected>Boite auto</option>
+    <option value="Boite manuelle">Boite manuelle</option>
+  </select>
+</div>            <div class="field">
+  <label for="reprEnergie">Énergie</label>
+  <select id="reprEnergie">
+    <option value="Diesel" selected>Diesel</option>
+    <option value="Essence">Essence</option>
+    <option value="Hybride">Hybride</option>
+    <option value="Electrique">Electrique</option>
+  </select>
+</div>
             <div class="field"><label for="reprPlacesCg">Nombre de place carte grise</label><select id="reprPlacesCg"></select></div>
             <div class="field"><label for="reprPlacesCouche">Places couchage</label><select id="reprPlacesCouche"></select></div>
             <div class="field"><label for="reprTypeLit">Type de lit</label><select id="reprTypeLit"><option value="">—</option><option>Lit À La Française</option><option>Lit Central</option><option>Lit Pavillon</option><option>Lit Superposé</option><option>Lit Sur Soute</option><option>Lit Transversal</option><option>Lits Jumeaux</option><option>Salon En U</option></select></div>
