@@ -233,13 +233,11 @@ body {
   margin-bottom: 8px;
 }
 
-/* ── Zone de commentaires ── */
-.comment-section {
-  margin-top: 20px;
-}
+/* ── Zone de commentaires & Argumentaire Local ── */
+.comment-section { margin-top: 20px; }
 .comment-area {
   width: 100%;
-  height: 140px;
+  height: 110px;
   padding: 12px;
   border: 1px solid var(--border-mid);
   border-radius: var(--radius-sm);
@@ -249,6 +247,18 @@ body {
   resize: vertical;
 }
 .comment-area:focus { border-color: var(--blue-mid); }
+
+.local-arg-box {
+  background: var(--gold-lt);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius-sm);
+  padding: 15px;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.local-arg-box h3 { font-size: 14px; color: var(--gold); margin-bottom: 8px; font-weight: 600; }
+.local-arg-box ul { padding-left: 18px; margin-bottom: 8px; }
+.local-arg-box li { margin-bottom: 4px; }
 
 /* ── Nav & Boutons ── */
 .step-nav {
@@ -560,28 +570,40 @@ body {
         <div class="q-label" style="margin-top:15px;">Catégories suggérées</div>
         <div id="recos"></div>
 
-        <div class="q-label" id="catalog-label" style="margin-top:20px; color: var(--navy);">Consulter le catalogue en ligne (libertium.fr)</div>
+        <div class="local-arg-box" id="commercial-argumentary-box">
+          </div>
+
+        <div class="q-label" id="catalog-label" style="margin-top:20px; color: var(--navy);">Consulter le catalogue en ligne (Fiches descriptives libertium.fr)</div>
         <div class="sourcing-grid" id="catalog-links">
           <div class="sourcing-item">
             <h4>Profilé</h4>
-            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/camping-car/profile" target="_blank">Voir Fiches ↗</a>
+            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/camping-car/profile" target="_blank">Fiches Profilé ↗</a>
           </div>
           <div class="sourcing-item">
             <h4>Intégral</h4>
-            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/camping-car/integral" target="_blank">Voir Fiches ↗</a>
+            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/camping-car/integral" target="_blank">Fiches Intégral ↗</a>
           </div>
           <div class="sourcing-item">
             <h4>Fourgon</h4>
-            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/fourgon" target="_blank">Voir Fiches ↗</a>
+            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/fourgon" target="_blank">Fiches Fourgon ↗</a>
           </div>
           <div class="sourcing-item">
             <h4>Van</h4>
-            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/van" target="_blank">Voir Fiches ↗</a>
+            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/van" target="_blank">Fiches Van ↗</a>
           </div>
           <div class="sourcing-item">
             <h4>Capucine</h4>
-            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/camping-car/capucine" target="_blank">Voir Fiches ↗</a>
+            <a class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" href="https://www.libertium.fr/vehicule/camping-car/capucine" target="_blank">Fiches Capucine ↗</a>
           </div>
+        </div>
+
+        <div style="margin-top:1rem;padding:14px 16px;background:var(--blue-lt);border:1px solid var(--blue-border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;" id="dynamic-stock-banner">
+          <div style="font-size:13px;color:var(--blue);">
+            <strong>Rechercher en stock commercial</strong> — Voir les fiches et annonces disponibles.
+          </div>
+          <a id="stock-link-dynamic" href="https://www.libertium.fr/vehicule/camping-car" target="_blank" class="btn primary" style="text-decoration:none;font-size:13px;padding:6px 14px;">
+            Accéder au stock recommandé →
+          </a>
         </div>
 
         <div class="comment-section">
@@ -711,7 +733,8 @@ function showResults() {
     ['Financement', fin],
   ].map(([k, v]) => `<div class="sum-row"><span class="sum-key">${k}</span><span class="sum-val">${v}</span></div>`).join('');
 
-  document.getElementById('recos').innerHTML = buildRecos().map((r, i) => `
+  const recos = buildRecos();
+  document.getElementById('recos').innerHTML = recos.map((r, i) => `
     <div class="reco-card ${i === 0 ? 'top' : ''}">
       <div class="reco-head">
         <div>
@@ -722,6 +745,26 @@ function showResults() {
       <div class="reco-why">${r.why}</div>
     </div>
   `).join('');
+
+  // Sourcing dynamique : Ajustement du lien principal "Voir le stock"
+  const topReco = recos[0];
+  const stockLink = document.getElementById('stock-link-dynamic');
+  if (topReco.type.includes('Van') || topReco.type.includes('Fourgon')) {
+    stockLink.href = "https://www.libertium.fr/vehicule/van-fourgon-amenage";
+  } else if (topReco.type.includes('profilé')) {
+    stockLink.href = "https://www.libertium.fr/vehicule/camping-car/profile";
+  } else if (topReco.type.includes('capucine')) {
+    stockLink.href = "https://www.libertium.fr/vehicule/camping-car/capucine";
+  } else if (topReco.type.includes('intégral')) {
+    stockLink.href = "https://www.libertium.fr/vehicule/camping-car/integral";
+  } else if (topReco.type.includes('Caravane')) {
+    stockLink.href = "https://www.libertium.fr/vehicule/caravane";
+  } else {
+    stockLink.href = "https://www.libertium.fr/vehicule/camping-car";
+  }
+
+  // Injection de l'argumentaire et des objections en local
+  injectLocalArgumentary(topReco.type);
 }
 
 function buildRecos() {
@@ -770,49 +813,97 @@ function buildRecos() {
   return recos.slice(0, 2);
 }
 
-// Nouvelle fonction d'enregistrement PDF optimisée (Zéro page blanche)
+// Génération automatique d'argumentaires et d'objections d'après la recommandation principale
+function injectLocalArgumentary(type) {
+  const box = document.getElementById('commercial-argumentary-box');
+  let content = `<h3>✦ Argumentaire Commercial & Objections Clientes</h3>`;
+  
+  if (type.includes('Van') || type.includes('Fourgon')) {
+    content += `
+      <p><strong>Arguments Clés :</strong> Mobilité absolue, passe-partout (hauteur contenue), conduite similaire à une voiture. Idéal pour les escapades improvisées en ville comme en montagne.</p>
+      <ul>
+        <li><strong>Question de relance :</strong> <em>"Quels types d'endroits sauvages ou de centres-villes aimeriez-vous explorer en priorité ?"</em></li>
+        <li><strong>Objection 1 : "C'est trop étroit à l'intérieur, j'ai peur de manquer d'espace."</strong><br>➔ Réponse : Les agencements modernes optimisent chaque centimètre. Les lits relevables ou transversaux libèrent un espace de vie aéré en journée.</li>
+        <li><strong>Objection 2 : "L'isolation en hiver est-elle suffisante ?"</strong><br>➔ Réponse : Nos gammes Font Vendôme ou Adria possèdent des isolations renforcées certifiées Classe 3, parfaites en toutes saisons.</li>
+      </ul>`;
+  } else if (type.includes('profilé')) {
+    content += `
+      <p><strong>Arguments Clés :</strong> Le compromis roi du marché. Profilé aérodynamique réduisant la consommation, vraie chambre avec lit permanent (central ou jumeaux) et grand salon.</p>
+      <ul>
+        <li><strong>Question de relance :</strong> <em>"Le confort d'un lit permanent central accessible des deux côtés est-il une priorité absolue pour vos nuits ?"</em></li>
+        <li><strong>Objection 1 : "C'est trop long pour manœuvrer sur les petites routes."</strong><br>➔ Réponse : Avec les caméras de recul intégrées et une largeur maîtrisée, la prise en main est très intuitive et sécurisante.</li>
+        <li><strong>Objection 2 : "La consommation de carburant doit être élevée."</strong><br>➔ Réponse : La casquette aérodynamique est spécialement profilée pour optimiser le flux d'air et économiser jusqu'à 15% par rapport à une capucine.</li>
+      </ul>`;
+  } else if (type.includes('capucine')) {
+    content += `
+      <p><strong>Arguments Clés :</strong> Le véhicule familial par excellence. Le lit permanent au-dessus de la cabine libère tout l'espace au sol pour un salon immense et de nombreux rangements.</p>
+      <ul>
+        <li><strong>Question de relance :</strong> <em>"Comment imaginez-vous l'organisation des repas et des couchages avec vos enfants les jours de pluie ?"</em></li>
+        <li><strong>Objection 1 : "Le véhicule est très haut, j'ai peur de la prise au vent."</strong><br>➔ Réponse : Les châssis élargis modernes offrent une excellente stabilité au sol, et la hauteur offre un volume de vie intérieur inégalé.</li>
+        <li><strong>Objection 2 : "Est-ce facile pour les enfants de grimper au lit du haut ?"</strong><br>➔ Réponse : Les échelles sont sécurisées et des filets de protection homologués empêchent tout risque de chute.</li>
+      </ul>`;
+  } else if (type.includes('intégral')) {
+    content += `
+      <p><strong>Arguments Clés :</strong> Le très haut de gamme du voyage. Vue panoramique spectaculaire sur la route, salon majestueux fusionnant avec la cabine, isolation thermique cabine premium.</p>
+      <ul>
+        <li><strong>Question de relance :</strong> <em>"Pour vos longs trajets, quel niveau de confort attendez-vous en termes de visibilité routière et d'espace de vie ?"</em></li>
+        <li><strong>Objection 1 : "Le pare-brise immense doit coûter cher en cas de bris de glace."</strong><br>➔ Réponse : Nos partenariats d'assurance Libertium intègrent des garanties spécifiques protégeant ces vitrages sans franchise lourde.</li>
+        <li><strong>Objection 2 : "Le gabarit me semble impressionnant au départ."</strong><br>➔ Réponse : C'est une habitude visuelle, mais la visibilité vers l'avant élimine la majorité des angles morts des camping-cars classiques.</li>
+      </ul>`;
+  } else {
+    content += `
+      <p><strong>Arguments Clés :</strong> Solution économique et flexible. Permet de détacher la voiture pour explorer les alentours ou faire des courses tout en laissant le logement au camping.</p>
+      <ul>
+        <li><strong>Question de relance :</strong> <em>"Aimeriez-vous disposer de votre véhicule personnel libre une fois installés sur votre lieu de séjour ?"</em></li>
+        <li><strong>Objection 1 : "La conduite avec une remorque/caravane me stresse."</strong><br>➔ Réponse : Les têtes d'attelage anti-lacets modernes (comme chez Caravelair) stabilisent parfaitement la trajectoire sur autoroute.</li>
+      </ul>`;
+  }
+  box.innerHTML = content;
+}
+
+// Fonction d'enregistrement PDF corrigée (Zéro page blanche)
 function savePDFLocal() {
   const element = document.getElementById('main-card-pdf');
   
-  // Récupération des informations saisies pour l'en-tête du PDF et le nom de fichier
   const nom = document.getElementById('cust-nom').value.trim().toUpperCase() || 'CLIENT';
   const prenom = document.getElementById('cust-prenom').value.trim() || '';
   const tel = document.getElementById('cust-tel').value.trim() || '—';
   const email = document.getElementById('cust-email').value.trim() || '—';
   const agence = document.getElementById('cust-agence').value.trim() || 'Réseau Libertium';
 
-  // Injection propre des informations dans la zone dédiée au PDF
   const pdfHeader = document.getElementById('pdf-header-injection');
-  pdfHeader.innerHTML = `<strong>LIBERTIUM — FICHE DÉCOUVERTE</strong><br>Client : ${nom} ${prenom} | Tél : ${tel} | Email : ${email} | Concession : ${agence}`;
+  pdfHeader.innerHTML = `<strong>LIBERTIUM — FICHE DÉCOUVERTE COMMERCIAL</strong><br>Client : ${nom} ${prenom} | Tél : ${tel} | Email : ${email} | Concession : ${agence}`;
   pdfHeader.style.display = 'block';
 
-  // Masquage temporaire des éléments superflus pour le PDF
   const progContainer = document.getElementById('progress-container');
   const navBox = document.getElementById('actions-nav');
   const catLabel = document.getElementById('catalog-label');
   const catLinks = document.getElementById('catalog-links');
+  const stockBanner = document.getElementById('dynamic-stock-banner');
   
   if (progContainer) progContainer.style.display = 'none';
   if (navBox) navBox.style.display = 'none';
   if (catLabel) catLabel.style.display = 'none';
   if (catLinks) catLinks.style.display = 'none';
+  if (stockBanner) stockBanner.style.display = 'none';
 
-  // Configuration stricte du moteur HTML2PDF
+  // Configuration stricte évitant le saut de page blanc en entête
   const configuration = {
-    margin:       [10, 12, 10, 12], // Marges [haut, gauche, bas, droite]
+    margin:       [10, 12, 10, 12],
     filename:     `decouverte_libertium_${nom}.pdf`,
     image:        { type: 'jpeg', quality: 0.98 },
     html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
   };
 
   html2pdf().set(configuration).from(element).save().then(() => {
-    // Restauration de l'affichage normal sur l'écran après la génération
     pdfHeader.style.display = 'none';
     if (progContainer) progContainer.style.display = 'block';
     if (navBox) navBox.style.display = 'flex';
     if (catLabel) catLabel.style.display = 'block';
     if (catLinks) catLinks.style.display = 'grid';
+    if (stockBanner) stockBanner.style.display = 'flex';
   });
 }
 
