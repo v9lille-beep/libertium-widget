@@ -18,12 +18,6 @@
   --gold: #c8960c;
   --gold-lt: #fdf3d7;
   --gold-border: #f0c842;
-  --ok: #1e6b3c;
-  --ok-lt: #eaf3de;
-  --warn: #9b6000;
-  --warn-lt: #fff3cd;
-  --danger: #a32d2d;
-  --danger-lt: #fcebeb;
   --text: #1a1a2e;
   --text-sec: #5a6480;
   --text-hint: #9ba3b8;
@@ -35,7 +29,6 @@
   --radius-sm: 8px;
   --radius-pill: 24px;
   --shadow: 0 2px 12px rgba(15,31,61,.08);
-  --shadow-lg: 0 8px 32px rgba(15,31,61,.14);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -65,7 +58,6 @@ body {
   font-family: 'DM Serif Display', serif;
   font-size: 20px;
   color: #fff;
-  letter-spacing: .02em;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -78,7 +70,6 @@ body {
   font-weight: 600;
   padding: 2px 8px;
   border-radius: 4px;
-  letter-spacing: .06em;
   text-transform: uppercase;
 }
 .header-right {
@@ -88,67 +79,36 @@ body {
 
 /* ── Layout ── */
 .container {
-  max-width: 820px;
+  max-width: 780px;
   margin: 0 auto;
   padding: 2rem 1.5rem 4rem;
 }
 
-/* ── API key setup ── */
-.api-setup {
+/* ── Formulaire Bloc Coordonnées ── */
+.client-form-box {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 2rem;
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
   box-shadow: var(--shadow);
 }
-.api-setup h2 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 18px;
-  color: var(--navy);
-  margin-bottom: .5rem;
-}
-.api-setup p {
-  font-size: 13px;
-  color: var(--text-sec);
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-.api-input-row {
-  display: flex;
-  gap: 10px;
-}
-.api-input-row input {
-  flex: 1;
-  padding: 10px 14px;
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-sm);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--text);
-  background: var(--bg);
-  outline: none;
-}
-
-/* ── Formulaire Coordonnées Client ── */
-.client-info-grid {
+.client-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 15px;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
 }
-.input-field {
+.form-control {
   width: 100%;
   padding: 10px 14px;
   border: 1px solid var(--border-mid);
   border-radius: var(--radius-sm);
   font-family: 'DM Sans', sans-serif;
   font-size: 13px;
-  color: var(--text);
   outline: none;
-  background: #fff;
 }
-.input-field:focus { border-color: var(--blue-mid); }
+.form-control:focus { border-color: var(--blue-mid); }
 
 /* ── Main card ── */
 .card {
@@ -253,51 +213,42 @@ body {
   font-weight: 500;
 }
 
-/* ── Zone de commentaire AGGRANDIE (Demande utilisateur) ── */
-.comment-section {
-  margin-top: 20px;
-}
-.comment-textarea {
-  width: 100%;
-  height: 160px;
-  padding: 14px;
-  border: 1px solid var(--border-mid);
-  border-radius: var(--radius-sm);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  color: var(--text);
-  resize: vertical;
-  outline: none;
-}
-.comment-textarea:focus {
-  border-color: var(--blue-mid);
-}
-
-/* ── Grille de liens Sourcing Live Libertium (5 types de modèles) ── */
-.live-sourcing-grid {
+/* ── Sourcing Direct Blocs ── */
+.sourcing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 10px;
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin: 15px 0;
 }
-.source-card {
+.sourcing-item {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 12px;
   text-align: center;
-  transition: all 0.2s ease;
 }
-.source-card:hover {
-  border-color: var(--blue-mid);
-  background: var(--blue-lt);
-}
-.source-card h4 {
+.sourcing-item h4 {
   font-size: 12px;
   color: var(--navy);
   margin-bottom: 8px;
 }
+
+/* ── Zone de commentaires Agrandie ── */
+.comment-section {
+  margin-top: 20px;
+}
+.comment-area {
+  width: 100%;
+  height: 150px;
+  padding: 12px;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+  resize: vertical;
+}
+.comment-area:focus { border-color: var(--blue-mid); }
 
 /* ── Nav & Boutons ── */
 .step-nav {
@@ -326,11 +277,12 @@ body {
 .btn:hover { background: var(--bg); border-color: var(--border); }
 .btn.primary { background: var(--blue-mid); color: #fff; border-color: var(--blue-mid); }
 .btn.primary:hover { background: var(--blue); border-color: var(--blue); }
-.btn.gold { background: var(--gold); color: #fff; border-color: var(--gold); }
-.btn.action-pdf { background-color: #212529; color: white; border: none; }
-.btn.action-pdf:hover { background-color: #000; }
-.btn.action-print { background-color: #6c757d; color: white; border: none; }
-.btn.action-print:hover { background-color: #5a6268; }
+.btn.outline-blue { background: transparent; color: var(--blue-mid); border-color: var(--blue-border); }
+.btn.outline-blue:hover { background: var(--blue-lt); }
+.btn.print-btn { background: #6c757d; color: white; border: none; }
+.btn.print-btn:hover { background: #5a6268; }
+.btn.pdf-btn { background: #212529; color: white; border: none; }
+.btn.pdf-btn:hover { background: #000; }
 
 /* ── Step visibility ── */
 .step { display: none; }
@@ -347,41 +299,25 @@ body {
 .sc-label { font-size: 11px; color: var(--text-hint); margin-bottom: 4px; }
 .sc-val { font-size: 14px; font-weight: 600; color: var(--navy); }
 
-.section-label {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-hint);
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  margin-bottom: 10px;
-  margin-top: 1.25rem;
-}
-
 .summary-table { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 4px 14px; margin-bottom: .5rem; }
 .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
 .sum-row:last-child { border-bottom: none; }
 .sum-key { color: var(--text-sec); }
 .sum-val { font-weight: 500; color: var(--navy); text-align: right; max-width: 60%; }
 
-/* ── AI Argumentaire ── */
-.ai-box { border: 1.5px solid var(--gold-border); border-radius: var(--radius); background: var(--gold-lt); overflow: hidden; margin-top: 1.25rem; }
-.ai-box-header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.ai-box-title { font-size: 14px; font-weight: 600; color: var(--warn); }
-.ai-box-body { display: none; padding: 0 18px 18px; }
-.ai-box-body.open { display: block; }
-.ai-output { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; font-size: 13px; line-height: 1.7; white-space: pre-wrap; }
+.reco-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px; background: var(--bg-card); }
+.reco-card.top { border-color: var(--blue-mid); border-width: 1.5px; }
+.reco-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
+.reco-name { font-size: 15px; font-weight: 600; color: var(--navy); }
+.reco-brand { font-size: 12px; color: var(--text-sec); margin-bottom: 6px; }
+.reco-why { font-size: 13px; color: var(--text-sec); line-height: 1.55; }
 
-/* Loader */
-.loader { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin .7s linear infinite; margin-right: 6px; }
-@keyframes spin { to { transform: rotate(3600deg); } }
-
-/* ── STYLES IMPRESSION SYSTEME CIBLÉ ── */
+/* ── Style d'impression système ── */
 @media print {
   body { background: #fff; color: #000; }
-  .header, .api-setup, .step-nav, #api-setup, .ai-box, .source-card .btn, .progress-wrap { display: none !important; }
-  .card { border: none; box-shadow: none; }
-  .container { max-width: 100%; padding: 0; }
-  .comment-textarea { border: 1px solid #000; height: auto; min-height: 150px; }
+  .header, .progress-wrap, .step-nav, .sourcing-item .btn { display: none !important; }
+  .card, .client-form-box { border: none; box-shadow: none; padding: 0; }
+  .comment-area { border: 1px solid #000; height: auto; min-height: 140px; }
 }
 </style>
 </head>
@@ -390,19 +326,21 @@ body {
 <div class="header">
   <div class="logo">
     Libertium
-    <span class="logo-badge">Espace Commercial</span>
+    <span class="logo-badge">Guide commercial</span>
   </div>
-  <div class="header-right">Découverte client multi-critères</div>
+  <div class="header-right">Fiche Découverte Client Officielle</div>
 </div>
 
-<div class="container" id="widget-main-capture">
+<div class="container" id="printable-area">
 
-  <div class="api-setup" id="api-setup">
-    <h2>Configuration initiale Claude AI</h2>
-    <p>Entrez la clé API Anthropic pour générer en concession les fiches d'arguments personnalisées.</p>
-    <div class="api-input-row">
-      <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off">
-      <button class="btn primary" onclick="saveKey()">Enregistrer</button>
+  <div class="client-form-box" id="client-info-fields">
+    <div class="q-label" style="color: var(--navy); font-size: 13px;">Coordonnées de l'opportunité client</div>
+    <div class="client-grid">
+      <input type="text" id="cust-nom" class="form-control" placeholder="Nom du client">
+      <input type="text" id="cust-prenom" class="form-control" placeholder="Prénom">
+      <input type="text" id="cust-tel" class="form-control" placeholder="Téléphone">
+      <input type="email" id="cust-email" class="form-control" placeholder="Email">
+      <input type="text" id="cust-agence" class="form-control" placeholder="Concession Libertium">
     </div>
   </div>
 
@@ -416,41 +354,37 @@ body {
       <div class="step-header">
         <div class="step-num">1</div>
         <div>
-          <div class="step-title">Fiche Client & Groupe</div>
-          <div class="step-sub">Saisie des informations de contact et voyageurs</div>
+          <div class="step-title">Qui voyage ?</div>
+          <div class="step-sub">Composition et besoins du groupe</div>
         </div>
       </div>
       <div class="step-body">
         <div class="q-block">
-          <div class="q-label">Coordonnées de contact</div>
-          <div class="client-info-grid">
-            <input type="text" id="c-nom" class="input-field" placeholder="Nom du client">
-            <input type="text" id="c-prenom" class="input-field" placeholder="Prénom">
-            <input type="text" id="c-phone" class="input-field" placeholder="Téléphone">
-            <input type="email" id="c-email" class="input-field" placeholder="Adresse Email">
-            <input type="text" id="c-concession" class="input-field" placeholder="Concession Libertium">
-          </div>
-        </div>
-
-        <div class="q-block">
-          <div class="q-label">Composition de l'équipage</div>
+          <div class="q-label">Vous partez…</div>
           <div class="chips" data-k="voyageurs" data-m="0">
             <div class="chip" data-v="solo">Seul(e)</div>
             <div class="chip" data-v="couple">En couple</div>
             <div class="chip" data-v="famille_young">Famille (enfants &lt; 6 ans)</div>
             <div class="chip" data-v="famille_ado">Famille (enfants / ados)</div>
-            <div class="chip" data-v="seniors">Couple retraités</div>
+            <div class="chip" data-v="seniors">Couple retraité(e)s</div>
             <div class="chip" data-v="amis">Entre amis</div>
           </div>
         </div>
-
         <div class="q-block">
-          <div class="q-label">Nombre de couchages requis</div>
+          <div class="q-label">Nombre de couchages nécessaires</div>
           <div class="chips" data-k="couchages" data-m="0">
-            <div class="chip" data-v="2">2 couchages</div>
-            <div class="chip" data-v="3">3 couchages</div>
-            <div class="chip" data-v="4">4 couchages</div>
-            <div class="chip" data-v="5plus">5 couchages ou +</div>
+            <div class="chip" data-v="2">2</div>
+            <div class="chip" data-v="3">3</div>
+            <div class="chip" data-v="4">4</div>
+            <div class="chip" data-v="5plus">5 ou plus</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Contraintes de mobilité ?</div>
+          <div class="chips" data-k="mobilite" data-m="0">
+            <div class="chip" data-v="non">Aucune</div>
+            <div class="chip" data-v="escalier">Difficultés à monter / descendre</div>
+            <div class="chip" data-v="pmr">Accessibilité renforcée</div>
           </div>
         </div>
       </div>
@@ -464,39 +398,38 @@ body {
       <div class="step-header">
         <div class="step-num">2</div>
         <div>
-          <div class="step-title">Style de Vie & Voyages</div>
-          <div class="step-sub">Définir le type de routes et la fréquence d'utilisation</div>
+          <div class="step-title">Comment et où voyagez-vous ?</div>
+          <div class="step-sub">Style de voyage et destinations</div>
         </div>
       </div>
       <div class="step-body">
         <div class="q-block">
-          <div class="q-label">Fréquence d'utilisation estimée</div>
+          <div class="q-label">Fréquence d'utilisation prévue</div>
           <div class="chips" data-k="freq" data-m="0">
-            <div class="chip" data-v="weekends">Quelques weekends & courtes semaines</div>
-            <div class="chip" data-v="vacances">Uniquement pendant les congés annuels</div>
-            <div class="chip" data-v="intensif">Utilisation intensive (&gt; 60 jours/an)</div>
-            <div class="chip" data-v="fulltime">Nomadisme complet / Vie à bord</div>
+            <div class="chip" data-v="weekends">Weekends + quelques semaines</div>
+            <div class="chip" data-v="vacances">Grandes vacances uniquement</div>
+            <div class="chip" data-v="intensif">Intensif — plus de 60 jours / an</div>
+            <div class="chip" data-v="fulltime">Full-time / nomadisme</div>
           </div>
         </div>
-
         <div class="q-block">
-          <div class="q-label">Typologie de routes prévues (Multi-choix)</div>
+          <div class="q-label">Routes et destinations (plusieurs choix)</div>
           <div class="chips" data-k="routes" data-m="1">
-            <div class="chip" data-v="autoroute">Autoroutes & Grands Axes</div>
-            <div class="chip" data-v="campagne">Campagne & Petites Routes</div>
-            <div class="chip" data-v="montagne">Montagne & Cols Sinueux</div>
-            <div class="chip" data-v="littoral">Bord de Mer & Côtes</div>
-            <div class="chip" data-v="europe">Road-trips en Europe</div>
-            <div class="chip" data-v="aventure">Expéditions Off-Road</div>
+            <div class="chip" data-v="autoroute">Grands axes / autoroutes</div>
+            <div class="chip" data-v="campagne">Campagne / villages</div>
+            <div class="chip" data-v="montagne">Montagne / routes étroites</div>
+            <div class="chip" data-v="littoral">Bord de mer</div>
+            <div class="chip" data-v="europe">Grand tour Europe</div>
+            <div class="chip" data-v="aventure">Hors des sentiers battus</div>
           </div>
         </div>
-
         <div class="q-block">
-          <div class="q-label">Hébergement privilégié</div>
+          <div class="q-label">Mode de séjour (plusieurs choix)</div>
           <div class="chips" data-k="sejour" data-m="1">
-            <div class="chip" data-v="camping">Campings raccordés</div>
-            <div class="chip" data-v="aire">Aires de camping-car payantes</div>
-            <div class="chip" data-v="sauvage">Spots sauvages / Autonomie totale</div>
+            <div class="chip" data-v="camping">Campings avec branchements</div>
+            <div class="chip" data-v="aire">Aires de services</div>
+            <div class="chip" data-v="sauvage">Étapes sauvages / liberté</div>
+            <div class="chip" data-v="long">Longs séjours sur place</div>
           </div>
         </div>
       </div>
@@ -510,30 +443,39 @@ body {
       <div class="step-header">
         <div class="step-num">3</div>
         <div>
-          <div class="step-title">Priorités Confort & Ergonomie</div>
-          <div class="step-sub">Les indispensables à bord du véhicule</div>
+          <div class="step-title">Vos priorités à bord</div>
+          <div class="step-sub">Ce qui est vraiment indispensable</div>
         </div>
       </div>
       <div class="step-body">
         <div class="q-block">
-          <div class="q-label">Équipements jugés critiques (Multi-choix)</div>
+          <div class="q-label">Équipements indispensables (plusieurs choix)</div>
           <div class="chips" data-k="must" data-m="1">
-            <div class="chip" data-v="lit_fixe">Lit fixe central permanent</div>
-            <div class="chip" data-v="lits_jumeaux">Lits jumeaux modulables</div>
-            <div class="chip" data-v="garage">Soute de rangement garage (vélos)</div>
-            <div class="chip" data-v="douche_sep">Douche indépendante du WC</div>
-            <div class="chip" data-v="grand_salon">Grand salon face/face</div>
-            <div class="chip" data-v="solaire">Autonomie Solaire</div>
-            <div class="chip" data-v="vue_pano">Vision panoramique en cabine</div>
+            <div class="chip" data-v="lit_fixe">Lit fixe permanent</div>
+            <div class="chip" data-v="lits_jumeaux">Lits jumeaux séparés</div>
+            <div class="chip" data-v="garage">Garage vélos / motos</div>
+            <div class="chip" data-v="douche_sep">Douche et WC séparés</div>
+            <div class="chip" data-v="grand_salon">Grand salon</div>
+            <div class="chip" data-v="cuisine">Cuisine équipée</div>
+            <div class="chip" data-v="solaire">Panneaux solaires</div>
+            <div class="chip" data-v="chauffage">Chauffage puissant</div>
+            <div class="chip" data-v="vue_pano">Vue panoramique conduite</div>
           </div>
         </div>
-
         <div class="q-block">
-          <div class="q-label">Aise face au gabarit de conduite</div>
+          <div class="q-label">Rapport à la conduite</div>
           <div class="chips" data-k="conduite" data-m="0">
-            <div class="chip" data-v="compact">Modèle ultra-compact recherché</div>
-            <div class="chip" data-v="equilibre">Équilibre confort/taille standard</div>
-            <div class="chip" data-v="grand">Aucune crainte face aux grands gabarits</div>
+            <div class="chip" data-v="compact">Compact et facile avant tout</div>
+            <div class="chip" data-v="equilibre">Bon équilibre taille / confort</div>
+            <div class="chip" data-v="grand">Grand gabarit — pas de souci</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Autonomie souhaitée</div>
+          <div class="chips" data-k="autonomie" data-m="0">
+            <div class="chip" data-v="faible">Toujours raccordé</div>
+            <div class="chip" data-v="moyenne">2–3 jours autonome</div>
+            <div class="chip" data-v="haute">Autonomie maximale</div>
           </div>
         </div>
       </div>
@@ -547,34 +489,43 @@ body {
       <div class="step-header">
         <div class="step-num">4</div>
         <div>
-          <div class="step-title">Enveloppe Budgétaire</div>
-          <div class="step-sub">Gamme de prix et type de transaction</div>
+          <div class="step-title">Budget et financement</div>
+          <div class="step-sub">Enveloppe et état du véhicule souhaité</div>
         </div>
       </div>
       <div class="step-body">
         <div class="q-block">
-          <div class="q-label">Budget prévu</div>
+          <div class="q-label">Budget envisagé</div>
           <div class="chips" data-k="budget" data-m="0">
             <div class="chip" data-v="m25">Moins de 25 000 €</div>
             <div class="chip" data-v="25_45">25 000 — 45 000 €</div>
             <div class="chip" data-v="45_65">45 000 — 65 000 €</div>
             <div class="chip" data-v="65_90">65 000 — 90 000 €</div>
             <div class="chip" data-v="p90">Plus de 90 000 €</div>
+            <div class="chip" data-v="nsp">Non défini</div>
           </div>
         </div>
-
         <div class="q-block">
-          <div class="q-label">État recherché</div>
+          <div class="q-label">Neuf ou occasion ?</div>
           <div class="chips" data-k="etat" data-m="0">
-            <div class="chip" data-v="neuf">Véhicule Neuf</div>
-            <div class="chip" data-v="occasion">Opportunité d'Occasion</div>
-            <div class="chip" data-v="indiff">Ouvert aux deux options</div>
+            <div class="chip" data-v="neuf">Neuf — garantie constructeur</div>
+            <div class="chip" data-v="occasion">Occasion — priorité au budget</div>
+            <div class="chip" data-v="indiff">Les deux — selon rapport qualité/prix</div>
+          </div>
+        </div>
+        <div class="q-block">
+          <div class="q-label">Financement envisagé (plusieurs choix)</div>
+          <div class="chips" data-k="fin" data-m="1">
+            <div class="chip" data-v="comptant">Comptant</div>
+            <div class="chip" data-v="credit">Crédit classique</div>
+            <div class="chip" data-v="loa">LOA / leasing</div>
+            <div class="chip" data-v="reprise">Avec reprise de mon véhicule</div>
           </div>
         </div>
       </div>
       <div class="step-nav">
         <button class="btn" onclick="goPrev()">← Retour</button>
-        <button class="btn primary" onclick="showResults()">Analyser & Générer la Synthèse ✦</button>
+        <button class="btn primary" onclick="showResults()">Voir la recommandation ✦</button>
       </div>
     </div>
 
@@ -582,48 +533,177 @@ body {
       <div class="step-header">
         <div class="step-num gold">✓</div>
         <div>
-          <div class="step-title">Recommandation Stratégique Libertium</div>
-          <div class="step-sub" id="pdf-client-title">Fiche de synthèse commerciale</div>
+          <div class="step-title" id="summary-client-title">Recommandation Libertium</div>
+          <div class="step-sub">Analyse instantanée locale · libertium.fr</div>
         </div>
       </div>
       <div class="step-body">
-
-        <div class="summary-table">
-          <div class="sum-row"><span class="sum-key">Nom du Client</span><span class="sum-val" id="lbl-nom">—</span></div>
-          <div class="sum-row"><span class="sum-key">Téléphone / Email</span><span class="sum-val" id="lbl-contact">—</span></div>
-          <div class="sum-row"><span class="sum-key">Point de vente</span><span class="sum-val" id="lbl-concession">—</span></div>
-        </div>
-
+        
         <div class="score-grid" id="scores"></div>
 
-        <div class="section-label">Synthèse complète des critères</div>
+        <div class="q-label" style="margin-top:15px;">Récapitulatif complet du profil</div>
         <div class="summary-table" id="summary"></div>
 
-        <div class="section-label">Sourcing Catalogue Direct (Ouverture Pop-up)</div>
-        <p style="font-size:12px; color:var(--text-sec); margin-bottom:8px;">Consulter instantanément les fiches véhicules correspondantes sur libertium.fr :</p>
-        
-        <div class="live-sourcing-grid">
-          <div class="source-card">
+        <div class="q-label" style="margin-top:15px;">Catégories suggérées</div>
+        <div id="recos"></div>
+
+        <div class="q-label" style="margin-top:20px; color: var(--navy);">Consulter en Pop-up (Catalogue live libertium.fr)</div>
+        <div class="sourcing-grid">
+          <div class="sourcing-item">
             <h4>Profilé</h4>
-            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/profile')">Fiches Directes ↗</button>
+            <button class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/profile')">Voir Fiches ↗</button>
           </div>
-          <div class="source-card">
+          <div class="sourcing-item">
             <h4>Intégral</h4>
-            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/integral')">Fiches Directes ↗</button>
+            <button class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/integral')">Voir Fiches ↗</button>
           </div>
-          <div class="source-card">
+          <div class="sourcing-item">
             <h4>Fourgon</h4>
-            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/fourgon')">Fiches Directes ↗</button>
+            <button class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" onclick="openPopUp('https://www.libertium.fr/vehicule/fourgon')">Voir Fiches ↗</button>
           </div>
-          <div class="source-card">
+          <div class="sourcing-item">
             <h4>Van</h4>
-            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/van')">Fiches Directes ↗</button>
+            <button class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" onclick="openPopUp('https://www.libertium.fr/vehicule/van')">Voir Fiches ↗</button>
           </div>
-          <div class="source-card">
+          <div class="sourcing-item">
             <h4>Capucine</h4>
-            <button class="btn primary" style="padding:4px 10px; font-size:11px;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/capucine')">Fiches Directes ↗</button>
+            <button class="btn outline-blue" style="padding:4px 8px; font-size:11px; width:100%; justify-content:center;" onclick="openPopUp('https://www.libertium.fr/vehicule/camping-car/capucine')">Voir Fiches ↗</button>
           </div>
         </div>
 
         <div class="comment-section">
-          <div class="section-label">Notes,
+          <div class="q-label" style="color: var(--navy);">Commentaires & Notes de la négociation commerciale</div>
+          <textarea id="commercial-notes" class="comment-area" placeholder="Saisissez ici les spécificités demandées, options complémentaires (store, attelage, GPS, pack énergie...), propositions de reprise ou détails sur les modalités de livraison..."></textarea>
+        </div>
+
+      </div>
+      <div class="step-nav">
+        <button class="btn" onclick="resetAll()">↺ Nouveau client</button>
+        <div style="display:flex; gap:8px;">
+          <button class="btn print-btn" onclick="window.print();">🖨️ Imprimer</button>
+          <button class="btn pdf-btn" onclick="savePDFLocal();">💾 Enregistrer le PDF</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const D = {};
+let currentStep = 1;
+const TOTAL_STEPS = 4;
+
+window.addEventListener('DOMContentLoaded', () => {
+  initChips();
+  updateProgress();
+});
+
+function initChips() {
+  document.querySelectorAll('.chips').forEach(g => {
+    const multi = g.dataset.m === '1';
+    const key = g.dataset.k;
+    if (!D[key]) D[key] = multi ? [] : null;
+    g.querySelectorAll('.chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const v = c.dataset.v;
+        if (multi) {
+          if (!D[key]) D[key] = [];
+          const i = D[key].indexOf(v);
+          if (i >= 0) { D[key].splice(i, 1); c.classList.remove('sel'); }
+          else { D[key].push(v); c.classList.add('sel'); }
+        } else {
+          D[key] = v;
+          g.querySelectorAll('.chip').forEach(x => x.classList.remove('sel'));
+          c.classList.add('sel');
+        }
+      });
+    });
+  });
+}
+
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('s' + n).classList.add('active');
+  currentStep = n;
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goNext() { showStep(currentStep + 1); }
+function goPrev() { showStep(currentStep - 1); }
+
+function updateProgress() {
+  const bar = document.getElementById('prog');
+  bar.innerHTML = '';
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const d = document.createElement('div');
+    d.className = 'progress-step' + (i < currentStep ? ' done' : i === currentStep ? ' active' : '');
+    bar.appendChild(d);
+  }
+  const lbl = document.getElementById('prog-label');
+  if (currentStep <= TOTAL_STEPS) lbl.textContent = `Étape ${currentStep} sur ${TOTAL_STEPS}`;
+  else lbl.textContent = 'Synthèse du profil';
+}
+
+const LBL = {
+  voyageurs: { solo:'Seul(e)', couple:'Couple', famille_young:'Famille (jeunes enfants)', famille_ado:'Famille (enfants/ados)', seniors:'Couple retraité', amis:'Entre amis' },
+  budget: { m25:'< 25 000 €', '25_45':'25–45 000 €', '45_65':'45–65 000 €', '65_90':'65–90 000 €', p90:'> 90 000 €', nsp:'Non défini' },
+  etat: { neuf:'Neuf', occasion:'Occasion', indiff:'Neuf ou occasion' },
+  freq: { weekends:'Weekends + semaines', vacances:'Grandes vacances', intensif:'Intensif >60j/an', fulltime:'Full-time' },
+  conduite: { compact:'Compact / facile', equilibre:'Équilibré', grand:'Grand gabarit OK' },
+  autonomie: { faible:'Toujours raccordé', moyenne:'2–3 jours', haute:'Autonomie max' },
+  mobilite: { non:'Aucune', escalier:'Difficultés montée/descente', pmr:'PMR' },
+};
+
+const MUST_LABELS = {
+  lit_fixe:'Lit fixe', lits_jumeaux:'Lits jumeaux', garage:'Garage',
+  douche_sep:'Douche séparée', grand_salon:'Grand salon', cuisine:'Cuisine',
+  solaire:'Solaire', chauffage:'Chauffage', vue_pano:'Vue panoramique'
+};
+
+function lbl(k, fb = '—') {
+  const v = D[k];
+  if (!v) return fb;
+  if (Array.isArray(v)) return v.map(x => LBL[k] ? LBL[k][x] || x : x).join(', ') || fb;
+  return LBL[k] ? LBL[k][v] || v : v;
+}
+
+// Fonction d'ouverture contrôlée pour les fiches Libertium en Pop-up
+function openPopUp(url) {
+  window.open(url, 'FicheLibertiumLive', 'width=1150,height=850,scrollbars=yes,resizable=yes');
+}
+
+function showResults() {
+  showStep(5);
+
+  const clientNom = document.getElementById('cust-nom').value.toUpperCase() || 'CLIENT';
+  const clientPrenom = document.getElementById('cust-prenom').value || '';
+  const clientAgence = document.getElementById('cust-agence').value || 'Réseau Libertium';
+  document.getElementById('summary-client-title').textContent = `Fiche Commerciale — ${clientNom} ${clientPrenom} (${clientAgence})`;
+
+  // Remplissage des scores
+  document.getElementById('scores').innerHTML = `
+    <div class="score-card"><div class="sc-label">Profil</div><div class="sc-val">${lbl('voyageurs')}</div></div>
+    <div class="score-card"><div class="sc-label">Couchages</div><div class="sc-val">${D.couchages || '—'}</div></div>
+    <div class="score-card"><div class="sc-label">Budget</div><div class="sc-val">${lbl('budget')}</div></div>
+    <div class="score-card"><div class="sc-label">État</div><div class="sc-val">${lbl('etat')}</div></div>
+  `;
+
+  // Construction du tableau récapitulatif
+  const must = (D.must || []).map(x => MUST_LABELS[x] || x).join(' · ') || '—';
+  const routes = (D.routes || []).map(x => ({ autoroute:'Autoroutes', campagne:'Campagne', montagne:'Montagne', littoral:'Littoral', europe:'Tour Europe', aventure:'Off-road' }[x] || x)).join(', ') || '—';
+  const fin = (D.fin || []).map(x => ({ comptant:'Comptant', credit:'Crédit', loa:'LOA', reprise:'Avec reprise' }[x] || x)).join(', ') || '—';
+
+  document.getElementById('summary').innerHTML = [
+    ['Téléphone / Mail', `${document.getElementById('cust-tel').value || '—'} / ${document.getElementById('cust-email').value || '—'}`],
+    ['Voyageurs', lbl('voyageurs')], ['Couchages', D.couchages || '—'],
+    ['Fréquence', lbl('freq')], ['Destinations', routes],
+    ['Mode de séjour', lbl('sejour', '—')], ['Équipements clés', must],
+    ['Conduite', lbl('conduite')], ['Autonomie', lbl('autonomie')],
+    ['Budget', lbl('budget')], ['État véhicule', lbl('etat')],
+    ['Financement', fin],
+  ].map(([k, v]) => `<div class="sum-row"><span class="sum-key">${k}</span><span class="sum-val">${v}</span></div>`).join('');
+
+  // Remplissage des recommandations (algorithme local natif)
+  document.getElementById('recos').innerHTML = buildRecos().map
