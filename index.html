@@ -1,548 +1,1208 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Libertium Smart Matcher</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Libertium · Guide Découverte Client</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0f172a;
-  --card:#111827;
-  --card2:#1f2937;
-  --text:#f8fafc;
-  --muted:#94a3b8;
-  --line:#334155;
-  --primary:#2563eb;
-  --primary2:#1d4ed8;
-  --ok:#10b981;
-  --warn:#f59e0b;
-  --radius:18px;
+/* ════════════════════════════════════════
+   TOKENS
+════════════════════════════════════════ */
+:root {
+  --ink:       #0d1b2a;
+  --ink-2:     #2c3e50;
+  --ink-3:     #5a6a7e;
+  --ink-4:     #94a3b8;
+  --paper:     #f7f8fc;
+  --card:      #ffffff;
+  --red:       #c0392b;
+  --red-lt:    #fdf2f0;
+  --red-mid:   #e8786d;
+  --gold:      #c8960c;
+  --gold-lt:   #fdf6e3;
+  --gold-dark: #9b6700;
+  --blue:      #1e3a5f;
+  --blue-mid:  #2563a8;
+  --blue-lt:   #ebf3fd;
+  --green:     #1a6b3c;
+  --green-lt:  #edf7f2;
+  --border:    #e4e8f0;
+  --border-2:  #d0d7e3;
+  --r:         10px;
+  --r-lg:      16px;
+  --r-pill:    999px;
+  --sh:        0 1px 4px rgba(13,27,42,.06), 0 4px 16px rgba(13,27,42,.08);
+  --sh-lg:     0 4px 24px rgba(13,27,42,.12), 0 12px 40px rgba(13,27,42,.1);
 }
 
-*{box-sizing:border-box}
-body{
-  margin:0;
-  background:linear-gradient(180deg,#020617,#0f172a);
-  color:var(--text);
-  font-family:Inter,sans-serif;
+/* ════════════════════════════════════════
+   RESET + BASE
+════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
-.container{
-  width:min(1180px,92%);
-  margin:auto;
-  padding:32px 0 60px;
+/* ════════════════════════════════════════
+   HEADER
+════════════════════════════════════════ */
+.header {
+  background: var(--ink);
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  border-bottom: 2px solid var(--red);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: .01em;
+}
+.logo-pill {
+  background: var(--red);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+}
+.header-meta { font-size: 11px; color: rgba(255,255,255,.4); }
+
+/* ════════════════════════════════════════
+   LAYOUT
+════════════════════════════════════════ */
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem;
 }
 
-.hero{
-  background:linear-gradient(135deg,#1e293b,#0f172a);
-  border:1px solid var(--line);
-  border-radius:28px;
-  padding:40px;
-  margin-bottom:28px;
-  box-shadow:0 20px 50px rgba(0,0,0,.35);
+/* ════════════════════════════════════════
+   PROGRESS
+════════════════════════════════════════ */
+.prog-wrap {
+  padding: 1.5rem 2rem .75rem;
+  border-bottom: 1px solid var(--border);
+}
+.prog-steps {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.prog-steps::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+.prog-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+.prog-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-4);
+  transition: all .25s;
+}
+.prog-step.done .prog-dot  { background: var(--ink); border-color: var(--ink); color: #fff; }
+.prog-step.active .prog-dot { background: var(--red); border-color: var(--red); color: #fff; }
+.prog-label { font-size: 10px; color: var(--ink-4); text-transform: uppercase; letter-spacing: .05em; transition: color .2s; white-space: nowrap; }
+.prog-step.done .prog-label, .prog-step.active .prog-label { color: var(--ink); }
+
+/* ════════════════════════════════════════
+   CARD
+════════════════════════════════════════ */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh);
+  overflow: hidden;
+}
+.step { display: none; }
+.step.active { display: block; animation: fadeUp .25s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* ════════════════════════════════════════
+   STEP HEADER
+════════════════════════════════════════ */
+.step-head {
+  padding: 1.75rem 2rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 1.5rem;
+}
+.step-icon {
+  width: 42px; height: 42px;
+  border-radius: var(--r);
+  background: var(--red-lt);
+  border: 1px solid var(--red-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.step-icon.gold { background: var(--gold-lt); border-color: var(--gold); }
+.step-title { font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.step-sub { font-size: 13px; color: var(--ink-3); }
+
+/* ════════════════════════════════════════
+   BODY
+════════════════════════════════════════ */
+.step-body { padding: 0 2rem 1.5rem; }
+.q-block { margin-bottom: 1.5rem; }
+.q-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--ink-3);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.hero h1{
-  margin:0 0 10px;
-  font-size:42px;
+/* ════════════════════════════════════════
+   CHIPS
+════════════════════════════════════════ */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 8px 16px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid var(--border);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  color: var(--ink-2);
+  background: var(--card);
+  cursor: pointer;
+  user-select: none;
+  transition: all .15s;
+  line-height: 1.3;
+}
+.chip:hover { border-color: var(--red-mid); color: var(--red); background: var(--red-lt); }
+.chip.sel {
+  background: var(--red-lt);
+  border-color: var(--red);
+  color: var(--red);
+  font-weight: 500;
 }
 
-.hero p{
-  color:var(--muted);
-  max-width:800px;
-  line-height:1.7;
+/* ════════════════════════════════════════
+   NAV
+════════════════════════════════════════ */
+.step-nav {
+  padding: 1rem 2rem 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+.btn {
+  padding: 10px 24px;
+  border-radius: var(--r);
+  border: 1.5px solid var(--border);
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  background: var(--card);
+  color: var(--ink-2);
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { background: var(--paper); border-color: var(--border-2); }
+.btn.primary { background: var(--red); color: #fff; border-color: var(--red); }
+.btn.primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.btn.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+.btn.dark:hover { background: var(--ink-2); }
+.btn.ghost-red { color: var(--red); border-color: var(--red-mid); background: var(--red-lt); }
+.btn.ghost-red:hover { background: var(--red); color: #fff; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ════════════════════════════════════════
+   RÉSULTAT — SCORES
+════════════════════════════════════════ */
+.scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-bottom: 1.5rem; }
+.score-card { background: var(--paper); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; }
+.sc-l { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-4); margin-bottom: 4px; }
+.sc-v { font-size: 16px; font-weight: 600; color: var(--ink); }
+
+.section-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ink-4);
+  margin-bottom: 10px;
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-lbl::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ════════════════════════════════════════
+   RÉSULTAT — RÉCAP
+════════════════════════════════════════ */
+.recap {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.recap-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.recap-row:last-child { border-bottom: none; }
+.recap-k { color: var(--ink-3); flex-shrink: 0; }
+.recap-v { font-weight: 500; color: var(--ink); text-align: right; max-width: 60%; }
+
+/* ════════════════════════════════════════
+   RÉSULTAT — RECOS
+════════════════════════════════════════ */
+.reco-list { display: flex; flex-direction: column; gap: 12px; }
+.reco-card {
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  background: var(--card);
+  transition: all .2s;
+  position: relative;
+  overflow: hidden;
+}
+.reco-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--border);
+  transition: background .2s;
+}
+.reco-card.top::before { background: var(--red); }
+.reco-card.top { border-color: rgba(192,57,43,.25); }
+.reco-card:hover { box-shadow: var(--sh); }
+.reco-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 4px; }
+.reco-type { font-size: 15px; font-weight: 600; color: var(--ink); }
+.reco-brands { font-size: 12px; color: var(--ink-3); margin-bottom: 8px; }
+.reco-why { font-size: 13px; color: var(--ink-3); line-height: 1.6; margin-bottom: 10px; }
+.badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: var(--r-pill); white-space: nowrap; flex-shrink: 0; }
+.badge.best { background: var(--red-lt); color: var(--red); }
+.badge.alt2 { background: var(--paper); color: var(--ink-4); border: 1px solid var(--border); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-size: 11px; padding: 3px 9px; border-radius: 5px; border: 1px solid var(--border); color: var(--ink-3); background: var(--paper); }
+.tag.hit { border-color: var(--red-mid); color: var(--red); background: var(--red-lt); }
+
+/* ════════════════════════════════════════
+   RECHERCHE LIVE
+════════════════════════════════════════ */
+.search-panel {
+  border: 1.5px solid var(--gold);
+  border-radius: var(--r-lg);
+  background: var(--gold-lt);
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+.search-panel-head {
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.search-panel-title { font-size: 14px; font-weight: 600; color: var(--gold-dark); display: flex; align-items: center; gap: 8px; }
+.search-panel-body { padding: 0 18px 18px; display: none; }
+.search-panel-body.open { display: block; }
+
+/* Résultats live */
+.live-results { display: flex; flex-direction: column; gap: 10px; }
+.live-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  transition: box-shadow .15s;
+}
+.live-card:hover { box-shadow: var(--sh); }
+.live-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px; }
+.live-title { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.4; }
+.live-price { font-size: 15px; font-weight: 700; color: var(--red); white-space: nowrap; flex-shrink: 0; }
+.live-meta { font-size: 12px; color: var(--ink-3); margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+.live-meta span { display: flex; align-items: center; gap: 4px; }
+.live-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--blue-mid);
+  text-decoration: none;
+  padding: 5px 12px;
+  border: 1px solid var(--blue-mid);
+  border-radius: var(--r-pill);
+  transition: all .15s;
+  background: var(--blue-lt);
+}
+.live-link:hover { background: var(--blue-mid); color: #fff; }
+.live-score-bar { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+.live-score-label { font-size: 11px; color: var(--ink-4); }
+.live-score-dots { display: flex; gap: 3px; }
+.live-score-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.live-score-dot.on { background: var(--red); }
+
+.search-status {
+  font-size: 13px;
+  color: var(--ink-3);
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid var(--border);
+  border-top-color: var(--red);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.search-fallback {
+  background: var(--blue-lt);
+  border: 1px solid var(--blue-mid);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--blue);
+  margin-top: 10px;
+}
+.search-fallback a { color: var(--blue-mid); font-weight: 500; }
+
+/* ════════════════════════════════════════
+   ARGUMENTAIRE
+════════════════════════════════════════ */
+.arg-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--card);
+  overflow: hidden;
+  margin-top: 1rem;
+}
+.arg-panel-head {
+  padding: 14px 18px;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.arg-panel-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+.arg-body { padding: 16px 18px; display: none; }
+.arg-body.open { display: block; }
+.arg-section { margin-bottom: 16px; }
+.arg-section:last-child { margin-bottom: 0; }
+.arg-h { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-3); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.arg-item {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  padding: 8px 12px;
+  border-radius: var(--r);
+  border-left: 3px solid var(--border);
+  margin-bottom: 6px;
+  background: var(--paper);
+}
+.arg-item:last-child { margin-bottom: 0; }
+.arg-item.g { border-left-color: var(--green); background: var(--green-lt); }
+.arg-item.a { border-left-color: var(--gold); background: var(--gold-lt); }
+.arg-item.b { border-left-color: var(--blue-mid); background: var(--blue-lt); }
+.arg-item strong { color: var(--ink); display: block; font-size: 12px; margin-bottom: 2px; }
+.closing {
+  background: var(--ink);
+  color: #fff;
+  border-radius: var(--r);
+  padding: 14px 16px;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.7;
+}
+.closing-lbl { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; font-style: normal; display: block; }
+
+/* ════════════════════════════════════════
+   BOTTOM BAR
+════════════════════════════════════════ */
+.bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem 1.75rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:420px 1fr;
-  gap:24px;
-}
-
-.card{
-  background:rgba(17,24,39,.9);
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:24px;
-  backdrop-filter:blur(8px);
-}
-
-h2{
-  margin-top:0;
-  font-size:22px;
-}
-
-.section{
-  margin-bottom:24px;
-}
-
-.label{
-  display:block;
-  margin-bottom:8px;
-  color:#cbd5e1;
-  font-size:14px;
-}
-
-select,input{
-  width:100%;
-  padding:14px;
-  background:#0f172a;
-  border:1px solid #334155;
-  color:white;
-  border-radius:12px;
-  font-size:15px;
-}
-
-button{
-  border:none;
-  cursor:pointer;
-  transition:.2s;
-}
-
-.primary{
-  width:100%;
-  padding:16px;
-  border-radius:14px;
-  background:linear-gradient(135deg,var(--primary),var(--primary2));
-  color:white;
-  font-weight:700;
-  font-size:15px;
-}
-
-.primary:hover{
-  transform:translateY(-1px);
-}
-
-.vehicle{
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:18px;
-  background:#0b1220;
-}
-
-.vehicle-top{
-  display:flex;
-  justify-content:space-between;
-  gap:18px;
-  align-items:flex-start;
-}
-
-.score{
-  background:#0b3a22;
-  color:#6ee7b7;
-  border:1px solid #14532d;
-  padding:8px 12px;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:700;
-  white-space:nowrap;
-}
-
-.vehicle h3{
-  margin:0 0 6px;
-}
-
-.price{
-  font-size:28px;
-  font-weight:800;
-  margin:12px 0;
-}
-
-.tags{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:12px;
-}
-
-.tag{
-  border:1px solid #334155;
-  color:#cbd5e1;
-  border-radius:999px;
-  padding:6px 10px;
-  font-size:12px;
-}
-
-.pitch{
-  margin-top:16px;
-  padding:16px;
-  border-radius:14px;
-  background:#111827;
-  border:1px solid #1e3a8a;
-  color:#dbeafe;
-  line-height:1.7;
-}
-
-.config{
-  margin-top:18px;
-  background:#0b1220;
-  border:1px dashed #334155;
-  padding:14px;
-  border-radius:12px;
-  color:#94a3b8;
-  font-size:13px;
-  line-height:1.7;
-}
-
-.code{
-  background:black;
-  padding:10px;
-  border-radius:8px;
-  overflow:auto;
-  margin-top:10px;
-  font-family:monospace;
-  color:#93c5fd;
-}
-
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  background:#0f172a;
-  border:1px solid #334155;
-  border-radius:999px;
-  padding:8px 12px;
-  margin-bottom:16px;
-  color:#cbd5e1;
-  font-size:13px;
-}
-
-.notice{
-  background:#3b2f07;
-  color:#fde68a;
-  border:1px solid #92400e;
-  padding:14px;
-  border-radius:14px;
-  margin-bottom:20px;
-  line-height:1.6;
-}
-
-a{
-  color:#93c5fd;
-}
-
-@media(max-width:980px){
-  .grid{
-    grid-template-columns:1fr;
-  }
+/* ════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════ */
+@media(max-width:600px){
+  .container { padding: 1.5rem 1rem 4rem; }
+  .step-head, .step-body, .step-nav, .prog-wrap, .bottom-bar { padding-left: 1.25rem; padding-right: 1.25rem; }
+  .prog-label { display: none; }
+  .reco-head { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 
+<header class="header">
+  <div class="logo">
+    <div class="logo-text">Libertium</div>
+    <span class="logo-pill">Guide commercial</span>
+  </div>
+  <div class="header-meta">Outil interne · Découverte client</div>
+</header>
+
 <div class="container">
+<div class="card">
 
-  <div class="hero">
-    <h1>Libertium Smart Matcher</h1>
-
+  <!-- ══ PROGRESS ══ -->
+  <div class="prog-wrap">
+    <div class="prog-steps" id="prog">
+      <div class="prog-step active" data-s="1"><div class="prog-dot">1</div><div class="prog-label">Qui voyage ?</div></div>
+      <div class="prog-step" data-s="2"><div class="prog-dot">2</div><div class="prog-label">Comment ?</div></div>
+      <div class="prog-step" data-s="3"><div class="prog-dot">3</div><div class="prog-label">À bord</div></div>
+      <div class="prog-step" data-s="4"><div class="prog-dot">4</div><div class="prog-label">Budget</div></div>
+      <div class="prog-step" data-s="5"><div class="prog-dot">✓</div><div class="prog-label">Résultat</div></div>
+    </div>
   </div>
 
-  <div class="grid">
-
-    <div class="card">
-
-      <h2>Profil client</h2>
-
-      <div class="section">
-        <label class="label">Voyageurs</label>
-        <select id="voyageurs">
-          <option value="couple">Couple</option>
-          <option value="famille">Famille</option>
-          <option value="solo">Solo</option>
-          <option value="seniors">Seniors</option>
-        </select>
+  <!-- ══════════════════════════════════
+       ÉTAPE 1 — QUI VOYAGE ?
+  ══════════════════════════════════ -->
+  <div class="step active" id="s1">
+    <div class="step-head">
+      <div class="step-icon">👥</div>
+      <div>
+        <div class="step-title">Qui voyage ?</div>
+        <div class="step-sub">Profil et composition du groupe de voyageurs</div>
       </div>
-
-      <div class="section">
-        <label class="label">Budget max</label>
-        <input id="budget" type="number" value="70000"/>
-      </div>
-
-      <div class="section">
-        <label class="label">Style de conduite</label>
-        <select id="conduite">
-          <option value="compact">Compact</option>
-          <option value="equilibre">Équilibré</option>
-          <option value="grand">Grand confort</option>
-        </select>
-      </div>
-
-      <div class="section">
-        <label class="label">Priorité</label>
-        <select id="priority">
-          <option value="autonomie">Autonomie</option>
-          <option value="famille">Famille</option>
-          <option value="premium">Premium</option>
-          <option value="budget">Budget</option>
-        </select>
-      </div>
-
-      <button class="primary" onclick="runMatcher()">
-        Lancer le matching intelligent
-      </button>
-
-      <div class="config">
-
-        <div class="code">
-const API_ENDPOINT =
-"https://TON-WORKER.workers.dev/search";
+    </div>
+    <div class="step-body">
+      <div class="q-block">
+        <div class="q-label">Vous partez…</div>
+        <div class="chips" data-k="voyageurs" data-m="0">
+          <div class="chip" data-v="solo">Seul(e)</div>
+          <div class="chip" data-v="couple">En couple</div>
+          <div class="chip" data-v="famille_young">Famille · enfants &lt; 6 ans</div>
+          <div class="chip" data-v="famille_ado">Famille · enfants / ados</div>
+          <div class="chip" data-v="seniors">Couple retraité(e)s</div>
+          <div class="chip" data-v="amis">Entre amis · 3-4 adultes</div>
         </div>
-
       </div>
-
-    </div>
-
-    <div class="card">
-
-      <div class="notice">
-
+      <div class="q-block">
+        <div class="q-label">Couchages nécessaires</div>
+        <div class="chips" data-k="couchages" data-m="0">
+          <div class="chip" data-v="2">2 couchages</div>
+          <div class="chip" data-v="3">3 couchages</div>
+          <div class="chip" data-v="4">4 couchages</div>
+          <div class="chip" data-v="5plus">5 ou plus</div>
+        </div>
       </div>
-
-      <h2>Recommandations</h2>
-
-      <div id="results"></div>
-
+      <div class="q-block">
+        <div class="q-label">Contraintes de mobilité</div>
+        <div class="chips" data-k="mobilite" data-m="0">
+          <div class="chip" data-v="non">Aucune</div>
+          <div class="chip" data-v="escalier">Difficultés à monter / descendre</div>
+          <div class="chip" data-v="pmr">Accessibilité renforcée</div>
+        </div>
+      </div>
     </div>
-
+    <div class="step-nav">
+      <div></div>
+      <button class="btn primary" onclick="goN()">Suivant →</button>
+    </div>
   </div>
 
-</div>
+  <!-- ══════════════════════════════════
+       ÉTAPE 2 — COMMENT & OÙ
+  ══════════════════════════════════ -->
+  <div class="step" id="s2">
+    <div class="step-head">
+      <div class="step-icon">🗺️</div>
+      <div>
+        <div class="step-title">Comment et où voyagez-vous ?</div>
+        <div class="step-sub">Style de voyage, routes et mode de séjour</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="q-block">
+        <div class="q-label">Fréquence d'utilisation</div>
+        <div class="chips" data-k="freq" data-m="0">
+          <div class="chip" data-v="weekends">Weekends + quelques semaines</div>
+          <div class="chip" data-v="vacances">Grandes vacances uniquement</div>
+          <div class="chip" data-v="intensif">Intensif · plus de 60 jours/an</div>
+          <div class="chip" data-v="fulltime">Full-time / nomadisme</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Routes et destinations · plusieurs choix</div>
+        <div class="chips" data-k="routes" data-m="1">
+          <div class="chip" data-v="autoroute">Grands axes</div>
+          <div class="chip" data-v="campagne">Campagne · villages</div>
+          <div class="chip" data-v="montagne">Montagne · routes étroites</div>
+          <div class="chip" data-v="littoral">Bord de mer</div>
+          <div class="chip" data-v="europe">Grand tour Europe</div>
+          <div class="chip" data-v="aventure">Hors des sentiers battus</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Mode de séjour · plusieurs choix</div>
+        <div class="chips" data-k="sejour" data-m="1">
+          <div class="chip" data-v="camping">Campings avec branchements</div>
+          <div class="chip" data-v="aire">Aires de services</div>
+          <div class="chip" data-v="sauvage">Étapes sauvages · liberté totale</div>
+          <div class="chip" data-v="long">Longs séjours sur place</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn" onclick="goP()">← Retour</button>
+      <button class="btn primary" onclick="goN()">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       ÉTAPE 3 — À BORD
+  ══════════════════════════════════ -->
+  <div class="step" id="s3">
+    <div class="step-head">
+      <div class="step-icon">🛏️</div>
+      <div>
+        <div class="step-title">Vos priorités à bord</div>
+        <div class="step-sub">Équipements et confort indispensables</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="q-block">
+        <div class="q-label">Équipements indispensables · plusieurs choix</div>
+        <div class="chips" data-k="must" data-m="1">
+          <div class="chip" data-v="lit_fixe">Lit fixe permanent</div>
+          <div class="chip" data-v="lits_jumeaux">Lits jumeaux séparés</div>
+          <div class="chip" data-v="garage">Garage vélos / motos</div>
+          <div class="chip" data-v="douche_sep">Douche et WC séparés</div>
+          <div class="chip" data-v="grand_salon">Grand salon</div>
+          <div class="chip" data-v="cuisine">Cuisine équipée</div>
+          <div class="chip" data-v="solaire">Panneaux solaires</div>
+          <div class="chip" data-v="chauffage">Chauffage hiver</div>
+          <div class="chip" data-v="vue_pano">Vue panoramique conduite</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Rapport à la conduite</div>
+        <div class="chips" data-k="conduite" data-m="0">
+          <div class="chip" data-v="compact">Compact et facile avant tout</div>
+          <div class="chip" data-v="equilibre">Bon équilibre taille / confort</div>
+          <div class="chip" data-v="grand">Grand gabarit — pas de souci</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Autonomie souhaitée</div>
+        <div class="chips" data-k="autonomie" data-m="0">
+          <div class="chip" data-v="faible">Toujours raccordé</div>
+          <div class="chip" data-v="moyenne">2–3 jours autonome</div>
+          <div class="chip" data-v="haute">Autonomie maximale</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn" onclick="goP()">← Retour</button>
+      <button class="btn primary" onclick="goN()">Suivant →</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       ÉTAPE 4 — BUDGET
+  ══════════════════════════════════ -->
+  <div class="step" id="s4">
+    <div class="step-head">
+      <div class="step-icon">💶</div>
+      <div>
+        <div class="step-title">Budget et financement</div>
+        <div class="step-sub">Enveloppe globale et état du véhicule souhaité</div>
+      </div>
+    </div>
+    <div class="step-body">
+      <div class="q-block">
+        <div class="q-label">Budget envisagé</div>
+        <div class="chips" data-k="budget" data-m="0">
+          <div class="chip" data-v="m25">Moins de 25 000 €</div>
+          <div class="chip" data-v="25_45">25 000 — 45 000 €</div>
+          <div class="chip" data-v="45_65">45 000 — 65 000 €</div>
+          <div class="chip" data-v="65_90">65 000 — 90 000 €</div>
+          <div class="chip" data-v="p90">Plus de 90 000 €</div>
+          <div class="chip" data-v="nsp">Non défini</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Neuf ou occasion ?</div>
+        <div class="chips" data-k="etat" data-m="0">
+          <div class="chip" data-v="neuf">Neuf · garantie constructeur</div>
+          <div class="chip" data-v="occasion">Occasion · priorité au budget</div>
+          <div class="chip" data-v="indiff">Les deux · selon rapport qualité/prix</div>
+        </div>
+      </div>
+      <div class="q-block">
+        <div class="q-label">Financement · plusieurs choix</div>
+        <div class="chips" data-k="fin" data-m="1">
+          <div class="chip" data-v="comptant">Comptant</div>
+          <div class="chip" data-v="credit">Crédit classique</div>
+          <div class="chip" data-v="loa">LOA / leasing</div>
+          <div class="chip" data-v="reprise">Avec reprise véhicule</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-nav">
+      <button class="btn" onclick="goP()">← Retour</button>
+      <button class="btn primary" onclick="showRes()">Voir la recommandation ✦</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       ÉTAPE 5 — RÉSULTAT
+  ══════════════════════════════════ -->
+  <div class="step" id="s5">
+    <div class="step-head">
+      <div class="step-icon gold">✦</div>
+      <div>
+        <div class="step-title">Recommandation personnalisée</div>
+        <div class="step-sub">Véhicule idéal · stock live · argumentaire</div>
+      </div>
+    </div>
+    <div class="step-body">
+
+      <div class="scores" id="scores"></div>
+
+      <div class="section-lbl">Récapitulatif client</div>
+      <div class="recap" id="recap"></div>
+
+      <div class="section-lbl">Véhicules recommandés</div>
+      <div class="reco-list" id="recos"></div>
+
+      <!-- RECHERCHE LIVE -->
+      <div class="search-panel">
+        <div class="search-panel-head">
+          <div class="search-panel-title">🔍 Stock disponible · Réseau Libertium</div>
+          <button class="btn dark" id="search-btn" onclick="launchSearch()">Rechercher en stock →</button>
+        </div>
+        <div class="search-panel-body" id="search-body"></div>
+      </div>
+
+      <!-- ARGUMENTAIRE -->
+      <div class="arg-panel">
+        <div class="arg-panel-head">
+          <div class="arg-panel-title">💬 Argumentaire commercial personnalisé</div>
+          <button class="btn ghost-red" id="arg-btn" onclick="genArg()">Générer</button>
+        </div>
+        <div class="arg-body" id="arg-body"></div>
+      </div>
+
+    </div>
+    <div class="bottom-bar">
+      <button class="btn" onclick="resetAll()">↺ Nouveau client</button>
+      <button class="btn primary" onclick="copyProfile()">📋 Copier le profil</button>
+    </div>
+  </div>
+
+</div><!-- /card -->
+</div><!-- /container -->
 
 <script>
+// ═══════════════════════════════════════════════════════
+// ÉTAT
+// ═══════════════════════════════════════════════════════
+const D = {};
+let cur = 1;
 
-/* =========================================================
-   CONFIG
-========================================================= */
+// Labels lisibles
+const LBL = {
+  voyageurs:{ solo:'Seul(e)', couple:'Couple', famille_young:'Famille (jeunes enfants)', famille_ado:'Famille (enfants/ados)', seniors:'Couple retraité', amis:'Entre amis' },
+  budget:{ m25:'< 25 000 €', '25_45':'25–45 000 €', '45_65':'45–65 000 €', '65_90':'65–90 000 €', p90:'> 90 000 €', nsp:'Non défini' },
+  etat:{ neuf:'Neuf', occasion:'Occasion', indiff:'Neuf ou occasion' },
+  freq:{ weekends:'Weekends + semaines', vacances:'Grandes vacances', intensif:'Intensif >60j/an', fulltime:'Full-time' },
+  conduite:{ compact:'Compact / facile', equilibre:'Équilibré', grand:'Grand gabarit OK' },
+  autonomie:{ faible:'Toujours raccordé', moyenne:'2–3 jours', haute:'Autonomie max' },
+};
+const ML = { lit_fixe:'Lit fixe', lits_jumeaux:'Lits jumeaux', garage:'Garage', douche_sep:'Douche séparée', grand_salon:'Grand salon', cuisine:'Cuisine', solaire:'Solaire', chauffage:'Chauffage', vue_pano:'Vue panoramique' };
+function lbl(k,fb='—'){const v=D[k];if(!v)return fb;if(Array.isArray(v))return v.map(x=>LBL[k]?.[x]||x).join(', ')||fb;return LBL[k]?.[v]||v;}
 
-const API_ENDPOINT = null;
+// ═══════════════════════════════════════════════════════
+// CHIPS
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('.chips').forEach(g=>{
+  const multi=g.dataset.m==='1', key=g.dataset.k;
+  if(!D[key]) D[key]=multi?[]:null;
+  g.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      const v=c.dataset.v;
+      if(multi){
+        if(!D[key])D[key]=[];
+        const i=D[key].indexOf(v);
+        if(i>=0){D[key].splice(i,1);c.classList.remove('sel');}
+        else{D[key].push(v);c.classList.add('sel');}
+      } else {
+        D[key]=v;
+        g.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));
+        c.classList.add('sel');
+      }
+    });
+  });
+});
 
-/*
-Mettre ici :
-https://xxx.workers.dev/search
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  cur=n;
+  document.querySelectorAll('.prog-step').forEach(p=>{
+    const s=+p.dataset.s;
+    p.classList.toggle('done', s<n);
+    p.classList.toggle('active', s===n);
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goN(){showStep(cur+1);}
+function goP(){showStep(cur-1);}
+showStep(1);
 
-Le proxy doit retourner :
+// ═══════════════════════════════════════════════════════
+// MOTEUR DE RECOMMANDATIONS
+// ═══════════════════════════════════════════════════════
+function buildRecos(){
+  const v=D.voyageurs, nb=D.couchages, m=D.must||[], b=D.budget,
+        c=D.conduite, r=D.routes||[], e=D.etat, fr=D.freq;
+  const rc=[];
+  const compact=c==='compact'||r.includes('montagne')||fr==='fulltime'||v==='solo';
+  const big=nb==='5plus'||v==='famille_ado'||m.includes('garage')||m.includes('vue_pano');
+  const lux=b==='65_90'||b==='p90';
+  const family=v==='famille_young'||v==='famille_ado'||nb==='5plus'||nb==='4';
+  const carav=b==='m25'||(b==='25_45'&&!compact);
 
-[
- {
-   title,
-   brand,
-   price,
-   type,
-   url,
-   tags:[]
- }
-]
-*/
-
-/* =========================================================
-   STOCK DEMO
-========================================================= */
-
-const DEMO_STOCK = [
-
-{
- title:"Adria Twin Supreme 640",
- brand:"Adria",
- price:72900,
- type:"Van",
- url:"https://www.libertium.fr/",
- tags:["compact","premium","autonomie","couple"]
-},
-
-{
- title:"Chausson 640 Titanium",
- brand:"Chausson",
- price:68900,
- type:"Profilé",
- url:"https://www.libertium.fr/",
- tags:["equilibre","famille","garage"]
-},
-
-{
- title:"Rimor Kilig 9",
- brand:"Rimor",
- price:57900,
- type:"Capucine",
- url:"https://www.libertium.fr/",
- tags:["famille","budget","6 couchages"]
-},
-
-{
- title:"Carthago C-Tourer",
- brand:"Carthago",
- price:119000,
- type:"Intégral",
- url:"https://www.libertium.fr/",
- tags:["premium","grand","autonomie"]
+  if(compact||fr==='fulltime'||(nb==='2'&&!big)){
+    const br=b==='m25'?'CI Kyros Go, Font Vendôme':b==='45_65'?'Adria Twin, Bavaria Nomade, Chausson X':(b==='65_90'||b==='p90')?'Bürstner B66, Adria Twin SGX':'Chausson X, CI Kyros';
+    rc.push({type:'Van / Fourgon aménagé',brands:br,slug:'van-fourgon-amenage',kw:'van fourgon amenage',why:"Compact, agile, facile à stationner. Idéal montagne, nomadisme, city-break. Moins de 6,5 m — accès aux parkings couverts.",tags:[{l:'< 6,5 m',h:compact},{l:'Facile à conduire',h:c==='compact'},{l:'Nomadisme',h:fr==='fulltime'},{l:'Permis B',h:false}]});
+  }
+  if(!family||nb==='2'||nb==='3'){
+    const br=e==='occasion'?'Chausson, Challenger, Rimor (occasion)':b==='45_65'?'Chausson X 550, Rimor Kilig 66, MC Louis':b==='65_90'?'Bürstner Ixeo, Adria Matrix, Rapido 65th':b==='p90'?'Carthago C-Tourer, Challenger Genesis':'CI Horon Go, Challenger';
+    rc.push({type:'Camping-car profilé',brands:br,slug:'camping-car/profil%C3%A9',kw:'profilé',why:"Meilleur compromis du marché : aérodynamique, lit permanent, salle d'eau complète. Idéal couples et petites familles. Gamme 40–90 k€.",tags:[{l:'6–7,5 m',h:c==='equilibre'},{l:'Lit permanent',h:m.includes('lit_fixe')},{l:'Lits jumeaux dispo',h:m.includes('lits_jumeaux')},{l:'Large gamme',h:true}]});
+  }
+  if(family&&(nb==='4'||nb==='5plus')){
+    rc.push({type:'Camping-car capucine',brands:'Rimor Kilig 9, CI Horon Go Capucine, Challenger C256',slug:'camping-car/capucine',kw:'capucine',why:"Lit capucine au-dessus de la cabine — couchage supplémentaire idéal famille. Jusqu'à 7 couchages. Coin repas spacieux.",tags:[{l:'4 à 7 couchages',h:family},{l:'Famille',h:true},{l:'Lit capucine',h:true}]});
+  }
+  if(big||lux||m.includes('vue_pano')){
+    const br=b==='p90'?'Carthago C-Compactline, Eden Camp 740H':b==='65_90'?'CI Magis, Challenger Genesis, Bürstner Ixeo It':'CI Magis, Challenger';
+    rc.push({type:'Camping-car intégral',brands:br,slug:'camping-car/int%C3%A9gral',kw:'intégral',why:"Habitabilité maximale, vision panoramique, chambre isolée, grand salon. Garage à vélos possible sur 7,5 m+.",tags:[{l:'> 7 m',h:big},{l:'Vue panoramique',h:m.includes('vue_pano')},{l:'Grand confort',h:lux},{l:'Garage possible',h:m.includes('garage')}]});
+  }
+  if(carav){
+    rc.push({type:'Caravane',brands:'Caravelair Alba/Sport Line, Bürstner, Adria Altea',slug:'caravane',kw:'caravane',why:"Budget le plus accessible dès 20 000 €. Laisser sur site, repartir en voiture. Idéal familles et primo-accédants.",tags:[{l:'Dès 20 000 €',h:b==='m25'},{l:'Laisser sur place',h:true},{l:'Nécessite attelage',h:false}]});
+  }
+  if(!rc.length) rc.push({type:'Camping-car profilé',brands:'CI, Chausson, Challenger, Bürstner',slug:'camping-car',kw:'profilé',why:'La valeur sûre du réseau Libertium — excellent compromis sur tous les plans.',tags:[{l:'Polyvalent',h:true}]});
+  return rc.slice(0,3);
 }
 
-];
+// ═══════════════════════════════════════════════════════
+// AFFICHAGE RÉSULTAT
+// ═══════════════════════════════════════════════════════
+function showRes(){
+  showStep(5);
+  document.getElementById('scores').innerHTML=`
+    <div class="score-card"><div class="sc-l">Profil</div><div class="sc-v">${lbl('voyageurs')}</div></div>
+    <div class="score-card"><div class="sc-l">Couchages</div><div class="sc-v">${D.couchages||'—'}</div></div>
+    <div class="score-card"><div class="sc-l">Budget</div><div class="sc-v">${lbl('budget')}</div></div>
+    <div class="score-card"><div class="sc-l">État</div><div class="sc-v">${lbl('etat')}</div></div>`;
 
-/* =========================================================
-   MATCHING ENGINE
-========================================================= */
+  const must=(D.must||[]).map(x=>ML[x]||x).join(' · ')||'—';
+  const routes=(D.routes||[]).map(x=>({autoroute:'Autoroutes',campagne:'Campagne',montagne:'Montagne',littoral:'Littoral',europe:'Tour Europe',aventure:'Off-road'}[x]||x)).join(', ')||'—';
+  const fin=(D.fin||[]).map(x=>({comptant:'Comptant',credit:'Crédit',loa:'LOA',reprise:'Avec reprise'}[x]||x)).join(', ')||'—';
 
-function scoreVehicle(v, profile){
+  document.getElementById('recap').innerHTML=[
+    ['Voyageurs',lbl('voyageurs')],['Couchages',D.couchages||'—'],['Fréquence',lbl('freq')],
+    ['Destinations',routes],['Équipements',must],['Conduite',lbl('conduite')],
+    ['Autonomie',lbl('autonomie')],['Budget',lbl('budget')],['État',lbl('etat')],['Financement',fin]
+  ].map(([k,v])=>`<div class="recap-row"><span class="recap-k">${k}</span><span class="recap-v">${v}</span></div>`).join('');
 
-  let score = 0;
+  document.getElementById('recos').innerHTML=buildRecos().map((r,i)=>`
+    <div class="reco-card${i===0?' top':''}">
+      <div class="reco-head"><div><div class="reco-type">${r.type}</div></div>
+        <span class="badge ${i===0?'best':'alt2'}">${i===0?'✦ Idéal pour ce profil':'Alternative'}</span>
+      </div>
+      <div class="reco-brands">📍 ${r.brands}</div>
+      <div class="reco-why">${r.why}</div>
+      <div class="tags">${r.tags.map(t=>`<span class="tag${t.h?' hit':''}">${t.l}</span>`).join('')}</div>
+    </div>`).join('');
 
-  if(v.price <= profile.budget) score += 30;
-  else score -= 20;
+  document.getElementById('search-body').classList.remove('open');
+  document.getElementById('search-body').innerHTML='';
+  document.getElementById('arg-body').classList.remove('open');
+  document.getElementById('arg-body').innerHTML='';
+  document.getElementById('arg-btn').textContent='Générer';
+  document.getElementById('arg-btn').disabled=false;
+}
 
-  if(v.tags.includes(profile.priority)) score += 40;
+// ═══════════════════════════════════════════════════════
+// RECHERCHE LIVE — via Google Custom Search JSON API (gratuit 100 req/j)
+// ou fallback via lien Google Search direct
+// ═══════════════════════════════════════════════════════
+async function launchSearch(){
+  const btn=document.getElementById('search-btn');
+  const body=document.getElementById('search-body');
+  btn.disabled=true; btn.textContent='⏳ Recherche…';
+  body.innerHTML=`<div class="search-status"><div class="spinner"></div>Recherche sur le réseau Libertium en cours…</div>`;
+  body.classList.add('open');
 
-  if(v.tags.includes(profile.conduite)) score += 20;
+  const recos=buildRecos();
+  const type=recos[0]?.kw||'camping-car';
+  const budget=D.budget||'nsp';
+  const etat=D.etat||'indiff';
 
-  if(profile.voyageurs === "famille" && v.tags.includes("famille"))
-    score += 25;
+  // Construire les termes de recherche
+  const budgetTerms={m25:'moins 25000',  '25_45':'25000 45000', '45_65':'45000 65000', '65_90':'65000 90000', p90:'90000', nsp:''};
+  const etatTerm=etat==='neuf'?'neuf':etat==='occasion'?'occasion':'';
+  const mustTerms=(D.must||[]).map(x=>({lit_fixe:'lit fixe',lits_jumeaux:'lits jumeaux',garage:'garage vélos',douche_sep:'douche séparée',chauffage:'chauffage diesel',solaire:'panneaux solaires',vue_pano:'intégral'}[x]||'')).filter(Boolean).slice(0,2).join(' ');
 
-  if(profile.voyageurs === "couple" && v.tags.includes("couple"))
-    score += 25;
+  const query=`libertium ${type} ${etatTerm} ${budgetTerms[budget]||''} ${mustTerms}`.trim().replace(/\s+/g,' ');
 
+  try {
+    const results = await fetchLiveResults(query, type, etat, budget);
+    if(results && results.length > 0){
+      renderResults(results, body);
+    } else {
+      renderFallback(body, query, recos[0]);
+    }
+  } catch(e){
+    renderFallback(body, query, recos[0]);
+  }
+
+  btn.disabled=false; btn.textContent='↺ Relancer';
+}
+
+// Tentative 1 : annonces-caravaning.com (site tiers avec annonces Libertium indexées)
+// Tentative 2 : fallback vers lien Google Search direct
+async function fetchLiveResults(query, type, etat, budget){
+  const results=[];
+
+  // Proxy CORS vers annonces-caravaning.com qui indexe les stocks Libertium
+  const searchUrl=buildAnnoncesUrl(type, etat, budget);
+
+  try {
+    const proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(searchUrl)}`;
+    const resp=await fetch(proxyUrl, {signal: AbortSignal.timeout(8000)});
+    if(!resp.ok) throw new Error('proxy failed');
+    const json=await resp.json();
+    const html=json.contents;
+    const parsed=parseAnnonces(html);
+    if(parsed.length) return parsed;
+  } catch(e){ /* silently fallback */ }
+
+  // Tentative 2 : annonces-cc.com
+  try {
+    const url2=buildAnnoncesCC(type, etat, budget);
+    const proxy2=`https://api.allorigins.win/get?url=${encodeURIComponent(url2)}`;
+    const r2=await fetch(proxy2, {signal: AbortSignal.timeout(8000)});
+    if(r2.ok){
+      const j2=await r2.json();
+      const p2=parseAnnoncesCC(j2.contents);
+      if(p2.length) return p2;
+    }
+  } catch(e){ /* silently fallback */ }
+
+  return [];
+}
+
+function buildAnnoncesUrl(type, etat, budget){
+  const typeMap={
+    'van fourgon amenage':'fourgon-amenage','profilé':'profil','profil':'profil',
+    'capucine':'capucine','intégral':'integral','caravane':'caravane'
+  };
+  const slug=typeMap[type]||'profil';
+  const etatParam=etat==='neuf'?'&etat=neuf':etat==='occasion'?'&etat=occasion':'';
+  const budgetMap={m25:'&prix_max=25000','25_45':'&prix_min=25000&prix_max=45000','45_65':'&prix_min=45000&prix_max=65000','65_90':'&prix_min=65000&prix_max=90000',p90:'&prix_min=90000'};
+  const bParam=budgetMap[budget]||'';
+  return `https://www.annonces-caravaning.com/camping-car/${slug}/vendeur/libertium${etatParam}${bParam}`;
+}
+
+function buildAnnoncesCC(type, etat, budget){
+  const etatParam=etat==='neuf'?'neuf':etat==='occasion'?'occasion':'tous';
+  return `https://www.annonces-caravaning.com/camping-car/vendeur/libertium/?etat=${etatParam}`;
+}
+
+function parseAnnonces(html){
+  const results=[];
+  try {
+    const parser=new DOMParser();
+    const doc=parser.parseFromString(html,'text/html');
+    const cards=doc.querySelectorAll('.annonce-item, .card-annonce, article.annonce, .listing-item, .vehicule-item, [class*="annonce"]');
+    cards.forEach((card,i)=>{
+      if(i>=5) return;
+      const title=card.querySelector('h2,h3,.titre,.title,[class*="titre"],[class*="title"]')?.textContent?.trim();
+      const price=card.querySelector('.prix,.price,[class*="prix"],[class*="price"]')?.textContent?.trim();
+      const link=card.querySelector('a[href*="annonce"],a[href*="vehicule"],a[href*="camping-car"]')?.getAttribute('href');
+      const img=card.querySelector('img')?.getAttribute('src');
+      const loc=card.querySelector('.localisation,.location,[class*="local"],[class*="loc"]')?.textContent?.trim();
+      const km=card.querySelector('.km,.kilometrage,[class*="km"]')?.textContent?.trim();
+      const year=card.querySelector('.annee,.year,[class*="annee"],[class*="year"]')?.textContent?.trim();
+      if(title&&price){
+        results.push({
+          title: title.substring(0,80),
+          price: price.replace(/[^\d\s€.,]/g,'').trim(),
+          url: link?('https://www.annonces-caravaning.com'+link):null,
+          img: img||null,
+          location: loc||'Réseau Libertium',
+          km: km||null,
+          year: year||null,
+          score: Math.floor(Math.random()*2)+4
+        });
+      }
+    });
+  } catch(e){}
+  return results;
+}
+
+function parseAnnoncesCC(html){
+  return parseAnnonces(html);
+}
+
+function renderResults(results, body){
+  if(!results.length){ renderFallback(body,'',null); return; }
+  const scored=results.map(r=>({...r, matchScore: computeScore(r)})).sort((a,b)=>b.matchScore-a.matchScore).slice(0,5);
+  body.innerHTML=`
+    <p style="font-size:12px;color:var(--gold-dark);margin-bottom:12px;font-weight:500;">
+      ${scored.length} véhicule${scored.length>1?'s':''} trouvé${scored.length>1?'s':''} · Triés par correspondance au profil
+    </p>
+    <div class="live-results">
+      ${scored.map((r,i)=>renderLiveCard(r,i)).join('')}
+    </div>`;
+}
+
+function computeScore(result){
+  let score=0;
+  const title=(result.title||'').toLowerCase();
+  const must=D.must||[];
+  if(must.includes('lit_fixe')&&(title.includes('lit fixe')||title.includes('pavillon'))) score+=2;
+  if(must.includes('lits_jumeaux')&&title.includes('jumeaux')) score+=2;
+  if(must.includes('garage')&&title.includes('garage')) score+=2;
+  if(D.etat==='neuf'&&title.includes('neuf')) score+=1;
+  if(D.etat==='occasion'&&title.includes('occasion')) score+=1;
+  if(D.couchages&&title.includes(D.couchages)) score+=1;
   return score;
 }
 
-/* =========================================================
-   ARGUMENTAIRE AUTO
-========================================================= */
-
-function buildPitch(v, profile){
-
-  let txt = "";
-
-  if(profile.voyageurs === "famille"){
-    txt += `
-Ce modèle est particulièrement adapté aux voyages familiaux grâce
-à son espace de vie généreux et sa modularité.
-`;
-  }
-
-  if(profile.priority === "autonomie"){
-    txt += `
-Son niveau d’autonomie permet plusieurs jours hors camping,
-ce qui correspond parfaitement au besoin exprimé.
-`;
-  }
-
-  if(profile.priority === "premium"){
-    txt += `
-La finition premium et le confort de conduite créent une forte
-valeur perçue en concession.
-`;
-  }
-
-  txt += `
-Le rapport équipement / prix est cohérent avec votre enveloppe
-budgétaire et votre fréquence d’utilisation.
-`;
-
-  return txt.trim();
-}
-
-/* =========================================================
-   FETCH LIVE
-========================================================= */
-
-async function fetchVehicles(){
-
-  if(!API_ENDPOINT){
-    return DEMO_STOCK;
-  }
-
-  try{
-    const r = await fetch(API_ENDPOINT);
-    return await r.json();
-  }catch(e){
-    console.error(e);
-    return DEMO_STOCK;
-  }
-}
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-async function runMatcher(){
-
-  const profile = {
-    voyageurs:document.getElementById("voyageurs").value,
-    budget:Number(document.getElementById("budget").value),
-    conduite:document.getElementById("conduite").value,
-    priority:document.getElementById("priority").value
-  };
-
-  const vehicles = await fetchVehicles();
-
-  const ranked = vehicles
-    .map(v => ({
-      ...v,
-      score:scoreVehicle(v, profile),
-      pitch:buildPitch(v, profile)
-    }))
-    .sort((a,b)=>b.score-a.score);
-
-  render(ranked);
-}
-
-/* =========================================================
-   RENDER
-========================================================= */
-
-function render(list){
-
-  const el = document.getElementById("results");
-
-  if(!list.length){
-    el.innerHTML = "Aucun résultat";
-    return;
-  }
-
-  el.innerHTML = list.map(v => `
-    <div class="vehicle">
-
-      <div class="vehicle-top">
-
-        <div>
-          <h3>${v.title}</h3>
-          <div>${v.brand} • ${v.type}</div>
-        </div>
-
-        <div class="score">
-          Match ${v.score}%
-        </div>
-
-      </div>
-
-      <div class="price">
-        ${v.price.toLocaleString("fr-FR")} €
-      </div>
-
-      <div class="tags">
-        ${v.tags.map(t=>`<div class="tag">${t}</div>`).join("")}
-      </div>
-
-      <div class="pitch">
-        ${v.pitch}
-      </div>
-
-      <div style="margin-top:16px;">
-        <a href="${v.url}" target="_blank">
-          Voir l’annonce →
-        </a>
-      </div>
-
+function renderLiveCard(r, rank){
+  const dots=Array.from({length:5}).map((_,i)=>`<div class="live-score-dot${i<(r.matchScore+3)?'':-1>=0?' on':''}"></div>`).join('');
+  const match=Math.min(5, (r.matchScore||0)+3);
+  return `<div class="live-card">
+    <div class="live-head">
+      <div class="live-title">${rank===0?'🥇 ':rank===1?'🥈 ':rank===2?'🥉 ':''} ${r.title}</div>
+      ${r.price?`<div class="live-price">${r.price}</div>`:''}
     </div>
-  `).join("");
+    <div class="live-meta">
+      ${r.location?`<span>📍 ${r.location}</span>`:''}
+      ${r.year?`<span>📅 ${r.year}</span>`:''}
+      ${r.km?`<span>🛣️ ${r.km}</span>`:''}
+    </div>
+    <div class="live-score-bar">
+      <span class="live-score-label">Correspondance :</span>
+      <div class="live-score-dots">
+        ${Array.from({length:5}).map((_,i)=>`<div class="live-score-dot${i<match?' on':''}"></div>`).join('')}
+      </div>
+    </div>
+    ${r.url?`<div style="margin-top:10px"><a href="${r.url}" target="_blank" class="live-link">Voir l'annonce →</a></div>`:''}
+  </div>`;
 }
 
-runMatcher();
+function renderFallback(body, query, reco){
+  const type=reco?.kw||'camping-car';
+  const budget=D.budget||'';
+  const etat=D.etat==='neuf'?'neuf':D.etat==='occasion'?'occasion':'';
+  const budgetMap={m25:'0-25000','25_45':'25000-45000','45_65':'45000-65000','65_90':'65000-90000',p90:'90000-'};
+  const bRange=budgetMap[budget]||'';
 
+  // Liens directs libertium.fr
+  const libUrl=`https://www.libertium.fr/vehicule/${reco?.slug||'camping-car'}`;
+
+  // Lien Google Search ciblé libertium
+  const gQuery=encodeURIComponent(`site:libertium.fr ${type} ${etat} ${bRange}`);
+  const gUrl=`https://www.google.com/search?q=${gQuery}`;
+
+  // Lien annonces-caravaning filtré
+  const acUrl=buildAnnoncesUrl(type, D.etat||'', budget);
+
+  body.innerHTML=`
+    <div style="font-size:12px;color:var(--ink-3);padding:12px 0 8px;">
+      Le chargement automatique des annonces n'a pas abouti (le site tiers a peut-être bloqué la requête).<br>
+      Voici les liens directs pour consulter le stock en quelques secondes :
+    </div>
+    <div class="search-fallback">
+      <div style="font-weight:600;margin-bottom:8px;">🔗 Accès direct au stock</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <a href="${libUrl}" target="_blank">→ libertium.fr · ${reco?.type||'Camping-cars'} disponibles</a>
+        <a href="${acUrl}" target="_blank">→ annonces-caravaning.com · Annonces Libertium filtrées</a>
+        <a href="${gUrl}" target="_blank">→ Google · Recherche dans le site Libertium</a>
+      </div>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// ARGUMENTAIRE LOCAL
+// ═══════════════════════════════════════════════════════
+function genArg(){
+  const btn=document.getElementById('arg-btn');
+  const body=document.getElementById('arg-body');
+  btn.disabled=true; btn.textContent='⏳…';
+  setTimeout(()=>{
+    body.innerHTML=buildArg();
+    body.classList.add('open');
+    btn.textContent='↺ Régénérer'; btn.disabled=false;
+  },400);
+}
+
+function buildArg(){
+  const v=D.voyageurs, nb=D.couchages, m=D.must||[], b=D.budget,
+        c=D.conduite, r=D.routes||[], sej=D.sejour||[], au=D.autonomie,
+        e=D.etat, fr=D.freq, fin=D.fin||[], mob=D.mobilite;
+
+  const pf=[];
+  if(v==='couple'||v==='seniors'){
+    if(m.includes('lit_fixe'))pf.push({c:'g',t:'Confort immédiat',d:"Le lit fixe permanent évite toute manipulation — vous montez à bord, vous dormez. C'est le critère n°1 des couples qui voyagent régulièrement."});
+    if(m.includes('lits_jumeaux'))pf.push({c:'g',t:'Indépendance de sommeil',d:"Les lits jumeaux séparés sont plébiscités — chacun son espace, sans déranger l'autre. Un confort sous-estimé à l'achat, adoré dès le premier voyage."});
+  }
+  if(v==='famille_young'||v==='famille_ado'){
+    pf.push({c:'g',t:'Liberté familiale totale',d:`Avec ${nb||'plusieurs'} couchages, toute la famille part sans compromis. Fini les hôtels hors de prix — le camping-car c'est la liberté de s'arrêter où on veut, quand on veut.`});
+    if(nb==='5plus'||nb==='4') pf.push({c:'g',t:'Espace optimisé enfants',d:"Les couchages superposés que les enfants adorent — et les parents apprécient la séparation des espaces vie/nuit."});
+  }
+  if(v==='seniors') pf.push({c:'g',t:'Liberté sans contrainte',d:"Plus besoin de réserver, porter des valises, respecter les horaires. Le camping-car s'adapte à votre rythme — départ quand vous voulez, étape où vous décidez."});
+  if(v==='solo'||fr==='fulltime') pf.push({c:'g',t:'Économie réelle',d:"Sur une utilisation intensive, le coût par nuit descend à 15–25 € en comptant l'amortissement, vs 80–150 € pour un hôtel moyen."});
+  if(r.includes('montagne')) pf.push({c:'g',t:'Liberté en montagne',d:"Pas de problème de disponibilité des hébergements en haute saison. Vous dormez au pied des pistes, repartez à l'aube avant la foule."});
+  if(r.includes('littoral')) pf.push({c:'g',t:'Spots préservés',d:"Les campings en bord de mer se réservent des mois à l'avance. Avec une aire de services, vous accédez à des spots encore préservés."});
+  if(sej.includes('sauvage')||au==='haute') pf.push({c:'g',t:'Autonomie réelle',d:"Les modèles solaires offrent 3–5 jours d'autonomie complète sans dépendance aux bornes."});
+  if(e==='occasion') pf.push({c:'g',t:'Rapport valeur/budget',d:"L'occasion Libertium, c'est un véhicule contrôlé par nos techniciens + Assistance 24 mois incluse — la tranquillité du neuf au prix de l'occasion."});
+  if(fin.includes('loa')) pf.push({c:'g',t:'LOA : rouler sans immobiliser',d:"Dès 300–500 €/mois, changer de véhicule tous les 4–5 ans, déduire les loyers en activité professionnelle."});
+  if(fin.includes('reprise')) pf.push({c:'g',t:'Reprise intégrée',d:"Libertium reprend votre véhicule en déduction directe — opération transparente qui améliore votre reste à payer."});
+  if(!pf.length) pf.push({c:'g',t:'67 concessions, 1 réseau',d:"L'Assistance 24/7 incluse 2 ans à chaque achat, ateliers agréés Fiat Professional et Ford partout en France."});
+
+  const qs=[];
+  if(!D.voyageurs) qs.push("Qui partirait avec vous — les enfants, le conjoint ? Ça va tout changer sur l'implantation.");
+  else if(v==='couple'||v==='seniors') qs.push("Vous avez déjà dormi dans un camping-car ? Un weekend d'essai vous aiderait à vous projeter concrètement.");
+  else if(v==='famille_young'||v==='famille_ado') qs.push("Quel âge ont vos enfants exactement ? Ça va influencer l'implantation idéale — capucine, lits superposés ou dinette convertible.");
+  if(!b||b==='nsp') qs.push("Vous avez une idée de la mensualité confortable pour vous ? C'est souvent plus parlant que le prix affiché.");
+  else if(b==='m25'||b==='25_45') qs.push("Avez-vous pensé à l'occasion récente ? Des modèles 2–3 ans en état irréprochable, garantie encore active, pour bien moins que le neuf.");
+  if(r.includes('montagne')) qs.push("Vous envisagez les Alpes, les Pyrénées ou le Massif Central ? Certains modèles sont mieux adaptés aux routes sinueuses.");
+  if(sej.includes('sauvage')||au==='haute') qs.push("Vous envisagez des étapes sans électricité ? Il faut qu'on regarde l'option solaire + pack batterie ensemble.");
+  if(fin.includes('reprise')) qs.push("Quel type de véhicule à reprendre ? Je peux vous donner une estimation rapide maintenant.");
+  if(qs.length<3) qs.push("Qu'est-ce qui vous a donné envie de franchir le pas aujourd'hui ?");
+
+  const obs=[];
+  if(c==='compact'||r.includes('montagne')) obs.push({c:'a',q:"« C'est grand à conduire… »",r:"C'est la crainte n°1 — et elle disparaît après le premier kilomètre. La plupart de nos clients rappellent pour dire qu'ils ont été surpris par la facilité. On propose aussi des stages de conduite VDL."});
+  if(!b||b==='nsp'||b==='m25') obs.push({c:'a',q:"« C'est un gros budget… »",r:"Regardons ça ensemble. Avec un crédit sur 7 ans pour 45 000 €, on est à ~580 €/mois. Soustrayez vos dépenses actuelles en hôtels et locations — pour beaucoup de familles, la différence est nulle."});
+  obs.push({c:'a',q:"« Je vais réfléchir… »",r:"C'est normal pour un achat de cette importance. Ce que je propose : on réserve un créneau d'essai, sans engagement. Une heure à bord d'un modèle adapté — la décision se prend d'elle-même."});
+  if(v==='famille_young'||v==='famille_ado') obs.push({c:'a',q:"« Et avec des enfants, c'est praticable ? »",r:"C'est l'un des usages les plus adaptés. Pas de valises, votre cuisine, votre rythme. Des milliers de familles nous disent que leur premier voyage a révolutionné leurs vacances."});
+
+  const closings={
+    famille_young:"Je vous propose de venir avec les enfants en fin de semaine — ils vont adorer visiter le véhicule, et vous allez pouvoir vous projeter vraiment. Je vous réserve un créneau ?",
+    famille_ado:"Les ados adorent avoir leur espace à bord. Venez essayer avec eux, leur avis va peser dans la décision. Samedi matin ?",
+    couple:"Le mieux c'est qu'on fasse l'essai ensemble — une heure sur route, et vous saurez. Je peux vous bloquer un créneau cette semaine ?",
+    seniors:"Beaucoup de nos clients retraités nous disent que c'est le meilleur achat de leur vie. Qu'est-ce qui vous empêche de franchir le pas cette semaine ?",
+    solo:"Pour un usage solo intensif, vous rentabilisez très vite. On fait les chiffres ensemble ? Je vous prépare une simulation.",
+    amis:"Pour des voyages entre amis c'est imbattable — vous partagez les coûts, chacun a son espace. Je vous montre les modèles qui s'y prêtent ?",
+  };
+  const closing=closings[v]||"Ce profil correspond à ce qu'on a en stock en ce moment. On fait une visite — je vous garde le véhicule le temps que vous en parliez entre vous ?";
+
+  const ri=items=>items.map(it=>`<div class="arg-item ${it.c||''}">${it.t?`<strong>${it.t}</strong>`:''}${it.d||it.r||''}</div>`).join('');
+
+  return `
+    <div class="arg-section"><div class="arg-h">✦ Points forts</div>${ri(pf.slice(0,4))}</div>
+    <div class="arg-section"><div class="arg-h">? Questions de rebond</div>${qs.slice(0,3).map(q=>`<div class="arg-item b">${q}</div>`).join('')}</div>
+    <div class="arg-section"><div class="arg-h">! Objections à anticiper</div>${ri(obs.slice(0,3))}</div>
+    <div class="arg-section"><div class="arg-h">→ Closing</div><div class="closing"><span class="closing-lbl">Phrase personnalisée</span>"${closing}"</div></div>`;
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILITAIRES
+// ═══════════════════════════════════════════════════════
+function resetAll(){
+  Object.keys(D).forEach(k=>delete D[k]);
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('arg-body').innerHTML='';
+  document.getElementById('arg-body').classList.remove('open');
+  document.getElementById('search-body').innerHTML='';
+  document.getElementById('search-body').classList.remove('open');
+  document.getElementById('arg-btn').textContent='Générer'; document.getElementById('arg-btn').disabled=false;
+  document.getElementById('search-btn').textContent='Rechercher en stock →'; document.getElementById('search-btn').disabled=false;
+  showStep(1);
+}
+
+function copyProfile(){
+  const must=(D.must||[]).map(x=>ML[x]||x).join(', ')||'—';
+  const text=`=== PROFIL CLIENT LIBERTIUM ===\nVoyageurs : ${lbl('voyageurs')}\nCouchages : ${D.couchages||'—'}\nFréquence : ${lbl('freq')}\nDestinations : ${(D.routes||[]).join(', ')||'—'}\nÉquipements : ${must}\nBudget : ${lbl('budget')}\nÉtat : ${lbl('etat')}\nFinancement : ${(D.fin||[]).join(', ')||'—'}\nVéhicule recommandé : ${buildRecos()[0]?.type||'—'}\nMarques : ${buildRecos()[0]?.brands||'—'}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=event.target, orig=btn.textContent;
+    btn.textContent='✓ Copié !'; setTimeout(()=>btn.textContent=orig, 2000);
+  });
+}
 </script>
-
 </body>
 </html>
