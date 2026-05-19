@@ -9,12 +9,20 @@
       --bg:#f4f7fb;--panel:#fff;--panel-2:#f8fbff;--text:#172033;--muted:#64748b;
       --primary:#0f62fe;--primary-dark:#0043ce;--danger:#dc2626;--border:#d8e1ee;
       --shadow:0 14px 34px rgba(15,23,42,.08);--radius:18px;
+      --print-bg:#f7f9fc;--print-card:#ffffff;--print-line:#d8e1ee;--print-accent:#2f5aa8;
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
-    body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);color:var(--text)}
+    body{
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);
+      color:var(--text)
+    }
     .page{max-width:1440px;margin:0 auto;padding:24px}
-    .topbar{display:flex;justify-content:space-between;gap:16px;align-items:stretch;margin-bottom:20px;background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+    .topbar{
+      display:flex;justify-content:space-between;gap:16px;align-items:stretch;margin-bottom:20px;
+      background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden
+    }
     .brand{flex:1;display:flex;gap:16px;align-items:center;padding:18px 20px;min-width:0}
     .brand-logo{width:74px;height:74px;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center}
     .brand-logo img{width:100%;height:100%;object-fit:contain;display:block}
@@ -65,7 +73,6 @@
     .score-low{background:#fff7ed;color:#9a3412}
     .reprise-fields{margin-top:10px;padding:12px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fbff;display:none}
     .reprise-fields.show{display:block}
-    .print-only{display:none}
     @media (max-width:1040px){
       .grid{grid-template-columns:1fr}
       .header{flex-direction:column}
@@ -80,13 +87,33 @@
       body{background:#fff}
       .page{max-width:none;padding:0}
       .topbar,.toolbar,.status,.reprise-fields,.form-panel{display:none !important}
-      .print-only{display:block !important}
       .grid{display:block}
       .card{box-shadow:none;border:0;border-radius:0;padding:0}
-      .preview-line{grid-template-columns:140px 1fr;font-size:11pt;padding:5px 0}
-      .summary-box,.recommend-top,.result{break-inside:avoid-page}
-      .results{display:grid;grid-template-columns:1fr;gap:8px}
+      .screen-only{display:none !important}
+      .print-only{display:block !important}
+      .print-header{
+        display:flex;justify-content:space-between;align-items:center;gap:12px;
+        padding:12px 14px;margin-bottom:14px;border:1px solid var(--print-line);border-radius:14px;
+        background:linear-gradient(180deg,#ffffff 0%,#f3f7ff 100%);
+      }
+      .print-title{font-size:18px;font-weight:800;color:var(--print-accent);margin:0}
+      .print-sub{font-size:11pt;color:#475569;margin:2px 0 0}
+      .print-section{margin-top:10px;border:1px solid var(--print-line);border-radius:14px;overflow:hidden;background:#fff}
+      .print-section h3{
+        margin:0;padding:8px 12px;font-size:11pt;background:#eef4ff;color:#163a6b;border-bottom:1px solid var(--print-line)
+      }
+      .print-kv{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid #edf2f7}
+      .print-kv:last-child{border-bottom:0}
+      .print-kv div{padding:6px 10px;font-size:10.5pt;line-height:1.35}
+      .print-kv .k{background:#fbfcff;color:#334155;font-weight:700;border-right:1px solid #edf2f7}
+      .print-kv .v{color:#0f172a}
+      .summary-box,.recommend-top,.result{border:1px solid var(--print-line);background:#fff}
+      .summary-box p{font-size:10.5pt}
       .chips{display:none}
+      .results{display:grid;grid-template-columns:1fr;gap:8px}
+      .result h4{font-size:11pt}
+      .result p{font-size:10.5pt}
+      a{color:#163a6b;text-decoration:none}
     }
   </style>
 </head>
@@ -111,9 +138,9 @@
     <div>
       <h2 class="title">Widget d’aide à la découverte véhicule de loisirs</h2>
       <p class="subtitle">Aperçu dynamique, scoring, reprise détaillée, export PDF et impression optimisée.</p>
-      <div class="status" id="status">Prêt.</div>
+      <div class="status screen-only" id="status">Prêt.</div>
     </div>
-    <div class="toolbar">
+    <div class="toolbar screen-only">
       <button type="button" class="btn-secondary" id="btnPrint">Print</button>
       <button type="button" class="btn-primary" id="btnPdf">Export PDF</button>
       <button type="button" class="btn-secondary" id="btnReset">Réinitialiser</button>
@@ -199,20 +226,9 @@
         <div class="reprise-fields" id="repriseFields">
           <h3 style="margin-top:0;">Véhicule à reprendre</h3>
           <div class="form-grid">
-            <div class="field">
-              <label for="reprGamme">Gamme</label>
-              <select id="reprGamme">
-                <option value="">—</option>
-                <option>Camping Car</option><option>Capucine</option><option>Caravane</option><option>Fourgon</option>
-                <option>Intégral</option><option>Loisir</option><option>Profile</option><option>Profile Compact</option>
-                <option>Rigide</option><option>Van</option>
-              </select>
-            </div>
+            <div class="field"><label for="reprGamme">Gamme</label><select id="reprGamme"><option value="">—</option><option>Camping Car</option><option>Capucine</option><option>Caravane</option><option>Fourgon</option><option>Intégral</option><option>Loisir</option><option>Profile</option><option>Profile Compact</option><option>Rigide</option><option>Van</option></select></div>
             <div class="field"><label for="reprPorteur">Marque porteur</label><input id="reprPorteur" type="text" /></div>
-            <div class="field">
-              <label for="reprEquip">Marque équipementier</label>
-              <select id="reprEquip"></select>
-            </div>
+            <div class="field"><label for="reprEquip">Marque équipementier</label><select id="reprEquip"></select></div>
             <div class="field"><label for="reprModele">Modèle</label><input id="reprModele" type="text" /></div>
             <div class="field"><label for="reprMec">Date de 1ère MEC</label><input id="reprMec" type="date" /></div>
             <div class="field"><label for="reprKm">Kilométrage</label><input id="reprKm" type="text" /></div>
@@ -222,36 +238,62 @@
             <div class="field"><label for="reprPtac">PTAC (en Kg)</label><input id="reprPtac" type="text" /></div>
             <div class="field"><label for="reprCvFisc">Chevaux fiscaux</label><input id="reprCvFisc" type="text" /></div>
             <div class="field"><label for="reprCvDin">Chevaux DIN</label><input id="reprCvDin" type="text" /></div>
-            <div class="field"><label>Boite de vitesse</label><div><label><input type="radio" name="reprBoite" value="Boite auto"> Boite auto</label> <label><input type="radio" name="reprBoite" value="Boite manuelle"> Boite manuelle</label></div></div>
+            <div class="field"><label>Boite de vitesse</label><div><label><input type="radio" name="reprBoite" value="Boite auto" checked> Boite auto</label> <label><input type="radio" name="reprBoite" value="Boite manuelle"> Boite manuelle</label></div></div>
             <div class="field"><label>Énergie</label><div><label><input type="radio" name="reprEnergie" value="Diesel" checked> Diesel</label> <label><input type="radio" name="reprEnergie" value="Essence"> Essence</label> <label><input type="radio" name="reprEnergie" value="Hybride"> Hybride</label> <label><input type="radio" name="reprEnergie" value="Electrique"> Electrique</label></div></div>
             <div class="field"><label for="reprPlacesCg">Nombre de place carte grise</label><select id="reprPlacesCg"></select></div>
             <div class="field"><label for="reprPlacesCouche">Places couchage</label><select id="reprPlacesCouche"></select></div>
             <div class="field"><label for="reprTypeLit">Type de lit</label><select id="reprTypeLit"><option value="">—</option><option>Lit À La Française</option><option>Lit Central</option><option>Lit Pavillon</option><option>Lit Superposé</option><option>Lit Sur Soute</option><option>Lit Transversal</option><option>Lits Jumeaux</option><option>Salon En U</option></select></div>
             <div class="field"><label for="reprEauPropre">Réservoir eaux propres (en L)</label><input id="reprEauPropre" type="text" /></div>
             <div class="field"><label for="reprEauUsee">Réservoir eaux usées (en L)</label><input id="reprEauUsee" type="text" /></div>
-            <div class="field"><label for="reprEtat">État général</label><select id="reprEtat"><option value="">—</option><option>Excellent</option><option>Correct</option><option>Passage</option><option>Triste</option></select></div>
+            <div class="field"><label for="reprEtat">État général</label><select id="reprEtat"><option value="">—</option><option>Excellent</option><option>Correct</option><option>Passable</option><option>Triste</option></select></div>
           </div>
         </div>
       </div>
     </form>
 
     <div class="card right-sticky" id="summaryBlock">
-      <div class="print-only">
-        <h2>Fiche récapitulative</h2>
+      <div class="print-only print-header">
+        <div>
+          <div class="print-title">Libertium Seclin Lestringuez</div>
+          <div class="print-sub">Fiche récapitulative commerciale</div>
+        </div>
+        <div style="text-align:right;font-size:10.5pt;color:#475569">
+          205 Avenue de la République<br>59113 SECLIN<br>contact.seclin@libertium.fr
+        </div>
       </div>
+
       <h2 class="screen-only">Aperçu et recommandation</h2>
-      <div class="preview-line"><strong>Vendeur</strong><span id="pvVendeur">—</span></div>
-      <div class="preview-line"><strong>Client</strong><span id="pvClient">—</span></div>
-      <div class="preview-line"><strong>Société</strong><span id="pvSociete">—</span></div>
-      <div class="preview-line"><strong>Fonction</strong><span id="pvFonction">—</span></div>
-      <div class="preview-line"><strong>Contact</strong><span id="pvContact">—</span></div>
-      <div class="preview-line"><strong>Adresse</strong><span id="pvAddress">—</span></div>
-      <div class="preview-line"><strong>Budget</strong><span id="pvBudget">—</span></div>
-      <div class="preview-line"><strong>Profil</strong><span id="pvProfile">—</span></div>
-      <div class="preview-line"><strong>Reprise</strong><span id="pvReprise">—</span></div>
-      <div class="summary-box"><p id="pvSummary">Renseigne les champs à gauche pour générer une recommandation.</p></div>
+
+      <div class="print-section">
+        <h3>Coordonnées</h3>
+        <div class="print-kv"><div class="k">Vendeur</div><div class="v" id="pvVendeur">—</div></div>
+        <div class="print-kv"><div class="k">Client</div><div class="v" id="pvClient">—</div></div>
+        <div class="print-kv"><div class="k">Société</div><div class="v" id="pvSociete">—</div></div>
+        <div class="print-kv"><div class="k">Fonction</div><div class="v" id="pvFonction">—</div></div>
+        <div class="print-kv"><div class="k">Contact</div><div class="v" id="pvContact">—</div></div>
+        <div class="print-kv"><div class="k">Adresse</div><div class="v" id="pvAddress">—</div></div>
+      </div>
+
+      <div class="print-section" style="margin-top:12px;">
+        <h3>Projet</h3>
+        <div class="print-kv"><div class="k">Budget</div><div class="v" id="pvBudget">—</div></div>
+        <div class="print-kv"><div class="k">Profil</div><div class="v" id="pvProfile">—</div></div>
+        <div class="print-kv"><div class="k">Délai</div><div class="v" id="pvDelai">—</div></div>
+        <div class="print-kv"><div class="k">Reprise</div><div class="v" id="pvReprise">—</div></div>
+        <div class="print-kv"><div class="k">Résumé</div><div class="v" id="pvSummary">—</div></div>
+      </div>
+
+      <div class="summary-box">
+        <p id="pvSummaryBox">Renseigne les champs à gauche pour générer une recommandation.</p>
+      </div>
+
       <div class="chips" id="chips"></div>
-      <div class="recommend-top"><h3>Meilleure recommandation</h3><p id="topExplanation">—</p></div>
+
+      <div class="recommend-top">
+        <h3>Meilleure recommandation</h3>
+        <p id="topExplanation">—</p>
+      </div>
+
       <div class="results" id="results"></div>
     </div>
   </div>
@@ -271,60 +313,105 @@ function read(){const d={};ids.forEach(id=>d[id]=document.getElementById(id)?.va
 function setVille(v){document.getElementById('ville').value=v||''}
 async function postal(){const cp=document.getElementById('codePostal').value.trim();if(!/^\d{5}$/.test(cp)){setVille('');return}try{const r=await fetch(`https://geo.api.gouv.fr/communes?codePostal=${encodeURIComponent(cp)}&fields=nom&format=json`);const j=await r.json();setVille([...new Set((j||[]).map(x=>x.nom).filter(Boolean))].join(' / '))}catch(e){setVille('')}}
 function toggleReprise(){repriseFields.classList.toggle('show',document.getElementById('reprise').value==='Oui')}
-function scoreVehicle(v,d){const b=d.budget;let s=0;if(v.key==='van'&&d.voyageurs==='1 à 2')s+=20;if(v.key==='fourgon'&&['1 à 2','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='profile'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='integral'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='capucine'&&['5 à 6','7 et +'].includes(d.voyageurs))s+=22;if(v.key==='caravane'&&d.priorite==='Prix')s+=18;return s+(b==='Plus de 100 000 €'&&v.key==='integral'?20:0)}
+function vr(v){return v||'—'}
+function repriseLabel(d){
+  if(d.reprise!=='Oui') return vr(d.reprise);
+  return [
+    ['Gamme',d.reprGamme],
+    ['Marque porteur',d.reprPorteur],
+    ['Marque équipementier',d.reprEquip],
+    ['Modèle',d.reprModele],
+    ['Date de 1ère MEC',d.reprMec],
+    ['Kilométrage',d.reprKm],
+    ['Longueur (en M)',d.reprLongueur],
+    ['Largeur (en M)',d.reprLargeur],
+    ['Hauteur (en M)',d.reprHauteur],
+    ['PTAC (en Kg)',d.reprPtac],
+    ['Chevaux fiscaux',d.reprCvFisc],
+    ['Chevaux DIN',d.reprCvDin],
+    ['Boite de vitesse',d.reprBoite],
+    ['Énergie',d.reprEnergie],
+    ['Nombre de place carte grise',d.reprPlacesCg],
+    ['Places couchage',d.reprPlacesCouche],
+    ['Type de lit',d.reprTypeLit],
+    ['Réservoir eaux propres (en L)',d.reprEauPropre],
+    ['Réservoir eaux usées (en L)',d.reprEauUsee],
+    ['État général',d.reprEtat]
+  ].filter(([,v])=>v).map(([k,v])=>`${k} : ${v}`).join(' · ')||'Oui';
+}
+function scoreVehicle(v,d){let s=0;if(v.key==='van'&&d.voyageurs==='1 à 2')s+=20;if(v.key==='fourgon'&&['1 à 2','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='profile'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='integral'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='capucine'&&['5 à 6','7 et +'].includes(d.voyageurs))s+=22;if(v.key==='caravane'&&d.priorite==='Prix')s+=18;return s+(d.budget==='Plus de 100 000 €'&&v.key==='integral'?20:0)}
 function render(){
   const d=read();toggleReprise();
-  document.getElementById('pvVendeur').textContent=d.vendeur||'—';
+  document.getElementById('pvVendeur').textContent=vr(d.vendeur);
   document.getElementById('pvClient').textContent=[d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')||'—';
-  document.getElementById('pvSociete').textContent=d.societe||'—';
-  document.getElementById('pvFonction').textContent=d.fonction||'—';
-  document.getElementById('pvContact').textContent=[d.telephone,d.mobile,d.email].filter(Boolean).join(' · ')||'—';
+  document.getElementById('pvSociete').textContent=vr(d.societe);
+  document.getElementById('pvFonction').textContent=vr(d.fonction);
+  document.getElementById('pvContact').textContent=[d.telephone,d.mobile,d.email,d.siteWeb].filter(Boolean).join(' · ')||'—';
   document.getElementById('pvAddress').textContent=[d.adresse1,d.adresse2,[d.codePostal,d.ville].filter(Boolean).join(' '),d.departement,d.pays].filter(Boolean).join(', ')||'—';
-  document.getElementById('pvBudget').textContent=d.budget||'—';
+  document.getElementById('pvBudget').textContent=vr(d.budget);
   document.getElementById('pvProfile').textContent=[d.voyageurs,d.usage,d.compacite,d.priorite].filter(Boolean).join(' · ')||'—';
-  document.getElementById('pvReprise').textContent=d.reprise==='Oui'?[d.reprGamme,d.reprPorteur,d.reprEquip,d.reprModele,d.reprMec,d.reprKm,d.reprLongueur,d.reprLargeur,d.reprHauteur,d.reprPtac,d.reprCvFisc,d.reprCvDin,d.reprBoite,d.reprEnergie,d.reprPlacesCg,d.reprPlacesCouche,d.reprTypeLit,d.reprEauPropre,d.reprEauUsee,d.reprEtat].filter(Boolean).join(' · '):d.reprise||'—';
-  const summary=[d.besoin&&`Besoin : ${d.besoin}`,d.notes&&`Notes : ${d.notes}`,d.delai&&`Délai : ${d.delai}`,d.decisionnaire&&`Décisionnaire : ${d.decisionnaire}`].filter(Boolean).join('\n\n')||'Renseigne les champs à gauche pour générer une recommandation.';
-  document.getElementById('pvSummary').textContent=summary;
-  const chips=['vendeur','budget','voyageurs','usage','compacite','priorite','departement'].map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
-  document.getElementById('chips').innerHTML=chips;
+  document.getElementById('pvDelai').textContent=vr(d.delai);
+  document.getElementById('pvReprise').textContent=repriseLabel(d);
+  document.getElementById('pvSummaryBox').textContent=[d.besoin&&`Besoin : ${d.besoin}`,d.notes&&`Notes : ${d.notes}`,d.delai&&`Délai : ${d.delai}`,d.decisionnaire&&`Décisionnaire : ${d.decisionnaire}`].filter(Boolean).join('\n\n')||'Renseigne les champs à gauche pour générer une recommandation.';
+  document.getElementById('pvSummary').textContent=[d.besoin&&`Besoin : ${d.besoin}`,d.notes&&`Notes : ${d.notes}`,d.delai&&`Délai : ${d.delai}`,d.decisionnaire&&`Décisionnaire : ${d.decisionnaire}`].filter(Boolean).join(' | ')||'—';
+  document.getElementById('chips').innerHTML=['vendeur','budget','voyageurs','usage','compacite','priorite','departement'].map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
   const ranked=[...vehicles].map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score).slice(0,3);
   document.getElementById('topExplanation').innerHTML=ranked[0]?`<strong><a href="${ranked[0].url}" target="_blank" rel="noopener">${ranked[0].title}</a></strong><br>Top adapté au budget et au profil saisi.`:'—';
   document.getElementById('results').innerHTML=ranked.map((v,i)=>`<div class="result"><div class="score-badge ${i===0?'score-high':i===1?'score-mid':'score-low'}">Top ${i+1} · ${v.score}/100</div><h4 style="margin-top:8px;"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4><p>Recommandation issue des critères saisis.</p></div>`).join('');
 }
 function buildDocText(){
   const d=read();
-  const rows=[];
-  rows.push(`Vendeur : ${d.vendeur||'—'}`);
-  rows.push(`Client : ${[d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')||'—'}`);
-  rows.push(`Société : ${d.societe||'—'}`);
-  rows.push(`Fonction : ${d.fonction||'—'}`);
-  rows.push(`Contact : ${[d.telephone,d.mobile,d.email,d.siteWeb].filter(Boolean).join(' · ')||'—'}`);
-  rows.push(`Adresse : ${[d.adresse1,d.adresse2,[d.codePostal,d.ville].filter(Boolean).join(' '),d.departement,d.pays].filter(Boolean).join(', ')||'—'}`);
-  rows.push(`Budget : ${d.budget||'—'}`);
-  rows.push(`Profil : ${[d.voyageurs,d.usage,d.compacite,d.priorite].filter(Boolean).join(' · ')||'—'}`);
-  rows.push(`Délai : ${d.delai||'—'}`);
-  rows.push(`Reprise : ${d.reprise||'—'}`);
-  if(d.reprise==='Oui'){
-    rows.push(`Reprise détail : ${[d.reprGamme,d.reprPorteur,d.reprEquip,d.reprModele,d.reprMec,d.reprKm,d.reprLongueur,d.reprLargeur,d.reprHauteur,d.reprPtac,d.reprCvFisc,d.reprCvDin,d.reprBoite,d.reprEnergie,d.reprPlacesCg,d.reprPlacesCouche,d.reprTypeLit,d.reprEauPropre,d.reprEauUsee,d.reprEtat].filter(Boolean).join(' · ')||'—'}`);
-  }
-  rows.push('');
-  rows.push('Aperçu commercial :');
-  rows.push(document.getElementById('pvSummary').textContent.trim());
-  rows.push('');
-  rows.push('Recommandations :');
-  rows.push(document.getElementById('results').innerText.trim());
-  return rows.join('\n');
+  return [
+    `Vendeur : ${vr(d.vendeur)}`,
+    `Client : ${[d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')||'—'}`,
+    `Société : ${vr(d.societe)}`,
+    `Fonction : ${vr(d.fonction)}`,
+    `Contact : ${[d.telephone,d.mobile,d.email,d.siteWeb].filter(Boolean).join(' · ')||'—'}`,
+    `Adresse : ${[d.adresse1,d.adresse2,[d.codePostal,d.ville].filter(Boolean).join(' '),d.departement,d.pays].filter(Boolean).join(', ')||'—'}`,
+    `Budget : ${vr(d.budget)}`,
+    `Profil : ${[d.voyageurs,d.usage,d.compacite,d.priorite].filter(Boolean).join(' · ')||'—'}`,
+    `Délai : ${vr(d.delai)}`,
+    `Reprise véhicule : ${repriseLabel(d)}`,
+    '',
+    'Aperçu commercial :',
+    document.getElementById('pvSummaryBox').textContent.trim(),
+    '',
+    'Recommandations :',
+    document.getElementById('results').innerText.trim()
+  ].join('\n');
 }
 function exportPDF(){
-  const d=document.createElement('div');
-  d.style.cssText='font-family:Arial,sans-serif;padding:18px;color:#172033;max-width:800px';
-  d.innerHTML=`<h1 style="margin:0 0 10px;font-size:22px;">Fiche récapitulative</h1><div style="font-size:13px;line-height:1.55;white-space:pre-wrap">${buildDocText().replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}</div>`;
-  html2pdf().set({margin:10,filename:'resume-widget.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(d).save();
+  const wrapper=document.createElement('div');
+  wrapper.style.cssText='font-family:Arial,sans-serif;max-width:800px;padding:0;background:#fff;color:#172033';
+  wrapper.innerHTML=`
+    <div style="border:1px solid #d8e1ee;border-radius:16px;overflow:hidden">
+      <div style="padding:16px 18px;background:linear-gradient(180deg,#ffffff 0%,#eef4ff 100%);border-bottom:1px solid #d8e1ee">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
+          <div>
+            <div style="font-size:20px;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div>
+            <div style="font-size:12px;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div>
+          </div>
+          <div style="text-align:right;font-size:11px;color:#475569;line-height:1.4">
+            205 Avenue de la République<br>59113 SECLIN<br>contact.seclin@libertium.fr
+          </div>
+        </div>
+      </div>
+      <div style="padding:18px">
+        <div style="font-size:12.5px;line-height:1.55;white-space:pre-wrap">${buildDocText().replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}</div>
+      </div>
+    </div>`;
+  html2pdf().set({
+    margin:10,
+    filename:'resume-widget.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(wrapper).save();
 }
 function bind(){
   document.getElementById('btnPrint').addEventListener('click',()=>window.print());
   document.getElementById('btnPdf').addEventListener('click',exportPDF);
-  document.getElementById('btnReset').addEventListener('click',()=>{form.reset();document.querySelector('input[name="reprEnergie"][value="Diesel"]').checked=true;setVille('');toggleReprise();render()});
+  document.getElementById('btnReset').addEventListener('click',()=>{form.reset();document.querySelector('input[name="reprEnergie"][value="Diesel"]').checked=true;document.querySelector('input[name="reprBoite"][value="Boite auto"]').checked=true;setVille('');toggleReprise();render()});
   ids.forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
     const ev=(el.tagName==='TEXTAREA'||el.tagName==='INPUT')?'input':'change';
