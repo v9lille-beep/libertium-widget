@@ -74,9 +74,6 @@
     .reprise-fields{margin-top:10px;padding:12px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fbff;display:none}
     .reprise-fields.show{display:block}
 
-    /* ═══════════════════════════════════════════
-       STYLES BLOC LIVE SEARCH — ajout uniquement
-    ═══════════════════════════════════════════ */
     .live-search-config{
       margin-top:12px;padding:14px;
       background:#f0f7ff;border:1px solid #bfdbfe;border-radius:14px;
@@ -156,10 +153,6 @@
     }
     .btn-live-toggle:hover{background:#0043ce}
     .btn-live-toggle.searching{background:#64748b;cursor:wait}
-
-    /* ═══════════════════════════════════════════
-       FIN STYLES LIVE SEARCH
-    ═══════════════════════════════════════════ */
 
     @media (max-width:1040px){
       .grid{grid-template-columns:1fr}
@@ -243,7 +236,6 @@
   <div class="grid">
     <form class="card form-panel" id="leadForm" autocomplete="on">
       <h2>Coordonnées client</h2>
-
       <div class="section">
         <h3>Vendeur</h3>
         <div class="form-grid">
@@ -315,7 +307,6 @@
           <div class="field"><label for="reprise">Reprise véhicule</label><select id="reprise"><option value="">—</option><option>Oui</option><option>Non</option><option>À étudier</option></select></div>
           <div class="field"><label for="score">Score commercial</label><input id="score" type="number" min="0" max="100" readonly /></div>
         </div>
-
         <div class="reprise-fields" id="repriseFields">
           <h3 style="margin-top:0;">Véhicule à reprendre</h3>
           <div class="form-grid">
@@ -403,24 +394,17 @@
 
       <div class="results" id="results"></div>
 
-      <!-- ═══════════════════════════════════════════════════════
-           BLOC LIVE SEARCH — ajout uniquement, rien modifié au-dessus
-      ═══════════════════════════════════════════════════════ -->
       <div style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px">
-
-        <!-- Titre bloc live -->
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span style="font-size:13px;font-weight:700;color:#0f172a">🔍 Stock en temps réel · libertium.fr</span>
           <span style="font-size:11px;color:#22c55e;font-weight:700;background:#dcfce7;padding:3px 8px;border-radius:999px">● API connectée</span>
         </div>
 
-        <!-- Bouton recherche -->
         <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
           <span id="btnLiveIcon">🔎</span>
           <span id="btnLiveTxt">Rechercher des véhicules en stock</span>
         </button>
 
-        <!-- Résultats live -->
         <div class="live-results-wrap" id="liveResults" style="display:none">
           <h4>
             Véhicules disponibles
@@ -428,21 +412,13 @@
           </h4>
           <div id="liveCards"></div>
         </div>
-
       </div>
-      <!-- ═══════════════════════════════════════════════════════
-           FIN BLOC LIVE SEARCH
-      ═══════════════════════════════════════════════════════ -->
-
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
-// ════════════════════════════════════════════════════════════
-// CODE ORIGINAL CHATGPT — INCHANGÉ
-// ════════════════════════════════════════════════════════════
 const ids=['vendeur','civilite','typeClient','prenom','nom','societe','fonction','telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville','departement','pays','budget','achat','voyageurs','usage','compacite','conduite','couchages','sdb','autonomie','saison','permis','priorite','besoin','notes','delai','decisionnaire','reprise','score','reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm','reprLongueur','reprLargeur','reprHauteur','reprPtac','reprCvFisc','reprCvDin','reprPlacesCg','reprPlacesCouche','reprTypeLit','reprEauPropre','reprEauUsee','reprEtat'];
 const deptSelect=document.getElementById('departement');
 const repriseFields=document.getElementById('repriseFields');
@@ -541,156 +517,159 @@ function bind(){
   });
   document.getElementById('reprise').addEventListener('change',render);
 }
-init();bind();render();
-document.getElementById('codePostal').addEventListener('blur',()=>postal().then(render));
 
-// ════════════════════════════════════════════════════════════
-// BLOC LIVE SEARCH — credentials intégrés directement
-// ════════════════════════════════════════════════════════════
+const LIVE_SEARCH_CONFIG = {
+  apiKey: 'AIzaSyCrUQqRwvZNlCxV9YDq1oKLB_1R4vZMRA4',
+  cx: 'a3a8f772f6df54590',
+  apiUrl: 'https://www.googleapis.com/customsearch/v1'
+};
 
-// Credentials Google PSE — intégrés directement
-const PSE_API_KEY = 'AIzaSyD1x8M0pDdCdxkGejiVMSJLuAWCNxsL6Rw';
-const PSE_CX      = 'a3a8f772f6df54590';
-
-// Construire la requête de recherche à partir du formulaire
-function buildSearchQuery(){
-  const d=read();
-  const parts=[];
-
-  // Type de véhicule
-  const budgetMap={'Moins de 40 000 €':'budget 40000','40 000 à 60 000 €':'budget 60000','60 000 à 80 000 €':'budget 80000','80 000 à 100 000 €':'budget 100000','Plus de 100 000 €':'premium'};
-  const typeMap={'van':'van aménagé','fourgon':'fourgon','profile':'profilé','integral':'intégral','capucine':'capucine','caravane':'caravane'};
-
-  // Déterminer le type dominant via scoreVehicle
-  const ranked=[...vehicles].map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score);
-  if(ranked[0]&&ranked[0].score>0) parts.push(typeMap[ranked[0].key]||ranked[0].title);
+function escapeHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function cleanText(str) {
+  return String(str || '').replace(/<\/?[^>]+(>|$)/g,' ').replace(/\s+/g,' ').trim();
+}
+function buildSearchQuery() {
+  const d = read();
+  const parts = [];
+  const budgetMap = {'Moins de 40 000 €':'budget 40000','40 000 à 60 000 €':'budget 60000','60 000 à 80 000 €':'budget 80000','80 000 à 100 000 €':'budget 100000','Plus de 100 000 €':'premium'};
+  const typeMap = {van:'van aménagé',fourgon:'fourgon',profile:'profil',integral:'intégral',capucine:'capucine',caravane:'caravane'};
+  const ranked = [...vehicles].map(v => ({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score);
+  if (ranked[0] && ranked[0].score > 0) parts.push(typeMap[ranked[0].key] || ranked[0].title);
   else parts.push('camping-car');
-
-  if(d.achat==='Neuf') parts.push('neuf');
-  else if(d.achat==='Occasion') parts.push('occasion');
-
-  if(d.couchages&&d.couchages!=='Peu importe') parts.push(d.couchages.toLowerCase());
-  if(d.budget&&d.budget!=='Non défini'&&budgetMap[d.budget]) parts.push(budgetMap[d.budget]);
-  if(d.autonomie&&d.autonomie!=='Peu importe'&&d.autonomie!=='Faible') parts.push('autonomie '+d.autonomie.toLowerCase());
-
+  if (d.achat === 'Neuf') parts.push('neuf');
+  else if (d.achat === 'Occasion') parts.push('occasion');
+  if (d.couchages && d.couchages !== 'Peu importe') parts.push(d.couchages.toLowerCase());
+  if (d.budget && d.budget !== 'Non défini' && budgetMap[d.budget]) parts.push(budgetMap[d.budget]);
+  if (d.autonomie && d.autonomie !== 'Peu importe' && d.autonomie !== 'Faible') parts.push(d.autonomie.toLowerCase());
+  if (d.usage && d.usage !== 'Mixte') parts.push(d.usage.toLowerCase());
   return parts.join(' ');
 }
-
-// Évaluer la pertinence d'un résultat Google par rapport au profil
-function computeMatchScore(item, d){
-  let score=0;
-  const text=(item.title+' '+(item.snippet||'')).toLowerCase();
-  const typeMap={'van':'van','fourgon':'fourgon','profile':'profilé profil','integral':'intégral integral','capucine':'capucine','caravane':'caravane'};
-  const ranked=[...vehicles].map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score);
-  const topKey=ranked[0]?.key||'';
-  const topWords=(typeMap[topKey]||'').split(' ');
-  topWords.forEach(w=>{if(w&&text.includes(w))score+=3;});
-  if(d.achat==='Neuf'&&text.includes('neuf'))score+=2;
-  if(d.achat==='Occasion'&&text.includes('occasion'))score+=2;
-  if(d.couchages&&text.includes(d.couchages.toLowerCase().split(' ')[0]))score+=1;
-  // URL contient /vehicule/ → c'est une vraie page annonce
-  if(item.link&&item.link.includes('/vehicule/'))score+=2;
+function computeMatchScore(item, d) {
+  let score = 0;
+  const text = cleanText(`${item.title || ''} ${item.snippet || ''}`).toLowerCase();
+  if (d.achat === 'Neuf' && text.includes('neuf')) score += 2;
+  if (d.achat === 'Occasion' && text.includes('occasion')) score += 2;
+  if (d.couchages && d.couchages !== 'Peu importe' && text.includes(d.couchages.toLowerCase())) score += 2;
+  if (d.budget === 'Moins de 40 000 €' && text.match(/40 ?000|moins de 40|budget/)) score += 1;
+  if (d.budget === '40 000 à 60 000 €' && text.match(/60 ?000|40 ?000|budget/)) score += 1;
+  if (d.budget === '60 000 à 80 000 €' && text.match(/80 ?000|60 ?000|budget/)) score += 1;
+  if (d.budget === '80 000 à 100 000 €' && text.match(/100 ?000|80 ?000|budget/)) score += 1;
+  if (d.budget === 'Plus de 100 000 €' && text.match(/premium|haut de gamme|luxe/)) score += 1;
+  if (item.link && /vehicule|vehicules|camping-car|fourgon|van|caravane/i.test(item.link)) score += 2;
   return score;
 }
+function renderLiveError(message, details = '') {
+  const badge = document.getElementById('liveBadge');
+  const cards = document.getElementById('liveCards');
+  badge.textContent = 'Erreur';
+  badge.className = 'live-badge error';
+  cards.innerHTML = `<div class="live-empty">${escapeHtml(message)}${details ? '<br>' + escapeHtml(details) : ''}</div>`;
+}
+function renderLiveLoading(query) {
+  const badge = document.getElementById('liveBadge');
+  const cards = document.getElementById('liveCards');
+  badge.textContent = 'Chargement';
+  badge.className = 'live-badge loading';
+  cards.innerHTML = `<div class="live-empty">Interrogation de libertium.fr…<br><em>${escapeHtml(query)}</em></div>`;
+}
+async function runLiveSearch() {
+  const btn = document.getElementById('btnLive');
+  const icon = document.getElementById('btnLiveIcon');
+  const txt = document.getElementById('btnLiveTxt');
+  const wrap = document.getElementById('liveResults');
+  const cards = document.getElementById('liveCards');
+  const badge = document.getElementById('liveBadge');
 
-// Requête Google PSE
-async function runLiveSearch(){
-  const apiKey = PSE_API_KEY;
-  const cx     = PSE_CX;
+  const apiKey = (LIVE_SEARCH_CONFIG.apiKey || '').trim();
+  const cx = (LIVE_SEARCH_CONFIG.cx || '').trim();
 
-  const btn=document.getElementById('btnLive');
-  const icon=document.getElementById('btnLiveIcon');
-  const txt=document.getElementById('btnLiveTxt');
-  const wrap=document.getElementById('liveResults');
-  const cards=document.getElementById('liveCards');
-  const badge=document.getElementById('liveBadge');
+  if (!apiKey || !cx) {
+    wrap.style.display = 'block';
+    renderLiveError('Configuration manquante.', 'Renseigne la clé Google API et le cx PSE dans LIVE_SEARCH_CONFIG.');
+    return;
+  }
 
-  // État chargement
   btn.classList.add('searching');
-  icon.textContent='⏳';
-  txt.textContent='Recherche en cours…';
-  btn.disabled=true;
-  wrap.style.display='block';
-  badge.textContent='Chargement…';
-  badge.className='live-badge loading';
-  cards.innerHTML='<div class="live-empty">Interrogation de libertium.fr…</div>';
+  btn.disabled = true;
+  icon.textContent = '⏳';
+  txt.textContent = 'Recherche en cours…';
+  wrap.style.display = 'block';
 
-  const query=buildSearchQuery();
-  const d=read();
+  const query = buildSearchQuery();
+  renderLiveLoading(query);
 
-  try{
-    const url=`https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(apiKey)}&cx=${encodeURIComponent(cx)}&q=${encodeURIComponent(query)}&num=10`;
-    const resp=await fetch(url);
+  try {
+    const url = new URL(LIVE_SEARCH_CONFIG.apiUrl);
+    url.searchParams.set('key', apiKey);
+    url.searchParams.set('cx', cx);
+    url.searchParams.set('q', query);
+    url.searchParams.set('num', '10');
 
-    if(!resp.ok){
-      const err=await resp.json().catch(()=>({}));
-      throw new Error(err.error?.message||`Erreur HTTP ${resp.status}`);
+    const resp = await fetch(url.toString(), { method: 'GET' });
+
+    let data = null;
+    try { data = await resp.json(); } catch (_) { data = null; }
+
+    if (!resp.ok) {
+      const msg = data?.error?.message || `Erreur HTTP ${resp.status}`;
+      throw new Error(msg);
     }
 
-    const data=await resp.json();
-    const items=(data.items||[]);
-
-    if(!items.length){
-      badge.textContent='0 résultat';
-      badge.className='live-badge error';
-      cards.innerHTML=`<div class="live-empty">Aucun résultat pour "<em>${query}</em>".<br>Essayez d'affiner les critères ou <a href="https://www.libertium.fr/vehicule" target="_blank">consultez libertium.fr</a>.</div>`;
+    const items = Array.isArray(data?.items) ? data.items : [];
+    if (!items.length) {
+      badge.textContent = '0 résultat';
+      badge.className = 'live-badge error';
+      cards.innerHTML = `<div class="live-empty">Aucun résultat pour <em>${escapeHtml(query)}</em>.<br>Essayez d’affiner les critères ou consultez <a href="https://www.libertium.fr/vehicule" target="_blank" rel="noopener noreferrer">libertium.fr</a>.</div>`;
       return;
     }
 
-    // Scorer et trier les résultats
-    const scored=items
-      .map(item=>({...item,matchScore:computeMatchScore(item,d)}))
-      .sort((a,b)=>b.matchScore-a.matchScore)
-      .slice(0,5);
+    const scored = items
+      .map(item => ({...item, matchScore: computeMatchScore(item, read())}))
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 5);
 
-    badge.textContent=`${scored.length} véhicule${scored.length>1?'s':''} trouvé${scored.length>1?'s':''}`;
-    badge.className='live-badge';
+    badge.textContent = `${scored.length} véhicule${scored.length > 1 ? 's' : ''} trouvé${scored.length > 1 ? 's' : ''}`;
+    badge.className = 'live-badge';
 
-    const rankLabels=['🥇 Top 1','🥈 Top 2','🥉 Top 3','4e','5e'];
-    const rankClasses=['r1','r2','r3','',''];
+    const rankLabels = ['Top 1', 'Top 2', 'Top 3', 'Top 4', 'Top 5'];
+    const rankClasses = ['r1', 'r2', 'r3', '', ''];
 
-    cards.innerHTML=scored.map((item,i)=>{
-      const matchLevel=item.matchScore>=5?'high':item.matchScore>=3?'mid':'low';
-      const matchTxt=item.matchScore>=5?'Très pertinent':item.matchScore>=3?'Pertinent':'À vérifier';
-      // Nettoyer le snippet HTML
-      const snippet=(item.snippet||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+    cards.innerHTML = scored.map((item, i) => {
+      const matchLevel = item.matchScore >= 5 ? 'high' : item.matchScore >= 3 ? 'mid' : 'low';
+      const matchTxt = item.matchScore >= 5 ? 'Très pertinent' : item.matchScore >= 3 ? 'Pertinent' : 'À vérifier';
+      const snippet = cleanText(item.snippet || '');
       return `
         <div class="live-vehicle-card">
           <div class="lvc-head">
-            <div class="lvc-title">${item.title}</div>
-            <div class="lvc-rank ${rankClasses[i]}">${rankLabels[i]}</div>
+            <div class="lvc-title">${escapeHtml(item.title || 'Annonce')}</div>
+            <div class="lvc-rank ${rankClasses[i] || ''}">${rankLabels[i] || ''}</div>
           </div>
-          ${snippet?`<div class="lvc-snippet">${snippet}</div>`:''}
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <a class="lvc-link" href="${item.link}" target="_blank" rel="noopener noreferrer">
-              Voir sur libertium.fr ↗
-            </a>
-            <span class="lvc-match ${matchLevel}">${matchTxt}</span>
+          ${snippet ? `<div class="lvc-snippet">${escapeHtml(snippet)}</div>` : ''}
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <a class="lvc-link" href="${escapeHtml(item.link || '#')}" target="_blank" rel="noopener noreferrer">Voir sur libertium.fr</a>
+            <span class="lvc-match ${matchLevel}">${escapeHtml(matchTxt)}</span>
           </div>
-        </div>`;
+        </div>
+      `;
     }).join('');
-
-  }catch(err){
-    badge.textContent='Erreur';
-    badge.className='live-badge error';
-    const isQuota=err.message&&err.message.toLowerCase().includes('quota');
-    cards.innerHTML=`
-      <div class="live-empty">
-        ${isQuota
-          ? '⚠️ Quota journalier atteint (100 req/jour gratuit). Réessayez demain ou <a href="https://console.developers.google.com" target="_blank">augmentez votre quota</a>.'
-          : `⚠️ Erreur : ${err.message}<br>Vérifiez votre clé API et l'ID du moteur PSE.`}
-      </div>`;
-  }finally{
+  } catch (err) {
+    const msg = String(err?.message || 'Erreur inconnue');
+    const quota = /quota|rate limit|exceeded/i.test(msg);
+    renderLiveError(
+      quota ? 'Quota journalier atteint.' : 'Erreur lors de la recherche.',
+      quota ? 'Ressayez plus tard ou augmentez le quota Google.' : 'Vérifiez la clé API, le cx PSE, et l’accès à la Custom Search JSON API.'
+    );
+  } finally {
     btn.classList.remove('searching');
-    icon.textContent='🔎';
-    txt.textContent='Relancer la recherche';
-    btn.disabled=false;
+    btn.disabled = false;
+    icon.textContent = '🔎';
+    txt.textContent = 'Relancer la recherche';
   }
 }
 
-// ════════════════════════════════════════════════════════════
-// FIN BLOC LIVE SEARCH
-// ════════════════════════════════════════════════════════════
+init();bind();render();
 </script>
 </body>
 </html>
