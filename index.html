@@ -408,31 +408,10 @@
       ═══════════════════════════════════════════════════════ -->
       <div style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px">
 
-        <!-- Bouton config -->
+        <!-- Titre bloc live -->
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
           <span style="font-size:13px;font-weight:700;color:#0f172a">🔍 Stock en temps réel · libertium.fr</span>
-          <button type="button" style="font-size:11px;font-weight:600;padding:5px 10px;border-radius:8px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;cursor:pointer" id="btnConfig" onclick="toggleConfig()">⚙️ Config API</button>
-        </div>
-
-        <!-- Zone de configuration (masquée par défaut) -->
-        <div class="live-search-config" id="liveConfig">
-          <p style="font-size:12px;color:#1e40af;font-weight:700;margin:0 0 10px">Configuration Google Programmable Search Engine</p>
-          <div class="cfg-row">
-            <div>
-              <label>Clé API Google</label>
-              <input type="password" id="cfgApiKey" placeholder="AIzaSy..." autocomplete="off">
-            </div>
-            <div>
-              <label>ID moteur PSE (cx)</label>
-              <input type="text" id="cfgCx" placeholder="a1b2c3d4e5f6g7h8i">
-            </div>
-          </div>
-          <button type="button" style="background:#1d4ed8;color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;border:0;cursor:pointer;width:100%" onclick="saveConfig()">Enregistrer</button>
-          <div class="cfg-note">
-            1. Créez un moteur sur <a href="https://programmablesearchengine.google.com" target="_blank">programmablesearchengine.google.com</a> — restreint à <strong>libertium.fr</strong><br>
-            2. Récupérez une clé API sur <a href="https://console.developers.google.com" target="_blank">console.developers.google.com</a> → API Custom Search JSON<br>
-            3. Gratuit jusqu'à 100 requêtes/jour · Les clés sont stockées uniquement dans ce navigateur
-          </div>
+          <span style="font-size:11px;color:#22c55e;font-weight:700;background:#dcfce7;padding:3px 8px;border-radius:999px">● API connectée</span>
         </div>
 
         <!-- Bouton recherche -->
@@ -566,30 +545,12 @@ init();bind();render();
 document.getElementById('codePostal').addEventListener('blur',()=>postal().then(render));
 
 // ════════════════════════════════════════════════════════════
-// BLOC LIVE SEARCH — ajout uniquement
+// BLOC LIVE SEARCH — credentials intégrés directement
 // ════════════════════════════════════════════════════════════
 
-// Stockage clé/cx dans localStorage
-function saveConfig(){
-  const key=document.getElementById('cfgApiKey').value.trim();
-  const cx=document.getElementById('cfgCx').value.trim();
-  if(!key||!cx){alert('Veuillez renseigner la clé API et l\'ID du moteur PSE.');return;}
-  localStorage.setItem('pse_api_key',key);
-  localStorage.setItem('pse_cx',cx);
-  document.getElementById('liveConfig').classList.remove('open');
-  document.getElementById('btnConfig').textContent='⚙️ Config ✓';
-  document.getElementById('status').textContent='Clé API sauvegardée.';
-}
-
-function toggleConfig(){
-  const cfg=document.getElementById('liveConfig');
-  cfg.classList.toggle('open');
-  // Pré-remplir les champs si déjà sauvegardés
-  const k=localStorage.getItem('pse_api_key');
-  const cx=localStorage.getItem('pse_cx');
-  if(k) document.getElementById('cfgApiKey').value=k;
-  if(cx) document.getElementById('cfgCx').value=cx;
-}
+// Credentials Google PSE — intégrés directement
+const PSE_API_KEY = 'AIzaSyD1x8M0pDdCdxkGejiVMSJLuAWCNxsL6Rw';
+const PSE_CX      = 'a3a8f772f6df54590';
 
 // Construire la requête de recherche à partir du formulaire
 function buildSearchQuery(){
@@ -634,8 +595,8 @@ function computeMatchScore(item, d){
 
 // Requête Google PSE
 async function runLiveSearch(){
-  const apiKey=localStorage.getItem('pse_api_key');
-  const cx=localStorage.getItem('pse_cx');
+  const apiKey = PSE_API_KEY;
+  const cx     = PSE_CX;
 
   const btn=document.getElementById('btnLive');
   const icon=document.getElementById('btnLiveIcon');
@@ -643,14 +604,6 @@ async function runLiveSearch(){
   const wrap=document.getElementById('liveResults');
   const cards=document.getElementById('liveCards');
   const badge=document.getElementById('liveBadge');
-
-  if(!apiKey||!cx){
-    // Ouvrir la config si pas encore configurée
-    document.getElementById('liveConfig').classList.add('open');
-    document.getElementById('btnConfig').scrollIntoView({behavior:'smooth',block:'nearest'});
-    document.getElementById('status').textContent='⚠️ Configurez d\'abord la clé API et l\'ID PSE.';
-    return;
-  }
 
   // État chargement
   btn.classList.add('searching');
@@ -735,12 +688,6 @@ async function runLiveSearch(){
   }
 }
 
-// Restaurer le label config si clé déjà présente
-(function(){
-  if(localStorage.getItem('pse_api_key')&&localStorage.getItem('pse_cx')){
-    document.getElementById('btnConfig').textContent='⚙️ Config ✓';
-  }
-})();
 // ════════════════════════════════════════════════════════════
 // FIN BLOC LIVE SEARCH
 // ════════════════════════════════════════════════════════════
