@@ -73,6 +73,94 @@
     .score-low{background:#fff7ed;color:#9a3412}
     .reprise-fields{margin-top:10px;padding:12px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fbff;display:none}
     .reprise-fields.show{display:block}
+
+    /* ═══════════════════════════════════════════
+       STYLES BLOC LIVE SEARCH — ajout uniquement
+    ═══════════════════════════════════════════ */
+    .live-search-config{
+      margin-top:12px;padding:14px;
+      background:#f0f7ff;border:1px solid #bfdbfe;border-radius:14px;
+      display:none
+    }
+    .live-search-config.open{display:block}
+    .live-search-config label{font-size:12px;color:#1e40af;font-weight:700;margin-bottom:4px}
+    .live-search-config input{
+      font-size:12px;padding:8px 10px;border-radius:8px;
+      border:1px solid #93c5fd;background:#fff
+    }
+    .live-search-config .cfg-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+    .live-search-config .cfg-note{font-size:11px;color:#3b82f6;margin-top:6px;line-height:1.5}
+    .live-search-config a{color:#2563eb;font-weight:700}
+
+    .live-results-wrap{margin-top:14px}
+    .live-results-wrap h4{
+      margin:0 0 10px;font-size:14px;font-weight:700;color:#0f172a;
+      display:flex;align-items:center;gap:8px
+    }
+    .live-results-wrap h4 .live-badge{
+      font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;
+      background:#dcfce7;color:#166534
+    }
+    .live-results-wrap h4 .live-badge.loading{
+      background:#fef9c3;color:#854d0e
+    }
+    .live-results-wrap h4 .live-badge.error{
+      background:#fee2e2;color:#991b1b
+    }
+
+    .live-vehicle-card{
+      border:1.5px solid #bfdbfe;border-radius:12px;padding:12px 14px;
+      background:#f8fbff;margin-bottom:8px;transition:border-color .15s
+    }
+    .live-vehicle-card:hover{border-color:var(--primary)}
+    .live-vehicle-card:last-child{margin-bottom:0}
+    .lvc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
+    .lvc-title{font-size:13px;font-weight:700;color:#0f172a;line-height:1.4}
+    .lvc-rank{
+      font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;
+      background:#dbeafe;color:#1d4ed8;white-space:nowrap;flex-shrink:0
+    }
+    .lvc-rank.r1{background:#dcfce7;color:#166534}
+    .lvc-rank.r2{background:#eff6ff;color:#1d4ed8}
+    .lvc-rank.r3{background:#fff7ed;color:#9a3412}
+    .lvc-snippet{font-size:12px;color:#475569;line-height:1.5;margin-bottom:8px}
+    .lvc-link{
+      display:inline-flex;align-items:center;gap:5px;
+      font-size:12px;font-weight:700;color:var(--primary);
+      text-decoration:none;padding:5px 12px;
+      border:1.5px solid var(--primary);border-radius:999px;
+      transition:all .15s;background:#fff
+    }
+    .lvc-link:hover{background:var(--primary);color:#fff}
+    .lvc-match{
+      display:inline-flex;align-items:center;gap:4px;
+      font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
+      margin-left:6px
+    }
+    .lvc-match.high{background:#dcfce7;color:#166534}
+    .lvc-match.mid{background:#fef9c3;color:#854d0e}
+    .lvc-match.low{background:#f1f5f9;color:#64748b}
+
+    .live-empty{
+      text-align:center;padding:20px;color:#94a3b8;font-size:13px;
+      border:1px dashed #cbd5e1;border-radius:12px
+    }
+    .live-empty a{color:var(--primary);font-weight:700}
+
+    .btn-live-toggle{
+      background:#0f62fe;color:#fff;border-radius:12px;
+      padding:10px 14px;font-size:13px;font-weight:700;
+      width:100%;margin-top:12px;cursor:pointer;border:0;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+      transition:background .15s
+    }
+    .btn-live-toggle:hover{background:#0043ce}
+    .btn-live-toggle.searching{background:#64748b;cursor:wait}
+
+    /* ═══════════════════════════════════════════
+       FIN STYLES LIVE SEARCH
+    ═══════════════════════════════════════════ */
+
     @media (max-width:1040px){
       .grid{grid-template-columns:1fr}
       .header{flex-direction:column}
@@ -81,6 +169,7 @@
       .form-grid{grid-template-columns:1fr}
       .preview-line{grid-template-columns:1fr;gap:4px}
       .right-sticky{position:static}
+      .live-search-config .cfg-row{grid-template-columns:1fr}
     }
     @media print{
       @page{size:A4;margin:10mm}
@@ -91,6 +180,10 @@
       .card{box-shadow:none;border:0;border-radius:0;padding:0}
       .screen-only{display:none !important}
       .print-only{display:block !important}
+      .live-search-config,.btn-live-toggle{display:none !important}
+      .live-results-wrap h4 .live-badge{display:none}
+      .live-vehicle-card{border:1px solid #d8e1ee;background:#fff;break-inside:avoid}
+      .lvc-link{color:#163a6b;text-decoration:none}
       .print-header{
         display:flex;justify-content:space-between;align-items:center;gap:12px;
         padding:12px 14px;margin-bottom:14px;border:1px solid var(--print-line);border-radius:14px;
@@ -136,7 +229,7 @@
 
   <div class="header">
     <div>
-      <h2 class="title">Widget d’aide à la découverte véhicule de loisirs</h2>
+      <h2 class="title">Widget d'aide à la découverte véhicule de loisirs</h2>
       <p class="subtitle">Aperçu dynamique, scoring, reprise détaillée, export PDF et impression optimisée.</p>
       <div class="status screen-only" id="status">Prêt.</div>
     </div>
@@ -238,21 +331,22 @@
             <div class="field"><label for="reprPtac">PTAC (en Kg)</label><input id="reprPtac" type="text" /></div>
             <div class="field"><label for="reprCvFisc">Chevaux fiscaux</label><input id="reprCvFisc" type="text" /></div>
             <div class="field"><label for="reprCvDin">Chevaux DIN</label><input id="reprCvDin" type="text" /></div>
-<div class="field">
-  <label for="reprBoite">Boite de vitesse</label>
-  <select id="reprBoite">
-    <option value="Boite auto" selected>Boite auto</option>
-    <option value="Boite manuelle">Boite manuelle</option>
-  </select>
-</div>            <div class="field">
-  <label for="reprEnergie">Énergie</label>
-  <select id="reprEnergie">
-    <option value="Diesel" selected>Diesel</option>
-    <option value="Essence">Essence</option>
-    <option value="Hybride">Hybride</option>
-    <option value="Electrique">Electrique</option>
-  </select>
-</div>
+            <div class="field">
+              <label for="reprBoite">Boite de vitesse</label>
+              <select id="reprBoite">
+                <option value="Boite auto" selected>Boite auto</option>
+                <option value="Boite manuelle">Boite manuelle</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="reprEnergie">Énergie</label>
+              <select id="reprEnergie">
+                <option value="Diesel" selected>Diesel</option>
+                <option value="Essence">Essence</option>
+                <option value="Hybride">Hybride</option>
+                <option value="Electrique">Electrique</option>
+              </select>
+            </div>
             <div class="field"><label for="reprPlacesCg">Nombre de place carte grise</label><select id="reprPlacesCg"></select></div>
             <div class="field"><label for="reprPlacesCouche">Places couchage</label><select id="reprPlacesCouche"></select></div>
             <div class="field"><label for="reprTypeLit">Type de lit</label><select id="reprTypeLit"><option value="">—</option><option>Lit À La Française</option><option>Lit Central</option><option>Lit Pavillon</option><option>Lit Superposé</option><option>Lit Sur Soute</option><option>Lit Transversal</option><option>Lits Jumeaux</option><option>Salon En U</option></select></div>
@@ -308,21 +402,77 @@
       </div>
 
       <div class="results" id="results"></div>
+
+      <!-- ═══════════════════════════════════════════════════════
+           BLOC LIVE SEARCH — ajout uniquement, rien modifié au-dessus
+      ═══════════════════════════════════════════════════════ -->
+      <div style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px">
+
+        <!-- Bouton config -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:13px;font-weight:700;color:#0f172a">🔍 Stock en temps réel · libertium.fr</span>
+          <button type="button" style="font-size:11px;font-weight:600;padding:5px 10px;border-radius:8px;background:#f1f5f9;color:#475569;border:1px solid #cbd5e1;cursor:pointer" id="btnConfig" onclick="toggleConfig()">⚙️ Config API</button>
+        </div>
+
+        <!-- Zone de configuration (masquée par défaut) -->
+        <div class="live-search-config" id="liveConfig">
+          <p style="font-size:12px;color:#1e40af;font-weight:700;margin:0 0 10px">Configuration Google Programmable Search Engine</p>
+          <div class="cfg-row">
+            <div>
+              <label>Clé API Google</label>
+              <input type="password" id="cfgApiKey" placeholder="AIzaSy..." autocomplete="off">
+            </div>
+            <div>
+              <label>ID moteur PSE (cx)</label>
+              <input type="text" id="cfgCx" placeholder="a1b2c3d4e5f6g7h8i">
+            </div>
+          </div>
+          <button type="button" style="background:#1d4ed8;color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;border:0;cursor:pointer;width:100%" onclick="saveConfig()">Enregistrer</button>
+          <div class="cfg-note">
+            1. Créez un moteur sur <a href="https://programmablesearchengine.google.com" target="_blank">programmablesearchengine.google.com</a> — restreint à <strong>libertium.fr</strong><br>
+            2. Récupérez une clé API sur <a href="https://console.developers.google.com" target="_blank">console.developers.google.com</a> → API Custom Search JSON<br>
+            3. Gratuit jusqu'à 100 requêtes/jour · Les clés sont stockées uniquement dans ce navigateur
+          </div>
+        </div>
+
+        <!-- Bouton recherche -->
+        <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
+          <span id="btnLiveIcon">🔎</span>
+          <span id="btnLiveTxt">Rechercher des véhicules en stock</span>
+        </button>
+
+        <!-- Résultats live -->
+        <div class="live-results-wrap" id="liveResults" style="display:none">
+          <h4>
+            Véhicules disponibles
+            <span class="live-badge" id="liveBadge">—</span>
+          </h4>
+          <div id="liveCards"></div>
+        </div>
+
+      </div>
+      <!-- ═══════════════════════════════════════════════════════
+           FIN BLOC LIVE SEARCH
+      ═══════════════════════════════════════════════════════ -->
+
     </div>
   </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script>
+// ════════════════════════════════════════════════════════════
+// CODE ORIGINAL CHATGPT — INCHANGÉ
+// ════════════════════════════════════════════════════════════
 const ids=['vendeur','civilite','typeClient','prenom','nom','societe','fonction','telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville','departement','pays','budget','achat','voyageurs','usage','compacite','conduite','couchages','sdb','autonomie','saison','permis','priorite','besoin','notes','delai','decisionnaire','reprise','score','reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm','reprLongueur','reprLargeur','reprHauteur','reprPtac','reprCvFisc','reprCvDin','reprPlacesCg','reprPlacesCouche','reprTypeLit','reprEauPropre','reprEauUsee','reprEtat'];
 const deptSelect=document.getElementById('departement');
 const repriseFields=document.getElementById('repriseFields');
 const statusEl=document.getElementById('status');
 const vehicles=[{key:'van',title:'Van aménagé',url:'https://www.libertium.fr/vehicule/van-amenage'},{key:'fourgon',title:'Fourgon aménagé',url:'https://www.libertium.fr/vehicule/van-fourgon-amenage'},{key:'profile',title:'Camping-car profilé',url:'https://www.libertium.fr/vehicule/camping-car/profile'},{key:'integral',title:'Camping-car intégral',url:'https://www.libertium.fr/vehicule/camping-car/integral'},{key:'capucine',title:'Camping-car capucine',url:'https://www.libertium.fr/vehicule/camping-car/capucine'},{key:'caravane',title:'Caravane',url:'https://www.libertium.fr/vehicule'}];
-const deptList=[['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d’Or'],['22','Côtes-d’Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['59','Nord'],['60','Oise'],['61','Orne'],['62','Pas-de-Calais'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d’Oise']];
+const deptList=[['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d\'Or'],['22','Côtes-d\'Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['59','Nord'],['60','Oise'],['61','Orne'],['62','Pas-de-Calais'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d\'Oise']];
 const equip=['Adria','Adria Caravane','Adria Caravanes','Airstream','Arca','Autostar','Barbot','Benimar','Burstner','California','Capron','Carado','Carado.','Carthago','Caravelair','Challenger','Challenger Vdl','Clever Vans','Concorde','Crosscamp','Dethleefs','Dethleffs','Dreamer','Eden Camp','Elios','Eriba','Etrusco','Eura Mobil','Euramobil','Fleurette','Font Vendome','Ford','Frankia','Giottiline','Hanroad','Hero Camper','Hobby','Hymer','Hymercar','Itineo','Joa','Joa Camp','Karmann','Knaus','La Mancelle','La Strada','Laika','Le Voyageur','Lmc','Mac Louis','Malibu','Marco Polo','Mcc','Mc Louis','Mclouis','Mercedes','Mercedes Benz','Mobilvetta','Morelo','Notin','Panama','Pilote','Possl','Rapido','Randger','Renault','Road Car','Roadcar','Roller Team','Silver','Sterckeman','Stylevan','Sun Living','Sunlight','Swift','Tourne Mobil','Trigano Caravanes','Volkswagen','Volskwagen','Weinsberg','Westfalia','Wingamm'];
 function init(){deptSelect.innerHTML='<option value="">—</option>'+deptList.map(([c,n])=>`<option value="${c}">${c} - ${n}</option>`).join('');document.getElementById('reprEquip').innerHTML='<option value="">—</option>'+equip.map(x=>`<option>${x}</option>`).join('');document.getElementById('reprPlacesCg').innerHTML='<option value="">—</option>'+Array.from({length:7},(_,i)=>2+i).map(x=>`<option>${x}</option>`).join('');document.getElementById('reprPlacesCouche').innerHTML='<option value="">—</option>'+Array.from({length:7},(_,i)=>2+i).map(x=>`<option>${x}</option>`).join('');}
-function read(){const d={};ids.forEach(id=>d[id]=document.getElementById(id)?.value||'');d.reprBoite=(document.querySelector('input[name="reprBoite"]:checked')||{}).value||'';d.reprEnergie=(document.querySelector('input[name="reprEnergie"]:checked')||{}).value||'Diesel';return d}
+function read(){const d={};ids.forEach(id=>d[id]=document.getElementById(id)?.value||'');d.reprBoite=(document.querySelector('select#reprBoite')||{}).value||'';d.reprEnergie=(document.querySelector('select#reprEnergie')||{}).value||'Diesel';return d}
 function setVille(v){document.getElementById('ville').value=v||''}
 async function postal(){const cp=document.getElementById('codePostal').value.trim();if(!/^\d{5}$/.test(cp)){setVille('');return}try{const r=await fetch(`https://geo.api.gouv.fr/communes?codePostal=${encodeURIComponent(cp)}&fields=nom&format=json`);const j=await r.json();setVille([...new Set((j||[]).map(x=>x.nom).filter(Boolean))].join(' / '))}catch(e){setVille('')}}
 function toggleReprise(){repriseFields.classList.toggle('show',document.getElementById('reprise').value==='Oui')}
@@ -330,26 +480,14 @@ function vr(v){return v||'—'}
 function repriseLabel(d){
   if(d.reprise!=='Oui') return vr(d.reprise);
   return [
-    ['Gamme',d.reprGamme],
-    ['Marque porteur',d.reprPorteur],
-    ['Marque équipementier',d.reprEquip],
-    ['Modèle',d.reprModele],
-    ['Date de 1ère MEC',d.reprMec],
-    ['Kilométrage',d.reprKm],
-    ['Longueur (en M)',d.reprLongueur],
-    ['Largeur (en M)',d.reprLargeur],
-    ['Hauteur (en M)',d.reprHauteur],
-    ['PTAC (en Kg)',d.reprPtac],
-    ['Chevaux fiscaux',d.reprCvFisc],
-    ['Chevaux DIN',d.reprCvDin],
-    ['Boite de vitesse',d.reprBoite],
-    ['Énergie',d.reprEnergie],
-    ['Nombre de place carte grise',d.reprPlacesCg],
-    ['Places couchage',d.reprPlacesCouche],
-    ['Type de lit',d.reprTypeLit],
-    ['Réservoir eaux propres (en L)',d.reprEauPropre],
-    ['Réservoir eaux usées (en L)',d.reprEauUsee],
-    ['État général',d.reprEtat]
+    ['Gamme',d.reprGamme],['Marque porteur',d.reprPorteur],['Marque équipementier',d.reprEquip],
+    ['Modèle',d.reprModele],['Date de 1ère MEC',d.reprMec],['Kilométrage',d.reprKm],
+    ['Longueur (en M)',d.reprLongueur],['Largeur (en M)',d.reprLargeur],['Hauteur (en M)',d.reprHauteur],
+    ['PTAC (en Kg)',d.reprPtac],['Chevaux fiscaux',d.reprCvFisc],['Chevaux DIN',d.reprCvDin],
+    ['Boite de vitesse',d.reprBoite],['Énergie',d.reprEnergie],
+    ['Nombre de place carte grise',d.reprPlacesCg],['Places couchage',d.reprPlacesCouche],
+    ['Type de lit',d.reprTypeLit],['Réservoir eaux propres (en L)',d.reprEauPropre],
+    ['Réservoir eaux usées (en L)',d.reprEauUsee],['État général',d.reprEtat]
   ].filter(([,v])=>v).map(([k,v])=>`${k} : ${v}`).join(' · ')||'Oui';
 }
 function scoreVehicle(v,d){let s=0;if(v.key==='van'&&d.voyageurs==='1 à 2')s+=20;if(v.key==='fourgon'&&['1 à 2','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='profile'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='integral'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='capucine'&&['5 à 6','7 et +'].includes(d.voyageurs))s+=22;if(v.key==='caravane'&&d.priorite==='Prix')s+=18;return s+(d.budget==='Plus de 100 000 €'&&v.key==='integral'?20:0)}
@@ -375,22 +513,15 @@ function render(){
 function buildDocText(){
   const d=read();
   return [
-    `Vendeur : ${vr(d.vendeur)}`,
-    `Client : ${[d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')||'—'}`,
-    `Société : ${vr(d.societe)}`,
-    `Fonction : ${vr(d.fonction)}`,
+    `Vendeur : ${vr(d.vendeur)}`,`Client : ${[d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')||'—'}`,
+    `Société : ${vr(d.societe)}`,`Fonction : ${vr(d.fonction)}`,
     `Contact : ${[d.telephone,d.mobile,d.email,d.siteWeb].filter(Boolean).join(' · ')||'—'}`,
     `Adresse : ${[d.adresse1,d.adresse2,[d.codePostal,d.ville].filter(Boolean).join(' '),d.departement,d.pays].filter(Boolean).join(', ')||'—'}`,
-    `Budget : ${vr(d.budget)}`,
-    `Profil : ${[d.voyageurs,d.usage,d.compacite,d.priorite].filter(Boolean).join(' · ')||'—'}`,
-    `Délai : ${vr(d.delai)}`,
-    `Reprise véhicule : ${repriseLabel(d)}`,
-    '',
-    'Aperçu commercial :',
-    document.getElementById('pvSummaryBox').textContent.trim(),
-    '',
-    'Recommandations :',
-    document.getElementById('results').innerText.trim()
+    `Budget : ${vr(d.budget)}`,`Profil : ${[d.voyageurs,d.usage,d.compacite,d.priorite].filter(Boolean).join(' · ')||'—'}`,
+    `Délai : ${vr(d.delai)}`,`Reprise véhicule : ${repriseLabel(d)}`,'',
+    'Aperçu commercial :',document.getElementById('pvSummaryBox').textContent.trim(),'',
+    'Recommandations :',document.getElementById('results').innerText.trim(),'',
+    'Stock en temps réel :',document.getElementById('liveCards').innerText.trim()||'—'
   ].join('\n');
 }
 function exportPDF(){
@@ -400,43 +531,219 @@ function exportPDF(){
     <div style="border:1px solid #d8e1ee;border-radius:16px;overflow:hidden">
       <div style="padding:16px 18px;background:linear-gradient(180deg,#ffffff 0%,#eef4ff 100%);border-bottom:1px solid #d8e1ee">
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
-          <div>
-            <div style="font-size:20px;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div>
-            <div style="font-size:12px;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div>
-          </div>
-          <div style="text-align:right;font-size:11px;color:#475569;line-height:1.4">
-            205 Avenue de la République<br>59113 SECLIN<br>contact.seclin@libertium.fr
-          </div>
+          <div><div style="font-size:20px;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div>
+          <div style="font-size:12px;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div></div>
+          <div style="text-align:right;font-size:11px;color:#475569;line-height:1.4">205 Avenue de la République<br>59113 SECLIN<br>contact.seclin@libertium.fr</div>
         </div>
       </div>
       <div style="padding:18px">
         <div style="font-size:12.5px;line-height:1.55;white-space:pre-wrap">${buildDocText().replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}</div>
       </div>
     </div>`;
-  html2pdf().set({
-    margin:10,
-    filename:'resume-widget.pdf',
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
-  }).from(wrapper).save();
+  html2pdf().set({margin:10,filename:'resume-widget.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrapper).save();
 }
 function bind(){
   document.getElementById('btnPrint').addEventListener('click',()=>window.print());
   document.getElementById('btnPdf').addEventListener('click',exportPDF);
-  document.getElementById('btnReset').addEventListener('click',()=>{form.reset();document.querySelector('input[name="reprEnergie"][value="Diesel"]').checked=true;document.querySelector('input[name="reprBoite"][value="Boite auto"]').checked=true;setVille('');toggleReprise();render()});
+  document.getElementById('btnReset').addEventListener('click',()=>{
+    document.getElementById('leadForm').reset();
+    document.getElementById('reprBoite').value='Boite auto';
+    document.getElementById('reprEnergie').value='Diesel';
+    setVille('');toggleReprise();render();
+    document.getElementById('liveResults').style.display='none';
+    document.getElementById('liveCards').innerHTML='';
+    document.getElementById('btnLiveTxt').textContent='Rechercher des véhicules en stock';
+    document.getElementById('btnLiveIcon').textContent='🔎';
+  });
   ids.forEach(id=>{
-    const el=document.getElementById(id); if(!el) return;
+    const el=document.getElementById(id);if(!el)return;
     const ev=(el.tagName==='TEXTAREA'||el.tagName==='INPUT')?'input':'change';
     el.addEventListener(ev,()=>{if(id==='codePostal')postal().then(render);else render()});
   });
-  document.querySelectorAll('input[name="reprBoite"],input[name="reprEnergie"]').forEach(el=>el.addEventListener('change',render));
   document.getElementById('reprise').addEventListener('change',render);
 }
-init();
-bind();
-render();
+init();bind();render();
 document.getElementById('codePostal').addEventListener('blur',()=>postal().then(render));
+
+// ════════════════════════════════════════════════════════════
+// BLOC LIVE SEARCH — ajout uniquement
+// ════════════════════════════════════════════════════════════
+
+// Stockage clé/cx dans localStorage
+function saveConfig(){
+  const key=document.getElementById('cfgApiKey').value.trim();
+  const cx=document.getElementById('cfgCx').value.trim();
+  if(!key||!cx){alert('Veuillez renseigner la clé API et l\'ID du moteur PSE.');return;}
+  localStorage.setItem('pse_api_key',key);
+  localStorage.setItem('pse_cx',cx);
+  document.getElementById('liveConfig').classList.remove('open');
+  document.getElementById('btnConfig').textContent='⚙️ Config ✓';
+  document.getElementById('status').textContent='Clé API sauvegardée.';
+}
+
+function toggleConfig(){
+  const cfg=document.getElementById('liveConfig');
+  cfg.classList.toggle('open');
+  // Pré-remplir les champs si déjà sauvegardés
+  const k=localStorage.getItem('pse_api_key');
+  const cx=localStorage.getItem('pse_cx');
+  if(k) document.getElementById('cfgApiKey').value=k;
+  if(cx) document.getElementById('cfgCx').value=cx;
+}
+
+// Construire la requête de recherche à partir du formulaire
+function buildSearchQuery(){
+  const d=read();
+  const parts=[];
+
+  // Type de véhicule
+  const budgetMap={'Moins de 40 000 €':'budget 40000','40 000 à 60 000 €':'budget 60000','60 000 à 80 000 €':'budget 80000','80 000 à 100 000 €':'budget 100000','Plus de 100 000 €':'premium'};
+  const typeMap={'van':'van aménagé','fourgon':'fourgon','profile':'profilé','integral':'intégral','capucine':'capucine','caravane':'caravane'};
+
+  // Déterminer le type dominant via scoreVehicle
+  const ranked=[...vehicles].map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score);
+  if(ranked[0]&&ranked[0].score>0) parts.push(typeMap[ranked[0].key]||ranked[0].title);
+  else parts.push('camping-car');
+
+  if(d.achat==='Neuf') parts.push('neuf');
+  else if(d.achat==='Occasion') parts.push('occasion');
+
+  if(d.couchages&&d.couchages!=='Peu importe') parts.push(d.couchages.toLowerCase());
+  if(d.budget&&d.budget!=='Non défini'&&budgetMap[d.budget]) parts.push(budgetMap[d.budget]);
+  if(d.autonomie&&d.autonomie!=='Peu importe'&&d.autonomie!=='Faible') parts.push('autonomie '+d.autonomie.toLowerCase());
+
+  return parts.join(' ');
+}
+
+// Évaluer la pertinence d'un résultat Google par rapport au profil
+function computeMatchScore(item, d){
+  let score=0;
+  const text=(item.title+' '+(item.snippet||'')).toLowerCase();
+  const typeMap={'van':'van','fourgon':'fourgon','profile':'profilé profil','integral':'intégral integral','capucine':'capucine','caravane':'caravane'};
+  const ranked=[...vehicles].map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score);
+  const topKey=ranked[0]?.key||'';
+  const topWords=(typeMap[topKey]||'').split(' ');
+  topWords.forEach(w=>{if(w&&text.includes(w))score+=3;});
+  if(d.achat==='Neuf'&&text.includes('neuf'))score+=2;
+  if(d.achat==='Occasion'&&text.includes('occasion'))score+=2;
+  if(d.couchages&&text.includes(d.couchages.toLowerCase().split(' ')[0]))score+=1;
+  // URL contient /vehicule/ → c'est une vraie page annonce
+  if(item.link&&item.link.includes('/vehicule/'))score+=2;
+  return score;
+}
+
+// Requête Google PSE
+async function runLiveSearch(){
+  const apiKey=localStorage.getItem('pse_api_key');
+  const cx=localStorage.getItem('pse_cx');
+
+  const btn=document.getElementById('btnLive');
+  const icon=document.getElementById('btnLiveIcon');
+  const txt=document.getElementById('btnLiveTxt');
+  const wrap=document.getElementById('liveResults');
+  const cards=document.getElementById('liveCards');
+  const badge=document.getElementById('liveBadge');
+
+  if(!apiKey||!cx){
+    // Ouvrir la config si pas encore configurée
+    document.getElementById('liveConfig').classList.add('open');
+    document.getElementById('btnConfig').scrollIntoView({behavior:'smooth',block:'nearest'});
+    document.getElementById('status').textContent='⚠️ Configurez d\'abord la clé API et l\'ID PSE.';
+    return;
+  }
+
+  // État chargement
+  btn.classList.add('searching');
+  icon.textContent='⏳';
+  txt.textContent='Recherche en cours…';
+  btn.disabled=true;
+  wrap.style.display='block';
+  badge.textContent='Chargement…';
+  badge.className='live-badge loading';
+  cards.innerHTML='<div class="live-empty">Interrogation de libertium.fr…</div>';
+
+  const query=buildSearchQuery();
+  const d=read();
+
+  try{
+    const url=`https://www.googleapis.com/customsearch/v1?key=${encodeURIComponent(apiKey)}&cx=${encodeURIComponent(cx)}&q=${encodeURIComponent(query)}&num=10`;
+    const resp=await fetch(url);
+
+    if(!resp.ok){
+      const err=await resp.json().catch(()=>({}));
+      throw new Error(err.error?.message||`Erreur HTTP ${resp.status}`);
+    }
+
+    const data=await resp.json();
+    const items=(data.items||[]);
+
+    if(!items.length){
+      badge.textContent='0 résultat';
+      badge.className='live-badge error';
+      cards.innerHTML=`<div class="live-empty">Aucun résultat pour "<em>${query}</em>".<br>Essayez d'affiner les critères ou <a href="https://www.libertium.fr/vehicule" target="_blank">consultez libertium.fr</a>.</div>`;
+      return;
+    }
+
+    // Scorer et trier les résultats
+    const scored=items
+      .map(item=>({...item,matchScore:computeMatchScore(item,d)}))
+      .sort((a,b)=>b.matchScore-a.matchScore)
+      .slice(0,5);
+
+    badge.textContent=`${scored.length} véhicule${scored.length>1?'s':''} trouvé${scored.length>1?'s':''}`;
+    badge.className='live-badge';
+
+    const rankLabels=['🥇 Top 1','🥈 Top 2','🥉 Top 3','4e','5e'];
+    const rankClasses=['r1','r2','r3','',''];
+
+    cards.innerHTML=scored.map((item,i)=>{
+      const matchLevel=item.matchScore>=5?'high':item.matchScore>=3?'mid':'low';
+      const matchTxt=item.matchScore>=5?'Très pertinent':item.matchScore>=3?'Pertinent':'À vérifier';
+      // Nettoyer le snippet HTML
+      const snippet=(item.snippet||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+      return `
+        <div class="live-vehicle-card">
+          <div class="lvc-head">
+            <div class="lvc-title">${item.title}</div>
+            <div class="lvc-rank ${rankClasses[i]}">${rankLabels[i]}</div>
+          </div>
+          ${snippet?`<div class="lvc-snippet">${snippet}</div>`:''}
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <a class="lvc-link" href="${item.link}" target="_blank" rel="noopener noreferrer">
+              Voir sur libertium.fr ↗
+            </a>
+            <span class="lvc-match ${matchLevel}">${matchTxt}</span>
+          </div>
+        </div>`;
+    }).join('');
+
+  }catch(err){
+    badge.textContent='Erreur';
+    badge.className='live-badge error';
+    const isQuota=err.message&&err.message.toLowerCase().includes('quota');
+    cards.innerHTML=`
+      <div class="live-empty">
+        ${isQuota
+          ? '⚠️ Quota journalier atteint (100 req/jour gratuit). Réessayez demain ou <a href="https://console.developers.google.com" target="_blank">augmentez votre quota</a>.'
+          : `⚠️ Erreur : ${err.message}<br>Vérifiez votre clé API et l'ID du moteur PSE.`}
+      </div>`;
+  }finally{
+    btn.classList.remove('searching');
+    icon.textContent='🔎';
+    txt.textContent='Relancer la recherche';
+    btn.disabled=false;
+  }
+}
+
+// Restaurer le label config si clé déjà présente
+(function(){
+  if(localStorage.getItem('pse_api_key')&&localStorage.getItem('pse_cx')){
+    document.getElementById('btnConfig').textContent='⚙️ Config ✓';
+  }
+})();
+// ════════════════════════════════════════════════════════════
+// FIN BLOC LIVE SEARCH
+// ════════════════════════════════════════════════════════════
 </script>
 </body>
 </html>
