@@ -3,46 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Libertium Seclin - Widget découverte</title>
+  <title>Libertium Seclin - Widget découverte complet</title>
   <style>
-    :root{--bg:#f4f7fb;--panel:#fff;--panel-2:#f8fbff;--text:#172033;--muted:#64748b;--primary:#0f62fe;--primary-dark:#0043ce;--danger:#dc2626;--border:#d8e1ee;--shadow:0 14px 34px rgba(15,23,42,.08);--radius:18px;--print-bg:#f7f9fc;--print-card:#ffffff;--print-line:#d8e1ee;--print-accent:#2f5aa8;}
+    :root {
+      --bg:#f4f7fb;--panel:#fff;--panel-2:#f8fbff;--text:#172033;--muted:#64748b;
+      --primary:#0f62fe;--primary-dark:#0043ce;--danger:#dc2626;--border:#d8e1ee;
+      --shadow:0 14px 34px rgba(15,23,42,.08);--radius:18px;
+    }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);color:var(--text)}
+    html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,sans-serif;background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);color:var(--text)}
     .page{max-width:1440px;margin:0 auto;padding:24px}
     .topbar{display:flex;justify-content:space-between;gap:16px;align-items:stretch;margin-bottom:20px;background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
     .brand{flex:1;display:flex;gap:16px;align-items:center;padding:18px 20px;min-width:0}
     .brand-logo{width:74px;height:74px;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-    .brand-logo img{width:100%;height:100%;object-fit:contain;display:block}
+    .brand-logo img{width:100%;height:100%;object-fit:contain}
     .brand-text h1{margin:0;font-size:24px;line-height:1.1}
-    .brand-text p{margin:6px 0 0;color:var(--muted);line-height:1.45;font-size:14px}
+    .brand-text p{margin:6px 0 0;color:var(--muted);font-size:14px}
     .contact-box{width:320px;display:flex;align-items:center;justify-content:center;padding:18px 20px;border-left:1px solid var(--border)}
     .contact-phone{width:100%;text-align:center;background:var(--danger);color:#fff;border-radius:12px;padding:14px 16px;font-weight:800;font-size:16px}
     .header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}
-    .title{margin:0;font-size:28px;line-height:1.1}
-    .subtitle{margin:8px 0 0;color:var(--muted)}
-    .status{margin-top:8px;font-size:14px;color:var(--muted)}
-    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-    button{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:14px;transition:transform .12s ease,background .15s ease}
-    button:hover{transform:translateY(-1px)}
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-primary:hover{background:var(--primary-dark)}
-    .btn-secondary{background:#e8eef8;color:var(--text)}
+    .title{margin:0;font-size:28px}
     .grid{display:grid;grid-template-columns:1.1fr .95fr;gap:20px}
     .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
-    .card h2{margin:0 0 16px;font-size:18px}
     .section{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #edf2f7}
-    .section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
-    .section h3{margin:0 0 12px;font-size:15px;color:#0f172a}
-    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
     .field{display:flex;flex-direction:column;gap:6px}
     .field.full{grid-column:1/-1}
     label{font-size:13px;color:#334155;font-weight:700}
-    input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:11px 12px;background:#fff;color:var(--text);font:inherit}
+    input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:11px 12px;background:#fff;font:inherit}
     .reprise-fields{margin-top:10px;padding:12px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fbff;display:none}
     .reprise-fields.show{display:block}
+    .btn-live-toggle{background:var(--primary);color:#fff;border-radius:12px;padding:12px;font-weight:700;width:100%;cursor:pointer;border:0;margin-top:12px}
     .live-empty{text-align:center;padding:20px;color:#94a3b8;font-size:13px;border:1px dashed #cbd5e1;border-radius:12px}
-    .btn-live-toggle{background:#0f62fe;color:#fff;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;width:100%;margin-top:12px;cursor:pointer;border:0;}
+    @media (max-width:1040px){.grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -50,7 +43,7 @@
   <div class="topbar">
     <div class="brand">
       <div class="brand-logo"><img src="https://www.libertium.fr/sites/default/files/logo_libertium.svg" alt="Libertium"></div>
-      <div class="brand-text"><h1>Libertium Seclin Lestringuez</h1><p>205 Avenue de la République<br>59113 SECLIN<br><strong>contact.seclin@libertium.fr</strong></p></div>
+      <div class="brand-text"><h1>Libertium Seclin Lestringuez</h1><p>205 Avenue de la République, 59113 SECLIN</p></div>
     </div>
     <div class="contact-box"><div class="contact-phone">03 20 32 25 99</div></div>
   </div>
@@ -83,25 +76,21 @@
 </div>
 
 <script>
-// Fonction intégrée de recherche simulée
 async function runLiveSearch() {
     const btn = document.getElementById('btnLive');
-    const display = document.getElementById('liveResults');
     const cards = document.getElementById('liveCards');
-    
     btn.innerText = "Recherche en cours...";
     btn.disabled = true;
-    display.style.display = "block";
+    document.getElementById('liveResults').style.display = "block";
     
-    // Simulation : La connexion API Google est suspendue en attente de mise à jour des droits
+    // Simulation API
     setTimeout(() => {
-        cards.innerHTML = `<div class="live-empty">Connectivité API suspendue.<br>Veuillez vérifier les autorisations du projet Google Cloud.</div>`;
+        cards.innerHTML = `<div class="live-empty">Connectivité API suspendue.<br>Vérifiez les accès Google Cloud.</div>`;
         btn.innerText = "Rechercher des véhicules";
         btn.disabled = false;
     }, 1000);
 }
 
-// Logique simple pour le champ reprise
 document.getElementById('reprise').addEventListener('change', function() {
     document.getElementById('repriseFields').classList.toggle('show', this.value === 'Oui');
 });
