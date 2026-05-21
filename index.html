@@ -1,48 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Libertium Seclin - Widget découverte</title>
   <style>
     :root{
       --bg:#f4f7fb;--panel:#fff;--panel-2:#f8fbff;--text:#172033;--muted:#64748b;
-      --primary:#0f62fe;--primary-dark:#0043ce;--danger:#dc2626;--border:#d8e1ee;
+      --primary:#0f62fe;--primary-dark:#0043ce;--border:#d8e1ee;
       --shadow:0 14px 34px rgba(15,23,42,.08);--radius:18px;
-      --print-bg:#f7f9fc;--print-card:#ffffff;--print-line:#d8e1ee;--print-accent:#2f5aa8;
+      --accent:#2f5aa8;--topbar-h:138px;
     }
     *{box-sizing:border-box}
     html,body{margin:0;padding:0}
-    body{
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-      background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);
-      color:var(--text)
-    }
-    .page{max-width:1440px;margin:0 auto;padding:24px}
-    .topbar{
-      display:flex;justify-content:space-between;gap:16px;align-items:stretch;margin-bottom:20px;
-      background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:var(--shadow);overflow:hidden
-    }
-    .brand{flex:1;display:flex;gap:16px;align-items:center;padding:18px 20px;min-width:0}
-    .brand-logo{width:74px;height:74px;border-radius:16px;overflow:hidden;border:1px solid #e2e8f0;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+    body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);color:var(--text)}
+
+    /* ── TOPBAR ── */
+    .topbar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;gap:16px;background:#fff;border-bottom:1px solid var(--border);box-shadow:var(--shadow);padding:12px 24px}
+    .brand{display:flex;gap:18px;align-items:center;min-width:0}
+    .brand-logo{width:110px;height:110px;border-radius:14px;overflow:hidden;border:1px solid #e2e8f0;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center}
     .brand-logo img{width:100%;height:100%;object-fit:contain;display:block}
-    .brand-text h1{margin:0;font-size:24px;line-height:1.1}
-    .brand-text p{margin:6px 0 0;color:var(--muted);line-height:1.45;font-size:14px}
-    .contact-box{width:320px;display:flex;align-items:center;justify-content:center;padding:18px 20px;border-left:1px solid var(--border)}
-    .contact-phone{width:100%;text-align:center;background:var(--danger);color:#fff;border-radius:12px;padding:14px 16px;font-weight:800;font-size:16px}
-    .header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:20px}
-    .title{margin:0;font-size:28px;line-height:1.1}
-    .subtitle{margin:8px 0 0;color:var(--muted)}
-    .status{margin-top:8px;font-size:14px;color:var(--muted)}
-    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-    button{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;font-size:14px;transition:transform .12s ease,background .15s ease}
+    .brand-text h1{margin:0;font-size:22px;line-height:1.15}
+    .brand-text p{margin:5px 0 0;color:var(--muted);line-height:1.5;font-size:13.5px}
+    .topbar-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;flex-shrink:0}
+
+    /* ── LAYOUT ── */
+    .page{max-width:1440px;margin:0 auto;padding:24px}
+    .page-inner{padding-top:20px}
+    button{border:0;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;font-size:13px;transition:transform .12s,background .15s}
     button:hover{transform:translateY(-1px)}
-    .btn-primary{background:var(--primary);color:#fff}
-    .btn-primary:hover{background:var(--primary-dark)}
+    .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
     .btn-secondary{background:#e8eef8;color:var(--text)}
     .grid{display:grid;grid-template-columns:1.1fr .95fr;gap:20px}
     .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
-    .card h2{margin:0 0 16px;font-size:18px}
+    .card>h2{margin:0 0 16px;font-size:18px}
     .section{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #edf2f7}
     .section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:0}
     .section h3{margin:0 0 12px;font-size:15px;color:#0f172a}
@@ -53,450 +44,633 @@
     input,select,textarea{width:100%;border:1px solid #cbd5e1;border-radius:12px;padding:11px 12px;background:#fff;color:var(--text);font:inherit;outline:none}
     textarea{min-height:92px;resize:vertical}
     input:focus,select:focus,textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,98,254,.12)}
-    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .chip{border-radius:999px;padding:7px 10px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700}
-    .right-sticky{position:sticky;top:16px;align-self:start}
-    .preview-line{display:grid;grid-template-columns:145px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid #eef2f7;font-size:14px}
-    .preview-line strong{color:#334155}
-    .preview-line:last-child{border-bottom:0}
-    .summary-box{background:var(--panel-2);border:1px dashed #c7d6f5;border-radius:14px;padding:14px;margin-top:14px}
-    .summary-box p{margin:0;line-height:1.55;white-space:pre-wrap}
-    .recommend-top{margin-top:16px;background:linear-gradient(180deg,#f8fbff 0%,#ffffff 100%);border:1px solid #dbe3ee;border-radius:16px;padding:14px}
-    .recommend-top h3{margin:0 0 8px}
-    .results{margin-top:16px;display:grid;gap:12px}
-    .result{border:1px solid #dbe3ee;border-radius:14px;padding:14px;background:#fff}
-    .result h4{margin:0;font-size:15px}
-    .result a{color:var(--primary);text-decoration:none;font-weight:800}
-    .score-badge{display:inline-flex;align-items:center;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800}
-    .score-high{background:#ecfdf5;color:#166534}
-    .score-mid{background:#eff6ff;color:#1d4ed8}
-    .score-low{background:#fff7ed;color:#9a3412}
+    .vendeur-bar{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid #edf2f7;display:flex;flex-direction:column;gap:6px}
     .reprise-fields{margin-top:10px;padding:12px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fbff;display:none}
     .reprise-fields.show{display:block}
 
-    .live-search-config{
-      margin-top:12px;padding:14px;
-      background:#f0f7ff;border:1px solid #bfdbfe;border-radius:14px;
-      display:none
-    }
-    .live-search-config.open{display:block}
-    .live-search-config label{font-size:12px;color:#1e40af;font-weight:700;margin-bottom:4px}
-    .live-search-config input{
-      font-size:12px;padding:8px 10px;border-radius:8px;
-      border:1px solid #93c5fd;background:#fff
-    }
-    .live-search-config .cfg-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
-    .live-search-config .cfg-note{font-size:11px;color:#3b82f6;margin-top:6px;line-height:1.5}
-    .live-search-config a{color:#2563eb;font-weight:700}
+    /* ── SCORE ── */
+    .score-wrap{display:flex;flex-direction:column;gap:6px}
+    .score-display{display:flex;align-items:center;gap:10px;background:#f8fbff;border:1px solid #d8e1ee;border-radius:12px;padding:10px 14px;transition:border-color .3s}
+    .score-num{font-size:22px;font-weight:800;min-width:38px;line-height:1;transition:color .3s}
+    .score-denom{font-size:13px;color:#94a3b8;font-weight:600}
+    .score-bar-track{flex:1;height:8px;background:#e2e8f0;border-radius:999px;overflow:hidden}
+    .score-bar-fill{height:100%;width:0%;border-radius:999px;transition:width .4s,background .3s}
+    .score-lbl{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap;transition:all .3s}
+    .sd-cold{border-color:#e2e8f0}.sd-cold .score-num{color:#64748b}.sd-cold .score-lbl{background:#f1f5f9;color:#64748b}.sd-cold .score-bar-fill{background:#94a3b8}
+    .sd-warm{border-color:#fcd34d}.sd-warm .score-num{color:#d97706}.sd-warm .score-lbl{background:#fef9c3;color:#854d0e}.sd-warm .score-bar-fill{background:#f59e0b}
+    .sd-hot{border-color:#6ee7b7}.sd-hot .score-num{color:#16a34a}.sd-hot .score-lbl{background:#dcfce7;color:#166534}.sd-hot .score-bar-fill{background:#22c55e}
+    .sd-fire{border-color:#93c5fd}.sd-fire .score-num{color:#0f62fe}.sd-fire .score-lbl{background:#dbeafe;color:#1d4ed8}.sd-fire .score-bar-fill{background:#0f62fe}
 
+    /* ── PANNEAU DROIT ── */
+    .right-sticky{position:sticky;top:calc(var(--topbar-h) + 16px);align-self:start;max-height:calc(100vh - var(--topbar-h) - 32px);overflow-y:auto}
+
+    /* ── APERÇU ÉCRAN ── */
+    .pv-block{margin-bottom:14px;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden}
+    .pv-head{padding:8px 12px;font-size:13px;font-weight:700;background:#eef4ff;color:#163a6b;border-bottom:1px solid #e2e8f0}
+    .pv-row{display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid #f0f4fa}
+    .pv-row:last-child{border-bottom:0}
+    .pv-k{padding:6px 10px;font-size:12px;font-weight:700;color:#475569;background:#f8faff;border-right:1px solid #f0f4fa;word-break:break-word}
+    .pv-v{padding:6px 10px;font-size:12px;color:#0f172a;word-break:break-word;white-space:pre-wrap}
+    .pv-empty .pv-v{color:#94a3b8;font-style:italic}
+
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+    .chip{border-radius:999px;padding:5px 10px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700}
+    .summary-box{background:var(--panel-2);border:1px dashed #c7d6f5;border-radius:14px;padding:14px;margin-bottom:14px}
+    .summary-box p{margin:0;line-height:1.6;white-space:pre-wrap;font-size:13px}
+    .recommend-top{background:linear-gradient(180deg,#f8fbff 0%,#fff 100%);border:1px solid #dbe3ee;border-radius:16px;padding:14px;margin-bottom:14px}
+    .recommend-top h3{margin:0 0 8px;font-size:15px}
+    .results{display:grid;gap:10px;margin-bottom:14px}
+    .result{border:1px solid #dbe3ee;border-radius:14px;padding:12px 14px;background:#fff}
+    .result h4{margin:0;font-size:14px}
+    .result a{color:var(--primary);text-decoration:none;font-weight:800}
+    .score-badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800}
+    .score-high{background:#ecfdf5;color:#166534}.score-mid{background:#eff6ff;color:#1d4ed8}.score-low{background:#fff7ed;color:#9a3412}
+
+    /* ── LIVE SEARCH ── */
+    .live-section{border-top:1px solid #e2e8f0;padding-top:16px}
+    .btn-live-toggle{background:var(--primary);color:#fff;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;width:100%;cursor:pointer;border:0;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
+    .btn-live-toggle:hover{background:var(--primary-dark)}.btn-live-toggle.searching{background:#64748b;cursor:wait}
     .live-results-wrap{margin-top:14px}
-    .live-results-wrap h4{
-      margin:0 0 10px;font-size:14px;font-weight:700;color:#0f172a;
-      display:flex;align-items:center;gap:8px
-    }
-    .live-results-wrap h4 .live-badge{
-      font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;
-      background:#dcfce7;color:#166534
-    }
-    .live-results-wrap h4 .live-badge.loading{
-      background:#fef9c3;color:#854d0e
-    }
-    .live-results-wrap h4 .live-badge.error{
-      background:#fee2e2;color:#991b1b
-    }
-
-    .live-vehicle-card{
-      border:1.5px solid #bfdbfe;border-radius:12px;padding:12px 14px;
-      background:#f8fbff;margin-bottom:8px;transition:border-color .15s
-    }
-    .live-vehicle-card:hover{border-color:var(--primary)}
+    .live-results-wrap h4{margin:0 0 10px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .live-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:#dcfce7;color:#166534}
+    .live-badge.loading{background:#fef9c3;color:#854d0e}.live-badge.error{background:#fee2e2;color:#991b1b}
+    .live-vehicle-card{border:1.5px solid #bfdbfe;border-radius:12px;padding:12px 14px;background:#f8fbff;margin-bottom:8px}
     .live-vehicle-card:last-child{margin-bottom:0}
-    .lvc-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
+    .lvc-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:4px}
     .lvc-title{font-size:13px;font-weight:700;color:#0f172a;line-height:1.4}
-    .lvc-rank{
-      font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;
-      background:#dbeafe;color:#1d4ed8;white-space:nowrap;flex-shrink:0
-    }
-    .lvc-rank.r1{background:#dcfce7;color:#166534}
-    .lvc-rank.r2{background:#eff6ff;color:#1d4ed8}
-    .lvc-rank.r3{background:#fff7ed;color:#9a3412}
+    .lvc-rank{font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:#dbeafe;color:#1d4ed8;flex-shrink:0}
+    .lvc-rank.r1{background:#dcfce7;color:#166534}.lvc-rank.r2{background:#eff6ff;color:#1d4ed8}.lvc-rank.r3{background:#fff7ed;color:#9a3412}
     .lvc-snippet{font-size:12px;color:#475569;line-height:1.5;margin-bottom:8px}
-    .lvc-link{
-      display:inline-flex;align-items:center;gap:5px;
-      font-size:12px;font-weight:700;color:var(--primary);
-      text-decoration:none;padding:5px 12px;
-      border:1.5px solid var(--primary);border-radius:999px;
-      transition:all .15s;background:#fff
-    }
-    .lvc-link:hover{background:var(--primary);color:#fff}
-    .lvc-match{
-      display:inline-flex;align-items:center;gap:4px;
-      font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
-      margin-left:6px
-    }
-    .lvc-match.high{background:#dcfce7;color:#166534}
-    .lvc-match.mid{background:#fef9c3;color:#854d0e}
-    .lvc-match.low{background:#f1f5f9;color:#64748b}
+    .lvc-link{display:inline-flex;font-size:12px;font-weight:700;color:var(--primary);text-decoration:none;padding:5px 12px;border:1.5px solid var(--primary);border-radius:999px;background:#fff}
+    .lvc-match{display:inline-flex;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:6px}
+    .lvc-match.high{background:#dcfce7;color:#166534}.lvc-match.mid{background:#fef9c3;color:#854d0e}.lvc-match.low{background:#f1f5f9;color:#64748b}
+    .live-empty{text-align:center;padding:20px;color:#94a3b8;font-size:13px;border:1px dashed #cbd5e1;border-radius:12px}
 
-    .live-empty{
-      text-align:center;padding:20px;color:#94a3b8;font-size:13px;
-      border:1px dashed #cbd5e1;border-radius:12px
-    }
-    .live-empty a{color:var(--primary);font-weight:700}
-
-    .btn-live-toggle{
-      background:#0f62fe;color:#fff;border-radius:12px;
-      padding:10px 14px;font-size:13px;font-weight:700;
-      width:100%;margin-top:12px;cursor:pointer;border:0;
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      transition:background .15s
-    }
-    .btn-live-toggle:hover{background:#0043ce}
-    .btn-live-toggle.searching{background:#64748b;cursor:wait}
-
+    /* ── PRINT ── */
     @media (max-width:1040px){
-      .grid{grid-template-columns:1fr}
-      .header{flex-direction:column}
-      .topbar{flex-direction:column}
-      .contact-box{width:100%;border-left:0;border-top:1px solid var(--border)}
-      .form-grid{grid-template-columns:1fr}
-      .preview-line{grid-template-columns:1fr;gap:4px}
-      .right-sticky{position:static}
-      .live-search-config .cfg-row{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}.topbar{flex-wrap:wrap}.form-grid{grid-template-columns:1fr}.right-sticky{position:static;max-height:none}
     }
     @media print{
-      @page{size:A4;margin:10mm}
+      @page{size:A4;margin:12mm}
       body{background:#fff}
       .page{max-width:none;padding:0}
-      .topbar,.toolbar,.status,.reprise-fields,.form-panel{display:none !important}
-      .grid{display:block}
+      .topbar,.topbar-actions,.form-panel,.chips,.recommend-top,.results,.live-section,.btn-live-toggle,.live-results-wrap,.summary-box{display:none!important}
+      .page-inner,.grid{display:block}
       .card{box-shadow:none;border:0;border-radius:0;padding:0}
-      .screen-only{display:none !important}
-      .print-only{display:block !important}
-      .live-search-config,.btn-live-toggle{display:none !important}
-      .live-results-wrap h4 .live-badge{display:none}
-      .live-vehicle-card{border:1px solid #d8e1ee;background:#fff;break-inside:avoid}
-      .lvc-link{color:#163a6b;text-decoration:none}
-      .print-header{
-        display:flex;justify-content:space-between;align-items:center;gap:12px;
-        padding:12px 14px;margin-bottom:14px;border:1px solid var(--print-line);border-radius:14px;
-        background:linear-gradient(180deg,#ffffff 0%,#f3f7ff 100%);
-      }
-      .print-title{font-size:18px;font-weight:800;color:var(--print-accent);margin:0}
-      .print-sub{font-size:11pt;color:#475569;margin:2px 0 0}
-      .print-section{margin-top:10px;border:1px solid var(--print-line);border-radius:14px;overflow:hidden;background:#fff}
-      .print-section h3{
-        margin:0;padding:8px 12px;font-size:11pt;background:#eef4ff;color:#163a6b;border-bottom:1px solid var(--print-line)
-      }
-      .print-kv{display:grid;grid-template-columns:160px 1fr;border-bottom:1px solid #edf2f7}
-      .print-kv:last-child{border-bottom:0}
-      .print-kv div{padding:6px 10px;font-size:10.5pt;line-height:1.35}
-      .print-kv .k{background:#fbfcff;color:#334155;font-weight:700;border-right:1px solid #edf2f7}
-      .print-kv .v{color:#0f172a}
-      .summary-box,.recommend-top,.result{border:1px solid var(--print-line);background:#fff}
-      .summary-box p{font-size:10.5pt}
-      .chips{display:none}
-      .results{display:grid;grid-template-columns:1fr;gap:8px}
-      .result h4{font-size:11pt}
-      .result p{font-size:10.5pt}
-      a{color:#163a6b;text-decoration:none}
+      .right-sticky{position:static;max-height:none;overflow:visible}
+      /* En-tête print */
+      .print-header{display:flex!important;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;margin-bottom:16px;border:1px solid #d8e1ee;border-radius:14px;background:#f3f7ff}
+      .print-logo{font-size:18px;font-weight:800;color:var(--accent);margin:0}
+      .print-sub{font-size:10.5pt;color:#475569;margin:2px 0 0}
+      .print-coords{text-align:right;font-size:10pt;color:#475569;line-height:1.5}
+      /* Blocs aperçu en print */
+      .pv-block{margin-bottom:12px;border:1px solid #d8e1ee!important;border-radius:12px!important;overflow:hidden;break-inside:avoid}
+      .pv-head{padding:7px 12px;font-size:10.5pt;background:#eef4ff;color:#163a6b;border-bottom:1px solid #d8e1ee}
+      .pv-row{display:grid!important;grid-template-columns:160px 1fr;border-bottom:1px solid #edf2f7}
+      .pv-k{padding:5px 10px;font-size:10pt;font-weight:700;color:#334155;background:#f8faff;border-right:1px solid #edf2f7}
+      .pv-v{padding:5px 10px;font-size:10pt;color:#0f172a}
+      .pv-empty .pv-v{color:#94a3b8}
+      .card>h2{font-size:14pt;margin-bottom:12px}
     }
   </style>
 </head>
 <body>
-<div class="page">
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-logo">
-        <img src="https://www.libertium.fr/sites/default/files/logo_libertium.svg" alt="Libertium">
-      </div>
-      <div class="brand-text">
-        <h1>Libertium Seclin Lestringuez</h1>
-        <p>205 Avenue de la République<br>59113 SECLIN<br><strong>contact.seclin@libertium.fr</strong></p>
-      </div>
-    </div>
-    <div class="contact-box">
-      <div class="contact-phone">03 20 32 25 99</div>
+
+<!-- ══ TOPBAR FIXE ══ -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-logo"><img src="https://www.libertium.fr/sites/default/files/logo_libertium.svg" alt="Libertium"></div>
+    <div class="brand-text">
+      <h1>Libertium Seclin Lestringuez</h1>
+      <p>205 Avenue de la République · 59113 SECLIN<br><strong>03 20 32 25 99</strong> · <strong>contact.seclin@libertium.fr</strong></p>
     </div>
   </div>
-
-  <div class="header">
-    <div>
-      <h2 class="title">Widget d'aide à la découverte véhicule de loisirs</h2>
-      <p class="subtitle">Aperçu dynamique, scoring, reprise détaillée, export PDF et impression optimisée.</p>
-      <div class="status screen-only" id="status">Prêt.</div>
-    </div>
-    <div class="toolbar screen-only">
-      <button type="button" class="btn-secondary" id="btnPrint">Print</button>
-      <button type="button" class="btn-primary" id="btnPdf">Export PDF</button>
-      <button type="button" class="btn-secondary" id="btnReset">Réinitialiser</button>
-    </div>
-  </div>
-
-  <div class="grid">
-    <form class="card form-panel" id="leadForm" autocomplete="on">
-      <h2>Coordonnées client</h2>
-      <div class="section">
-        <h3>Vendeur</h3>
-        <div class="form-grid">
-          <div class="field full">
-            <label for="vendeur">Vendeur</label>
-            <select id="vendeur">
-              <option value="">—</option>
-              <option>Ludovic</option>
-              <option>Cédric</option>
-              <option>Nicolas</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h3>Identité</h3>
-        <div class="form-grid">
-          <div class="field"><label for="civilite">Civilité</label><select id="civilite"><option value="">—</option><option>M.</option><option>Mme</option><option>Mx</option></select></div>
-          <div class="field"><label for="typeClient">Type de client</label><select id="typeClient"><option value="">—</option><option>Particulier</option><option>Entreprise</option><option>Association</option><option>Collectivité</option></select></div>
-          <div class="field"><label for="prenom">Prénom</label><input id="prenom" type="text" /></div>
-          <div class="field"><label for="nom">Nom</label><input id="nom" type="text" /></div>
-          <div class="field"><label for="societe">Société</label><input id="societe" type="text" /></div>
-          <div class="field"><label for="fonction">Fonction</label><input id="fonction" type="text" /></div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h3>Coordonnées</h3>
-        <div class="form-grid">
-          <div class="field"><label for="telephone">Téléphone</label><input id="telephone" type="tel" /></div>
-          <div class="field"><label for="mobile">Mobile</label><input id="mobile" type="tel" /></div>
-          <div class="field"><label for="email">Email</label><input id="email" type="email" /></div>
-          <div class="field"><label for="siteWeb">Site web</label><input id="siteWeb" type="url" /></div>
-          <div class="field full"><label for="adresse1">Adresse ligne 1</label><input id="adresse1" type="text" /></div>
-          <div class="field full"><label for="adresse2">Adresse ligne 2</label><input id="adresse2" type="text" /></div>
-          <div class="field"><label for="codePostal">Code postal</label><input id="codePostal" type="text" inputmode="numeric" /></div>
-          <div class="field"><label for="ville">Ville</label><input id="ville" type="text" readonly /></div>
-          <div class="field"><label for="departement">Département</label><select id="departement"></select></div>
-          <div class="field"><label for="pays">Pays</label><input id="pays" type="text" value="France" /></div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h3>Découverte véhicule de loisir</h3>
-        <div class="form-grid">
-          <div class="field"><label for="budget">Budget</label><select id="budget"><option value="">—</option><option>Moins de 40 000 €</option><option>40 000 à 60 000 €</option><option>60 000 à 80 000 €</option><option>80 000 à 100 000 €</option><option>Plus de 100 000 €</option><option>Non défini</option></select></div>
-          <div class="field"><label for="achat">Projet d'achat</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
-          <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
-          <div class="field"><label for="usage">Usage principal</label><select id="usage"><option value="">—</option><option>Week-ends</option><option>Vacances longues</option><option>Itinérance fréquente</option><option>Séjours stationnaires</option><option>Mixte</option></select></div>
-          <div class="field"><label for="compacite">Capacité souhaitée</label><select id="compacite"><option value="">—</option><option>Peu importe</option><option>Très compacte</option><option>Compacte</option><option>Standard</option><option>Grand confort</option></select></div>
-          <div class="field"><label for="conduite">Conduite / gabarit</label><select id="conduite"><option value="">—</option><option>Ville et routes étroites</option><option>Mixte</option><option>Routes ouvertes</option><option>Peu de contrainte</option></select></div>
-          <div class="field"><label for="couchages">Type de couchages</label><select id="couchages"><option value="">—</option><option>Lit permanent</option><option>Lits jumeaux</option><option>Lit central</option><option>Lit pavillon</option><option>Lit dinette</option><option>Peu importe</option></select></div>
-          <div class="field"><label for="sdb">Salle de bain</label><select id="sdb"><option value="">—</option><option>Indispensable</option><option>Souhaitée</option><option>Optionnelle</option></select></div>
-          <div class="field"><label for="autonomie">Autonomie</label><select id="autonomie"><option value="">—</option><option>Peu importe</option><option>Faible</option><option>Moyenne</option><option>Élevée</option><option>Très élevée</option></select></div>
-          <div class="field"><label for="saison">Utilisation saisonnière</label><select id="saison"><option value="">—</option><option>Été uniquement</option><option>Mi-saison</option><option>Toute saison</option><option>Montagne / hiver</option></select></div>
-          <div class="field"><label for="permis">Permis / poids</label><select id="permis"><option value="">—</option><option>Permis B sans contrainte</option><option>Permis B, vigilance poids</option><option>Permis C ou équivalent</option><option>Remorquage souhaité</option></select></div>
-          <div class="field"><label for="priorite">Priorité</label><select id="priorite"><option value="">—</option><option>Prix</option><option>Confort</option><option>Maniabilité</option><option>Autonomie</option><option>Volume</option><option>Équipement</option></select></div>
-          <div class="field full"><label for="besoin">Besoin exprimé</label><textarea id="besoin"></textarea></div>
-          <div class="field full"><label for="notes">Notes du commercial</label><textarea id="notes"></textarea></div>
-        </div>
-      </div>
-
-      <div class="section">
-        <h3>Qualification complémentaire</h3>
-        <div class="form-grid">
-          <div class="field"><label for="delai">Délai d'achat</label><select id="delai"><option value="">—</option><option>Immédiat</option><option>1 à 3 mois</option><option>3 à 6 mois</option><option>6 mois et plus</option><option>Se renseigne</option></select></div>
-          <div class="field"><label for="decisionnaire">Décisionnaire</label><input id="decisionnaire" type="text" /></div>
-          <div class="field"><label for="reprise">Reprise véhicule</label><select id="reprise"><option value="">—</option><option>Oui</option><option>Non</option><option>À étudier</option></select></div>
-          <div class="field"><label for="score">Score commercial</label><input id="score" type="number" min="0" max="100" readonly /></div>
-        </div>
-        <div class="reprise-fields" id="repriseFields">
-          <h3 style="margin-top:0;">Véhicule à reprendre</h3>
-          <div class="form-grid">
-            <div class="field"><label for="reprGamme">Gamme</label><select id="reprGamme"><option value="">—</option><option>Camping Car</option><option>Capucine</option><option>Caravane</option><option>Fourgon</option><option>Intégral</option><option>Loisir</option><option>Profile</option><option>Profile Compact</option><option>Rigide</option><option>Van</option></select></div>
-            <div class="field"><label for="reprPorteur">Marque porteur</label><input id="reprPorteur" type="text" /></div>
-            <div class="field"><label for="reprEquip">Marque équipementier</label><select id="reprEquip"></select></div>
-            <div class="field"><label for="reprModele">Modèle</label><input id="reprModele" type="text" /></div>
-            <div class="field"><label for="reprMec">Date de 1ère MEC</label><input id="reprMec" type="date" /></div>
-            <div class="field"><label for="reprKm">Kilométrage</label><input id="reprKm" type="text" /></div>
-            <div class="field"><label for="reprLongueur">Longueur (en M)</label><input id="reprLongueur" type="text" /></div>
-            <div class="field"><label for="reprLargeur">Largeur (en M)</label><input id="reprLargeur" type="text" /></div>
-            <div class="field"><label for="reprHauteur">Hauteur (en M)</label><input id="reprHauteur" type="text" /></div>
-            <div class="field"><label for="reprPtac">PTAC (en Kg)</label><input id="reprPtac" type="text" /></div>
-            <div class="field"><label for="reprCvFisc">Chevaux fiscaux</label><input id="reprCvFisc" type="text" /></div>
-            <div class="field"><label for="reprCvDin">Chevaux DIN</label><input id="reprCvDin" type="text" /></div>
-            <div class="field">
-              <label for="reprBoite">Boite de vitesse</label>
-              <select id="reprBoite">
-                <option value="Boite auto" selected>Boite auto</option>
-                <option value="Boite manuelle">Boite manuelle</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="reprEnergie">Énergie</label>
-              <select id="reprEnergie">
-                <option value="Diesel" selected>Diesel</option>
-                <option value="Essence">Essence</option>
-                <option value="Hybride">Hybride</option>
-                <option value="Electrique">Electrique</option>
-              </select>
-            </div>
-            <div class="field"><label for="reprPlacesCg">Nombre de place carte grise</label><select id="reprPlacesCg"></select></div>
-            <div class="field"><label for="reprPlacesCouche">Places couchage</label><select id="reprPlacesCouche"></select></div>
-            <div class="field"><label for="reprTypeLit">Type de lit</label><select id="reprTypeLit"><option value="">—</option><option>Lit À La Française</option><option>Lit Central</option><option>Lit Pavillon</option><option>Lit Superposé</option><option>Lit Sur Soute</option><option>Lit Transversal</option><option>Lits Jumeaux</option><option>Salon En U</option></select></div>
-            <div class="field"><label for="reprEauPropre">Réservoir eaux propres (en L)</label><input id="reprEauPropre" type="text" /></div>
-            <div class="field"><label for="reprEauUsee">Réservoir eaux usées (en L)</label><input id="reprEauUsee" type="text" /></div>
-            <div class="field"><label for="reprEtat">État général</label><select id="reprEtat"><option value="">—</option><option>Excellent</option><option>Correct</option><option>Passable</option><option>Triste</option></select></div>
-          </div>
-        </div>
-      </div>
-    </form>
-
-    <div class="card right-sticky" id="summaryBlock">
-      <div class="print-only print-header">
-        <div>
-          <div class="print-title">Libertium Seclin Lestringuez</div>
-          <div class="print-sub">Fiche réctulative commerciale</div>
-        </div>
-        <div style="text-align:right;font-size:10.5pt;color:#475569">
-          205 Avenue de la République<br>59113 SECLIN<br>contact.seclin@libertium.fr
-        </div>
-      </div>
-
-      <h2 class="screen-only">Aperçu et recommandation</h2>
-
-      <div class="print-section">
-        <h3>Coordonnées</h3>
-        <div class="print-kv"><div class="k">Vendeur</div><div class="v" id="pvVendeur">—</div></div>
-        <div class="print-kv"><div class="k">Client</div><div class="v" id="pvClient">—</div></div>
-        <div class="print-kv"><div class="k">Société</div><div class="v" id="pvSociete">—</div></div>
-        <div class="print-kv"><div class="k">Fonction</div><div class="v" id="pvFonction">—</div></div>
-        <div class="print-kv"><div class="k">Contact</div><div class="v" id="pvContact">—</div></div>
-        <div class="print-kv"><div class="k">Adresse</div><div class="v" id="pvAddress">—</div></div>
-      </div>
-
-      <div class="print-section" style="margin-top:12px;">
-        <h3>Projet</h3>
-        <div class="print-kv"><div class="k">Budget</div><div class="v" id="pvBudget">—</div></div>
-        <div class="print-kv"><div class="k">Profil</div><div class="v" id="pvProfile">—</div></div>
-        <div class="print-kv"><div class="k">Délai</div><div class="v" id="pvDelai">—</div></div>
-        <div class="print-kv"><div class="k">Reprise</div><div class="v" id="pvReprise">—</div></div>
-        <div class="print-kv"><div class="k">Résumé</div><div class="v" id="pvSummary">—</div></div>
-      </div>
-
-      <div class="summary-box">
-        <p id="pvSummaryBox">Renseigne les champs à gauche pour générer une recommandation.</p>
-      </div>
-
-      <div class="chips" id="chips"></div>
-
-      <div class="recommend-top">
-        <h3>Meilleure recommandation</h3>
-        <p id="topExplanation">—</p>
-      </div>
-
-      <div class="results" id="results"></div>
-
-      <div style="margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <span style="font-size:13px;font-weight:700;color:#0f172a">🔍 Stock en temps réel · libertium.fr</span>
-          <span style="font-size:11px;color:#22c55e;font-weight:700;background:#dcfce7;padding:3px 8px;border-radius:999px">● API connectée</span>
-        </div>
-
-        <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
-          <span id="btnLiveIcon">🔎</span>
-          <span id="btnLiveTxt">Rechercher des véhicules en stock</span>
-        </button>
-
-        <div class="live-results-wrap" id="liveResults" style="display:none">
-          <h4>
-            Véhicules disponibles
-            <span class="live-badge" id="liveBadge">—</span>
-          </h4>
-          <div id="liveCards"></div>
-        </div>
-      </div>
-    </div>
+  <div class="topbar-actions">
+    <button type="button" class="btn-secondary" id="btnPrint">🖨 Print</button>
+    <button type="button" class="btn-primary"   id="btnPdf">📄 Export PDF</button>
+    <button type="button" class="btn-secondary" id="btnReset">↺ Réinitialiser</button>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-const ids=['vendeur','civilite','typeClient','prenom','nom','societe','fonction','telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville','departement','pays','budget','achat','voyageurs','usage','compacite','conduite','couchages','sdb','autonomie','saison','permis','priorite','besoin','notes','delai','decisionnaire','reprise','score','reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm','reprLongueur','reprLargeur','reprHauteur','reprPtac','reprCvFisc','reprCvDin','reprPlacesCg','reprPlacesCouche','reprTypeLit','reprEauPropre','reprEauUsee','reprEtat'];
-const deptSelect=document.getElementById('departement');
-const repriseFields=document.getElementById('repriseFields');
-const statusEl=document.getElementById('status');
-const vehicles=[{key:'van',title:'Van aménagé',url:'https://www.libertium.fr/vehicule/van-amenage'},{key:'fourgon',title:'Fourgon aménagé',url:'https://www.libertium.fr/vehicule/van-fourgon-amenage'},{key:'profile',title:'Camping-car profilé',url:'https://www.libertium.fr/vehicule/camping-car/profile'},{key:'integral',title:'Camping-car intégral',url:'https://www.libertium.fr/vehicule/camping-car/integral'},{key:'capucine',title:'Camping-car capucine',url:'https://www.libertium.fr/vehicule/camping-car/capucine'},{key:'caravane',title:'Caravane',url:'https://www.libertium.fr/vehicule'}];
-const deptList=[['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d\'Or'],['22','Côtes-d\'Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['59','Nord'],['60','Oise'],['61','Orne'],['62','Pas-de-Calais'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d\'Oise']];
-const equip=['Adria','Adria Caravane','Adria Caravanes','Airstream','Arca','Autostar','Barbot','Benimar','Burstner','California','Capron','Carado','Carado.','Carthago','Caravelair','Challenger','Challenger Vdl','Clever Vans','Concorde','Crosscamp','Dethleefs','Dethleffs','Dreamer','Eden Camp','Elios','Eriba','Etrusco','Eura Mobil','Euramobil','Fleurette','Font Vendome','Ford','Frankia','Giottiline','Hanroad','Hero Camper','Hobby','Hymer','Hymercar','Itineo','Joa','Joa Camp','Karmann','Knaus','La Mancelle','La Strada','Laika','Le Voyageur','Lmc','Mac Louis','Malibu','Marco Polo','Mcc','Mc Louis','Mclouis','Mercedes','Mercedes Benz','Mobilvetta','Morelo','Notin','Panama','Pilote','Possl','Rapido','Randger','Renault','Road Car','Roadcar','Roller Team','Silver','Sterckeman','Stylevan','Sun Living','Sunlight','Swift','Tourne Mobil','Trigano Caravanes','Volkswagen','Volskwagen','Weinsberg','Westfalia','Wingamm'];
-function init(){deptSelect.innerHTML='<option value="">—</option>'+deptList.map(([c,n])=>`<option value="${c}">${c} - ${n}</option>`).join('');document.getElementById('reprEquip').innerHTML='<option value="">—</option>'+equip.map(x=>`<option>${x}</option>`).join('');document.getElementById('reprPlacesCg').innerHTML='<option value="">—</option>'+Array.from({length:7},(_,i)=>2+i).map(x=>`<option>${x}</option>`).join('');document.getElementById('reprPlacesCouche').innerHTML='<option value="">—</option>'+Array.from({length:7},(_,i)=>2+i).map(x=>`<option>${x}</option>`).join('');}
-function read(){const d={};ids.forEach(id=>d[id]=document.getElementById(id)?.value||'');d.reprBoite=(document.querySelector('select#reprBoite')||{}).value||'';d.reprEnergie=(document.querySelector('select#reprEnergie')||{}).value||'Diesel';return d}
-function setVille(v){document.getElementById('ville').value=v||''}
-async function postal(){const cp=document.getElementById('codePostal').value.trim();if(!/^\d{5}$/.test(cp)){setVille('');return}try{const r=await fetch(`https://geo.api.gouv.fr/communes?codePostal=${encodeURIComponent(cp)}&fields=nom&format=json`);const j=await r.json();setVille([...new Set((j||[]).map(x=>x.nom).filter(Boolean))].join(' / '))}catch(e){setVille('')}}
-function toggleReprise(){repriseFields.classList.toggle('show',document.getElementById('reprise').value==='Oui')}
-function vr(v){return v||'—'}
-function repriseLabel(d){
-  if(d.reprise!=='Oui') return vr(d.reprise);
-  return [
-    ['Gamme',d.reprGamme],['Marque porteur',d.reprPorteur],['Marque équipementier',d.reprEquip],
-    ['Modèle',d.reprModele],['Date de 1ère MEC',d.reprMec],['Kilométrage',d.reprKm],
-    ['Longueur (en M)',d.reprLongueur],['Largeur (en M)',d.reprLargeur],['Hauteur (en M)',d.reprHauteur],
-    ['PTAC (en Kg)',d.reprPtac],['Chevaux fiscaux',d.reprCvFisc],['Chevaux DIN',d.reprCvDin],
-    ['Boite de vitesse',d.reprBoite],['Énergie',d.reprEnergie],
-    ['Nombre de place carte grise',d.reprPlacesCg],['Places couchage',d.reprPlacesCouche],
-    ['Type de lit',d.reprTypeLit],['Réservoir eaux propres (en L)',d.reprEauPropre],
-    ['Réservoir eaux usées (en L)',d.reprEauUsee],['État général',d.reprEtat]
-  ].filter(([,v])=>v).map(([k,v])=>`${k} : ${v}`).join(' · ')||'Oui';
-}
-function scoreVehicle(v,d){let s=0;if(v.key==='van'&&d.voyageurs==='1 à 2')s+=20;if(v.key==='fourgon'&&['1 à 2','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='profile'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='integral'&&['2 à 4','3 à 4'].includes(d.voyageurs))s+=18;if(v.key==='capucine'&&['5 à 6','7 et +'].includes(d.voyageurs))s+=22;if(v.key==='caravane'&&d.priorite==='Prix')s+=18;return s+(d.budget==='Plus de 100 000 €'&&v.key==='integral'?20:0)}
-function render(){
-  const d=read();toggleReprise();
-  document.getElementById('pvVendeur').textContent=vr(d.vendeur);
-  document.getElementById('pvClient').textContent=[d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')||'—';
-  document.getElementById('pvSociete').textContent=vr(d.societe);
-  document.getElementById('pvFonction').textContent=vr(d.fonction);
-  document.getElementById('pvContact').textContent=[d.telephone,d.mobile,d.email,d.siteWeb].filter(Boolean).join(' · ')||'—';
-  document.getElementById('pvAddress').textContent=[d.adresse1,d.adresse2,[d.codePostal,d.ville].filter(Boolean).join(' '),d.departement,d.pays].filter(Boolean).join(', ')||'—';
-  document.getElementById('pvBudget').textContent=vr(d.budget);
-  document.getElementById('pvProfile').textContent=[d.voyageurs,d.usage,d.compacite,d.priorite].filter(Boolean).join(' · ')||'—';
-  document.getElementById('pvDelai').textContent=vr(d.delai);
-  document.getElementById('pvReprise').textContent=repriseLabel(d);
-  document.getElementById('pvSummaryBox').textContent=[d.besoin&&`Besoin : ${d.besoin}`,d.notes&&`Notes : ${d.notes}`,d.delai&&`Délai : ${d.delai}`,d.decisionnaire&&`Décisionnaire : ${d.decisionnaire}`].filter(Boolean).join('\n\n')||'Renseigne les champs à gauche pour générer une recommandation.';
-  document.getElementById('pvSummary').textContent=[d.besoin&&`Besoin : ${d.besoin}`,d.notes&&`Notes : ${d.notes}`,d.delai&&`Délai : ${d.delai}`,d.decisionnaire&&`Décisionnaire : ${d.decisionnaire}`].filter(Boolean).join(' | ')||'—';
-  document.getElementById('chips').innerHTML=['vendeur','budget','voyageurs','usage','compacite','priorite','departement'].map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
-  const ranked=[...vehicles].map(v=>({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score).slice(0,3);
-  document.getElementById('topExplanation').innerHTML=ranked[0]?`<strong><a href="${ranked[0].url}" target="_blank" rel="noopener">${ranked[0].title}</a></strong><br>Top adapté au budget et au profil saisi.`:'—';
-  document.getElementById('results').innerHTML=ranked.map((v,i)=>`<div class="result"><div class="score-badge ${i===0?'score-high':i===1?'score-mid':'score-low'}">Top ${i+1} · ${v.score}/100</div><h4 style="margin-top:8px;"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4><p>Recommandation issue des critères saisis.</p></div>`).join('');
-}
-function buildDocText(){
-  const d=read();
-  return [
-    `Vendeur : ${vr(d.vendeur)}`,`Client : ${[d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')||'—'}`,
-    `Société : ${vr(d.societe)}`,`Fonction : ${vr(d.fonction)}`,
-    `Contact : ${[d.telephone,d.mobile,d.email,d.siteWeb].filter(Boolean).join(' · ')||'—'}`,
-    `Adresse : ${[d.adresse1,d.adresse2,[d.codePostal,d.ville].filter(Boolean).join(' '),d.departement,d.pays].filter(Boolean).join(', ')||'—'}`,
-    `Budget : ${vr(d.budget)}`,`Profil : ${[d.voyageurs,d.usage,d.compacite,d.priorite].filter(Boolean).join(' · ')||'—'}`,
-    `Délai : ${vr(d.delai)}`,`Reprise véhicule : ${repriseLabel(d)}`,'',
-    'Aperçu commercial :',document.getElementById('pvSummaryBox').textContent.trim(),'',
-    'Recommandations :',document.getElementById('results').innerText.trim(),'',
-    'Stock en temps réel :',document.getElementById('liveCards').innerText.trim()||'—'
-  ].join('\n');
-}
-function exportPDF(){
-  const wrapper=document.createElement('div');
-  wrapper.style.cssText='font-family:Arial,sans-serif;max-width:800px;padding:0;background:#fff;color:#172033';
-  wrapper.innerHTML=`
-    <div style="border:1px solid #d8e1ee;border-radius:16px;overflow:hidden">
-      <div style="padding:16px 18px;background:linear-gradient(180deg,#ffffff 0%,#eef4ff 100%);border-bottom:1px solid #d8e1ee">
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
-          <div><div style="font-size:20px;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div>
-          <div style="font-size:12px;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div></div>
-          <div style="text-align:right;font-size:11px;color:#475569;line-height:1.4">205 Avenue de la République<br>59113 SECLIN<br>contact.seclin@libertium.fr</div>
+<div class="page"><div class="page-inner"><div class="grid">
+
+<!-- ══ COLONNE GAUCHE ══ -->
+<form class="card form-panel" id="leadForm" autocomplete="on">
+
+  <div class="vendeur-bar">
+    <label for="vendeur">Vendeur</label>
+    <select id="vendeur"><option value="">—</option><option>Ludovic</option><option>Cédric</option><option>Nicolas</option></select>
+  </div>
+
+  <h2>Coordonnées client</h2>
+
+  <div class="section">
+    <h3>Identité</h3>
+    <div class="form-grid">
+      <div class="field"><label for="civilite">Civilité</label><select id="civilite"><option value="">—</option><option>M.</option><option>Mme</option><option>Mx</option></select></div>
+      <div class="field"><label for="typeClient">Type de client</label><select id="typeClient"><option value="">—</option><option>Particulier</option><option>Entreprise</option><option>Association</option><option>Collectivité</option></select></div>
+      <div class="field"><label for="prenom">Prénom</label><input id="prenom" type="text"/></div>
+      <div class="field"><label for="nom">Nom</label><input id="nom" type="text"/></div>
+      <div class="field"><label for="societe">Société</label><input id="societe" type="text"/></div>
+      <div class="field"><label for="fonction">Fonction</label><input id="fonction" type="text"/></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Coordonnées</h3>
+    <div class="form-grid">
+      <div class="field"><label for="telephone">Téléphone</label><input id="telephone" type="tel"/></div>
+      <div class="field"><label for="mobile">Mobile</label><input id="mobile" type="tel"/></div>
+      <div class="field"><label for="email">Email</label><input id="email" type="email"/></div>
+      <div class="field"><label for="siteWeb">Site web</label><input id="siteWeb" type="url"/></div>
+      <div class="field full"><label for="adresse1">Adresse ligne 1</label><input id="adresse1" type="text"/></div>
+      <div class="field full"><label for="adresse2">Adresse ligne 2</label><input id="adresse2" type="text"/></div>
+      <div class="field"><label for="codePostal">Code postal</label><input id="codePostal" type="text" inputmode="numeric"/></div>
+      <div class="field"><label for="ville">Ville</label><input id="ville" type="text" readonly/></div>
+      <div class="field"><label for="departement">Département</label><select id="departement"></select></div>
+      <div class="field"><label for="pays">Pays</label><input id="pays" type="text" value="France"/></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Découverte véhicule de loisir</h3>
+    <div class="form-grid">
+      <div class="field"><label for="budget">Budget</label><select id="budget"><option value="">—</option><option>Moins de 40 000 €</option><option>40 000 à 60 000 €</option><option>60 000 à 80 000 €</option><option>80 000 à 100 000 €</option><option>Plus de 100 000 €</option><option>Non défini</option></select></div>
+      <div class="field"><label for="achat">Projet d'achat</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
+      <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
+      <div class="field"><label for="usage">Usage principal</label><select id="usage"><option value="">—</option><option>Week-ends</option><option>Vacances longues</option><option>Itinérance fréquente</option><option>Séjours stationnaires</option><option>Mixte</option></select></div>
+      <div class="field"><label for="compacite">Capacité souhaitée</label><select id="compacite"><option value="">—</option><option>Peu importe</option><option>Très compacte</option><option>Compacte</option><option>Standard</option><option>Grand confort</option></select></div>
+      <div class="field"><label for="conduite">Conduite / gabarit</label><select id="conduite"><option value="">—</option><option>Ville et routes étroites</option><option>Mixte</option><option>Routes ouvertes</option><option>Peu de contrainte</option></select></div>
+      <div class="field"><label for="couchages">Type de couchages</label><select id="couchages"><option value="">—</option><option>Lit permanent</option><option>Lits jumeaux</option><option>Lit central</option><option>Lit pavillon</option><option>Lit dinette</option><option>Peu importe</option></select></div>
+      <div class="field"><label for="sdb">Salle de bain</label><select id="sdb"><option value="">—</option><option>Indispensable</option><option>Souhaitée</option><option>Optionnelle</option></select></div>
+      <div class="field"><label for="autonomie">Autonomie</label><select id="autonomie"><option value="">—</option><option>Peu importe</option><option>Faible</option><option>Moyenne</option><option>Élevée</option><option>Très élevée</option></select></div>
+      <div class="field"><label for="saison">Utilisation saisonnière</label><select id="saison"><option value="">—</option><option>Été uniquement</option><option>Mi-saison</option><option>Toute saison</option><option>Montagne / hiver</option></select></div>
+      <div class="field"><label for="permis">Permis / poids</label><select id="permis"><option value="">—</option><option>Permis B sans contrainte</option><option>Permis B, vigilance poids</option><option>Permis C ou équivalent</option><option>Remorquage souhaité</option></select></div>
+      <div class="field"><label for="priorite">Priorité</label><select id="priorite"><option value="">—</option><option>Prix</option><option>Confort</option><option>Maniabilité</option><option>Autonomie</option><option>Volume</option><option>Équipement</option></select></div>
+      <div class="field full"><label for="besoin">Besoin exprimé</label><textarea id="besoin"></textarea></div>
+      <div class="field full"><label for="notes">Notes du commercial</label><textarea id="notes"></textarea></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Qualification complémentaire</h3>
+    <div class="form-grid">
+      <div class="field"><label for="delai">Délai d'achat</label><select id="delai"><option value="">—</option><option>Immédiat</option><option>1 à 3 mois</option><option>3 à 6 mois</option><option>6 mois et plus</option><option>Se renseigne</option></select></div>
+      <div class="field"><label for="decisionnaire">Décisionnaire</label><input id="decisionnaire" type="text"/></div>
+      <div class="field"><label for="reprise">Reprise véhicule</label><select id="reprise"><option value="">—</option><option>Oui</option><option>Non</option><option>À étudier</option></select></div>
+      <div class="field score-wrap">
+        <label>Score commercial</label>
+        <div class="score-display sd-cold" id="scoreDisplay">
+          <span class="score-num" id="scoreNum">0</span>
+          <span class="score-denom">/100</span>
+          <div class="score-bar-track"><div class="score-bar-fill" id="scoreBarFill"></div></div>
+          <span class="score-lbl" id="scoreLbl">À qualifier</span>
         </div>
       </div>
-      <div style="padding:18px">
-        <div style="font-size:12.5px;line-height:1.55;white-space:pre-wrap">${buildDocText().replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]))}</div>
+    </div>
+
+    <div class="reprise-fields" id="repriseFields">
+      <h3 style="margin-top:0">Véhicule à reprendre</h3>
+      <div class="form-grid">
+        <div class="field"><label for="reprGamme">Gamme</label><select id="reprGamme"><option value="">—</option><option>Camping Car</option><option>Capucine</option><option>Caravane</option><option>Fourgon</option><option>Intégral</option><option>Loisir</option><option>Profile</option><option>Profile Compact</option><option>Rigide</option><option>Van</option></select></div>
+        <div class="field"><label for="reprPorteur">Marque porteur</label><input id="reprPorteur" type="text"/></div>
+        <div class="field"><label for="reprEquip">Marque équipementier</label><select id="reprEquip"></select></div>
+        <div class="field"><label for="reprModele">Modèle</label><input id="reprModele" type="text"/></div>
+        <div class="field"><label for="reprMec">Date 1ère MEC</label><input id="reprMec" type="date"/></div>
+        <div class="field"><label for="reprKm">Kilométrage</label><input id="reprKm" type="text"/></div>
+        <div class="field"><label for="reprLongueur">Longueur (m)</label><input id="reprLongueur" type="text"/></div>
+        <div class="field"><label for="reprLargeur">Largeur (m)</label><input id="reprLargeur" type="text"/></div>
+        <div class="field"><label for="reprHauteur">Hauteur (m)</label><input id="reprHauteur" type="text"/></div>
+        <div class="field"><label for="reprPtac">PTAC (kg)</label><input id="reprPtac" type="text"/></div>
+        <div class="field"><label for="reprCvFisc">Chevaux fiscaux</label><input id="reprCvFisc" type="text"/></div>
+        <div class="field"><label for="reprCvDin">Chevaux DIN</label><input id="reprCvDin" type="text"/></div>
+        <div class="field"><label for="reprBoite">Boite de vitesse</label><select id="reprBoite"><option value="Boite auto" selected>Boite auto</option><option value="Boite manuelle">Boite manuelle</option></select></div>
+        <div class="field"><label for="reprEnergie">Énergie</label><select id="reprEnergie"><option value="Diesel" selected>Diesel</option><option value="Essence">Essence</option><option value="Hybride">Hybride</option><option value="Electrique">Electrique</option></select></div>
+        <div class="field"><label for="reprPlacesCg">Places carte grise</label><select id="reprPlacesCg"></select></div>
+        <div class="field"><label for="reprPlacesCouche">Places couchage</label><select id="reprPlacesCouche"></select></div>
+        <div class="field"><label for="reprTypeLit">Type de lit</label><select id="reprTypeLit"><option value="">—</option><option>Lit À La Française</option><option>Lit Central</option><option>Lit Pavillon</option><option>Lit Superposé</option><option>Lit Sur Soute</option><option>Lit Transversal</option><option>Lits Jumeaux</option><option>Salon En U</option></select></div>
+        <div class="field"><label for="reprEauPropre">Eaux propres (L)</label><input id="reprEauPropre" type="text"/></div>
+        <div class="field"><label for="reprEauUsee">Eaux usées (L)</label><input id="reprEauUsee" type="text"/></div>
+        <div class="field"><label for="reprEtat">État général</label><select id="reprEtat"><option value="">—</option><option>Excellent</option><option>Correct</option><option>Passable</option><option>Triste</option></select></div>
       </div>
-    </div>`;
-  html2pdf().set({margin:10,filename:'resume-widget.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrapper).save();
+    </div>
+  </div>
+</form>
+
+<!-- ══ COLONNE DROITE ══ -->
+<div class="card right-sticky" id="summaryBlock">
+
+  <!-- En-tête print uniquement -->
+  <div class="print-header" style="display:none">
+    <div><div class="print-logo">Libertium Seclin Lestringuez</div><div class="print-sub">Fiche récapitulative commerciale</div></div>
+    <div class="print-coords">205 Avenue de la République<br>59113 SECLIN<br>03 20 32 25 99 · contact.seclin@libertium.fr</div>
+  </div>
+
+  <h2>Aperçu et recommandation</h2>
+
+  <!-- ▸ IDENTITÉ -->
+  <div class="pv-block">
+    <div class="pv-head">Vendeur &amp; Identité</div>
+    <div class="pv-row" id="rVendeur"><div class="pv-k">Vendeur</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rCivilite"><div class="pv-k">Civilité</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rTypeClient"><div class="pv-k">Type client</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rPrenom"><div class="pv-k">Prénom</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rNom"><div class="pv-k">Nom</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rSociete"><div class="pv-k">Société</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rFonction"><div class="pv-k">Fonction</div><div class="pv-v">—</div></div>
+  </div>
+
+  <!-- ▸ COORDONNÉES -->
+  <div class="pv-block">
+    <div class="pv-head">Coordonnées</div>
+    <div class="pv-row" id="rTelephone"><div class="pv-k">Téléphone</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rMobile"><div class="pv-k">Mobile</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rEmail"><div class="pv-k">Email</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rSiteWeb"><div class="pv-k">Site web</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rAdresse"><div class="pv-k">Adresse</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rVille"><div class="pv-k">CP / Ville</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rDepartement"><div class="pv-k">Département</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rPays"><div class="pv-k">Pays</div><div class="pv-v">—</div></div>
+  </div>
+
+  <!-- ▸ DÉCOUVERTE -->
+  <div class="pv-block">
+    <div class="pv-head">Découverte véhicule de loisir</div>
+    <div class="pv-row" id="rBudget"><div class="pv-k">Budget</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rAchat"><div class="pv-k">Projet d'achat</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rVoyageurs"><div class="pv-k">Voyageurs</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rUsage"><div class="pv-k">Usage principal</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rCompacite"><div class="pv-k">Capacité</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rConduite"><div class="pv-k">Conduite / gabarit</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rCouchages"><div class="pv-k">Couchages</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rSdb"><div class="pv-k">Salle de bain</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rAutonomie"><div class="pv-k">Autonomie</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rSaison"><div class="pv-k">Saison</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rPermis"><div class="pv-k">Permis / poids</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rPriorite"><div class="pv-k">Priorité</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rBesoin"><div class="pv-k">Besoin exprimé</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rNotes"><div class="pv-k">Notes commercial</div><div class="pv-v">—</div></div>
+  </div>
+
+  <!-- ▸ QUALIFICATION -->
+  <div class="pv-block">
+    <div class="pv-head">Qualification</div>
+    <div class="pv-row" id="rDelai"><div class="pv-k">Délai d'achat</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rDecisionnaire"><div class="pv-k">Décisionnaire</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rReprise"><div class="pv-k">Reprise véhicule</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rScore"><div class="pv-k">Score commercial</div><div class="pv-v">—</div></div>
+  </div>
+
+  <!-- ▸ REPRISE (masqué si non) -->
+  <div class="pv-block" id="rRepriseBlock" style="display:none">
+    <div class="pv-head">Véhicule à reprendre</div>
+    <div class="pv-row" id="rRGamme"><div class="pv-k">Gamme</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRPorteur"><div class="pv-k">Marque porteur</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rREquip"><div class="pv-k">Équipementier</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRModele"><div class="pv-k">Modèle</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRMec"><div class="pv-k">1ère MEC</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRKm"><div class="pv-k">Kilométrage</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRDims"><div class="pv-k">L × l × H (m)</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRPtac"><div class="pv-k">PTAC (kg)</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRCv"><div class="pv-k">CV fisc. / DIN</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRBoite"><div class="pv-k">Boite</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rREnergie"><div class="pv-k">Énergie</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRPlaces"><div class="pv-k">Places CG / couchage</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rRTypeLit"><div class="pv-k">Type de lit</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rREaux"><div class="pv-k">Eaux propres / usées</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rREtat"><div class="pv-k">État général</div><div class="pv-v">—</div></div>
+  </div>
+
+  <!-- ▸ CHIPS + RÉSUMÉ + RECOMMANDATION -->
+  <div class="chips" id="chips"></div>
+
+  <div class="summary-box">
+    <p id="pvSummaryBox">Renseigne les champs à gauche pour générer une recommandation.</p>
+  </div>
+
+  <div class="recommend-top">
+    <h3>Meilleure recommandation</h3>
+    <p id="topExplanation">—</p>
+  </div>
+  <div class="results" id="results"></div>
+
+  <!-- ▸ LIVE SEARCH -->
+  <div class="live-section">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:13px;font-weight:700">🔍 Stock en temps réel · libertium.fr</span>
+      <span style="font-size:11px;color:#22c55e;font-weight:700;background:#dcfce7;padding:3px 8px;border-radius:999px">● API connectée</span>
+    </div>
+    <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
+      <span id="btnLiveIcon">🔎</span><span id="btnLiveTxt">Rechercher des véhicules en stock</span>
+    </button>
+    <div class="live-results-wrap" id="liveResults" style="display:none">
+      <h4>Véhicules disponibles <span class="live-badge" id="liveBadge">—</span></h4>
+      <div id="liveCards"></div>
+    </div>
+  </div>
+
+</div><!-- /right-sticky -->
+</div></div></div><!-- /grid /page-inner /page -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
+  'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
+  'departement','pays','budget','achat','voyageurs','usage','compacite','conduite',
+  'couchages','sdb','autonomie','saison','permis','priorite','besoin','notes',
+  'delai','decisionnaire','reprise',
+  'reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm',
+  'reprLongueur','reprLargeur','reprHauteur','reprPtac','reprCvFisc','reprCvDin',
+  'reprPlacesCg','reprPlacesCouche','reprTypeLit','reprEauPropre','reprEauUsee','reprEtat'];
+
+const VEHICLES=[
+  {key:'van',      title:'Van aménagé',         url:'https://www.libertium.fr/vehicule/van-amenage'},
+  {key:'fourgon',  title:'Fourgon aménagé',      url:'https://www.libertium.fr/vehicule/van-fourgon-amenage'},
+  {key:'profile',  title:'Camping-car profilé',  url:'https://www.libertium.fr/vehicule/camping-car/profile'},
+  {key:'integral', title:'Camping-car intégral', url:'https://www.libertium.fr/vehicule/camping-car/integral'},
+  {key:'capucine', title:'Camping-car capucine', url:'https://www.libertium.fr/vehicule/camping-car/capucine'},
+  {key:'caravane', title:'Caravane',             url:'https://www.libertium.fr/vehicule'}
+];
+
+const deptList=[['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d\'Or'],['22','Côtes-d\'Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['59','Nord'],['60','Oise'],['61','Orne'],['62','Pas-de-Calais'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d\'Oise']];
+const equip=['Adria','Adria Caravane','Adria Caravanes','Airstream','Arca','Autostar','Barbot','Benimar','Burstner','California','Capron','Carado','Carthago','Caravelair','Challenger','Challenger Vdl','Clever Vans','Concorde','Crosscamp','Dethleffs','Dreamer','Eden Camp','Elios','Eriba','Etrusco','Eura Mobil','Euramobil','Fleurette','Font Vendome','Ford','Frankia','Giottiline','Hanroad','Hero Camper','Hobby','Hymer','Hymercar','Itineo','Joa','Joa Camp','Karmann','Knaus','La Mancelle','La Strada','Laika','Le Voyageur','Lmc','Mac Louis','Malibu','Marco Polo','Mc Louis','Mclouis','Mercedes','Mercedes Benz','Mobilvetta','Morelo','Notin','Panama','Pilote','Possl','Rapido','Randger','Renault','Road Car','Roadcar','Roller Team','Silver','Sterckeman','Stylevan','Sun Living','Sunlight','Swift','Tourne Mobil','Trigano Caravanes','Volkswagen','Weinsberg','Westfalia','Wingamm'];
+
+function init(){
+  document.getElementById('departement').innerHTML='<option value="">—</option>'+deptList.map(([c,n])=>`<option value="${c}">${c} - ${n}</option>`).join('');
+  document.getElementById('reprEquip').innerHTML='<option value="">—</option>'+equip.map(x=>`<option>${x}</option>`).join('');
+  document.getElementById('reprPlacesCg').innerHTML='<option value="">—</option>'+[2,3,4,5,6,7,8].map(x=>`<option>${x}</option>`).join('');
+  document.getElementById('reprPlacesCouche').innerHTML='<option value="">—</option>'+[2,3,4,5,6,7,8].map(x=>`<option>${x}</option>`).join('');
 }
+
+function read(){
+  const d={};
+  FORM_IDS.forEach(id=>{const el=document.getElementById(id);d[id]=el?el.value:''});
+  d.reprBoite=document.getElementById('reprBoite').value||'Boite auto';
+  d.reprEnergie=document.getElementById('reprEnergie').value||'Diesel';
+  return d;
+}
+
+// Met à jour une ligne pv-row
+function pv(id, val){
+  const row=document.getElementById(id);
+  if(!row)return;
+  const cell=row.querySelector('.pv-v');
+  const v=(val||'').trim();
+  cell.textContent=v||'—';
+  row.classList.toggle('pv-empty',!v);
+}
+
+function setVille(v){document.getElementById('ville').value=v||''}
+async function postal(){
+  const cp=document.getElementById('codePostal').value.trim();
+  if(!/^\d{5}$/.test(cp)){setVille('');return}
+  try{const r=await fetch(`https://geo.api.gouv.fr/communes?codePostal=${encodeURIComponent(cp)}&fields=nom&format=json`);const j=await r.json();setVille([...new Set((j||[]).map(x=>x.nom).filter(Boolean))].join(' / '))}catch(e){setVille('')}
+}
+function toggleReprise(){
+  const show=document.getElementById('reprise').value==='Oui';
+  document.getElementById('repriseFields').classList.toggle('show',show);
+  document.getElementById('rRepriseBlock').style.display=show?'':'none';
+}
+
+function vr(v){return(v||'').trim()||'—'}
+
+function scoreVehicle(v,d){
+  let s=10;
+  const voy=d.voyageurs;
+  if(voy==='1 à 2'){if(v.key==='van')s+=30;else if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=15;}
+  if(voy==='3 à 4'){if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=30;else if(v.key==='integral')s+=25;}
+  if(voy==='5 à 6'){if(v.key==='capucine')s+=30;else if(v.key==='integral')s+=25;else if(v.key==='caravane')s+=20;}
+  if(voy==='7 et +'){if(v.key==='capucine')s+=35;else if(v.key==='caravane')s+=25;}
+  const bud=d.budget;
+  if(bud==='Moins de 40 000 €'){if(v.key==='van')s+=15;else if(v.key==='caravane')s+=20;}
+  if(bud==='40 000 à 60 000 €'){if(v.key==='fourgon')s+=15;else if(v.key==='profile')s+=12;}
+  if(bud==='60 000 à 80 000 €'){if(v.key==='profile')s+=15;else if(v.key==='integral')s+=12;}
+  if(bud==='80 000 à 100 000 €'||bud==='Plus de 100 000 €'){if(v.key==='integral')s+=20;else if(v.key==='capucine')s+=15;}
+  if(d.conduite==='Ville et routes étroites'){if(v.key==='van')s+=15;else if(v.key==='fourgon')s+=10;else if(['integral','capucine'].includes(v.key))s-=10;}
+  if(d.conduite==='Peu de contrainte'||d.conduite==='Routes ouvertes'){if(['integral','capucine'].includes(v.key))s+=10;}
+  if(d.permis==='Remorquage souhaité'&&v.key==='caravane')s+=20;
+  if(d.priorite==='Prix'&&v.key==='caravane')s+=15;
+  if(d.usage==='Itinérance fréquente'&&['van','fourgon'].includes(v.key))s+=10;
+  return Math.max(0,Math.min(s,100));
+}
+
+function computeScore(d){
+  let s=0;
+  s+=({'Immédiat':20,'1 à 3 mois':15,'3 à 6 mois':10,'6 mois et plus':5,'Se renseigne':2}[d.delai]||0);
+  if(d.budget&&d.budget!=='Non défini')s+=15;
+  if(d.besoin&&d.besoin.trim().length>5)s+=10;
+  if(d.decisionnaire&&d.decisionnaire.trim().length>1)s+=10;
+  if(d.reprise)s+=10;
+  if(d.achat)s+=5;if(d.voyageurs)s+=5;if(d.usage)s+=5;if(d.priorite)s+=5;
+  if(d.telephone||d.mobile||d.email)s+=5;
+  if(d.nom&&d.prenom)s+=5;if(d.couchages)s+=5;
+  return Math.min(s,100);
+}
+
+function updateScoreUI(score){
+  document.getElementById('scoreNum').textContent=score;
+  document.getElementById('scoreBarFill').style.width=score+'%';
+  let cls,lbl;
+  if(score>=80){cls='sd-fire';lbl='🔥 Chaud +';}
+  else if(score>=55){cls='sd-hot';lbl='✅ Qualifié';}
+  else if(score>=30){cls='sd-warm';lbl='⚡ En cours';}
+  else{cls='sd-cold';lbl='À qualifier';}
+  document.getElementById('scoreDisplay').className='score-display '+cls;
+  document.getElementById('scoreLbl').textContent=lbl;
+}
+
+function render(){
+  const d=read();
+  toggleReprise();
+  const score=computeScore(d);
+  updateScoreUI(score);
+
+  // ── IDENTITÉ
+  pv('rVendeur',   d.vendeur);
+  pv('rCivilite',  d.civilite);
+  pv('rTypeClient',d.typeClient);
+  pv('rPrenom',    d.prenom);
+  pv('rNom',       d.nom);
+  pv('rSociete',   d.societe);
+  pv('rFonction',  d.fonction);
+
+  // ── COORDONNÉES
+  pv('rTelephone',   d.telephone);
+  pv('rMobile',      d.mobile);
+  pv('rEmail',       d.email);
+  pv('rSiteWeb',     d.siteWeb);
+  pv('rAdresse',     [d.adresse1,d.adresse2].filter(Boolean).join(', '));
+  pv('rVille',       [d.codePostal,d.ville].filter(Boolean).join(' '));
+  pv('rDepartement', d.departement);
+  pv('rPays',        d.pays);
+
+  // ── DÉCOUVERTE
+  pv('rBudget',    d.budget);
+  pv('rAchat',     d.achat);
+  pv('rVoyageurs', d.voyageurs);
+  pv('rUsage',     d.usage);
+  pv('rCompacite', d.compacite);
+  pv('rConduite',  d.conduite);
+  pv('rCouchages', d.couchages);
+  pv('rSdb',       d.sdb);
+  pv('rAutonomie', d.autonomie);
+  pv('rSaison',    d.saison);
+  pv('rPermis',    d.permis);
+  pv('rPriorite',  d.priorite);
+  pv('rBesoin',    d.besoin);
+  pv('rNotes',     d.notes);
+
+  // ── QUALIFICATION
+  pv('rDelai',        d.delai);
+  pv('rDecisionnaire',d.decisionnaire);
+  pv('rReprise',      d.reprise);
+  pv('rScore',        score+'/100');
+
+  // ── REPRISE VÉHICULE
+  pv('rRGamme',   d.reprGamme);
+  pv('rRPorteur', d.reprPorteur);
+  pv('rREquip',   d.reprEquip);
+  pv('rRModele',  d.reprModele);
+  pv('rRMec',     d.reprMec);
+  pv('rRKm',      d.reprKm?d.reprKm+' km':'');
+  pv('rRDims',    [d.reprLongueur,d.reprLargeur,d.reprHauteur].filter(Boolean).join(' × '));
+  pv('rRPtac',    d.reprPtac?d.reprPtac+' kg':'');
+  pv('rRCv',      [d.reprCvFisc?d.reprCvFisc+' CV fisc.':'',d.reprCvDin?d.reprCvDin+' CV DIN':''].filter(Boolean).join(' / '));
+  pv('rRBoite',   d.reprBoite);
+  pv('rREnergie', d.reprEnergie);
+  pv('rRPlaces',  [d.reprPlacesCg?d.reprPlacesCg+' CG':'',d.reprPlacesCouche?d.reprPlacesCouche+' couchage':''].filter(Boolean).join(' / '));
+  pv('rRTypeLit', d.reprTypeLit);
+  pv('rREaux',    [d.reprEauPropre?d.reprEauPropre+'L propres':'',d.reprEauUsee?d.reprEauUsee+'L usées':''].filter(Boolean).join(' / '));
+  pv('rREtat',    d.reprEtat);
+
+  // ── CHIPS
+  document.getElementById('chips').innerHTML=
+    ['vendeur','budget','voyageurs','usage','compacite','priorite','departement']
+    .map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
+
+  // ── RÉSUMÉ
+  document.getElementById('pvSummaryBox').textContent=[
+    d.besoin&&`Besoin : ${d.besoin}`,d.notes&&`Notes : ${d.notes}`,
+    d.delai&&`Délai : ${d.delai}`,d.decisionnaire&&`Décisionnaire : ${d.decisionnaire}`
+  ].filter(Boolean).join('\n\n')||'Renseigne les champs à gauche pour générer une recommandation.';
+
+  // ── RECOMMANDATION
+  const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
+  document.getElementById('topExplanation').innerHTML=
+    `<strong><a href="${ranked[0].url}" target="_blank" rel="noopener">${ranked[0].title}</a></strong><br>Meilleure correspondance avec le profil saisi.`;
+  document.getElementById('results').innerHTML=ranked.map((v,i)=>`
+    <div class="result">
+      <span class="score-badge ${i===0?'score-high':i===1?'score-mid':'score-low'}">Top ${i+1} · ${v.s}/100</span>
+      <h4 style="margin-top:8px"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4>
+      <p style="margin:4px 0 0;font-size:13px;color:#64748b">Recommandation issue des critères saisis.</p>
+    </div>`).join('');
+}
+
+// ── HTML STRUCTURÉ pour PDF ──
+function buildPdfHtml(){
+  const d=read();
+  const score=computeScore(d);
+  const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
+
+  const S='font-family:Arial,sans-serif;font-size:10pt;color:#172033';
+  const H='background:#eef4ff;color:#163a6b;font-weight:700;padding:7px 12px;font-size:10.5pt;border-bottom:1px solid #d8e1ee';
+  const KS='background:#f8faff;color:#334155;font-weight:700;padding:5px 10px;border-right:1px solid #e2e8f0;width:160px;vertical-align:top;font-size:9.5pt';
+  const VS='color:#0f172a;padding:5px 10px;font-size:9.5pt;vertical-align:top';
+  const RS='border-bottom:1px solid #edf2f7';
+
+  function sec(title, rows){
+    const rHtml=rows.filter(([,v])=>v).map(([k,v])=>`<tr style="${RS}"><td style="${KS}">${k}</td><td style="${VS}">${v}</td></tr>`).join('');
+    if(!rHtml)return'';
+    return`<div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden">
+      <div style="${H}">${title}</div>
+      <table style="width:100%;border-collapse:collapse">${rHtml}</table>
+    </div>`;
+  }
+
+  const recoHtml=ranked.map((v,i)=>{
+    const col=i===0?'#166534':i===1?'#1d4ed8':'#9a3412';
+    const bg=i===0?'#ecfdf5':i===1?'#eff6ff':'#fff7ed';
+    return`<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:8px">
+      <span style="background:${bg};color:${col};border-radius:999px;padding:3px 10px;font-size:9pt;font-weight:700">Top ${i+1} · ${v.s}/100</span>
+      <div style="font-weight:700;margin-top:6px;font-size:10pt">${v.title}</div>
+      <div style="font-size:9pt;color:#64748b">${v.url}</div>
+    </div>`;
+  }).join('');
+
+  const repriseRows=d.reprise==='Oui'?[
+    ['Gamme',d.reprGamme],['Marque porteur',d.reprPorteur],['Équipementier',d.reprEquip],
+    ['Modèle',d.reprModele],['1ère MEC',d.reprMec],['Kilométrage',d.reprKm?d.reprKm+' km':''],
+    ['L × l × H (m)',[d.reprLongueur,d.reprLargeur,d.reprHauteur].filter(Boolean).join(' × ')],
+    ['PTAC',d.reprPtac?d.reprPtac+' kg':''],
+    ['CV fisc./DIN',[d.reprCvFisc?d.reprCvFisc+' CV fisc.':'',d.reprCvDin?d.reprCvDin+' CV DIN':''].filter(Boolean).join(' / ')],
+    ['Boite',d.reprBoite],['Énergie',d.reprEnergie],
+    ['Places CG/couchage',[d.reprPlacesCg?d.reprPlacesCg+' CG':'',d.reprPlacesCouche?d.reprPlacesCouche+' couchage':''].filter(Boolean).join(' / ')],
+    ['Type de lit',d.reprTypeLit],
+    ['Eaux propres/usées',[d.reprEauPropre?d.reprEauPropre+'L propres':'',d.reprEauUsee?d.reprEauUsee+'L usées':''].filter(Boolean).join(' / ')],
+    ['État général',d.reprEtat]
+  ]:[];
+
+  return`<div style="${S};max-width:800px;padding:0">
+    <!-- EN-TÊTE -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(180deg,#fff 0%,#eef4ff 100%);border:1px solid #d8e1ee;border-radius:12px;margin-bottom:18px">
+      <div>
+        <div style="font-size:18pt;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div>
+        <div style="font-size:10pt;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div>
+      </div>
+      <div style="text-align:right;font-size:9.5pt;color:#475569;line-height:1.5">
+        205 Avenue de la République<br>59113 SECLIN<br>03 20 32 25 99<br>contact.seclin@libertium.fr
+      </div>
+    </div>
+    ${sec('Vendeur &amp; Identité',[
+      ['Vendeur',d.vendeur],['Civilité',d.civilite],['Type client',d.typeClient],
+      ['Prénom',d.prenom],['Nom',d.nom],['Société',d.societe],['Fonction',d.fonction]
+    ])}
+    ${sec('Coordonnées',[
+      ['Téléphone',d.telephone],['Mobile',d.mobile],['Email',d.email],['Site web',d.siteWeb],
+      ['Adresse',[d.adresse1,d.adresse2].filter(Boolean).join(', ')],
+      ['CP / Ville',[d.codePostal,d.ville].filter(Boolean).join(' ')],
+      ['Département',d.departement],['Pays',d.pays]
+    ])}
+    ${sec('Découverte véhicule de loisir',[
+      ['Budget',d.budget],['Projet d\'achat',d.achat],['Voyageurs',d.voyageurs],
+      ['Usage principal',d.usage],['Capacité souhaitée',d.compacite],['Conduite / gabarit',d.conduite],
+      ['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],
+      ['Utilisation saisonnière',d.saison],['Permis / poids',d.permis],['Priorité',d.priorite],
+      ['Besoin exprimé',d.besoin],['Notes commercial',d.notes]
+    ])}
+    ${sec('Qualification',[
+      ['Délai d\'achat',d.delai],['Décisionnaire',d.decisionnaire],['Reprise véhicule',d.reprise],
+      ['Score commercial',score+'/100']
+    ])}
+    ${repriseRows.length?sec('Véhicule à reprendre',repriseRows):''}
+    <div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden">
+      <div style="${H}">Recommandations véhicule</div>
+      <div style="padding:12px">${recoHtml}</div>
+    </div>
+    ${(d.besoin||d.notes)?`<div style="border:1px dashed #c7d6f5;border-radius:10px;padding:12px;background:#f8fbff">
+      <div style="font-weight:700;color:#163a6b;margin-bottom:6px;font-size:10.5pt">Résumé commercial</div>
+      <div style="white-space:pre-wrap;font-size:9.5pt;line-height:1.6">${[d.besoin&&'Besoin : '+d.besoin,d.notes&&'Notes : '+d.notes,d.delai&&'Délai : '+d.delai,d.decisionnaire&&'Décisionnaire : '+d.decisionnaire].filter(Boolean).join('\n\n')}</div>
+    </div>`:''}
+  </div>`;
+}
+
+function exportPDF(){
+  const wrapper=document.createElement('div');
+  // position:fixed dans le viewport (opacity:0) — nécessaire pour html2canvas
+  wrapper.style.cssText='position:fixed;top:0;left:0;width:800px;z-index:-9999;opacity:0;pointer-events:none;background:#fff';
+  wrapper.innerHTML=buildPdfHtml();
+  document.body.appendChild(wrapper);
+  html2pdf().set({
+    margin:10,
+    filename:'fiche-client-libertium.pdf',
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+  }).from(wrapper).save()
+    .then(()=>document.body.removeChild(wrapper))
+    .catch(()=>document.body.removeChild(wrapper));
+}
+
 function bind(){
   document.getElementById('btnPrint').addEventListener('click',()=>window.print());
   document.getElementById('btnPdf').addEventListener('click',exportPDF);
@@ -510,166 +684,60 @@ function bind(){
     document.getElementById('btnLiveTxt').textContent='Rechercher des véhicules en stock';
     document.getElementById('btnLiveIcon').textContent='🔎';
   });
-  ids.forEach(id=>{
+  FORM_IDS.forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
     const ev=(el.tagName==='TEXTAREA'||el.tagName==='INPUT')?'input':'change';
-    el.addEventListener(ev,()=>{if(id==='codePostal')postal().then(render);else render()});
+    el.addEventListener(ev,()=>{if(id==='codePostal')postal().then(render);else render();});
   });
-  document.getElementById('reprise').addEventListener('change',render);
+  // reprBoite et reprEnergie ne sont pas dans FORM_IDS (valeurs par défaut gérées séparément)
+  document.getElementById('reprBoite').addEventListener('change', render);
+  document.getElementById('reprEnergie').addEventListener('change', render);
 }
 
-const LIVE_SEARCH_CONFIG = {
-  apiKey: 'AIzaSyD-iraFLFgGIY5nBZ3v07VeCRXOQ7-Ty0k',
-  cx: 'a3a8f772f6df54590',
-  apiUrl: 'https://www.googleapis.com/customsearch/v1'
-};
-
-function escapeHtml(str) {
-  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
-}
-function cleanText(str) {
-  return String(str || '').replace(/<\/?[^>]+(>|$)/g,' ').replace(/\s+/g,' ').trim();
-}
-function buildSearchQuery() {
-  const d = read();
-  const parts = [];
-  const budgetMap = {'Moins de 40 000 €':'budget 40000','40 000 à 60 000 €':'budget 60000','60 000 à 80 000 €':'budget 80000','80 000 à 100 000 €':'budget 100000','Plus de 100 000 €':'premium'};
-  const typeMap = {van:'van aménagé',fourgon:'fourgon',profile:'profil',integral:'intégral',capucine:'capucine',caravane:'caravane'};
-  const ranked = [...vehicles].map(v => ({...v,score:scoreVehicle(v,d)})).sort((a,b)=>b.score-a.score);
-  if (ranked[0] && ranked[0].score > 0) parts.push(typeMap[ranked[0].key] || ranked[0].title);
-  else parts.push('camping-car');
-  if (d.achat === 'Neuf') parts.push('neuf');
-  else if (d.achat === 'Occasion') parts.push('occasion');
-  if (d.couchages && d.couchages !== 'Peu importe') parts.push(d.couchages.toLowerCase());
-  if (d.budget && d.budget !== 'Non défini' && budgetMap[d.budget]) parts.push(budgetMap[d.budget]);
-  if (d.autonomie && d.autonomie !== 'Peu importe' && d.autonomie !== 'Faible') parts.push(d.autonomie.toLowerCase());
-  if (d.usage && d.usage !== 'Mixte') parts.push(d.usage.toLowerCase());
-  return parts.join(' ');
-}
-function computeMatchScore(item, d) {
-  let score = 0;
-  const text = cleanText(`${item.title || ''} ${item.snippet || ''}`).toLowerCase();
-  if (d.achat === 'Neuf' && text.includes('neuf')) score += 2;
-  if (d.achat === 'Occasion' && text.includes('occasion')) score += 2;
-  if (d.couchages && d.couchages !== 'Peu importe' && text.includes(d.couchages.toLowerCase())) score += 2;
-  if (d.budget === 'Moins de 40 000 €' && text.match(/40 ?000|moins de 40|budget/)) score += 1;
-  if (d.budget === '40 000 à 60 000 €' && text.match(/60 ?000|40 ?000|budget/)) score += 1;
-  if (d.budget === '60 000 à 80 000 €' && text.match(/80 ?000|60 ?000|budget/)) score += 1;
-  if (d.budget === '80 000 à 100 000 €' && text.match(/100 ?000|80 ?000|budget/)) score += 1;
-  if (d.budget === 'Plus de 100 000 €' && text.match(/premium|haut de gamme|luxe/)) score += 1;
-  if (item.link && /vehicule|vehicules|camping-car|fourgon|van|caravane/i.test(item.link)) score += 2;
-  return score;
-}
-function renderLiveError(message, details = '') {
-  const badge = document.getElementById('liveBadge');
-  const cards = document.getElementById('liveCards');
-  badge.textContent = 'Erreur';
-  badge.className = 'live-badge error';
-  cards.innerHTML = `<div class="live-empty">${escapeHtml(message)}${details ? '<br>' + escapeHtml(details) : ''}</div>`;
-}
-function renderLiveLoading(query) {
-  const badge = document.getElementById('liveBadge');
-  const cards = document.getElementById('liveCards');
-  badge.textContent = 'Chargement';
-  badge.className = 'live-badge loading';
-  cards.innerHTML = `<div class="live-empty">Interrogation de libertium.fr…<br><em>${escapeHtml(query)}</em></div>`;
-}
-async function runLiveSearch() {
-  const btn = document.getElementById('btnLive');
-  const icon = document.getElementById('btnLiveIcon');
-  const txt = document.getElementById('btnLiveTxt');
-  const wrap = document.getElementById('liveResults');
-  const cards = document.getElementById('liveCards');
-  const badge = document.getElementById('liveBadge');
-
-  const apiKey = (LIVE_SEARCH_CONFIG.apiKey || '').trim();
-  const cx = (LIVE_SEARCH_CONFIG.cx || '').trim();
-
-  if (!apiKey || !cx) {
-    wrap.style.display = 'block';
-    renderLiveError('Configuration manquante.', 'Renseigne la clé Google API et le cx PSE dans LIVE_SEARCH_CONFIG.');
-    return;
-  }
-
-  btn.classList.add('searching');
-  btn.disabled = true;
-  icon.textContent = '⏳';
-  txt.textContent = 'Recherche en cours…';
-  wrap.style.display = 'block';
-
-  const query = buildSearchQuery();
-  renderLiveLoading(query);
-
-  try {
-    const url = new URL(LIVE_SEARCH_CONFIG.apiUrl);
-    url.searchParams.set('key', apiKey);
-    url.searchParams.set('cx', cx);
-    url.searchParams.set('q', query);
-    url.searchParams.set('num', '10');
-
-    const resp = await fetch(url.toString(), { method: 'GET' });
-
-    let data = null;
-    try { data = await resp.json(); } catch (_) { data = null; }
-
-    if (!resp.ok) {
-      const msg = data?.error?.message || `Erreur HTTP ${resp.status}`;
-      throw new Error(msg);
-    }
-
-    const items = Array.isArray(data?.items) ? data.items : [];
-    if (!items.length) {
-      badge.textContent = '0 résultat';
-      badge.className = 'live-badge error';
-      cards.innerHTML = `<div class="live-empty">Aucun résultat pour <em>${escapeHtml(query)}</em>.<br>Essayez d’affiner les critères ou consultez <a href="https://www.libertium.fr/vehicule" target="_blank" rel="noopener noreferrer">libertium.fr</a>.</div>`;
-      return;
-    }
-
-    const scored = items
-      .map(item => ({...item, matchScore: computeMatchScore(item, read())}))
-      .sort((a, b) => b.matchScore - a.matchScore)
-      .slice(0, 5);
-
-    badge.textContent = `${scored.length} véhicule${scored.length > 1 ? 's' : ''} trouvé${scored.length > 1 ? 's' : ''}`;
-    badge.className = 'live-badge';
-
-    const rankLabels = ['Top 1', 'Top 2', 'Top 3', 'Top 4', 'Top 5'];
-    const rankClasses = ['r1', 'r2', 'r3', '', ''];
-
-    cards.innerHTML = scored.map((item, i) => {
-      const matchLevel = item.matchScore >= 5 ? 'high' : item.matchScore >= 3 ? 'mid' : 'low';
-      const matchTxt = item.matchScore >= 5 ? 'Très pertinent' : item.matchScore >= 3 ? 'Pertinent' : 'À vérifier';
-      const snippet = cleanText(item.snippet || '');
-      return `
-        <div class="live-vehicle-card">
-          <div class="lvc-head">
-            <div class="lvc-title">${escapeHtml(item.title || 'Annonce')}</div>
-            <div class="lvc-rank ${rankClasses[i] || ''}">${rankLabels[i] || ''}</div>
-          </div>
-          ${snippet ? `<div class="lvc-snippet">${escapeHtml(snippet)}</div>` : ''}
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-            <a class="lvc-link" href="${escapeHtml(item.link || '#')}" target="_blank" rel="noopener noreferrer">Voir sur libertium.fr</a>
-            <span class="lvc-match ${matchLevel}">${escapeHtml(matchTxt)}</span>
-          </div>
-        </div>
-      `;
+// ── LIVE SEARCH ──
+const LIVE_CFG={apiKey:'AIzaSyD-iraFLFgGIY5nBZ3v07VeCRXOQ7-Ty0k',cx:'a3a8f772f6df54590',apiUrl:'https://www.googleapis.com/customsearch/v1'};
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function cleanTxt(s){return String(s||'').replace(/<\/?[^>]+(>|$)/g,' ').replace(/\s+/g,' ').trim()}
+async function runLiveSearch(){
+  const btn=document.getElementById('btnLive'),icon=document.getElementById('btnLiveIcon'),txt=document.getElementById('btnLiveTxt');
+  const wrap=document.getElementById('liveResults'),cards=document.getElementById('liveCards'),badge=document.getElementById('liveBadge');
+  const key=(LIVE_CFG.apiKey||'').trim(),cx=(LIVE_CFG.cx||'').trim();
+  if(!key||!cx){wrap.style.display='block';badge.textContent='Config manquante';badge.className='live-badge error';return;}
+  btn.classList.add('searching');btn.disabled=true;icon.textContent='⏳';txt.textContent='Recherche en cours…';wrap.style.display='block';
+  const d=read();
+  const typeMap={van:'van aménagé',fourgon:'fourgon',profile:'profil',integral:'intégral',capucine:'capucine',caravane:'caravane'};
+  const bm={'Moins de 40 000 €':'budget 40000','40 000 à 60 000 €':'budget 60000','60 000 à 80 000 €':'budget 80000','80 000 à 100 000 €':'budget 100000','Plus de 100 000 €':'premium'};
+  const top=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s)[0];
+  const parts=[top&&top.s>10?typeMap[top.key]:' camping-car'];
+  if(d.achat==='Neuf')parts.push('neuf');else if(d.achat==='Occasion')parts.push('occasion');
+  if(d.couchages&&d.couchages!=='Peu importe')parts.push(d.couchages.toLowerCase());
+  if(d.budget&&bm[d.budget])parts.push(bm[d.budget]);
+  const query=parts.join(' ');
+  badge.textContent='Chargement';badge.className='live-badge loading';
+  cards.innerHTML=`<div class="live-empty">Interrogation de libertium.fr…<br><em>${esc(query)}</em></div>`;
+  try{
+    const url=new URL(LIVE_CFG.apiUrl);
+    url.searchParams.set('key',key);url.searchParams.set('cx',cx);url.searchParams.set('q',query);url.searchParams.set('num','10');
+    const resp=await fetch(url.toString());
+    let data=null;try{data=await resp.json();}catch(_){}
+    if(!resp.ok)throw new Error(data?.error?.message||`HTTP ${resp.status}`);
+    const items=Array.isArray(data?.items)?data.items:[];
+    if(!items.length){badge.textContent='0 résultat';badge.className='live-badge error';cards.innerHTML=`<div class="live-empty">Aucun résultat. Consultez <a href="https://www.libertium.fr/vehicule" target="_blank">libertium.fr</a>.</div>`;return;}
+    const scored=items.map(it=>({...it,ms:(it.achat==='Neuf'&&cleanTxt(it.snippet).toLowerCase().includes('neuf')?2:0)+(it.link&&/vehicule|camping-car|fourgon|van/i.test(it.link)?2:0)})).sort((a,b)=>b.ms-a.ms).slice(0,5);
+    badge.textContent=`${scored.length} trouvé${scored.length>1?'s':''}`;badge.className='live-badge';
+    const rl=['r1','r2','r3','',''],rn=['Top 1','Top 2','Top 3','Top 4','Top 5'];
+    cards.innerHTML=scored.map((it,i)=>{
+      const ml=it.ms>=4?'high':it.ms>=2?'mid':'low',mt=it.ms>=4?'Très pertinent':it.ms>=2?'Pertinent':'À vérifier';
+      return`<div class="live-vehicle-card"><div class="lvc-head"><div class="lvc-title">${esc(it.title||'Annonce')}</div><div class="lvc-rank ${rl[i]||''}">${rn[i]||''}</div></div>${it.snippet?`<div class="lvc-snippet">${esc(cleanTxt(it.snippet))}</div>`:''}<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><a class="lvc-link" href="${esc(it.link||'#')}" target="_blank" rel="noopener">Voir sur libertium.fr</a><span class="lvc-match ${ml}">${mt}</span></div></div>`;
     }).join('');
-  } catch (err) {
-    const msg = String(err?.message || 'Erreur inconnue');
-    const quota = /quota|rate limit|exceeded/i.test(msg);
-    renderLiveError(
-      quota ? 'Quota journalier atteint.' : 'Erreur lors de la recherche.',
-      quota ? 'Ressayez plus tard ou augmentez le quota Google.' : 'Vérifiez la clé API, le cx PSE, et l’accès à la Custom Search JSON API.'
-    );
-  } finally {
-    btn.classList.remove('searching');
-    btn.disabled = false;
-    icon.textContent = '🔎';
-    txt.textContent = 'Relancer la recherche';
-  }
+  }catch(err){
+    const m=String(err?.message||'');
+    badge.textContent='Erreur';badge.className='live-badge error';
+    cards.innerHTML=`<div class="live-empty">${/quota|rate/i.test(m)?'Quota journalier atteint.':'Erreur : '+esc(m)}</div>`;
+  }finally{btn.classList.remove('searching');btn.disabled=false;icon.textContent='🔎';txt.textContent='Relancer la recherche';}
 }
 
-init();bind();render();
+init(); bind(); render();
 </script>
 </body>
 </html>
