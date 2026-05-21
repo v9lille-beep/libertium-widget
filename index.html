@@ -372,7 +372,7 @@
 </div><!-- /right-sticky -->
 </div></div></div><!-- /grid /page-inner /page -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 <script>
 const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
   'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
@@ -655,20 +655,38 @@ function buildPdfHtml(){
 }
 
 function exportPDF(){
-  const wrapper=document.createElement('div');
-  // position:fixed dans le viewport (opacity:0) — nécessaire pour html2canvas
-  wrapper.style.cssText='position:fixed;top:0;left:0;width:800px;z-index:-9999;opacity:0;pointer-events:none;background:#fff';
-  wrapper.innerHTML=buildPdfHtml();
-  document.body.appendChild(wrapper);
-  html2pdf().set({
-    margin:10,
-    filename:'fiche-client-libertium.pdf',
-    image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',logging:false},
-    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
-  }).from(wrapper).save()
-    .then(()=>document.body.removeChild(wrapper))
-    .catch(()=>document.body.removeChild(wrapper));
+  const win = window.open('', '_blank');
+  if(!win){ alert('Autorisez les popups pour cet export.'); return; }
+
+  const pdfBody = buildPdfHtml();
+
+  win.document.write(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Fiche client Libertium</title>
+<style>
+  *{box-sizing:border-box}
+  @page{size:A4;margin:12mm}
+  body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#172033;margin:0;padding:24px;font-size:10pt;line-height:1.45}
+  @media print{body{padding:0}.toolbar{display:none!important}}
+  .toolbar{display:flex;align-items:center;gap:10px;padding:14px 18px;background:#eef4ff;border-radius:10px;margin-bottom:22px;border:1px solid #c7d6f5}
+  .toolbar button{border:0;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer}
+  .btn-p{background:#0f62fe;color:#fff}
+  .btn-c{background:#e8eef8;color:#172033}
+  .toolbar p{margin:0;font-size:11px;color:#64748b;flex:1}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button class="btn-p" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button>
+  <button class="btn-c" onclick="window.close()">✕ Fermer</button>
+  <p>Dans la boîte de dialogue d'impression, sélectionnez <strong>« Enregistrer en PDF »</strong> comme destination.</p>
+</div>
+${pdfBody}
+</body>
+</html>`);
+  win.document.close();
 }
 
 function bind(){
