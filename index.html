@@ -194,6 +194,7 @@
   <div class="section">
     <h3>Découverte véhicule de loisir</h3>
     <div class="form-grid">
+      <div class="field"><label for="typeVehicle">Type</label><select id="typeVehicle"><option value="">—</option><option>Camping Car</option><option>Caravane</option><option>Van</option><option>Fourgon</option><option>Van Et Fourgon</option></select></div>
       <div class="field"><label for="budget">Budget</label><select id="budget"><option value="">—</option><option>Moins de 30 000 €</option><option>Maxi 40 000 €</option><option>Maxi 50 000 €</option><option>Maxi 60 000 €</option><option>Maxi 70 000 €</option><option>Maxi 80 000 €</option><option>80 000 € et +</option></select></div>
       <div class="field"><label for="achat">Projet d'achat</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
       <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
@@ -295,6 +296,7 @@
   <!-- ▸ DÉCOUVERTE -->
   <div class="pv-block">
     <div class="pv-head">Découverte véhicule de loisir</div>
+    <div class="pv-row" id="rTypeVehicle"><div class="pv-k">Type</div><div class="pv-v">—</div></div>
     <div class="pv-row" id="rBudget"><div class="pv-k">Budget</div><div class="pv-v">—</div></div>
     <div class="pv-row" id="rAchat"><div class="pv-k">Projet d'achat</div><div class="pv-v">—</div></div>
     <div class="pv-row" id="rVoyageurs"><div class="pv-k">Voyageurs</div><div class="pv-v">—</div></div>
@@ -385,7 +387,7 @@
 <script>
 const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
   'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
-  'departement','pays','budget','achat','voyageurs','usage','compacite','conduite',
+  'departement','pays','typeVehicle','budget','achat','voyageurs','usage','compacite','conduite',
   'couchages','sdb','autonomie','saison','permis','priorite','besoin','notes',
   'delai','decisionnaire','reprise',
   'reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm',
@@ -517,6 +519,7 @@ function render(){
   pv('rPays',        d.pays);
 
   // ── DÉCOUVERTE
+  pv('rTypeVehicle', d.typeVehicle);
   pv('rBudget',    d.budget);
   pv('rAchat',     d.achat);
   pv('rVoyageurs', d.voyageurs);
@@ -557,7 +560,7 @@ function render(){
 
   // ── CHIPS
   document.getElementById('chips').innerHTML=
-    ['vendeur','budget','voyageurs','usage','compacite','priorite','departement']
+    ['vendeur','typeVehicle','budget','voyageurs','usage','compacite','priorite','departement']
     .map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
 
   // ── RÉSUMÉ
@@ -644,7 +647,7 @@ function buildPdfHtml(){
       ['Département',d.departement],['Pays',d.pays]
     ])}
     ${sec('Découverte véhicule de loisir',[
-      ['Budget',d.budget],['Projet d\'achat',d.achat],['Voyageurs',d.voyageurs],
+      ['Type',d.typeVehicle],['Budget',d.budget],['Projet d\'achat',d.achat],['Voyageurs',d.voyageurs],
       ['Usage principal',d.usage],['Capacité souhaitée',d.compacite],['Conduite / gabarit',d.conduite],
       ['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],
       ['Utilisation saisonnière',d.saison],['Permis / poids',d.permis],['Priorité',d.priorite],
@@ -747,8 +750,17 @@ async function runLiveSearch(){
 
   // Construire les paramètres depuis le formulaire
   const d = read();
+  // Mapping type widget → types internes worker
+  const typeMap = {
+    'Camping Car':    'profile,integral,capucine',
+    'Caravane':       'caravane,rigide',
+    'Van':            'van',
+    'Fourgon':        'fourgon',
+    'Van Et Fourgon': 'van,fourgon',
+  };
   const params = new URLSearchParams({
     voyageurs: d.voyageurs,
+    type_filter: typeMap[d.typeVehicle] || '',
     budget_max: parseBudgetMax(d.budget),
     achat:      d.achat,
     conduite:   d.conduite,
@@ -832,27 +844,4 @@ function setScope(scope){
   const on  = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff';
   const off = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155';
   s.style.cssText = scope === 'seclin' ? on : off;
-  r.style.cssText = scope === 'reseau'  ? on : off;
-  document.getElementById('btnLiveTxt').textContent = scope === 'seclin'
-    ? 'Rechercher dans le stock Seclin'
-    : 'Rechercher dans tout le réseau Libertium';
-}
-
-function parseBudgetMax(budget){
-  // Retourne le plafond avec 10% de tolérance (sauf illimité)
-  const map={
-    'Moins de 30 000 €': 33000,   // 30 000 × 1,10
-    'Maxi 40 000 €':     44000,   // 40 000 × 1,10
-    'Maxi 50 000 €':     55000,   // 50 000 × 1,10
-    'Maxi 60 000 €':     66000,   // 60 000 × 1,10
-    'Maxi 70 000 €':     77000,   // 70 000 × 1,10
-    'Maxi 80 000 €':     88000,   // 80 000 × 1,10
-    '80 000 € et +':     0,       // pas de plafond
-  };
-  return (budget in map) ? map[budget] : 0;
-}
-
-init(); bind(); render();
-</script>
-</body>
-</html>
+  r.style.cssText = scope === 
