@@ -844,4 +844,27 @@ function setScope(scope){
   const on  = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff';
   const off = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155';
   s.style.cssText = scope === 'seclin' ? on : off;
-  r.style.cssText = scope === 
+  r.style.cssText = scope === 'reseau'  ? on : off;
+  document.getElementById('btnLiveTxt').textContent = scope === 'seclin'
+    ? 'Rechercher dans le stock Seclin'
+    : 'Rechercher dans tout le réseau Libertium';
+}
+
+function parseBudgetMax(budget){
+  // Retourne le plafond avec 10% de tolérance (sauf illimité)
+  const map={
+    'Moins de 30 000 €': 33000,   // 30 000 × 1,10
+    'Maxi 40 000 €':     44000,   // 40 000 × 1,10
+    'Maxi 50 000 €':     55000,   // 50 000 × 1,10
+    'Maxi 60 000 €':     66000,   // 60 000 × 1,10
+    'Maxi 70 000 €':     77000,   // 70 000 × 1,10
+    'Maxi 80 000 €':     88000,   // 80 000 × 1,10
+    '80 000 € et +':     0,       // pas de plafond
+  };
+  return (budget in map) ? map[budget] : 0;
+}
+
+init(); bind(); render();
+</script>
+</body>
+</html>
