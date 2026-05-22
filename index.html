@@ -194,7 +194,7 @@
   <div class="section">
     <h3>Découverte véhicule de loisir</h3>
     <div class="form-grid">
-      <div class="field"><label for="budget">Budget</label><select id="budget"><option value="">—</option><option>Moins de 40 000 €</option><option>40 000 à 60 000 €</option><option>60 000 à 80 000 €</option><option>80 000 à 100 000 €</option><option>Plus de 100 000 €</option><option>Non défini</option></select></div>
+      <div class="field"><label for="budget">Budget</label><select id="budget"><option value="">—</option><option>Moins de 30 000 €</option><option>Maxi 40 000 €</option><option>Maxi 50 000 €</option><option>Maxi 60 000 €</option><option>Maxi 70 000 €</option><option>Maxi 80 000 €</option><option>80 000 € et +</option></select></div>
       <div class="field"><label for="achat">Projet d'achat</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
       <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
       <div class="field"><label for="usage">Usage principal</label><select id="usage"><option value="">—</option><option>Week-ends</option><option>Vacances longues</option><option>Itinérance fréquente</option><option>Séjours stationnaires</option><option>Mixte</option></select></div>
@@ -451,10 +451,13 @@ function scoreVehicle(v,d){
   if(voy==='5 à 6'){if(v.key==='capucine')s+=30;else if(v.key==='integral')s+=25;else if(v.key==='caravane')s+=20;}
   if(voy==='7 et +'){if(v.key==='capucine')s+=35;else if(v.key==='caravane')s+=25;}
   const bud=d.budget;
-  if(bud==='Moins de 40 000 €'){if(v.key==='van')s+=15;else if(v.key==='caravane')s+=20;}
-  if(bud==='40 000 à 60 000 €'){if(v.key==='fourgon')s+=15;else if(v.key==='profile')s+=12;}
-  if(bud==='60 000 à 80 000 €'){if(v.key==='profile')s+=15;else if(v.key==='integral')s+=12;}
-  if(bud==='80 000 à 100 000 €'||bud==='Plus de 100 000 €'){if(v.key==='integral')s+=20;else if(v.key==='capucine')s+=15;}
+  if(bud==='Moins de 30 000 €'){if(v.key==='van')s+=15;else if(v.key==='caravane')s+=20;}
+  if(bud==='Maxi 40 000 €'){if(v.key==='van')s+=12;else if(v.key==='fourgon')s+=10;else if(v.key==='caravane')s+=15;}
+  if(bud==='Maxi 50 000 €'){if(v.key==='fourgon')s+=15;else if(v.key==='van')s+=10;}
+  if(bud==='Maxi 60 000 €'){if(v.key==='fourgon')s+=15;else if(v.key==='profile')s+=12;}
+  if(bud==='Maxi 70 000 €'){if(v.key==='profile')s+=15;else if(v.key==='integral')s+=10;}
+  if(bud==='Maxi 80 000 €'){if(v.key==='profile')s+=12;else if(v.key==='integral')s+=15;}
+  if(bud==='80 000 € et +'){if(v.key==='integral')s+=20;else if(v.key==='capucine')s+=15;}
   if(d.conduite==='Ville et routes étroites'){if(v.key==='van')s+=15;else if(v.key==='fourgon')s+=10;else if(['integral','capucine'].includes(v.key))s-=10;}
   if(d.conduite==='Peu de contrainte'||d.conduite==='Routes ouvertes'){if(['integral','capucine'].includes(v.key))s+=10;}
   if(d.permis==='Remorquage souhaité'&&v.key==='caravane')s+=20;
@@ -466,7 +469,7 @@ function scoreVehicle(v,d){
 function computeScore(d){
   let s=0;
   s+=({'Immédiat':20,'1 à 3 mois':15,'3 à 6 mois':10,'6 mois et plus':5,'Se renseigne':2}[d.delai]||0);
-  if(d.budget&&d.budget!=='Non défini')s+=15;
+  if(d.budget&&d.budget!=='')s+=15;
   if(d.besoin&&d.besoin.trim().length>5)s+=10;
   if(d.decisionnaire&&d.decisionnaire.trim().length>1)s+=10;
   if(d.reprise)s+=10;
@@ -836,8 +839,17 @@ function setScope(scope){
 }
 
 function parseBudgetMax(budget){
-  const map={'Moins de 40 000 €':40000,'40 000 à 60 000 €':60000,'60 000 à 80 000 €':80000,'80 000 à 100 000 €':100000,'Plus de 100 000 €':999999};
-  return map[budget]||0;
+  // Retourne le plafond avec 10% de tolérance (sauf illimité)
+  const map={
+    'Moins de 30 000 €': 33000,   // 30 000 × 1,10
+    'Maxi 40 000 €':     44000,   // 40 000 × 1,10
+    'Maxi 50 000 €':     55000,   // 50 000 × 1,10
+    'Maxi 60 000 €':     66000,   // 60 000 × 1,10
+    'Maxi 70 000 €':     77000,   // 70 000 × 1,10
+    'Maxi 80 000 €':     88000,   // 80 000 × 1,10
+    '80 000 € et +':     0,       // pas de plafond
+  };
+  return (budget in map) ? map[budget] : 0;
 }
 
 init(); bind(); render();
