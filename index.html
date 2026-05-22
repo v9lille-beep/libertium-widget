@@ -366,6 +366,10 @@
         style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff">
         📍 Stock Seclin
       </button>
+      <button type="button" id="btnScopeSeclinBeauvois" onclick="setScope('seclin_beauvois')"
+        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">
+        📍📍 Seclin + Beauvois
+      </button>
       <button type="button" id="btnScopeReseau" onclick="setScope('reseau')"
         style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">
         🌐 Tout le réseau
@@ -767,7 +771,7 @@ async function runLiveSearch(){
     priorite:   d.priorite,
     permis:     d.permis,
     usage:      d.usage,
-    seclin:     _liveScope === 'seclin' ? '1' : '0',
+    seclin:     _liveScope === 'seclin' ? '1' : _liveScope === 'seclin_beauvois' ? 'seclin_beauvois' : '0',
   });
 
   try {
@@ -787,7 +791,7 @@ async function runLiveSearch(){
       return;
     }
 
-    const scopeLabel = _liveScope === 'seclin' ? 'Seclin' : 'réseau';
+    const scopeLabel = _liveScope === 'seclin' ? 'Seclin' : _liveScope === 'seclin_beauvois' ? 'Seclin + Beauvois' : 'réseau';
     badge.textContent=`${results.length} véhicule${results.length>1?'s':''} · ${data.total||'?'} en stock · ${scopeLabel}`;
     badge.className='live-badge';
 
@@ -839,15 +843,17 @@ let _liveScope = 'seclin';
 
 function setScope(scope){
   _liveScope = scope;
-  const s = document.getElementById('btnScopeSeclin');
-  const r = document.getElementById('btnScopeReseau');
   const on  = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff';
   const off = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155';
-  s.style.cssText = scope === 'seclin' ? on : off;
-  r.style.cssText = scope === 'reseau'  ? on : off;
-  document.getElementById('btnLiveTxt').textContent = scope === 'seclin'
-    ? 'Rechercher dans le stock Seclin'
-    : 'Rechercher dans tout le réseau Libertium';
+  document.getElementById('btnScopeSeclin').style.cssText        = scope === 'seclin'          ? on : off;
+  document.getElementById('btnScopeSeclinBeauvois').style.cssText = scope === 'seclin_beauvois' ? on : off;
+  document.getElementById('btnScopeReseau').style.cssText         = scope === 'reseau'          ? on : off;
+  const labels = {
+    seclin:          'Rechercher dans le stock Seclin',
+    seclin_beauvois: 'Rechercher dans le stock Seclin + Beauvois',
+    reseau:          'Rechercher dans tout le réseau Libertium',
+  };
+  document.getElementById('btnLiveTxt').textContent = labels[scope] || labels.seclin;
 }
 
 function parseBudgetMax(budget){
