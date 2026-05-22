@@ -146,8 +146,7 @@
     </div>
   </div>
   <div class="topbar-actions">
-    <button type="button" class="btn-primary" id="btnPdf">📄 Export PDF</button>
-    <button type="button" class="btn-primary" id="btnSaveClient">💾 Sauvegarde client</button>
+    <button type="button" class="btn-primary"   id="btnPdf">📄 Export PDF</button>
     <button type="button" class="btn-secondary" id="btnReset">↺ Réinitialiser</button>
   </div>
 </div>
@@ -372,10 +371,8 @@
 </div><!-- /right-sticky -->
 </div></div></div><!-- /grid /page-inner /page -->
 
-<script>
-// URL du Google Apps Script à déployer côté Google Sheets
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/TON_ID_DE_SCRIPT/exec';
 
+<script>
 const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
   'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
   'departement','pays','budget','achat','voyageurs','usage','compacite','conduite',
@@ -410,39 +407,6 @@ function read(){
   d.reprBoite=document.getElementById('reprBoite').value||'Boite auto';
   d.reprEnergie=document.getElementById('reprEnergie').value||'Diesel';
   return d;
-}
-
-// Fonction pour sauvegarder les données dans Google Sheets
-async function saveToGoogleSheet() {
-  const d = read();
-  const timestamp = new Date().toISOString();
-
-  // Ajoute un timestamp aux données
-  const dataToSend = { ...d, timestamp };
-
-  if (!GOOGLE_APPS_SCRIPT_URL || GOOGLE_APPS_SCRIPT_URL.includes('TON_ID_DE_SCRIPT')) {
-    alert('⚠️ Veuillez configurer l\'URL du Google Apps Script dans le code (variable GOOGLE_APPS_SCRIPT_URL).');
-    return;
-  }
-
-  try {
-    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(dataToSend),
-    });
-
-    if (response.ok) {
-      alert('✅ Données sauvegardées avec succès dans Google Sheets !');
-    } else {
-      alert('❌ Erreur lors de la sauvegarde. Vérifiez la configuration du Google Apps Script.');
-    }
-  } catch (error) {
-    alert('❌ Erreur réseau : ' + error.message);
-  }
 }
 
 // Met à jour une ligne pv-row
@@ -725,8 +689,7 @@ ${pdfBody}
 }
 
 function bind(){
-  document.getElementById('btnPdf').addEventListener('click', exportPDF);
-  document.getElementById('btnSaveClient').addEventListener('click', saveToGoogleSheet);
+  document.getElementById('btnPdf').addEventListener('click',exportPDF);
   document.getElementById('btnReset').addEventListener('click',()=>{
     document.getElementById('leadForm').reset();
     document.getElementById('reprBoite').value='Boite auto';
@@ -821,7 +784,7 @@ async function runLiveSearch(){
         <div style="margin-bottom:6px">${marqueStr}${anneeStr}${kmStr}</div>
         ${concStr}
         <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <a class="lvc-link" href="${esc(v.url)}" target="_blank" rel="noopener">Voir la fiche →</a>
+          <a class="lvc-link" href="${esc(v.urla)}" target="_blank" rel="noopener">Voir la fiche →</a>
           <span class="lvc-match ${v.score>=70?'high':v.score>=45?'mid':'low'}">${v.score}/100</span>
         </div>
       </div>`;
