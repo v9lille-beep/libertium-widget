@@ -710,47 +710,103 @@ function bind(){
   document.getElementById('reprEnergie').addEventListener('change', render);
 }
 
-// ── LIVE SEARCH ──
-const LIVE_CFG={apiKey:'AIzaSyD-iraFLFgGIY5nBZ3v07VeCRXOQ7-Ty0k',cx:'a3a8f772f6df54590',apiUrl:'https://www.googleapis.com/customsearch/v1'};
+// ── LIVE SEARCH — Cloudflare Worker ──
+const WORKER_URL = 'https://libertium-stock.v9lille.workers.dev'; // ← à remplacer après deploy
+
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function cleanTxt(s){return String(s||'').replace(/<\/?[^>]+(>|$)/g,' ').replace(/\s+/g,' ').trim()}
+
 async function runLiveSearch(){
   const btn=document.getElementById('btnLive'),icon=document.getElementById('btnLiveIcon'),txt=document.getElementById('btnLiveTxt');
   const wrap=document.getElementById('liveResults'),cards=document.getElementById('liveCards'),badge=document.getElementById('liveBadge');
-  const key=(LIVE_CFG.apiKey||'').trim(),cx=(LIVE_CFG.cx||'').trim();
-  if(!key||!cx){wrap.style.display='block';badge.textContent='Config manquante';badge.className='live-badge error';return;}
-  btn.classList.add('searching');btn.disabled=true;icon.textContent='⏳';txt.textContent='Recherche en cours…';wrap.style.display='block';
-  const d=read();
-  const typeMap={van:'van aménagé',fourgon:'fourgon',profile:'profil',integral:'intégral',capucine:'capucine',caravane:'caravane'};
-  const bm={'Moins de 40 000 €':'budget 40000','40 000 à 60 000 €':'budget 60000','60 000 à 80 000 €':'budget 80000','80 000 à 100 000 €':'budget 100000','Plus de 100 000 €':'premium'};
-  const top=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s)[0];
-  const parts=[top&&top.s>10?typeMap[top.key]:' camping-car'];
-  if(d.achat==='Neuf')parts.push('neuf');else if(d.achat==='Occasion')parts.push('occasion');
-  if(d.couchages&&d.couchages!=='Peu importe')parts.push(d.couchages.toLowerCase());
-  if(d.budget&&bm[d.budget])parts.push(bm[d.budget]);
-  const query=parts.join(' ');
-  badge.textContent='Chargement';badge.className='live-badge loading';
-  cards.innerHTML=`<div class="live-empty">Interrogation de libertium.fr…<br><em>${esc(query)}</em></div>`;
-  try{
-    const url=new URL(LIVE_CFG.apiUrl);
-    url.searchParams.set('key',key);url.searchParams.set('cx',cx);url.searchParams.set('q',query);url.searchParams.set('num','10');
-    const resp=await fetch(url.toString());
-    let data=null;try{data=await resp.json();}catch(_){}
-    if(!resp.ok)throw new Error(data?.error?.message||`HTTP ${resp.status}`);
-    const items=Array.isArray(data?.items)?data.items:[];
-    if(!items.length){badge.textContent='0 résultat';badge.className='live-badge error';cards.innerHTML=`<div class="live-empty">Aucun résultat. Consultez <a href="https://www.libertium.fr/vehicule" target="_blank">libertium.fr</a>.</div>`;return;}
-    const scored=items.map(it=>({...it,ms:(it.achat==='Neuf'&&cleanTxt(it.snippet).toLowerCase().includes('neuf')?2:0)+(it.link&&/vehicule|camping-car|fourgon|van/i.test(it.link)?2:0)})).sort((a,b)=>b.ms-a.ms).slice(0,5);
-    badge.textContent=`${scored.length} trouvé${scored.length>1?'s':''}`;badge.className='live-badge';
-    const rl=['r1','r2','r3','',''],rn=['Top 1','Top 2','Top 3','Top 4','Top 5'];
-    cards.innerHTML=scored.map((it,i)=>{
-      const ml=it.ms>=4?'high':it.ms>=2?'mid':'low',mt=it.ms>=4?'Très pertinent':it.ms>=2?'Pertinent':'À vérifier';
-      return`<div class="live-vehicle-card"><div class="lvc-head"><div class="lvc-title">${esc(it.title||'Annonce')}</div><div class="lvc-rank ${rl[i]||''}">${rn[i]||''}</div></div>${it.snippet?`<div class="lvc-snippet">${esc(cleanTxt(it.snippet))}</div>`:''}<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><a class="lvc-link" href="${esc(it.link||'#')}" target="_blank" rel="noopener">Voir sur libertium.fr</a><span class="lvc-match ${ml}">${mt}</span></div></div>`;
+
+  if(!WORKER_URL || WORKER_URL.includes('COMPTE')){
+    wrap.style.display='block';
+    badge.textContent='Non configuré';badge.className='live-badge error';
+    cards.innerHTML=`<div class="live-empty">⚙️ Renseigne l'URL du Worker dans la variable <strong>WORKER_URL</strong> du widget.<br>Voir <strong>SETUP.md</strong> étape 6.</div>`;
+    return;
+  }
+
+  btn.classList.add('searching');btn.disabled=true;icon.textContent='⏳';txt.textContent='Recherche en cours…';
+  wrap.style.display='block';badge.textContent='Chargement';badge.className='live-badge loading';
+  cards.innerHTML=`<div class="live-empty">Interrogation du stock Libertium…</div>`;
+
+  // Construire les paramètres depuis le formulaire
+  const d = read();
+  const params = new URLSearchParams({
+    voyageurs: d.voyageurs,
+    budget_max: parseBudgetMax(d.budget),
+    achat:      d.achat,
+    conduite:   d.conduite,
+    priorite:   d.priorite,
+    permis:     d.permis,
+    usage:      d.usage,
+    seclin:     '1',   // filtrer sur la concession Seclin en priorité
+  });
+
+  try {
+    const resp = await fetch(`${WORKER_URL}/search?${params}`);
+    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    const results = data.results || [];
+
+    if(!results.length){
+      badge.textContent='0 résultat';badge.className='live-badge error';
+      cards.innerHTML=`<div class="live-empty">Aucun véhicule correspondant en stock actuellement.<br>
+        <a href="https://www.libertium.fr/vehicule" target="_blank" rel="noopener">Voir tout le stock →</a></div>`;
+      return;
+    }
+
+    badge.textContent=`${results.length} véhicule${results.length>1?'s':''} · ${data.total||'?'} en stock`;
+    badge.className='live-badge';
+
+    const rankCls=['r1','r2','r3','',''];
+    const rankLbl=['Top 1','Top 2','Top 3','Top 4','Top 5'];
+
+    cards.innerHTML = results.map((v,i) => {
+      const priceStr = v.price ? v.price.toLocaleString('fr-FR')+'&nbsp;€' : 'Prix non communiqué';
+      const neufStr  = v.neuf===true ? '<span style="background:#dcfce7;color:#166534;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700">Neuf</span>'
+                     : v.neuf===false ? '<span style="background:#fef9c3;color:#854d0e;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700">Occasion</span>' : '';
+      const marqueStr = v.marque ? `<span style="font-size:12px;color:#64748b">${esc(v.marque)}</span> · ` : '';
+      const anneeStr  = v.annee  ? `<span style="font-size:12px;color:#64748b">${v.annee}</span> · ` : '';
+      const kmStr     = v.km     ? `<span style="font-size:12px;color:#64748b">${v.km.toLocaleString('fr-FR')} km</span>` : '';
+      const concStr   = v.concession ? `<div style="font-size:11px;color:#94a3b8;margin-top:4px">📍 ${esc(v.concession)}</div>` : '';
+
+      return `<div class="live-vehicle-card">
+        <div class="lvc-head">
+          <div class="lvc-title">${esc(v.title)}</div>
+          <div class="lvc-rank ${rankCls[i]||''}">${rankLbl[i]||''}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          ${neufStr}
+          <span style="font-size:13px;font-weight:700;color:#0f172a">${priceStr}</span>
+        </div>
+        <div style="margin-bottom:6px">${marqueStr}${anneeStr}${kmStr}</div>
+        ${concStr}
+        <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <a class="lvc-link" href="${esc(v.url)}" target="_blank" rel="noopener">Voir la fiche →</a>
+          <span class="lvc-match ${v.score>=70?'high':v.score>=45?'mid':'low'}">${v.score}/100</span>
+        </div>
+      </div>`;
     }).join('');
-  }catch(err){
-    const m=String(err?.message||'');
+
+    if(data.cachedAt){
+      cards.innerHTML += `<div style="font-size:11px;color:#94a3b8;text-align:right;margin-top:8px">
+        Stock mis à jour le ${new Date(data.cachedAt).toLocaleString('fr-FR')}</div>`;
+    }
+
+  } catch(err){
     badge.textContent='Erreur';badge.className='live-badge error';
-    cards.innerHTML=`<div class="live-empty">${/quota|rate/i.test(m)?'Quota journalier atteint.':'Erreur : '+esc(m)}</div>`;
-  }finally{btn.classList.remove('searching');btn.disabled=false;icon.textContent='🔎';txt.textContent='Relancer la recherche';}
+    cards.innerHTML=`<div class="live-empty">Erreur : ${esc(String(err.message||err))}<br>
+      Vérifiez que le Worker est déployé et que l'URL est correcte.</div>`;
+  } finally {
+    btn.classList.remove('searching');btn.disabled=false;icon.textContent='🔎';txt.textContent='Relancer la recherche';
+  }
+}
+
+function parseBudgetMax(budget){
+  const map={'Moins de 40 000 €':40000,'40 000 à 60 000 €':60000,'60 000 à 80 000 €':80000,'80 000 à 100 000 €':100000,'Plus de 100 000 €':999999};
+  return map[budget]||0;
 }
 
 init(); bind(); render();
