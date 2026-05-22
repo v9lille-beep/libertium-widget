@@ -359,8 +359,18 @@
       <span style="font-size:13px;font-weight:700">🔍 Stock en temps réel · libertium.fr</span>
       <span style="font-size:11px;color:#22c55e;font-weight:700;background:#dcfce7;padding:3px 8px;border-radius:999px">● API connectée</span>
     </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px">
+      <button type="button" id="btnScopeSeclin" onclick="setScope('seclin')"
+        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff">
+        📍 Stock Seclin
+      </button>
+      <button type="button" id="btnScopeReseau" onclick="setScope('reseau')"
+        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">
+        🌐 Tout le réseau
+      </button>
+    </div>
     <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
-      <span id="btnLiveIcon">🔎</span><span id="btnLiveTxt">Rechercher des véhicules en stock</span>
+      <span id="btnLiveIcon">🔎</span><span id="btnLiveTxt">Rechercher dans le stock Seclin</span>
     </button>
     <div class="live-results-wrap" id="liveResults" style="display:none">
       <h4>Véhicules disponibles <span class="live-badge" id="liveBadge">—</span></h4>
@@ -696,6 +706,7 @@ function bind(){
     document.getElementById('reprEnergie').value='Diesel';
     setVille('');toggleReprise();render();
     document.getElementById('liveResults').style.display='none';
+    setScope('seclin');
     document.getElementById('liveCards').innerHTML='';
     document.getElementById('btnLiveTxt').textContent='Rechercher des véhicules en stock';
     document.getElementById('btnLiveIcon').textContent='🔎';
@@ -711,7 +722,7 @@ function bind(){
 }
 
 // ── LIVE SEARCH — Cloudflare Worker ──
-const WORKER_URL = 'https://libertium-stock.v9lille.workers.dev'; // ← à remplacer après deploy
+const WORKER_URL = 'https://libertium-stock.COMPTE.workers.dev'; // ← à remplacer après deploy
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function cleanTxt(s){return String(s||'').replace(/<\/?[^>]+(>|$)/g,' ').replace(/\s+/g,' ').trim()}
@@ -741,14 +752,18 @@ async function runLiveSearch(){
     priorite:   d.priorite,
     permis:     d.permis,
     usage:      d.usage,
-    seclin:     '1',   // filtrer sur la concession Seclin en priorité
+    seclin:     _liveScope === 'seclin' ? '1' : '0',
   });
 
   try {
     const resp = await fetch(`${WORKER_URL}/search?${params}`);
     if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
-    const results = data.results || [];
+    const rawResults = data.results || [];
+    const budMax = parseBudgetMax(d.budget);
+    const results = budMax > 0
+      ? rawResults.filter(v => !v.price || v.price <= budMax)
+      : rawResults;
 
     if(!results.length){
       badge.textContent='0 résultat';badge.className='live-badge error';
@@ -757,7 +772,8 @@ async function runLiveSearch(){
       return;
     }
 
-    badge.textContent=`${results.length} véhicule${results.length>1?'s':''} · ${data.total||'?'} en stock`;
+    const scopeLabel = _liveScope === 'seclin' ? 'Seclin' : 'réseau';
+    badge.textContent=`${results.length} véhicule${results.length>1?'s':''} · ${data.total||'?'} en stock · ${scopeLabel}`;
     badge.className='live-badge';
 
     const rankCls=['r1','r2','r3','',''];
@@ -784,7 +800,7 @@ async function runLiveSearch(){
         <div style="margin-bottom:6px">${marqueStr}${anneeStr}${kmStr}</div>
         ${concStr}
         <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <a class="lvc-link" href="${esc(v.urla)}" target="_blank" rel="noopener">Voir la fiche →</a>
+          <a class="lvc-link" href="${esc(v.url)}" target="_blank" rel="noopener">Voir la fiche →</a>
           <span class="lvc-match ${v.score>=70?'high':v.score>=45?'mid':'low'}">${v.score}/100</span>
         </div>
       </div>`;
@@ -802,6 +818,21 @@ async function runLiveSearch(){
   } finally {
     btn.classList.remove('searching');btn.disabled=false;icon.textContent='🔎';txt.textContent='Relancer la recherche';
   }
+}
+
+let _liveScope = 'seclin';
+
+function setScope(scope){
+  _liveScope = scope;
+  const s = document.getElementById('btnScopeSeclin');
+  const r = document.getElementById('btnScopeReseau');
+  const on  = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff';
+  const off = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155';
+  s.style.cssText = scope === 'seclin' ? on : off;
+  r.style.cssText = scope === 'reseau'  ? on : off;
+  document.getElementById('btnLiveTxt').textContent = scope === 'seclin'
+    ? 'Rechercher dans le stock Seclin'
+    : 'Rechercher dans tout le réseau Libertium';
 }
 
 function parseBudgetMax(budget){
