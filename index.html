@@ -722,7 +722,7 @@ function bind(){
 }
 
 // ── LIVE SEARCH — Cloudflare Worker ──
-const WORKER_URL = 'https://libertium-stock.COMPTE.workers.dev'; // ← à remplacer après deploy
+const WORKER_URL = 'https://libertium-stock.v9lille.workers.dev';
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
 function cleanTxt(s){return String(s||'').replace(/<\/?[^>]+(>|$)/g,' ').replace(/\s+/g,' ').trim()}
