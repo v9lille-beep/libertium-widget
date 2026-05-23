@@ -146,6 +146,12 @@
     </div>
   </div>
   <div class="topbar-actions">
+    <div class="score-display sd-cold" id="scoreDisplay" style="min-width:200px">
+      <span class="score-num" id="scoreNum">0</span>
+      <span class="score-denom">/100</span>
+      <div class="score-bar-track"><div class="score-bar-fill" id="scoreBarFill"></div></div>
+      <span class="score-lbl" id="scoreLbl">À qualifier</span>
+    </div>
     <button type="button" class="btn-primary"   id="btnPdf">📄 Export PDF</button>
     <button type="button" class="btn-primary"   id="btnSave" style="background:#16a34a">💾 Sauvegarde</button>
     <button type="button" class="btn-secondary" id="btnReset">↺ Réinitialiser</button>
@@ -221,15 +227,7 @@
       <div class="field"><label for="delai">Délai d'achat</label><select id="delai"><option value="">—</option><option>Immédiat</option><option>1 à 3 mois</option><option>3 à 6 mois</option><option>6 mois et plus</option><option>Se renseigne</option></select></div>
       <div class="field"><label for="decisionnaire">Décisionnaire</label><input id="decisionnaire" type="text"/></div>
       <div class="field"><label for="reprise">Reprise véhicule</label><select id="reprise"><option value="">—</option><option>Oui</option><option>Non</option><option>À étudier</option></select></div>
-      <div class="field score-wrap">
-        <label>Score commercial</label>
-        <div class="score-display sd-cold" id="scoreDisplay">
-          <span class="score-num" id="scoreNum">0</span>
-          <span class="score-denom">/100</span>
-          <div class="score-bar-track"><div class="score-bar-fill" id="scoreBarFill"></div></div>
-          <span class="score-lbl" id="scoreLbl">À qualifier</span>
-        </div>
-      </div>
+
     </div>
 
     <div class="reprise-fields" id="repriseFields">
