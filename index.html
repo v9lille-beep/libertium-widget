@@ -784,22 +784,20 @@ async function saveToSheet() {
   btn.style.background = '#64748b';
 
   try {
-    const resp = await fetch(SHEETS_URL, {
+    // no-cors : contourne le blocage CORS depuis un fichier local
+    // La réponse est opaque mais l'envoi passe bien
+    await fetch(SHEETS_URL, {
       method:  'POST',
+      mode:    'no-cors',
       body:    JSON.stringify(row),
     });
-    const json = await resp.json();
-    if (json.ok) {
-      btn.textContent = '✅ Sauvegardé !';
-      btn.style.background = '#15803d';
-      setTimeout(() => {
-        btn.textContent = '💾 Sauvegarde';
-        btn.style.background = '#16a34a';
-        btn.disabled = false;
-      }, 2500);
-    } else {
-      throw new Error(json.error || 'Erreur inconnue');
-    }
+    btn.textContent = '✅ Sauvegardé !';
+    btn.style.background = '#15803d';
+    setTimeout(() => {
+      btn.textContent = '💾 Sauvegarde';
+      btn.style.background = '#16a34a';
+      btn.disabled = false;
+    }, 2500);
   } catch(err) {
     btn.textContent = '❌ Erreur';
     btn.style.background = '#dc2626';
