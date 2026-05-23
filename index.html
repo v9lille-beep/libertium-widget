@@ -200,11 +200,11 @@
       <div class="field"><label for="achat">Projet d'achat</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
       <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
       <div class="field"><label for="usage">Usage principal</label><select id="usage"><option value="">—</option><option>Week-ends</option><option>Vacances longues</option><option>Itinérance fréquente</option><option>Séjours stationnaires</option><option>Mixte</option></select></div>
-      <div class="field"><label for="compacite">Capacité souhaitée</label><select id="compacite"><option value="">—</option><option>Peu importe</option><option>Très compacte</option><option>Compacte</option><option>Standard</option><option>Grand confort</option></select></div>
+      <div class="field"><label for="compacite">Capacité souhaitée</label><select id="compacite"><option value="">—</option><option>Très compacte</option><option>Compacte</option><option>Standard</option><option>Grand confort</option></select></div>
       <div class="field"><label for="conduite">Conduite / gabarit</label><select id="conduite"><option value="">—</option><option>Ville et routes étroites</option><option>Mixte</option><option>Routes ouvertes</option><option>Peu de contrainte</option></select></div>
-      <div class="field"><label for="couchages">Type de couchages</label><select id="couchages"><option value="">—</option><option>Lit permanent</option><option>Lits jumeaux</option><option>Lit central</option><option>Lit pavillon</option><option>Lit dinette</option><option>Peu importe</option></select></div>
+      <div class="field"><label for="couchages">Type de couchages</label><select id="couchages"><option value="">—</option><option>Lit permanent</option><option>Lits jumeaux</option><option>Lit central</option><option>Lit pavillon</option><option>Lit dinette</option></select></div>
       <div class="field"><label for="sdb">Salle de bain</label><select id="sdb"><option value="">—</option><option>Indispensable</option><option>Souhaitée</option><option>Optionnelle</option></select></div>
-      <div class="field"><label for="autonomie">Autonomie</label><select id="autonomie"><option value="">—</option><option>Peu importe</option><option>Faible</option><option>Moyenne</option><option>Élevée</option><option>Très élevée</option></select></div>
+      <div class="field"><label for="autonomie">Autonomie</label><select id="autonomie"><option value="">—</option><option>Faible</option><option>Moyenne</option><option>Élevée</option><option>Très élevée</option></select></div>
       <div class="field"><label for="saison">Utilisation saisonnière</label><select id="saison"><option value="">—</option><option>Été uniquement</option><option>Mi-saison</option><option>Toute saison</option><option>Montagne / hiver</option></select></div>
       <div class="field"><label for="permis">Permis / poids</label><select id="permis"><option value="">—</option><option>Permis B sans contrainte</option><option>Permis B, vigilance poids</option><option>Permis C ou équivalent</option><option>Remorquage souhaité</option></select></div>
       <div class="field"><label for="priorite">Priorité</label><select id="priorite"><option value="">—</option><option>Prix</option><option>Confort</option><option>Maniabilité</option><option>Autonomie</option><option>Volume</option><option>Équipement</option></select></div>
@@ -245,8 +245,8 @@
         <div class="field"><label for="reprPtac">PTAC (kg)</label><input id="reprPtac" type="text"/></div>
         <div class="field"><label for="reprCvFisc">Chevaux fiscaux</label><input id="reprCvFisc" type="text"/></div>
         <div class="field"><label for="reprCvDin">Chevaux DIN</label><input id="reprCvDin" type="text"/></div>
-        <div class="field"><label for="reprBoite">Boite de vitesse</label><select id="reprBoite"><option value="Boite auto" selected>Boite auto</option><option value="Boite manuelle">Boite manuelle</option></select></div>
-        <div class="field"><label for="reprEnergie">Énergie</label><select id="reprEnergie"><option value="Diesel" selected>Diesel</option><option value="Essence">Essence</option><option value="Hybride">Hybride</option><option value="Electrique">Electrique</option></select></div>
+        <div class="field"><label for="reprBoite">Boite de vitesse</label><select id="reprBoite"><option value="">—</option><option value="Boite auto">Boite auto</option><option value="Boite manuelle">Boite manuelle</option></select></div>
+        <div class="field"><label for="reprEnergie">Énergie</label><select id="reprEnergie"><option value="">—</option><option value="Diesel">Diesel</option><option value="Essence">Essence</option><option value="Hybride">Hybride</option><option value="Electrique">Electrique</option></select></div>
         <div class="field"><label for="reprPlacesCg">Places carte grise</label><select id="reprPlacesCg"></select></div>
         <div class="field"><label for="reprPlacesCouche">Places couchage</label><select id="reprPlacesCouche"></select></div>
         <div class="field"><label for="reprTypeLit">Type de lit</label><select id="reprTypeLit"><option value="">—</option><option>Lit À La Française</option><option>Lit Central</option><option>Lit Pavillon</option><option>Lit Superposé</option><option>Lit Sur Soute</option><option>Lit Transversal</option><option>Lits Jumeaux</option><option>Salon En U</option></select></div>
@@ -421,8 +421,8 @@ function init(){
 function read(){
   const d={};
   FORM_IDS.forEach(id=>{const el=document.getElementById(id);d[id]=el?el.value:''});
-  d.reprBoite=document.getElementById('reprBoite').value||'Boite auto';
-  d.reprEnergie=document.getElementById('reprEnergie').value||'Diesel';
+  d.reprBoite=document.getElementById('reprBoite').value||'';
+  d.reprEnergie=document.getElementById('reprEnergie').value||'';
   return d;
 }
 
@@ -453,10 +453,27 @@ function vr(v){return(v||'').trim()||'—'}
 function scoreVehicle(v,d){
   let s=10;
   const voy=d.voyageurs;
-  if(voy==='1 à 2'){if(v.key==='van')s+=30;else if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=15;}
-  if(voy==='3 à 4'){if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=30;else if(v.key==='integral')s+=25;}
-  if(voy==='5 à 6'){if(v.key==='capucine')s+=30;else if(v.key==='integral')s+=25;else if(v.key==='caravane')s+=20;}
-  if(voy==='7 et +'){if(v.key==='capucine')s+=35;else if(v.key==='caravane')s+=25;}
+  if(voy==='1 à 2'){
+    if(v.key==='van')s+=30;else if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=15;
+    // Pénalité véhicules surdimensionnés
+    if(['capucine','integral'].includes(v.key))s-=15;
+    if(v.key==='caravane')s-=10;
+  }
+  if(voy==='3 à 4'){
+    if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=30;else if(v.key==='integral')s+=25;
+    if(v.key==='van')s-=10;
+  }
+  if(voy==='5 à 6'){
+    if(v.key==='capucine')s+=30;else if(v.key==='integral')s+=25;else if(v.key==='caravane')s+=15;
+    // Caravane 5-6 places rare → bonus modéré
+    if(['van','fourgon'].includes(v.key))s-=15;
+  }
+  if(voy==='7 et +'){
+    if(v.key==='capucine')s+=35;else if(v.key==='integral')s+=15;
+    // Caravane : rarement 7+ places → pas de bonus
+    if(v.key==='caravane')s-=5;
+    if(['van','fourgon','profile'].includes(v.key))s-=20;
+  }
   const bud=d.budget;
   if(bud==='Moins de 30 000 €'){if(v.key==='van')s+=15;else if(v.key==='caravane')s+=20;}
   if(bud==='Maxi 40 000 €'){if(v.key==='van')s+=12;else if(v.key==='fourgon')s+=10;else if(v.key==='caravane')s+=15;}
@@ -838,8 +855,8 @@ function bind(){
   document.getElementById('btnSave').addEventListener('click',saveToSheet);
   document.getElementById('btnReset').addEventListener('click',()=>{
     document.getElementById('leadForm').reset();
-    document.getElementById('reprBoite').value='Boite auto';
-    document.getElementById('reprEnergie').value='Diesel';
+    document.getElementById('reprBoite').value='';
+    document.getElementById('reprEnergie').value='';
     setVille('');toggleReprise();render();
     document.getElementById('liveResults').style.display='none';
     setScope('seclin');
