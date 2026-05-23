@@ -450,8 +450,10 @@ function render(){
   const isOccasion   = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
   const isCaravane   = d.typeVehicle === 'Caravane';
   const showKmMax    = isOccasion && !isCaravane;
-  document.getElementById('kmMaxField').style.display = showKmMax ? '' : 'none';
-  document.getElementById('rKmMax').style.display     = (showKmMax && d.kmMax) ? '' : 'none';
+  const _kmMaxField = document.getElementById('kmMaxField');
+  const _rKmMax     = document.getElementById('rKmMax');
+  if (_kmMaxField) _kmMaxField.style.display = showKmMax ? '' : 'none';
+  if (_rKmMax)     _rKmMax.style.display     = (showKmMax && d.kmMax) ? '' : 'none';
   const score=computeScore(d);
   updateScoreUI(score);
 
