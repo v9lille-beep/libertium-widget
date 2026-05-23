@@ -966,6 +966,11 @@ function openLbc() {
     params.set('mileage', '0-' + parseInt(d.kmMax, 10));
   }
 
+  // Année max (LBC paramètre : regdate=AAAA-AAAA)
+  if (d.anneeMax && parseInt(d.anneeMax, 10) > 0) {
+    params.set('regdate', '1900-' + parseInt(d.anneeMax, 10));
+  }
+
   // Recherche texte selon le type de véhicule
   const typeMap = {
     'Camping Car':    'camping car',
