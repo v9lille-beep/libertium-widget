@@ -375,6 +375,10 @@
         style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">
         🌐 Tout le réseau
       </button>
+      <button type="button" id="btnLbc" onclick="openLbc()"
+        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #f97316;background:#fff7ed;color:#c2410c">
+        🟠 Le Bon Coin
+      </button>
     </div>
     <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
       <span id="btnLiveIcon">🔎</span><span id="btnLiveTxt">Rechercher dans le stock Seclin</span>
@@ -980,6 +984,54 @@ async function runLiveSearch(){
   } finally {
     btn.classList.remove('searching');btn.disabled=false;icon.textContent='🔎';txt.textContent='Relancer la recherche';
   }
+}
+
+// ── LE BON COIN ──────────────────────────────────────────────────────────────
+function openLbc() {
+  const d = read();
+
+  // Catégorie LBC : Caravaning = catégorie 7
+  // Hauts-de-France = région 32 sur LBC
+  const base = 'https://www.leboncoin.fr/recherche';
+  const params = new URLSearchParams();
+
+  params.set('category', '7');          // Caravaning
+  params.set('locations', 'r_32');      // Hauts-de-France
+
+  // Neuf / Occasion
+  if (d.achat === 'Neuf')      params.set('ad_type', 'professional');
+  if (d.achat === 'Occasion')  params.set('ad_type', 'private,professional');
+
+  // Budget
+  const budgetMap = {
+    'Moins de 30 000 €': [0, 30000],
+    'Maxi 40 000 €':     [0, 40000],
+    'Maxi 50 000 €':     [0, 50000],
+    'Maxi 60 000 €':     [0, 60000],
+    'Maxi 70 000 €':     [0, 70000],
+    'Maxi 80 000 €':     [0, 80000],
+    '80 000 € et +':     [80000, ''],
+  };
+  if (d.budget && budgetMap[d.budget]) {
+    const [min, max] = budgetMap[d.budget];
+    if (min) params.set('price', min + '-' + (max || ''));
+    else if (max) params.set('price', '1-' + max);
+  }
+
+  // Recherche texte selon le type de véhicule
+  const typeMap = {
+    'Camping Car':    'camping car',
+    'Caravane':       'caravane',
+    'Van':            'van aménagé',
+    'Fourgon':        'fourgon aménagé',
+    'Van Et Fourgon': 'van fourgon',
+  };
+  if (d.typeVehicle && typeMap[d.typeVehicle]) {
+    params.set('text', typeMap[d.typeVehicle]);
+  }
+
+  const url = base + '?' + params.toString();
+  window.open(url, '_blank', 'noopener');
 }
 
 let _liveScope = 'seclin';
