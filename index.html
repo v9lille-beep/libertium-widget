@@ -709,6 +709,109 @@ ${pdfBody}
   win.document.close();
 }
 
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyDa-PJ6JNc8nME1x1WpaWSYr4oJE3HG0-xRoXKWEoTdlCT6eEcoum5u7_RRsh3S6WD/exec';
+
+async function saveToSheet() {
+  const btn = document.getElementById('btnSave');
+  const d = read();
+
+  // Horodatage
+  const now = new Date().toLocaleString('fr-FR');
+
+  const row = {
+    'Date / Heure':      now,
+    'Vendeur':           d.vendeur,
+    'Civilité':          d.civilite,
+    'Type client':       d.typeClient,
+    'Prénom':            d.prenom,
+    'Nom':               d.nom,
+    'Société':           d.societe,
+    'Fonction':          d.fonction,
+    'Téléphone':         d.telephone,
+    'Mobile':            d.mobile,
+    'Email':             d.email,
+    'Site web':          d.siteWeb,
+    'Adresse 1':         d.adresse1,
+    'Adresse 2':         d.adresse2,
+    'Code postal':       d.codePostal,
+    'Ville':             d.ville,
+    'Département':       d.departement,
+    'Pays':              d.pays,
+    'Type véhicule':     d.typeVehicle,
+    'Budget':            d.budget,
+    'Projet achat':      d.achat,
+    'Voyageurs':         d.voyageurs,
+    'Usage':             d.usage,
+    'Capacité':          d.compacite,
+    'Conduite':          d.conduite,
+    'Couchages':         d.couchages,
+    'Salle de bain':     d.sdb,
+    'Autonomie':         d.autonomie,
+    'Saison':            d.saison,
+    'Permis':            d.permis,
+    'Priorité':          d.priorite,
+    'Besoin exprimé':    d.besoin,
+    'Notes commercial':  d.notes,
+    'Délai achat':       d.delai,
+    'Décisionnaire':     d.decisionnaire,
+    'Reprise':           d.reprise,
+    'Score commercial':  computeScore(d),
+    // Reprise véhicule
+    'Reprise gamme':     d.reprGamme,
+    'Reprise porteur':   d.reprPorteur,
+    'Reprise équip.':    d.reprEquip,
+    'Reprise modèle':    d.reprModele,
+    'Reprise MEC':       d.reprMec,
+    'Reprise km':        d.reprKm,
+    'Reprise longueur':  d.reprLongueur,
+    'Reprise largeur':   d.reprLargeur,
+    'Reprise hauteur':   d.reprHauteur,
+    'Reprise PTAC':      d.reprPtac,
+    'Reprise CV fisc.':  d.reprCvFisc,
+    'Reprise CV DIN':    d.reprCvDin,
+    'Reprise boite':     d.reprBoite,
+    'Reprise énergie':   d.reprEnergie,
+    'Reprise places CG': d.reprPlacesCg,
+    'Reprise places couchage': d.reprPlacesCouche,
+    'Reprise type lit':  d.reprTypeLit,
+    'Reprise eaux propres': d.reprEauPropre,
+    'Reprise eaux usées': d.reprEauUsee,
+    'Reprise état':      d.reprEtat,
+  };
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Sauvegarde…';
+  btn.style.background = '#64748b';
+
+  try {
+    const resp = await fetch(SHEETS_URL, {
+      method:  'POST',
+      body:    JSON.stringify(row),
+    });
+    const json = await resp.json();
+    if (json.ok) {
+      btn.textContent = '✅ Sauvegardé !';
+      btn.style.background = '#15803d';
+      setTimeout(() => {
+        btn.textContent = '💾 Sauvegarde';
+        btn.style.background = '#16a34a';
+        btn.disabled = false;
+      }, 2500);
+    } else {
+      throw new Error(json.error || 'Erreur inconnue');
+    }
+  } catch(err) {
+    btn.textContent = '❌ Erreur';
+    btn.style.background = '#dc2626';
+    setTimeout(() => {
+      btn.textContent = '💾 Sauvegarde';
+      btn.style.background = '#16a34a';
+      btn.disabled = false;
+    }, 3000);
+    console.error('Sauvegarde échouée :', err);
+  }
+}
+
 function bind(){
   document.getElementById('btnPdf').addEventListener('click',exportPDF);
   document.getElementById('btnSave').addEventListener('click',saveToSheet);
@@ -866,4 +969,13 @@ function parseBudgetMax(budget){
     'Maxi 50 000 €':     55000,   // 50 000 × 1,10
     'Maxi 60 000 €':     66000,   // 60 000 × 1,10
     'Maxi 70 000 €':     77000,   // 70 000 × 1,10
-    'Maxi 80 000 €':
+    'Maxi 80 000 €':     88000,   // 80 000 × 1,10
+    '80 000 € et +':     0,       // pas de plafond
+  };
+  return (budget in map) ? map[budget] : 0;
+}
+
+init(); bind(); render();
+</script>
+</body>
+</html>
