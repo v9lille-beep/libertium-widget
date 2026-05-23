@@ -199,6 +199,7 @@
       <div class="field"><label for="budget">Budget</label><select id="budget"><option value="">—</option><option>Moins de 30 000 €</option><option>Maxi 40 000 €</option><option>Maxi 50 000 €</option><option>Maxi 60 000 €</option><option>Maxi 70 000 €</option><option>Maxi 80 000 €</option><option>80 000 € et +</option></select></div>
       <div class="field"><label for="achat">Neuf ou occasion ?</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
       <div class="field" id="kmMaxField" style="display:none"><label for="kmMax">Km max</label><input id="kmMax" type="number" min="0" step="5000" placeholder="ex. 50000"/></div>
+      <div class="field" id="anneeMaxField" style="display:none"><label for="anneeMax">Année max</label><input id="anneeMax" type="number" min="1990" max="2025" step="1" placeholder="ex. 2020"/></div>
       <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
       <div class="field"><label for="usage">Usage principal</label><select id="usage"><option value="">—</option><option>Week-ends</option><option>Vacances longues</option><option>Itinérance fréquente</option><option>Séjours stationnaires</option><option>Mixte</option></select></div>
       <div class="field"><label for="compacite">Capacité souhaitée</label><select id="compacite"><option value="">—</option><option>Très compacte</option><option>Compacte</option><option>Standard</option><option>Grand confort</option></select></div>
@@ -320,7 +321,7 @@
 <script>
 const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
   'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
-  'departement','pays','typeVehicle','budget','achat','kmMax','voyageurs','usage','compacite','conduite',
+  'departement','pays','typeVehicle','budget','achat','kmMax','anneeMax','voyageurs','usage','compacite','conduite',
   'couchages','sdb','autonomie','saison','permis','priorite','besoin','notes',
   'delai','decisionnaire','reprise',
   'reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm',
@@ -354,11 +355,12 @@ function read(){
   return d;
 }
 
-// Met à jour une ligne pv-row
+// Met à jour une ligne pv-row (silencieux si élément absent du DOM)
 function pv(id, val){
   const row=document.getElementById(id);
   if(!row)return;
   const cell=row.querySelector('.pv-v');
+  if(!cell)return;
   const v=(val||'').trim();
   cell.textContent=v||'—';
   row.classList.toggle('pv-empty',!v);
@@ -373,7 +375,7 @@ async function postal(){
 function toggleReprise(){
   const show=document.getElementById('reprise').value==='Oui';
   document.getElementById('repriseFields').classList.toggle('show',show);
-  document.getElementById('rRepriseBlock').style.display=show?'':'none';
+  const _rRB=document.getElementById('rRepriseBlock');if(_rRB)_rRB.style.display=show?'':'none';
 }
 
 function vr(v){return(v||'').trim()||'—'}
@@ -450,10 +452,12 @@ function render(){
   const isOccasion   = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
   const isCaravane   = d.typeVehicle === 'Caravane';
   const showKmMax    = isOccasion && !isCaravane;
-  const _kmMaxField = document.getElementById('kmMaxField');
-  const _rKmMax     = document.getElementById('rKmMax');
-  if (_kmMaxField) _kmMaxField.style.display = showKmMax ? '' : 'none';
-  if (_rKmMax)     _rKmMax.style.display     = (showKmMax && d.kmMax) ? '' : 'none';
+  const _kmMaxField    = document.getElementById('kmMaxField');
+  const _anneeMaxField = document.getElementById('anneeMaxField');
+  const _rKmMax        = document.getElementById('rKmMax');
+  if (_kmMaxField)    _kmMaxField.style.display    = showKmMax ? '' : 'none';
+  if (_anneeMaxField) _anneeMaxField.style.display = showKmMax ? '' : 'none';
+  if (_rKmMax)        _rKmMax.style.display        = (showKmMax && d.kmMax) ? '' : 'none';
   const score=computeScore(d);
   updateScoreUI(score);
 
@@ -480,7 +484,7 @@ function render(){
   pv('rTypeVehicle', d.typeVehicle);
   pv('rBudget',    d.budget);
   pv('rAchat',     d.achat);
-  pv('rKmMax',     d.kmMax ? Number(d.kmMax).toLocaleString('fr-FR')+' km max' : '');
+  if(document.getElementById('rKmMax')) pv('rKmMax', d.kmMax ? Number(d.kmMax).toLocaleString('fr-FR')+' km max' : '');
   pv('rVoyageurs', d.voyageurs);
   pv('rUsage',     d.usage);
   pv('rCompacite', d.compacite);
@@ -606,7 +610,7 @@ function buildPdfHtml(){
       ['Département',d.departement],['Pays',d.pays]
     ])}
     ${sec('Découverte véhicule de loisir',[
-      ['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion ?',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Voyageurs',d.voyageurs],
+      ['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion ?',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Année max',d.anneeMax||''],['Voyageurs',d.voyageurs],
       ['Usage principal',d.usage],['Capacité souhaitée',d.compacite],['Conduite / gabarit',d.conduite],
       ['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],
       ['Utilisation saisonnière',d.saison],['Permis / poids',d.permis],['Priorité',d.priorite],
@@ -695,6 +699,7 @@ async function saveToSheet() {
     'Budget':            d.budget,
     'Neuf ou occasion':  d.achat,
     'Km max':            d.kmMax ? d.kmMax + ' km' : '',
+    'Année max':         d.anneeMax || '',
     'Voyageurs':         d.voyageurs,
     'Usage':             d.usage,
     'Capacité':          d.compacite,
@@ -847,6 +852,7 @@ async function runLiveSearch(){
     voyageurs: d.voyageurs,
     type_filter: typeMap[d.typeVehicle] || '',
     km_max:     d.kmMax || '',
+    annee_max:  d.anneeMax || '',
     budget_max: parseBudgetMax(d.budget),
     achat:      d.achat,
     conduite:   d.conduite,
@@ -865,7 +871,8 @@ async function runLiveSearch(){
     const kmMax  = d.kmMax ? parseInt(d.kmMax, 10) : 0;
     const results = rawResults
       .filter(v => budMax <= 0 || !v.price || v.price <= budMax)
-      .filter(v => kmMax  <= 0 || v.neuf !== false || !v.km || v.km <= kmMax);
+      .filter(v => kmMax     <= 0 || v.neuf !== false || !v.km   || v.km   <= kmMax)
+      .filter(v => !d.anneeMax || v.neuf !== false || !v.annee || v.annee <= parseInt(d.anneeMax,10));
 
     if(!results.length){
       badge.textContent='0 résultat';badge.className='live-badge error';
