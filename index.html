@@ -197,7 +197,8 @@
     <div class="form-grid">
       <div class="field"><label for="typeVehicle">Type</label><select id="typeVehicle"><option value="">—</option><option>Camping Car</option><option>Caravane</option><option>Van</option><option>Fourgon</option><option>Van Et Fourgon</option></select></div>
       <div class="field"><label for="budget">Budget</label><select id="budget"><option value="">—</option><option>Moins de 30 000 €</option><option>Maxi 40 000 €</option><option>Maxi 50 000 €</option><option>Maxi 60 000 €</option><option>Maxi 70 000 €</option><option>Maxi 80 000 €</option><option>80 000 € et +</option></select></div>
-      <div class="field"><label for="achat">Projet d'achat</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
+      <div class="field"><label for="achat">Neuf ou occasion ?</label><select id="achat"><option value="">—</option><option>Neuf</option><option>Occasion</option><option>Neuf ou occasion</option></select></div>
+      <div class="field" id="kmMaxField" style="display:none"><label for="kmMax">Km max</label><input id="kmMax" type="number" min="0" step="5000" placeholder="ex. 50000"/></div>
       <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
       <div class="field"><label for="usage">Usage principal</label><select id="usage"><option value="">—</option><option>Week-ends</option><option>Vacances longues</option><option>Itinérance fréquente</option><option>Séjours stationnaires</option><option>Mixte</option></select></div>
       <div class="field"><label for="compacite">Capacité souhaitée</label><select id="compacite"><option value="">—</option><option>Très compacte</option><option>Compacte</option><option>Standard</option><option>Grand confort</option></select></div>
@@ -299,7 +300,8 @@
     <div class="pv-head">Découverte véhicule de loisir</div>
     <div class="pv-row" id="rTypeVehicle"><div class="pv-k">Type</div><div class="pv-v">—</div></div>
     <div class="pv-row" id="rBudget"><div class="pv-k">Budget</div><div class="pv-v">—</div></div>
-    <div class="pv-row" id="rAchat"><div class="pv-k">Projet d'achat</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rAchat"><div class="pv-k">Neuf ou occasion ?</div><div class="pv-v">—</div></div>
+    <div class="pv-row" id="rKmMax" style="display:none"><div class="pv-k">Km max</div><div class="pv-v">—</div></div>
     <div class="pv-row" id="rVoyageurs"><div class="pv-k">Voyageurs</div><div class="pv-v">—</div></div>
     <div class="pv-row" id="rUsage"><div class="pv-k">Usage principal</div><div class="pv-v">—</div></div>
     <div class="pv-row" id="rCompacite"><div class="pv-k">Capacité</div><div class="pv-v">—</div></div>
@@ -396,7 +398,7 @@
 <script>
 const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
   'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
-  'departement','pays','typeVehicle','budget','achat','voyageurs','usage','compacite','conduite',
+  'departement','pays','typeVehicle','budget','achat','kmMax','voyageurs','usage','compacite','conduite',
   'couchages','sdb','autonomie','saison','permis','priorite','besoin','notes',
   'delai','decisionnaire','reprise',
   'reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm',
@@ -522,6 +524,10 @@ function updateScoreUI(score){
 function render(){
   const d=read();
   toggleReprise();
+  // Afficher km max uniquement si Occasion sélectionné
+  const isOccasion = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
+  document.getElementById('kmMaxField').style.display = isOccasion ? '' : 'none';
+  document.getElementById('rKmMax').style.display     = (isOccasion && d.kmMax) ? '' : 'none';
   const score=computeScore(d);
   updateScoreUI(score);
 
@@ -548,6 +554,7 @@ function render(){
   pv('rTypeVehicle', d.typeVehicle);
   pv('rBudget',    d.budget);
   pv('rAchat',     d.achat);
+  pv('rKmMax',     d.kmMax ? Number(d.kmMax).toLocaleString('fr-FR')+' km max' : '');
   pv('rVoyageurs', d.voyageurs);
   pv('rUsage',     d.usage);
   pv('rCompacite', d.compacite);
@@ -610,6 +617,10 @@ function render(){
 // ── HTML STRUCTURÉ pour PDF ──
 function buildPdfHtml(){
   const d=read();
+  // Afficher km max uniquement si Occasion sélectionné
+  const isOccasion = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
+  document.getElementById('kmMaxField').style.display = isOccasion ? '' : 'none';
+  document.getElementById('rKmMax').style.display     = (isOccasion && d.kmMax) ? '' : 'none';
   const score=computeScore(d);
   const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
 
@@ -673,7 +684,7 @@ function buildPdfHtml(){
       ['Département',d.departement],['Pays',d.pays]
     ])}
     ${sec('Découverte véhicule de loisir',[
-      ['Type',d.typeVehicle],['Budget',d.budget],['Projet d\'achat',d.achat],['Voyageurs',d.voyageurs],
+      ['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion ?',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Voyageurs',d.voyageurs],
       ['Usage principal',d.usage],['Capacité souhaitée',d.compacite],['Conduite / gabarit',d.conduite],
       ['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],
       ['Utilisation saisonnière',d.saison],['Permis / poids',d.permis],['Priorité',d.priorite],
@@ -760,7 +771,8 @@ async function saveToSheet() {
     'Pays':              d.pays,
     'Type véhicule':     d.typeVehicle,
     'Budget':            d.budget,
-    'Projet achat':      d.achat,
+    'Neuf ou occasion':  d.achat,
+    'Km max':            d.kmMax ? d.kmMax + ' km' : '',
     'Voyageurs':         d.voyageurs,
     'Usage':             d.usage,
     'Capacité':          d.compacite,
@@ -912,6 +924,7 @@ async function runLiveSearch(){
   const params = new URLSearchParams({
     voyageurs: d.voyageurs,
     type_filter: typeMap[d.typeVehicle] || '',
+    km_max:     d.kmMax || '',
     budget_max: parseBudgetMax(d.budget),
     achat:      d.achat,
     conduite:   d.conduite,
@@ -927,9 +940,10 @@ async function runLiveSearch(){
     const data = await resp.json();
     const rawResults = data.results || [];
     const budMax = parseBudgetMax(d.budget);
-    const results = budMax > 0
-      ? rawResults.filter(v => !v.price || v.price <= budMax)
-      : rawResults;
+    const kmMax  = d.kmMax ? parseInt(d.kmMax, 10) : 0;
+    const results = rawResults
+      .filter(v => budMax <= 0 || !v.price || v.price <= budMax)
+      .filter(v => kmMax  <= 0 || v.neuf !== false || !v.km || v.km <= kmMax);
 
     if(!results.length){
       badge.textContent='0 résultat';badge.className='live-badge error';
