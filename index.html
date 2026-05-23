@@ -783,14 +783,37 @@ async function saveToSheet() {
   btn.textContent = '⏳ Sauvegarde…';
   btn.style.background = '#64748b';
 
+  // Soumission via formulaire caché dans une iframe
+  // → contourne CORS complètement, fonctionne depuis fichier local
   try {
-    // no-cors : contourne le blocage CORS depuis un fichier local
-    // La réponse est opaque mais l'envoi passe bien
-    await fetch(SHEETS_URL, {
-      method:  'POST',
-      mode:    'no-cors',
-      body:    JSON.stringify(row),
-    });
+    // Iframe cachée pour intercepter la réponse du formulaire
+    let iframe = document.getElementById('_save_iframe');
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id   = '_save_iframe';
+      iframe.name = '_save_iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+
+    // Formulaire caché
+    const form = document.createElement('form');
+    form.method  = 'POST';
+    form.action  = SHEETS_URL;
+    form.target  = '_save_iframe';
+    form.style.display = 'none';
+
+    // Un seul champ "data" contenant le JSON complet
+    const input = document.createElement('input');
+    input.type  = 'hidden';
+    input.name  = 'data';
+    input.value = JSON.stringify(row);
+    form.appendChild(input);
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
     btn.textContent = '✅ Sauvegardé !';
     btn.style.background = '#15803d';
     setTimeout(() => {
