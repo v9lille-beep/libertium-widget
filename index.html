@@ -147,6 +147,7 @@
   </div>
   <div class="topbar-actions">
     <button type="button" class="btn-primary"   id="btnPdf">📄 Export PDF</button>
+    <button type="button" class="btn-primary"   id="btnSave" style="background:#16a34a">💾 Sauvegarde</button>
     <button type="button" class="btn-secondary" id="btnReset">↺ Réinitialiser</button>
   </div>
 </div>
@@ -710,6 +711,7 @@ ${pdfBody}
 
 function bind(){
   document.getElementById('btnPdf').addEventListener('click',exportPDF);
+  document.getElementById('btnSave').addEventListener('click',saveToSheet);
   document.getElementById('btnReset').addEventListener('click',()=>{
     document.getElementById('leadForm').reset();
     document.getElementById('reprBoite').value='Boite auto';
@@ -864,13 +866,4 @@ function parseBudgetMax(budget){
     'Maxi 50 000 €':     55000,   // 50 000 × 1,10
     'Maxi 60 000 €':     66000,   // 60 000 × 1,10
     'Maxi 70 000 €':     77000,   // 70 000 × 1,10
-    'Maxi 80 000 €':     88000,   // 80 000 × 1,10
-    '80 000 € et +':     0,       // pas de plafond
-  };
-  return (budget in map) ? map[budget] : 0;
-}
-
-init(); bind(); render();
-</script>
-</body>
-</html>
+    'Maxi 80 000 €':
