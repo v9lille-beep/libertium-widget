@@ -524,10 +524,12 @@ function updateScoreUI(score){
 function render(){
   const d=read();
   toggleReprise();
-  // Afficher km max uniquement si Occasion sélectionné
-  const isOccasion = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
-  document.getElementById('kmMaxField').style.display = isOccasion ? '' : 'none';
-  document.getElementById('rKmMax').style.display     = (isOccasion && d.kmMax) ? '' : 'none';
+  // Afficher km max uniquement si Occasion sélectionné ET pas Caravane
+  const isOccasion   = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
+  const isCaravane   = d.typeVehicle === 'Caravane';
+  const showKmMax    = isOccasion && !isCaravane;
+  document.getElementById('kmMaxField').style.display = showKmMax ? '' : 'none';
+  document.getElementById('rKmMax').style.display     = (showKmMax && d.kmMax) ? '' : 'none';
   const score=computeScore(d);
   updateScoreUI(score);
 
@@ -617,10 +619,12 @@ function render(){
 // ── HTML STRUCTURÉ pour PDF ──
 function buildPdfHtml(){
   const d=read();
-  // Afficher km max uniquement si Occasion sélectionné
-  const isOccasion = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
-  document.getElementById('kmMaxField').style.display = isOccasion ? '' : 'none';
-  document.getElementById('rKmMax').style.display     = (isOccasion && d.kmMax) ? '' : 'none';
+  // Afficher km max uniquement si Occasion sélectionné ET pas Caravane
+  const isOccasion   = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
+  const isCaravane   = d.typeVehicle === 'Caravane';
+  const showKmMax    = isOccasion && !isCaravane;
+  document.getElementById('kmMaxField').style.display = showKmMax ? '' : 'none';
+  document.getElementById('rKmMax').style.display     = (showKmMax && d.kmMax) ? '' : 'none';
   const score=computeScore(d);
   const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
 
