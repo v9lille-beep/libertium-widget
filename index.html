@@ -1036,6 +1036,11 @@ function openLbc() {
     else if (max) params.set('price', '1-' + max);
   }
 
+  // Kilométrage max (LBC paramètre : mileage=0-XXXXX)
+  if (d.kmMax && parseInt(d.kmMax, 10) > 0) {
+    params.set('mileage', '0-' + parseInt(d.kmMax, 10));
+  }
+
   // Recherche texte selon le type de véhicule
   const typeMap = {
     'Camping Car':    'camping car',
