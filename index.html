@@ -32,8 +32,9 @@
       .brand-logo{width:56px;height:56px;border-radius:10px}
       .brand-text h1{font-size:15px}
       .brand-text p{display:none}
-      .topbar-actions{width:100%;justify-content:space-between}
-      .topbar-actions .score-display{flex:1;min-width:0!important}
+      .topbar-actions{width:100%;flex-direction:column;gap:8px}
+      .topbar-actions .score-display{width:100%;min-width:0!important;order:2}
+      .topbar-actions .btn-row{display:flex;gap:8px;width:100%;order:1}
       .topbar-actions button{padding:8px 10px;font-size:12px;flex:1}
     }
     @media(max-width:480px){
@@ -186,9 +187,11 @@
       <div class="score-bar-track"><div class="score-bar-fill" id="scoreBarFill"></div></div>
       <span class="score-lbl" id="scoreLbl">À qualifier</span>
     </div>
-    <button type="button" class="btn-primary"   id="btnPdf">📄 Export PDF</button>
-    <button type="button" class="btn-primary"   id="btnSave" style="background:#16a34a">💾 Sauvegarde</button>
-    <button type="button" class="btn-secondary" id="btnReset">↺ Réinitialiser</button>
+    <div class="btn-row">
+      <button type="button" class="btn-primary"   id="btnPdf">📄 Export PDF</button>
+      <button type="button" class="btn-primary"   id="btnSave" style="background:#16a34a">💾 Sauvegarde</button>
+      <button type="button" class="btn-secondary" id="btnReset">↺ Réinitialiser</button>
+    </div>
   </div>
 </div>
 
