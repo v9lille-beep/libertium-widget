@@ -1476,10 +1476,8 @@ function buildPdfHtml(){
 }
 
 function exportPDF(){
-  const win = window.open('','_blank');
-  if(!win){ alert('Autorisez les popups pour cet export.'); return; }
   const pdfContent = buildPdfHtml();
-  win.document.write(`<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -1523,8 +1521,22 @@ function exportPDF(){
 </div>
 ${pdfContent}
 </body>
-</html>`);
-  win.document.close();
+</html>`;
+
+  // Blob URL — fonctionne sans popup bloquée, contenu garanti chargé
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const win  = window.open(url, '_blank');
+  if(!win){
+    // Fallback : téléchargement direct
+    const a = document.createElement('a');
+    a.href = url;
+    const d = read();
+    const nom = [d.prenom, d.nom].filter(Boolean).join('_') || 'client';
+    a.download = `fiche_${nom}_${new Date().toLocaleDateString('fr-FR').replace(/\//g,'-')}.html`;
+    a.click();
+  }
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
 }
 
 // ══════════════════════════════════════════════════════════
