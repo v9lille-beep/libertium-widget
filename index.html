@@ -1227,7 +1227,7 @@ async function runLiveSearch(){
   cards.innerHTML=`<div class="live-empty">Interrogation du stock Libertium…</div>`;
   const d=read();
   const typeMap={'Camping Car':'profile,integral,capucine','Caravane':'caravane,rigide','Van':'van','Fourgon':'fourgon','Van Et Fourgon':'van,fourgon'};
-  const params=new URLSearchParams({voyageurs:d.voyageurs,type_filter:typeMap[d.typeVehicle]||'',km_max:d.kmMax||'',annee_min:d.anneeMin||'',budget_max:parseBudgetMax(d.budget),achat:d.achat,permis:d.permis,seclin:_liveScope==='seclin'?'1':_liveScope==='seclin_beauvois'?'seclin_beauvois':'0'});
+  const params=new URLSearchParams({voyageurs:d.voyageurs,type_filter:typeMap[d.typeVehicle]||'',km_max:d.kmMax||'',annee_min:d.anneeMin||'',budget_max:parseBudgetMax(d.budget),achat:d.achat,permis:d.permis,equip_souhaite:(d.equipSouhaite||'').toLowerCase(),porteur_souhaite:(d.porteurSouhaite||'').toLowerCase(),modele_souhaite:(d.modeleSouhaite||'').toLowerCase(),seclin:_liveScope==='seclin'?'1':_liveScope==='seclin_beauvois'?'seclin_beauvois':'0'});
   try{
     const resp=await fetch(`${WORKER_URL}/search?${params}`);
     if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
