@@ -300,6 +300,12 @@
       <div class="field"><label for="permis">Permis / poids</label><select id="permis"><option value="">—</option><option>Permis B sans contrainte</option><option>Permis B, vigilance poids</option><option>Permis C ou équivalent</option><option>Remorquage souhaité</option></select></div>
       <div class="field"><label for="porteurSouhaite">Porteur souhaité</label><select id="porteurSouhaite"><option value="">— Indifférent —</option><option>Citroën Jumper</option><option>Fiat Ducato</option><option>Ford Transit</option><option>Iveco Daily</option><option>Mercedes Sprinter</option><option>Opel Movano</option><option>Peugeot Boxer</option><option>Renault Master</option><option>Toyota HiAce</option><option>Volkswagen Crafter</option></select></div>
       <div class="field"><label for="equipSouhaite">Marque équipementier souhaitée</label><select id="equipSouhaite"><option value="">— Indifférent —</option></select></div>
+      <div class="field" id="filtreDurWrap" style="display:none">
+        <label style="flex-direction:row;align-items:center;gap:8px;cursor:pointer;font-weight:400">
+          <input type="checkbox" id="filtreDur" style="width:16px;height:16px;flex-shrink:0;cursor:pointer;accent-color:#0f62fe"/>
+          <span style="font-size:13px;color:#334155">Uniquement cette marque <span style="color:#0f62fe;font-weight:700">(filtre strict)</span></span>
+        </label>
+      </div>
       <div class="field full"><label for="modeleSouhaite">Modèle souhaité <span style="font-weight:400;color:#94a3b8">(indicatif)</span></label><select id="modeleSouhaite"><option value="">— Choisir une marque d'abord —</option></select></div>
       <div class="field full"><label for="besoin">Besoin exprimé</label><textarea id="besoin"></textarea></div>
       <div class="field full"><label for="notes">Notes du commercial</label><textarea id="notes"></textarea></div>
@@ -610,6 +616,9 @@ function init(){
     } else {
       sel.innerHTML = '<option value="">— Indifférent / non listé —</option>';
     }
+    // Afficher/masquer la case "filtre strict"
+    document.getElementById('filtreDurWrap').style.display = marque ? '' : 'none';
+    if(!marque) document.getElementById('filtreDur').checked = false;
     render();
   });
   // Comparateur selects
@@ -1227,7 +1236,7 @@ async function runLiveSearch(){
   cards.innerHTML=`<div class="live-empty">Interrogation du stock Libertium…</div>`;
   const d=read();
   const typeMap={'Camping Car':'profile,integral,capucine','Caravane':'caravane,rigide','Van':'van','Fourgon':'fourgon','Van Et Fourgon':'van,fourgon'};
-  const params=new URLSearchParams({voyageurs:d.voyageurs,type_filter:typeMap[d.typeVehicle]||'',km_max:d.kmMax||'',annee_min:d.anneeMin||'',budget_max:parseBudgetMax(d.budget),achat:d.achat,permis:d.permis,equip_souhaite:(d.equipSouhaite||'').toLowerCase(),porteur_souhaite:(d.porteurSouhaite||'').toLowerCase(),modele_souhaite:(d.modeleSouhaite||'').toLowerCase(),seclin:_liveScope==='seclin'?'1':_liveScope==='seclin_beauvois'?'seclin_beauvois':'0'});
+  const params=new URLSearchParams({voyageurs:d.voyageurs,type_filter:typeMap[d.typeVehicle]||'',km_max:d.kmMax||'',annee_min:d.anneeMin||'',budget_max:parseBudgetMax(d.budget),achat:d.achat,permis:d.permis,equip_souhaite:(d.equipSouhaite||'').toLowerCase(),porteur_souhaite:(d.porteurSouhaite||'').toLowerCase(),modele_souhaite:(d.modeleSouhaite||'').toLowerCase(),filtre_dur:document.getElementById('filtreDur').checked?'1':'0',seclin:_liveScope==='seclin'?'1':_liveScope==='seclin_beauvois'?'seclin_beauvois':'0'});
   try{
     const resp=await fetch(`${WORKER_URL}/search?${params}`);
     if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
@@ -1301,6 +1310,8 @@ function bind(){
   document.getElementById('btnReset').addEventListener('click',()=>{
     document.getElementById('leadForm').reset();
     document.getElementById('reprBoite').value='';document.getElementById('reprEnergie').value='';
+    document.getElementById('filtreDur').checked=false;
+    document.getElementById('filtreDurWrap').style.display='none';
     setVille('');toggleReprise();render();
     document.getElementById('liveResults').style.display='none';
     setScope('seclin');document.getElementById('liveCards').innerHTML='';
@@ -1315,6 +1326,7 @@ function bind(){
   });
   document.getElementById('reprBoite').addEventListener('change',render);
   document.getElementById('reprEnergie').addEventListener('change',render);
+  document.getElementById('filtreDur').addEventListener('change',render);
   // Fermer modal en cliquant l'overlay
   document.getElementById('modalEmail').addEventListener('click',function(e){if(e.target===this)closeModal('modalEmail');});
 }
