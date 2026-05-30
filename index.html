@@ -588,6 +588,27 @@ const MODELS_DB = {
 };
 const equip = ["Adria", "Adria Caravane", "Autostar", "Bavaria", "Benimar", "Burstner", "Campérêve", "Carado", "Caravelair", "Carthago", "Challenger", "Chausson", "CI", "Clever Vans", "Concorde", "Crosscamp", "Dethleffs", "Dreamer", "Eden Camp", "Elios", "Eura Mobil", "Font Vendôme", "Frankia", "Hanroad", "Hero Camper", "Hobby", "Karmann", "Knaus", "La Mancelle", "La Strada", "Le Voyageur", "Malibu", "Mc Louis", "Mobilvetta", "Morelo", "Notin", "Panama", "Pilote", "Pössl", "Randger", "Rapido", "Rimor", "Road Car / Roadcar", "Roller Team", "Silver", "Sterckeman", "Stylevan", "Weinsberg"];
 
+const CARAVANE_MODELS_DB = {
+  'Adria Caravane': ["Action", "Adora", "Alpina", "Alta", "Altea", "Astella", "Aviva", "Coral", "Unica", "Ursa"],
+  'Airstream': ["Bambi", "Basecamp", "Caravel", "Classic", "Flying Cloud", "International", "Sport", "Trade Wind"],
+  'Bürstner': ["Averso", "Averso Plus", "Averso Top", "Premio", "Premio Life", "Premio Plus"],
+  'Caravelair': ["Alba", "Altair", "Antares", "Artica", "Azur", "Calypso", "Columbus", "Elisa", "Emmena", "Family", "Intense", "Olympique", "Paseo", "Riviera", "Romance", "Soleil", "Stereo", "Sun", "Titanium", "Trio", "Venise"],
+  'Dethleffs': ["Beduin", "C'Joy", "Coco", "Cococell", "Cococino", "Cocomini", "Cocoon", "Nomad", "Trend"],
+  'Eriba': ["Exciting", "Feeling", "Feeling Edition", "Touring", "Touring Edition", "Troll", "Troll Edition"],
+  'Fendt': ["Bianco", "Bianco Activ", "Bianco Edition", "Bianco Opal", "Tendenza", "Tendenza Edition", "Vivo", "Vivo Edition"],
+  'Hobby': ["De Luxe", "De Luxe Edition", "Excellent", "Excellent Edition", "Excellent Up", "Landhaus", "Prestige", "Siesta", "Toskana", "Vantana"],
+  'Kabe': ["Classic", "Imperial", "Royal", "Travel", "Travel Edition"],
+  'Knaus': ["Azur", "Deseo", "Diamant", "Starclass", "Sudwind", "Sudwind Edition", "Tourer", "Tourer Edition", "Traveller", "Vivo", "Vivo Plus"],
+  'LMC': ["Comfort", "One", "Style", "Style Edition", "Vivo"],
+  'La Mancelle': ["Altitude", "Estival", "Family", "Horizon", "Junior", "Panorama", "Prestige", "Riviera", "Summer", "Sunside"],
+  'Notin': ["Cap", "Cap Duo", "Cap Plus", "Junior", "Luxe", "Prestige", "Tendance", "Touring"],
+  'Silver': ["2", "3", "4", "90", "Classic", "Edition", "Elite", "Plus", "Premium", "Sport", "Star"],
+  'Sterckeman': ["Alize", "Easy", "Evolution", "Expert", "Galaxy", "Pure", "Starlett", "Starlett Comfort", "Sunstrip", "Triton"],
+  'Tabbert': ["Da Vinci", "Panto", "Rossini", "Vivaldi", "Vivaldi Edition"],
+  'Trigano Caravanes': ["Gallieni", "Gallieni Edition", "Gallieni Plus", "Origin", "Origin Edition", "Silver Plus"],
+  'Weinsberg': ["Caracito", "Caracito Edition", "Caraclub", "Caraclub Edition", "Caracom", "Carafamily", "Carafamily Edition", "Caranavan", "Caranavan Edition", "Caraone", "Caraone Edition", "Carasuite", "Caratour", "Caratour Edition"],
+};
+
 // ══════════════════════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════════════════════
@@ -609,14 +630,15 @@ function init(){
   // Modèle dynamique — recherche
   document.getElementById('equipSouhaite').addEventListener('change', function(){
     const marque = this.value;
-    const models = MODELS_DB[marque] || [];
+    const isCaravane = document.getElementById('typeVehicle').value === 'Caravane';
+    const db = isCaravane ? CARAVANE_MODELS_DB : MODELS_DB;
+    const models = db[marque] || [];
     const sel = document.getElementById('modeleSouhaite');
     if(models.length){
       sel.innerHTML = '<option value="">— Choisir un modèle —</option>' + models.map(m=>`<option>${m}</option>`).join('');
     } else {
       sel.innerHTML = '<option value="">— Indifférent / non listé —</option>';
     }
-    // Afficher/masquer la case "filtre strict"
     document.getElementById('filtreDurWrap').style.display = marque ? '' : 'none';
     if(!marque) document.getElementById('filtreDur').checked = false;
     render();
@@ -826,15 +848,44 @@ function render(){
   // Caravane : masquer porteur, filtrer marques caravanes, trier alphabétiquement
   const porteurWrap = document.getElementById('porteurSouhaiteWrap');
   porteurWrap.style.display = isCaravane ? 'none' : '';
+  // Permis : options adaptées selon type
+  const permisSel = document.getElementById('permis');
+  const currentPermis = permisSel.value;
+  if(isCaravane){
+    permisSel.innerHTML = `
+      <option value="">—</option>
+      <option>Permis B — PTAC remorque ≤ 750 kg</option>
+      <option>Permis B — remorque ≤ poids véhicule (règle 96)</option>
+      <option>Permis B — remorque > poids véhicule (formation 7h)</option>
+      <option>Permis BE (remorque PTAC > 3 500 kg)</option>
+    `;
+  } else {
+    permisSel.innerHTML = `
+      <option value="">—</option>
+      <option>Permis B sans contrainte</option>
+      <option>Permis B, vigilance poids</option>
+      <option>Permis C ou équivalent</option>
+      <option>Remorquage souhaité</option>
+    `;
+  }
+  // Restaurer la valeur si compatible
+  if([...permisSel.options].some(o=>o.value===currentPermis)) permisSel.value = currentPermis;
   if(isCaravane){
     document.getElementById('porteurSouhaite').value = '';
     // Marques caravanes uniquement, triées alphabétiquement
-    const caravaneMarques = ['Adria Caravane','Caravelair','Eriba','Hobby','Knaus',
-      'La Mancelle','Sterckeman','Weinsberg'].sort((a,b)=>a.localeCompare(b,'fr'));
+    const caravaneMarques = Object.keys(CARAVANE_MODELS_DB).sort((a,b)=>a.localeCompare(b,'fr'));
     const equipSel = document.getElementById('equipSouhaite');
     const currentVal = equipSel.value;
     equipSel.innerHTML = '<option value="">— Indifférent —</option>' +
       caravaneMarques.map(m=>`<option${currentVal===m?' selected':''}>${m}</option>`).join('');
+    // Mettre à jour les modèles si une marque caravane est déjà sélectionnée
+    const modSel = document.getElementById('modeleSouhaite');
+    if(currentVal && CARAVANE_MODELS_DB[currentVal]){
+      modSel.innerHTML = '<option value="">— Choisir un modèle —</option>' +
+        CARAVANE_MODELS_DB[currentVal].map(m=>`<option>${m}</option>`).join('');
+    } else {
+      modSel.innerHTML = '<option value="">— Choisir une marque d\'abord —</option>';
+    }
   } else {
     // Toutes les marques triées alphabétiquement
     const equipSel = document.getElementById('equipSouhaite');
