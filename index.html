@@ -352,10 +352,14 @@
       </div>
       <!-- SCORE REPRISE AUTOMATIQUE -->
       <div id="repriseScoreBox" class="reprise-score-box" style="display:none">
-        <h4>💰 Estimation reprise automatique</h4>
-        <div class="reprise-fourchette" id="repriseFourchette">—</div>
-        <div class="reprise-detail" id="repriseDetail"></div>
-        <div class="reprise-warning" id="repriseWarning" style="display:none"></div>
+        <h4>💰 Côtes de référence — reprise</h4>
+        <div style="font-size:12px;color:#475569;margin-bottom:10px;line-height:1.6">
+          Renseignez marque, modèle et année sur l'un de ces outils pour obtenir une cotation fiable avant toute offre.
+        </div>
+        <div style="display:flex;flex-direction:column;gap:7px" id="repriseLinks"></div>
+        <div style="margin-top:10px;padding:8px 10px;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;font-size:11px;color:#92400e">
+          ⚠️ Ces cotes sont des <strong>valeurs de vente particulier→particulier</strong>. La reprise professionnelle est généralement <strong>15 à 25 % en dessous</strong>. La DICA est la référence officielle pour les pros.
+        </div>
       </div>
     </div>
   </div>
@@ -638,68 +642,104 @@ function updateScoreUI(score){
 }
 
 // ══════════════════════════════════════════════════════════
-// SCORE REPRISE AUTOMATIQUE
+// CÔTES DE RÉFÉRENCE REPRISE
 // ══════════════════════════════════════════════════════════
-function computeRepriseScore(d){
-  if(d.reprise !== 'Oui') return null;
-  const gamme = d.reprGamme;
-  const etat  = d.reprEtat;
-  const mec   = d.reprMec;
-  const km    = parseInt((d.reprKm||'').replace(/\D/g,''))||0;
-  if(!gamme && !mec && !km) return null;
-
-  // Base selon gamme
-  const baseMap = {
-    'Intégral':15000, 'Capucine':12000, 'Profile':10000,
-    'Profile Compact':8000, 'Fourgon':7000, 'Van':6000,
-    'Camping Car':10000, 'Caravane':4000, 'Rigide':3500, 'Loisir':3000
-  };
-  let base = baseMap[gamme] || 8000;
-
-  // Âge
-  let age = 0;
-  if(mec){ age = new Date().getFullYear() - new Date(mec).getFullYear(); }
-  const coefAge = age<=2?1.0:age<=5?0.8:age<=8?0.6:age<=12?0.45:0.3;
-
-  // Km
-  let coefKm = 1.0;
-  if(km>0){ coefKm = km<50000?1.0:km<100000?0.85:km<150000?0.70:km<200000?0.55:0.40; }
-
-  // État
-  const coefEtat = {'Excellent':1.0,'Correct':0.80,'Passable':0.60,'Triste':0.40}[etat]||0.75;
-
-  const val = Math.round(base * coefAge * coefKm * coefEtat / 500) * 500;
-  const min = Math.round(val * 0.85 / 500) * 500;
-  const max = Math.round(val * 1.15 / 500) * 500;
-
-  const warnings = [];
-  if(age > 12) warnings.push('Véhicule de plus de 12 ans — valorisation faible, arbitrage nécessaire');
-  if(km > 150000) warnings.push('Kilométrage élevé — prévoir expertise avant offre');
-  if(etat === 'Triste') warnings.push('État médiocre — déduire coût de remise en état estimé');
-
-  return { min, max, age, km, etat, warnings };
-}
+const COTE_SOURCES = [
+  {
+    label: "L'Officiel du Camping-Car",
+    desc: "Cotation 2026 — +13 000 modèles, camping-cars, fourgons et vans",
+    icon: "📊",
+    color: "#1d4ed8",
+    bg: "#eff6ff",
+    border: "#bfdbfe",
+    getUrl: (d) => {
+      const typeMap = {
+        'Camping Car':'profile','Intégral':'integral','Capucine':'capucine',
+        'Profile':'profile','Profile Compact':'profile','Fourgon':'fourgon',
+        'Van':'fourgon','Caravane':'caravane'
+      };
+      const type = typeMap[d.reprGamme] || '';
+      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+      if(marque) return `https://www.officielcampingcar.com/marques/${marque}`;
+      if(type)   return `https://www.officielcampingcar.com/calcul-cote/${type}`;
+      return 'https://www.officielcampingcar.com/calcul-cote';
+    }
+  },
+  {
+    label: "Camping-Car Magazine — Cote officielle",
+    desc: "Cote valeur de revente — référence presse spécialisée",
+    icon: "📰",
+    color: "#166534",
+    bg: "#f0fdf4",
+    border: "#86efac",
+    getUrl: (d) => {
+      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'+');
+      return `https://www.camping-car.com/occasion/cote${marque?'?marque='+marque:''}`;
+    }
+  },
+  {
+    label: "Argus Camping-Car (DICA)",
+    desc: "Estimation gratuite + proposition de rachat — cote officielle DICA",
+    icon: "🏛",
+    color: "#7c3aed",
+    bg: "#faf5ff",
+    border: "#c4b5fd",
+    getUrl: () => 'https://www.argus-camping-car.fr/'
+  },
+  {
+    label: "La Centrale — Camping-car",
+    desc: "Prix du marché occasion — annonces en temps réel",
+    icon: "🔍",
+    color: "#b45309",
+    bg: "#fffbeb",
+    border: "#fcd34d",
+    getUrl: (d) => {
+      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'+');
+      const modele = (d.reprModele||'').toLowerCase().replace(/\s+/g,'+');
+      const q = [marque, modele].filter(Boolean).join('+');
+      return `https://www.lacentrale.fr/auto-occasion-annonce-${q||'camping+car'}.html`;
+    }
+  },
+  {
+    label: "Le Bon Coin — Estimation",
+    desc: "Cote LBC basée sur les annonces actives — marché réel",
+    icon: "🟠",
+    color: "#c2410c",
+    bg: "#fff7ed",
+    border: "#fdba74",
+    getUrl: (d) => {
+      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'+');
+      const modele = (d.reprModele||'').toLowerCase().replace(/\s+/g,'+');
+      const q = [marque, modele, 'camping car'].filter(Boolean).join('+');
+      return `https://www.leboncoin.fr/recherche?category=4&text=${encodeURIComponent([marque,modele].filter(Boolean).join(' ')||'camping car')}`;
+    }
+  },
+];
 
 function renderRepriseScore(d){
   const box = document.getElementById('repriseScoreBox');
-  const res = computeRepriseScore(d);
-  if(!res){ box.style.display='none'; return; }
+  if(d.reprise !== 'Oui'){ box.style.display='none'; return; }
+  const gamme = d.reprGamme, mec = d.reprMec, km = d.reprKm, equip = d.reprEquip, porteur = d.reprPorteur;
+  if(!gamme && !mec && !km && !equip && !porteur){ box.style.display='none'; return; }
   box.style.display='block';
-  document.getElementById('repriseFourchette').textContent =
-    res.min.toLocaleString('fr-FR')+' € — '+res.max.toLocaleString('fr-FR')+' €';
-  const details = [
-    res.age ? `Âge estimé : ${res.age} ans` : '',
-    res.km  ? `Kilométrage : ${res.km.toLocaleString('fr-FR')} km` : '',
-    res.etat ? `État : ${res.etat}` : '',
-    '⚠️ Estimation indicative — à affiner par expertise physique'
-  ].filter(Boolean).join(' · ');
-  document.getElementById('repriseDetail').textContent = details;
-  const warnEl = document.getElementById('repriseWarning');
-  if(res.warnings.length){
-    warnEl.style.display='block';
-    warnEl.textContent = res.warnings.join(' — ');
-  } else { warnEl.style.display='none'; }
+  const linksEl = document.getElementById('repriseLinks');
+  linksEl.innerHTML = COTE_SOURCES.map(s => {
+    const url = s.getUrl(d);
+    return `<a href="${url}" target="_blank" rel="noopener"
+      style="display:flex;align-items:center;gap:10px;padding:9px 12px;border:1.5px solid ${s.border};border-radius:10px;background:${s.bg};text-decoration:none;transition:opacity .15s"
+      onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+      <span style="font-size:18px;flex-shrink:0">${s.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;color:${s.color}">${s.label}</div>
+        <div style="font-size:11px;color:#64748b;margin-top:1px">${s.desc}</div>
+      </div>
+      <span style="font-size:12px;color:${s.color};flex-shrink:0">→</span>
+    </a>`;
+  }).join('');
 }
+
+// Stub pour compatibilité PDF (plus de calcul, juste la mention)
+function computeRepriseScore(){ return null; }
 
 // ══════════════════════════════════════════════════════════
 // RECOMMANDATION VÉHICULE
