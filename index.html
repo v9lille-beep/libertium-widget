@@ -723,9 +723,10 @@ const COTE_SOURCES = [
     border: "#bfdbfe",
     getUrl: (d) => {
       const typeMap = {
-        'Camping Car':'profile','Intégral':'integral','Capucine':'capucine',
-        'Profile':'profile','Profile Compact':'profile','Fourgon':'fourgon',
-        'Van':'fourgon','Caravane':'caravane'
+        'Camping Car':'profile','Intégral':'integral','Integral':'integral',
+        'Capucine':'capucine','Profile':'profile','Profile Compact':'profile',
+        'Fourgon':'fourgon','Van':'fourgon','Caravane':'caravane',
+        'Rigide':'caravane','Loisir':'profile','Loisir (caravane)':'caravane'
       };
       const type = typeMap[d.reprGamme] || '';
       const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
@@ -742,7 +743,11 @@ const COTE_SOURCES = [
     bg: "#f0fdf4",
     border: "#86efac",
     getUrl: (d) => {
-      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'+');
+      const isCaravane = (d.reprGamme||'').toLowerCase().includes('caravane') || (d.reprGamme||'').toLowerCase().includes('rigide');
+      const marque = encodeURIComponent((d.reprEquip||d.reprPorteur||'').toLowerCase().trim());
+      if(isCaravane){
+        return `https://www.camping-car.com/caravane/cote${marque?'?marque='+marque:''}`;
+      }
       return `https://www.camping-car.com/occasion/cote${marque?'?marque='+marque:''}`;
     }
   },
@@ -763,10 +768,10 @@ const COTE_SOURCES = [
     bg: "#fffbeb",
     border: "#fcd34d",
     getUrl: (d) => {
-      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'+');
-      const modele = (d.reprModele||'').toLowerCase().replace(/\s+/g,'+');
-      const q = [marque, modele].filter(Boolean).join('+');
-      return `https://www.lacentrale.fr/auto-occasion-annonce-${q||'camping+car'}.html`;
+      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().trim();
+      const modele = (d.reprModele||'').toLowerCase().trim();
+      const q = encodeURIComponent([marque, modele, 'camping car'].filter(Boolean).join(' '));
+      return `https://www.lacentrale.fr/listing?makesModelsCommercialNames=${q}`;
     }
   },
   {
@@ -777,10 +782,12 @@ const COTE_SOURCES = [
     bg: "#fff7ed",
     border: "#fdba74",
     getUrl: (d) => {
-      const marque = (d.reprEquip||d.reprPorteur||'').toLowerCase().replace(/\s+/g,'+');
-      const modele = (d.reprModele||'').toLowerCase().replace(/\s+/g,'+');
-      const q = [marque, modele, 'camping car'].filter(Boolean).join('+');
-      return `https://www.leboncoin.fr/recherche?category=4&text=${encodeURIComponent([marque,modele].filter(Boolean).join(' ')||'camping car')}`;
+      const isCaravane = (d.reprGamme||'').toLowerCase().includes('caravane') || (d.reprGamme||'').toLowerCase().includes('rigide');
+      const cat = isCaravane ? '55' : '4';
+      const marque = (d.reprEquip||'').toLowerCase().trim();
+      const modele = (d.reprModele||'').toLowerCase().trim();
+      const text = [marque, modele].filter(Boolean).join(' ') || (isCaravane ? 'caravane' : 'camping car');
+      return `https://www.leboncoin.fr/recherche?category=${cat}&text=${encodeURIComponent(text)}&locations=r_32`;
     }
   },
 ];
@@ -1315,7 +1322,7 @@ async function runLiveSearch(){
     const data=await resp.json();
     const rawResults=data.results||[];
     const budMax=parseBudgetMax(d.budget);const kmMax=d.kmMax?parseInt(d.kmMax,10):0;
-    const results=rawResults.filter(v=>budMax<=0||!v.price||v.price<=budMax).filter(v=>kmMax<=0||v.neuf!==false||!v.km||v.km<=kmMax).filter(v=>!d.anneeMin||v.neuf!==false||!v.annee||v.annee<=parseInt(d.anneeMin,10));
+    const results=rawResults.filter(v=>budMax<=0||!v.price||v.price<=budMax).filter(v=>kmMax<=0||v.neuf!==false||!v.km||v.km<=kmMax).filter(v=>!d.anneeMin||v.neuf!==false||!v.annee||v.annee>=parseInt(d.anneeMin,10));
     if(!results.length){badge.textContent='0 résultat';badge.className='live-badge error';cards.innerHTML=`<div class="live-empty">Aucun véhicule correspondant.<br><a href="https://www.libertium.fr/vehicule" target="_blank" rel="noopener">Voir tout le stock →</a></div>`;return;}
     const scopeLabel=_liveScope==='seclin'?'Seclin':_liveScope==='seclin_beauvois'?'Seclin + Beauvois':'réseau';
     badge.textContent=`${results.length} véhicule${results.length>1?'s':''} · ${data.total||'?'} en stock · ${scopeLabel}`;badge.className='live-badge';
@@ -1343,15 +1350,28 @@ function openLbc(){
   const d=read();
   const base='https://www.leboncoin.fr/recherche';
   const params=new URLSearchParams();
-  params.set('category','4');params.set('locations','r_32');
+  // Catégorie : caravane (55) ou caravaning général (4)
+  params.set('category', d.typeVehicle==='Caravane' ? '55' : '4');
+  params.set('locations','r_32'); // Hauts-de-France
   if(d.achat==='Neuf')params.set('ad_type','professional');
   if(d.achat==='Occasion')params.set('ad_type','private,professional');
-  const budgetMap={'Moins de 30 000 €':[0,30000],'Maxi 40 000 €':[0,40000],'Maxi 50 000 €':[0,50000],'Maxi 60 000 €':[0,60000],'Maxi 70 000 €':[0,70000],'Maxi 80 000 €':[0,80000],'80 000 € et +':[80000,'']};
+  // Budget
+  const budgetMap={'Moins de 30 000 €':[0,30000],'Maxi 40 000 €':[0,40000],'Maxi 50 000 €':[0,50000],
+    'Maxi 60 000 €':[0,60000],'Maxi 70 000 €':[0,70000],'Maxi 80 000 €':[0,80000],'80 000 € et +':[80000,'']};
   if(d.budget&&budgetMap[d.budget]){const[min,max]=budgetMap[d.budget];if(min)params.set('price',min+'-'+(max||''));else if(max)params.set('price','1-'+max);}
+  // Km max
   if(d.kmMax&&parseInt(d.kmMax,10)>0)params.set('mileage','0-'+parseInt(d.kmMax,10));
-  if(d.anneeMin&&parseInt(d.anneeMin,10)>0)params.set('regdate',parseInt(d.anneeMin,10)+'-'+new Date().getFullYear());
-  const typeMap={'Camping Car':'camping car','Caravane':'caravane','Van':'van aménagé','Fourgon':'fourgon aménagé','Van Et Fourgon':'van fourgon'};
-  if(d.typeVehicle&&typeMap[d.typeVehicle])params.set('text',typeMap[d.typeVehicle]);
+  // Année min — FIX: anneeMin à currentYear (pas anneeMin-anneeMin)
+  const currentYear=new Date().getFullYear();
+  if(d.anneeMin&&parseInt(d.anneeMin,10)>0)params.set('regdate',parseInt(d.anneeMin,10)+'-'+currentYear);
+  // Texte de recherche : marque équipementier + modèle souhaité + type
+  const typeMap={'Camping Car':'camping-car','Caravane':'caravane','Van':'van aménagé','Fourgon':'fourgon aménagé','Van Et Fourgon':'van fourgon'};
+  const textParts=[
+    d.equipSouhaite||'',
+    d.modeleSouhaite||'',
+    (!d.equipSouhaite&&d.typeVehicle)?typeMap[d.typeVehicle]||'':''
+  ].filter(Boolean);
+  if(textParts.length)params.set('text',textParts.join(' '));
   window.open(base+'?'+params.toString(),'_blank','noopener');
 }
 
