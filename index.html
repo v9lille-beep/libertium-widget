@@ -217,7 +217,7 @@
     @media print{
       @page{size:A4;margin:12mm}
       body{background:#fff}.page{max-width:none;padding:0}
-      .topbar,.topbar-actions,.form-panel,.chips,.recommend-top,.results,.live-section,.btn-live-toggle,.live-results-wrap,.summary-box{display:none!important}
+      .topbar,.topbar-actions,.form-panel,.chips,.live-section,.btn-live-toggle,.live-results-wrap,.summary-box{display:none!important}
       .page-inner,.grid{display:block}.card{box-shadow:none;border:0;border-radius:0;padding:0}
       .right-sticky{position:static;max-height:none;overflow:visible}
       .print-header{display:flex!important;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;margin-bottom:16px;border:1px solid #d8e1ee;border-radius:14px;background:#f3f7ff}
@@ -405,9 +405,9 @@
   <!-- TAB APERCU -->
   <div id="tab-apercu" class="tab-pane active">
     <div class="chips" id="chips"></div>
-    <div class="summary-box"><p id="pvSummaryBox">Renseigne les champs à gauche pour générer une recommandation.</p></div>
-    <div class="recommend-top"><h3>Meilleure recommandation</h3><p id="topExplanation">—</p></div>
-    <div class="results" id="results"></div>
+    <div class="summary-box"><p id="pvSummaryBox">Renseigne les champs à gauche pour générer le résumé du projet client.</p></div>
+    <div id="results" style="display:none"></div>
+    <div id="topExplanation" style="display:none"></div>
     <div class="live-section">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
         <span style="font-size:13px;font-weight:700">🔍 Stock en temps réel · libertium.fr</span>
@@ -1478,6 +1478,7 @@ function buildPdfHtml(){
 function exportPDF(){
   const win = window.open('','_blank');
   if(!win){ alert('Autorisez les popups pour cet export.'); return; }
+  const pdfContent = buildPdfHtml();
   win.document.write(`<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -1520,7 +1521,7 @@ function exportPDF(){
   <button class="btn-c" onclick="window.close()">✕ Fermer</button>
   <p>Dans la boîte de dialogue d'impression, sélectionnez <strong>« Enregistrer en PDF »</strong> comme destination.</p>
 </div>
-${buildPdfHtml()}
+${pdfContent}
 </body>
 </html>`);
   win.document.close();
