@@ -298,7 +298,7 @@
       <div class="field" id="anneeMinField" style="display:none"><label for="anneeMin">Année min</label><input id="anneeMin" type="number" min="1990" max="2025" step="1" placeholder="ex. 2020"/></div>
       <div class="field"><label for="voyageurs">Nombre de voyageurs</label><select id="voyageurs"><option value="">—</option><option>1 à 2</option><option>3 à 4</option><option>5 à 6</option><option>7 et +</option></select></div>
       <div class="field"><label for="permis">Permis / poids</label><select id="permis"><option value="">—</option><option>Permis B sans contrainte</option><option>Permis B, vigilance poids</option><option>Permis C ou équivalent</option><option>Remorquage souhaité</option></select></div>
-      <div class="field"><label for="porteurSouhaite">Porteur souhaité</label><select id="porteurSouhaite"><option value="">— Indifférent —</option><option>Citroën Jumper</option><option>Fiat Ducato</option><option>Ford Transit</option><option>Iveco Daily</option><option>Mercedes Sprinter</option><option>Opel Movano</option><option>Peugeot Boxer</option><option>Renault Master</option><option>Toyota HiAce</option><option>Volkswagen Crafter</option></select></div>
+      <div class="field" id="porteurSouhaiteWrap"><label for="porteurSouhaite">Porteur souhaité</label><select id="porteurSouhaite"><option value="">— Indifférent —</option><option>Citroën Jumper</option><option>Fiat Ducato</option><option>Ford Transit</option><option>Iveco Daily</option><option>Mercedes Sprinter</option><option>Opel Movano</option><option>Peugeot Boxer</option><option>Renault Master</option><option>Toyota HiAce</option><option>Volkswagen Crafter</option></select></div>
       <div class="field"><label for="equipSouhaite">Marque équipementier souhaitée</label><select id="equipSouhaite"><option value="">— Indifférent —</option></select></div>
       <div class="field" id="filtreDurWrap" style="display:none">
         <label style="flex-direction:row;align-items:center;gap:8px;cursor:pointer;font-weight:400">
@@ -593,7 +593,7 @@ const equip = ["Adria", "Adria Caravane", "Autostar", "Bavaria", "Benimar", "Bur
 // ══════════════════════════════════════════════════════════
 function init(){
   document.getElementById('reprEquip').innerHTML='<option value="">—</option>'+equip.map(x=>`<option>${x}</option>`).join('');
-  document.getElementById('equipSouhaite').innerHTML='<option value="">— Indifférent —</option>'+equip.map(x=>`<option>${x}</option>`).join('');
+  document.getElementById('equipSouhaite').innerHTML='<option value="">— Indifférent —</option>'+[...equip].sort((a,b)=>a.localeCompare(b,'fr')).map(x=>`<option>${x}</option>`).join('');
   // Modèle dynamique — reprise
   document.getElementById('reprEquip').addEventListener('change', function(){
     const marque = this.value;
@@ -822,6 +822,27 @@ function render(){
   const showKmMax=isOccasion&&!isCaravane;
   document.getElementById('kmMaxField').style.display=showKmMax?'':'none';
   document.getElementById('anneeMinField').style.display=showKmMax?'':'none';
+
+  // Caravane : masquer porteur, filtrer marques caravanes, trier alphabétiquement
+  const porteurWrap = document.getElementById('porteurSouhaiteWrap');
+  porteurWrap.style.display = isCaravane ? 'none' : '';
+  if(isCaravane){
+    document.getElementById('porteurSouhaite').value = '';
+    // Marques caravanes uniquement, triées alphabétiquement
+    const caravaneMarques = ['Adria Caravane','Caravelair','Eriba','Hobby','Knaus',
+      'La Mancelle','Sterckeman','Weinsberg'].sort((a,b)=>a.localeCompare(b,'fr'));
+    const equipSel = document.getElementById('equipSouhaite');
+    const currentVal = equipSel.value;
+    equipSel.innerHTML = '<option value="">— Indifférent —</option>' +
+      caravaneMarques.map(m=>`<option${currentVal===m?' selected':''}>${m}</option>`).join('');
+  } else {
+    // Toutes les marques triées alphabétiquement
+    const equipSel = document.getElementById('equipSouhaite');
+    const currentVal = equipSel.value;
+    const allMarques = [...equip].sort((a,b)=>a.localeCompare(b,'fr'));
+    equipSel.innerHTML = '<option value="">— Indifférent —</option>' +
+      allMarques.map(m=>`<option${currentVal===m?' selected':''}>${m}</option>`).join('');
+  }
   const score=computeScore(d);
   updateScoreUI(score);
   renderRepriseScore(d);
