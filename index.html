@@ -315,6 +315,9 @@
       <div class="field"><label for="saison">Utilisation saisonnière</label><select id="saison"><option value="">—</option><option>Été uniquement</option><option>Mi-saison</option><option>Toute saison</option><option>Montagne / hiver</option></select></div>
       <div class="field"><label for="permis">Permis / poids</label><select id="permis"><option value="">—</option><option>Permis B sans contrainte</option><option>Permis B, vigilance poids</option><option>Permis C ou équivalent</option><option>Remorquage souhaité</option></select></div>
       <div class="field"><label for="priorite">Priorité</label><select id="priorite"><option value="">—</option><option>Prix</option><option>Confort</option><option>Maniabilité</option><option>Autonomie</option><option>Volume</option><option>Équipement</option></select></div>
+      <div class="field"><label for="porteurSouhaite">Porteur souhaité</label><select id="porteurSouhaite"><option value="">— Indifférent —</option><option>Citroën Jumper</option><option>Fiat Ducato</option><option>Ford Transit</option><option>Iveco Daily</option><option>Mercedes Sprinter</option><option>Opel Movano</option><option>Peugeot Boxer</option><option>Renault Master</option><option>Toyota HiAce</option><option>Volkswagen Crafter</option></select></div>
+      <div class="field"><label for="equipSouhaite">Marque équipementier souhaitée</label><select id="equipSouhaite"><option value="">— Indifférent —</option></select></div>
+      <div class="field full"><label for="modeleSouhaite">Modèle souhaité <span style="font-weight:400;color:#94a3b8">(indicatif)</span></label><select id="modeleSouhaite"><option value="">— Choisir une marque d'abord —</option></select></div>
       <div class="field full"><label for="besoin">Besoin exprimé</label><textarea id="besoin"></textarea></div>
       <div class="field full"><label for="notes">Notes du commercial</label><textarea id="notes"></textarea></div>
     </div>
@@ -330,7 +333,7 @@
       <h3 style="margin-top:0">Véhicule à reprendre</h3>
       <div class="form-grid">
         <div class="field"><label for="reprGamme">Gamme</label><select id="reprGamme"><option value="">—</option><option>Camping Car</option><option>Capucine</option><option>Caravane</option><option>Fourgon</option><option>Intégral</option><option>Loisir</option><option>Profile</option><option>Profile Compact</option><option>Rigide</option><option>Van</option></select></div>
-        <div class="field"><label for="reprPorteur">Marque porteur</label><input id="reprPorteur" type="text"/></div>
+        <div class="field"><label for="reprPorteur">Marque porteur</label><select id="reprPorteur"><option value="">—</option><option>Citroën Jumper</option><option>Fiat Ducato</option><option>Ford Transit</option><option>Hyundai H350</option><option>Iveco Daily</option><option>MAN</option><option>Mercedes Sprinter</option><option>Nissan NV400</option><option>Opel Movano</option><option>Peugeot Boxer</option><option>Renault Master</option><option>Toyota HiAce</option><option>Volkswagen Crafter</option></select></div>
         <div class="field"><label for="reprEquip">Marque équipementier</label><select id="reprEquip"></select></div>
         <div class="field"><label for="reprModele">Modèle</label><select id="reprModele"><option value="">— Choisir une marque d'abord —</option></select></div>
         <div class="field"><label for="reprMec">Date 1ère MEC</label><input id="reprMec" type="date"/></div>
@@ -524,7 +527,7 @@
 const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
   'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
   'departement','pays','typeVehicle','budget','achat','kmMax','anneeMin','voyageurs','usage','compacite','conduite',
-  'couchages','sdb','autonomie','saison','permis','priorite','besoin','notes',
+  'couchages','sdb','autonomie','saison','permis','priorite','porteurSouhaite','equipSouhaite','modeleSouhaite','besoin','notes',
   'delai','decisionnaire','reprise',
   'reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm',
   'reprLongueur','reprLargeur','reprHauteur','reprPtac','reprCvFisc','reprCvDin',
@@ -619,6 +622,8 @@ const equip = ["Adria", "Adria Caravane", "Autostar", "Benimar", "Burstner", "Ca
 function init(){
   document.getElementById('departement').innerHTML='<option value="">—</option>'+deptList.map(([c,n])=>`<option value="${c}">${c} - ${n}</option>`).join('');
   document.getElementById('reprEquip').innerHTML='<option value="">—</option>'+equip.map(x=>`<option>${x}</option>`).join('');
+  document.getElementById('equipSouhaite').innerHTML='<option value="">— Indifférent —</option>'+equip.map(x=>`<option>${x}</option>`).join('');
+  // Modèle dynamique — reprise
   document.getElementById('reprEquip').addEventListener('change', function(){
     const marque = this.value;
     const models = MODELS_DB[marque] || [];
@@ -627,6 +632,18 @@ function init(){
       sel.innerHTML = '<option value="">— Choisir un modèle —</option>' + models.map(m=>`<option>${m}</option>`).join('');
     } else {
       sel.innerHTML = '<option value="">— Modèle libre (saisir) —</option>';
+    }
+    render();
+  });
+  // Modèle dynamique — recherche
+  document.getElementById('equipSouhaite').addEventListener('change', function(){
+    const marque = this.value;
+    const models = MODELS_DB[marque] || [];
+    const sel = document.getElementById('modeleSouhaite');
+    if(models.length){
+      sel.innerHTML = '<option value="">— Choisir un modèle —</option>' + models.map(m=>`<option>${m}</option>`).join('');
+    } else {
+      sel.innerHTML = '<option value="">— Indifférent / non listé —</option>';
     }
     render();
   });
@@ -843,7 +860,7 @@ function render(){
   renderRepriseScore(d);
 
   document.getElementById('chips').innerHTML=
-    ['vendeur','typeVehicle','budget','voyageurs','usage','compacite','priorite','departement']
+    ['vendeur','typeVehicle','budget','voyageurs','usage','compacite','priorite','departement','porteurSouhaite','equipSouhaite','modeleSouhaite']
     .map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
 
   document.getElementById('pvSummaryBox').textContent=[
@@ -1192,7 +1209,7 @@ function buildPdfHtml(){
     </div>
     ${sec('Vendeur &amp; Identité',[['Vendeur',d.vendeur],['Civilité',d.civilite],['Type client',d.typeClient],['Prénom',d.prenom],['Nom',d.nom],['Société',d.societe],['Fonction',d.fonction]])}
     ${sec('Coordonnées',[['Téléphone',d.telephone],['Mobile',d.mobile],['Email',d.email],['Site web',d.siteWeb],['Adresse',[d.adresse1,d.adresse2].filter(Boolean).join(', ')],['CP / Ville',[d.codePostal,d.ville].filter(Boolean).join(' ')],['Département',d.departement],['Pays',d.pays]])}
-    ${sec('Découverte véhicule',[['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Année min',d.anneeMin||''],['Voyageurs',d.voyageurs],['Usage',d.usage],['Capacité',d.compacite],['Conduite',d.conduite],['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],['Saison',d.saison],['Permis',d.permis],['Priorité',d.priorite],['Besoin exprimé',d.besoin],['Notes commercial',d.notes]])}
+    ${sec('Découverte véhicule',[['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Année min',d.anneeMin||''],['Voyageurs',d.voyageurs],['Usage',d.usage],['Capacité',d.compacite],['Conduite',d.conduite],['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],['Saison',d.saison],['Permis',d.permis],['Priorité',d.priorite],['Porteur souhaité',d.porteurSouhaite],['Équipementier souhaité',d.equipSouhaite],['Modèle souhaité',d.modeleSouhaite],['Besoin exprimé',d.besoin],['Notes commercial',d.notes]])}
     ${sec('Qualification',[['Délai d\'achat',d.delai],['Décisionnaire',d.decisionnaire],['Reprise véhicule',d.reprise],['Score commercial',score+'/100']])}
     ${repriseRows.length?sec('Véhicule à reprendre',repriseRows):''}
     ${repriseHtml}
@@ -1220,7 +1237,7 @@ async function saveToSheet(){
   // Sauvegarder aussi en historique local
   saveToHistory(d, score);
   const now=new Date().toLocaleString('fr-FR');
-  const row={'Date / Heure':now,'Vendeur':d.vendeur,'Civilité':d.civilite,'Type client':d.typeClient,'Prénom':d.prenom,'Nom':d.nom,'Société':d.societe,'Fonction':d.fonction,'Téléphone':d.telephone,'Mobile':d.mobile,'Email':d.email,'Site web':d.siteWeb,'Adresse 1':d.adresse1,'Adresse 2':d.adresse2,'Code postal':d.codePostal,'Ville':d.ville,'Département':d.departement,'Pays':d.pays,'Type véhicule':d.typeVehicle,'Budget':d.budget,'Neuf ou occasion':d.achat,'Km max':d.kmMax?d.kmMax+' km':'','Année min':d.anneeMin||'','Voyageurs':d.voyageurs,'Usage':d.usage,'Capacité':d.compacite,'Conduite':d.conduite,'Couchages':d.couchages,'Salle de bain':d.sdb,'Autonomie':d.autonomie,'Saison':d.saison,'Permis':d.permis,'Priorité':d.priorite,'Besoin exprimé':d.besoin,'Notes commercial':d.notes,'Délai achat':d.delai,'Décisionnaire':d.decisionnaire,'Reprise':d.reprise,'Score commercial':score,'Reprise gamme':d.reprGamme,'Reprise porteur':d.reprPorteur,'Reprise équip.':d.reprEquip,'Reprise modèle':d.reprModele,'Reprise MEC':d.reprMec,'Reprise km':d.reprKm,'Reprise longueur':d.reprLongueur,'Reprise largeur':d.reprLargeur,'Reprise hauteur':d.reprHauteur,'Reprise PTAC':d.reprPtac,'Reprise CV fisc.':d.reprCvFisc,'Reprise CV DIN':d.reprCvDin,'Reprise boite':d.reprBoite,'Reprise énergie':d.reprEnergie,'Reprise places CG':d.reprPlacesCg,'Reprise places couchage':d.reprPlacesCouche,'Reprise type lit':d.reprTypeLit,'Reprise eaux propres':d.reprEauPropre,'Reprise eaux usées':d.reprEauUsee,'Reprise état':d.reprEtat};
+  const row={'Date / Heure':now,'Vendeur':d.vendeur,'Civilité':d.civilite,'Type client':d.typeClient,'Prénom':d.prenom,'Nom':d.nom,'Société':d.societe,'Fonction':d.fonction,'Téléphone':d.telephone,'Mobile':d.mobile,'Email':d.email,'Site web':d.siteWeb,'Adresse 1':d.adresse1,'Adresse 2':d.adresse2,'Code postal':d.codePostal,'Ville':d.ville,'Département':d.departement,'Pays':d.pays,'Type véhicule':d.typeVehicle,'Budget':d.budget,'Neuf ou occasion':d.achat,'Km max':d.kmMax?d.kmMax+' km':'','Année min':d.anneeMin||'','Voyageurs':d.voyageurs,'Usage':d.usage,'Capacité':d.compacite,'Conduite':d.conduite,'Couchages':d.couchages,'Salle de bain':d.sdb,'Autonomie':d.autonomie,'Saison':d.saison,'Permis':d.permis,'Priorité':d.priorite,'Porteur souhaité':d.porteurSouhaite,'Équipementier souhaité':d.equipSouhaite,'Modèle souhaité':d.modeleSouhaite,'Besoin exprimé':d.besoin,'Notes commercial':d.notes,'Délai achat':d.delai,'Décisionnaire':d.decisionnaire,'Reprise':d.reprise,'Score commercial':score,'Reprise gamme':d.reprGamme,'Reprise porteur':d.reprPorteur,'Reprise équip.':d.reprEquip,'Reprise modèle':d.reprModele,'Reprise MEC':d.reprMec,'Reprise km':d.reprKm,'Reprise longueur':d.reprLongueur,'Reprise largeur':d.reprLargeur,'Reprise hauteur':d.reprHauteur,'Reprise PTAC':d.reprPtac,'Reprise CV fisc.':d.reprCvFisc,'Reprise CV DIN':d.reprCvDin,'Reprise boite':d.reprBoite,'Reprise énergie':d.reprEnergie,'Reprise places CG':d.reprPlacesCg,'Reprise places couchage':d.reprPlacesCouche,'Reprise type lit':d.reprTypeLit,'Reprise eaux propres':d.reprEauPropre,'Reprise eaux usées':d.reprEauUsee,'Reprise état':d.reprEtat};
   btn.disabled=true;btn.textContent='⏳ Sauvegarde…';btn.style.background='#64748b';
   try{
     let iframe=document.getElementById('_save_iframe');
