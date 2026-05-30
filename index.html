@@ -259,20 +259,21 @@
 (function(){
   function h(s){let n=0;for(let i=0;i<s.length;i++){n=((n<<5)-n)+s.charCodeAt(i);n|=0;}return Math.abs(n).toString(16).padStart(8,'0');}
   const PWD_HASH=h('LIB%SEC%');
-  if(sessionStorage.getItem('lib_widget_auth')===PWD_HASH){
-    document.getElementById('lock-screen').style.display='none';
-  }
+  function hideLock(){ document.getElementById('lock-screen').style.display='none'; }
+  // localStorage persiste entre sessions — pas besoin de ressaisir à chaque rechargement
+  if(localStorage.getItem('lib_widget_auth')===PWD_HASH){ hideLock(); }
   window.checkPwd=function(){
     const v=document.getElementById('pwd-input').value;
     if(h(v)===PWD_HASH){
-      sessionStorage.setItem('lib_widget_auth',PWD_HASH);
-      document.getElementById('lock-screen').style.display='none';
+      localStorage.setItem('lib_widget_auth',PWD_HASH);
+      hideLock();
     } else {
       document.getElementById('pwd-error').textContent='Mot de passe incorrect';
       document.getElementById('pwd-input').value='';
       document.getElementById('pwd-input').focus();
     }
   };
+  // Soumettre aussi avec Entrée géré via onkeydown dans le HTML
 })();
 </script>
 
