@@ -588,6 +588,14 @@ const VEHICLES=[
   {key:'caravane', title:'Caravane',             url:'https://www.libertium.fr/vehicule'}
 ];
 
+// Recommandations spécifiques caravanes
+const VEHICLES_CARAVANE = [
+  {key:'caravane_compact', title:'Caravane compacte (2–4 pers.)',   url:'https://www.libertium.fr/vehicule/caravane'},
+  {key:'caravane_familiale',title:'Caravane familiale (4–6 pers.)',  url:'https://www.libertium.fr/vehicule/caravane'},
+  {key:'caravane_luxe',    title:'Caravane grand confort',           url:'https://www.libertium.fr/vehicule/caravane'},
+];
+
+
 const VEHICLES_COMP = [
   {key:'van',      label:'Van aménagé',
    specs:{Gabarit:'Compact (5–6m)',Couchages:'2 pers.',Budget:'25–50k €',Permis:'B',Usage:'Itinérance',Autonomie:'Moyenne',Rangements:'Limités',Maniabilité:'Excellente',Entretien:'Faible'}},
@@ -988,15 +996,50 @@ function render(){
     d.delai&&`Délai : ${d.delai}`
   ].filter(Boolean).join('\n\n')||'Renseigne les champs à gauche pour générer une recommandation.';
 
-  const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
-  document.getElementById('topExplanation').innerHTML=
-    `<strong><a href="${ranked[0].url}" target="_blank" rel="noopener">${ranked[0].title}</a></strong><br>Meilleure correspondance avec le profil saisi.`;
-  document.getElementById('results').innerHTML=ranked.map((v,i)=>`
-    <div class="result">
-      <span class="score-badge ${i===0?'score-high':i===1?'score-mid':'score-low'}">Top ${i+1} · ${v.s}/100</span>
-      <h4 style="margin-top:8px"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4>
-      <p style="margin:4px 0 0;font-size:13px;color:#64748b">Recommandation issue des critères saisis.</p>
-    </div>`).join('');
+  const isCaravaneReco = d.typeVehicle === 'Caravane';
+  if(isCaravaneReco){
+    // Recommandation caravane basée sur voyageurs + marque souhaitée
+    const voy = d.voyageurs;
+    const marque = d.equipSouhaite || '';
+    const budget = d.budget || '';
+    const marqueLabel = marque ? `<strong>${marque}</strong>` : 'une caravane';
+
+    // Top reco selon voyageurs
+    let topTitle, topDesc;
+    if(voy==='1 à 2'){topTitle='Caravane compacte 2 places';topDesc='Maniable, facile à tracter, idéale pour 2 personnes.';}
+    else if(voy==='5 à 6'||voy==='7 et +'){topTitle='Caravane familiale grand gabarit';topDesc='Espace optimisé pour les grandes familles, lits séparés.';}
+    else {topTitle='Caravane 4 places polyvalente';topDesc='Le meilleur rapport habitabilité / maniabilité.';}
+
+    const marqueUrl = marque
+      ? `https://www.libertium.fr/vehicule/caravane?marque=${encodeURIComponent(marque)}`
+      : 'https://www.libertium.fr/vehicule/caravane';
+
+    document.getElementById('topExplanation').innerHTML =
+      `<strong><a href="${marqueUrl}" target="_blank" rel="noopener">${topTitle}${marque?' · '+marque:''}</a></strong><br>${topDesc}`;
+
+    // 3 suggestions de gammes caravanes
+    const caravaneRecos = [
+      {label:'Compacte / week-end', desc:'PTAC ≤ 1 000 kg — Permis B sans formation', badge:'score-high'},
+      {label:'Familiale 4–6 places', desc:'PTAC 1 000–1 500 kg — Vérifier règle 96', badge:'score-mid'},
+      {label:'Grand confort / luxe', desc:'PTAC > 1 500 kg — Permis BE recommandé', badge:'score-low'},
+    ];
+    document.getElementById('results').innerHTML = caravaneRecos.map((r,i)=>`
+      <div class="result">
+        <span class="score-badge ${r.badge}">Gamme ${i+1}</span>
+        <h4 style="margin-top:8px"><a href="${marqueUrl}" target="_blank" rel="noopener">${r.label}${marque?' — '+marque:''}</a></h4>
+        <p style="margin:4px 0 0;font-size:13px;color:#64748b">${r.desc}</p>
+      </div>`).join('');
+  } else {
+    const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
+    document.getElementById('topExplanation').innerHTML=
+      `<strong><a href="${ranked[0].url}" target="_blank" rel="noopener">${ranked[0].title}</a></strong><br>Meilleure correspondance avec le profil saisi.`;
+    document.getElementById('results').innerHTML=ranked.map((v,i)=>`
+      <div class="result">
+        <span class="score-badge ${i===0?'score-high':i===1?'score-mid':'score-low'}">Top ${i+1} · ${v.s}/100</span>
+        <h4 style="margin-top:8px"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4>
+        <p style="margin:4px 0 0;font-size:13px;color:#64748b">Recommandation issue des critères saisis.</p>
+      </div>`).join('');
+  }
 
   // Sync vendeur RDV
   const vd=document.getElementById('vendeur').value;
@@ -1181,7 +1224,10 @@ L'équipe Libertium Seclin`;
 function openEmailModal(){
   const d = read();
   const score = computeScore(d);
-  const ranked = [...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,2);
+  const ranked = d.typeVehicle === 'Caravane'
+    ? [{title:'Caravane adaptée à votre projet',url:'https://www.libertium.fr/vehicule/caravane',s:80},
+       {title:'Sélection caravanes Libertium',url:'https://www.libertium.fr/vehicule/caravane',s:70}]
+    : [...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,2);
   const client = [d.civilite, d.prenom, d.nom].filter(Boolean).join(' ') || 'Madame, Monsieur';
 
   document.getElementById('emailTo').value = d.email || '';
@@ -1301,7 +1347,11 @@ function renderAvis(){
 function buildPdfHtml(){
   const d=read();
   const score=computeScore(d);
-  const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
+  const ranked = d.typeVehicle === 'Caravane'
+    ? [{title:'Caravane compacte / week-end',  url:'https://www.libertium.fr/vehicule/caravane', s:80},
+       {title:'Caravane familiale 4–6 places',  url:'https://www.libertium.fr/vehicule/caravane', s:70},
+       {title:'Caravane grand confort',          url:'https://www.libertium.fr/vehicule/caravane', s:60}]
+    : [...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
   const S='font-family:Arial,sans-serif;font-size:10pt;color:#172033';
   const H='background:#eef4ff;color:#163a6b;font-weight:700;padding:7px 12px;font-size:10.5pt;border-bottom:1px solid #d8e1ee';
   const KS='background:#f8faff;color:#334155;font-weight:700;padding:5px 10px;border-right:1px solid #e2e8f0;width:160px;vertical-align:top;font-size:9.5pt';
