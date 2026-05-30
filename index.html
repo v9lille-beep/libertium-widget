@@ -1345,54 +1345,184 @@ function renderAvis(){
 // PDF
 // ══════════════════════════════════════════════════════════
 function buildPdfHtml(){
-  const d=read();
-  const score=computeScore(d);
-  const ranked = d.typeVehicle === 'Caravane'
-    ? [{title:'Caravane compacte / week-end',  url:'https://www.libertium.fr/vehicule/caravane', s:80},
-       {title:'Caravane familiale 4–6 places',  url:'https://www.libertium.fr/vehicule/caravane', s:70},
-       {title:'Caravane grand confort',          url:'https://www.libertium.fr/vehicule/caravane', s:60}]
-    : [...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
-  const S='font-family:Arial,sans-serif;font-size:10pt;color:#172033';
-  const H='background:#eef4ff;color:#163a6b;font-weight:700;padding:7px 12px;font-size:10.5pt;border-bottom:1px solid #d8e1ee';
-  const KS='background:#f8faff;color:#334155;font-weight:700;padding:5px 10px;border-right:1px solid #e2e8f0;width:160px;vertical-align:top;font-size:9.5pt';
-  const VS='color:#0f172a;padding:5px 10px;font-size:9.5pt;vertical-align:top';
-  const RS='border-bottom:1px solid #edf2f7';
-  function sec(title, rows){
-    const rHtml=rows.filter(([,v])=>v).map(([k,v])=>`<tr style="${RS}"><td style="${KS}">${k}</td><td style="${VS}">${v}</td></tr>`).join('');
-    if(!rHtml)return'';
-    return`<div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden"><div style="${H}">${title}</div><table style="width:100%;border-collapse:collapse">${rHtml}</table></div>`;
+  const d = read();
+  const score = computeScore(d);
+  const now = new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+
+  // Styles inline
+  const fontBase = 'font-family:Arial,Helvetica,sans-serif;color:#172033;';
+  const secHead  = 'background:#1A3557;color:#fff;font-weight:700;padding:6px 12px;font-size:9pt;letter-spacing:.05em;text-transform:uppercase;';
+  const cellK    = 'background:#f4f7fb;color:#334155;font-weight:700;padding:5px 10px;border-right:1px solid #dde4ee;width:155px;vertical-align:top;font-size:9pt;border-bottom:1px solid #e8edf5;';
+  const cellV    = 'color:#0f172a;padding:5px 10px;font-size:9pt;vertical-align:top;border-bottom:1px solid #e8edf5;';
+  const secWrap  = 'margin-bottom:12px;border:1px solid #d0d9e8;border-radius:8px;overflow:hidden;page-break-inside:avoid;';
+
+  function sec(title, rows, icon=''){
+    const filled = rows.filter(([,v]) => v && String(v).trim());
+    if(!filled.length) return '';
+    const rowsHtml = filled.map(([k,v]) =>
+      `<tr><td style="${cellK}">${k}</td><td style="${cellV}">${String(v).replace(/\n/g,'<br>')}</td></tr>`
+    ).join('');
+    return `<div style="${secWrap}">
+      <div style="${secHead}">${icon} ${title}</div>
+      <table style="width:100%;border-collapse:collapse">${rowsHtml}</table>
+    </div>`;
   }
-  const recoHtml=ranked.map((v,i)=>{
-    const col=i===0?'#166534':i===1?'#1d4ed8':'#9a3412';
-    const bg=i===0?'#ecfdf5':i===1?'#eff6ff':'#fff7ed';
-    return`<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:8px"><span style="background:${bg};color:${col};border-radius:999px;padding:3px 10px;font-size:9pt;font-weight:700">Top ${i+1} · ${v.s}/100</span><div style="font-weight:700;margin-top:6px;font-size:10pt">${v.title}</div><div style="font-size:9pt;color:#64748b">${v.url}</div></div>`;
-  }).join('');
-  const repriseRes = computeRepriseScore(d);
-  const repriseHtml = repriseRes ? `<div style="margin-bottom:14px;border:1.5px solid #6ee7b7;border-radius:10px;overflow:hidden"><div style="background:#f0fdf4;color:#166534;font-weight:700;padding:7px 12px;border-bottom:1px solid #d8e1ee">💰 Estimation reprise</div><div style="padding:10px 12px;font-size:10pt"><strong>${repriseRes.min.toLocaleString('fr-FR')} € — ${repriseRes.max.toLocaleString('fr-FR')} €</strong><br><span style="font-size:9pt;color:#475569">Estimation indicative — à affiner par expertise physique</span></div></div>` : '';
-  const repriseRows=d.reprise==='Oui'?[['Gamme',d.reprGamme],['Marque porteur',d.reprPorteur],['Équipementier',d.reprEquip],['Modèle',d.reprModele],['1ère MEC',d.reprMec],['Kilométrage',d.reprKm?d.reprKm+' km':''],['Boite',d.reprBoite],['Énergie',d.reprEnergie],['État général',d.reprEtat]]:[];
-  return`<div style="${S};max-width:800px;padding:0">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(180deg,#fff 0%,#eef4ff 100%);border:1px solid #d8e1ee;border-radius:12px;margin-bottom:18px">
-      <div><div style="font-size:18pt;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div><div style="font-size:10pt;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div></div>
-      <div style="text-align:right;font-size:9.5pt;color:#475569;line-height:1.5">205 Avenue de la République<br>59113 SECLIN<br>03 20 32 25 99<br>contact.seclin@libertium.fr</div>
-    </div>
-    ${sec('Vendeur &amp; Identité',[['Vendeur',d.vendeur],['Civilité',d.civilite],['Prénom',d.prenom],['Nom',d.nom]])}
-    ${sec('Coordonnées',[['Téléphone',d.telephone],['Mobile',d.mobile],['Email',d.email],['Adresse',[d.adresse1,d.adresse2].filter(Boolean).join(', ')],['CP / Ville',[d.codePostal,d.ville].filter(Boolean).join(' ')]])}
-    ${sec('Découverte véhicule',[['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Année min',d.anneeMin||''],['Voyageurs',d.voyageurs],['Permis',d.permis],['Porteur souhaité',d.porteurSouhaite],['Équipementier souhaité',d.equipSouhaite],['Modèle souhaité',d.modeleSouhaite],['Besoin exprimé',d.besoin],['Notes commercial',d.notes]])}
-    ${sec('Qualification',[['Délai d\'achat',d.delai],['Reprise véhicule',d.reprise],['Score commercial',score+'/100']])}
-    ${repriseRows.length?sec('Véhicule à reprendre',repriseRows):''}
-    ${repriseHtml}
-    <div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden"><div style="${H}">Recommandations véhicule</div><div style="padding:12px">${recoHtml}</div></div>
-    ${(d.besoin||d.notes)?`<div style="border:1px dashed #c7d6f5;border-radius:10px;padding:12px;background:#f8fbff"><div style="font-weight:700;color:#163a6b;margin-bottom:6px;font-size:10.5pt">Résumé commercial</div><div style="white-space:pre-wrap;font-size:9.5pt;line-height:1.6">${[d.besoin&&'Besoin : '+d.besoin,d.notes&&'Notes : '+d.notes,d.delai&&'Délai : '+d.delai].filter(Boolean).join('\n\n')}</div></div>`:''}
-  <div style="margin-top:16px;padding:10px 14px;background:#f8faff;border:1px solid #d8e1ee;border-radius:8px;font-size:8.5pt;color:#64748b;line-height:1.6">
-    🔒 <strong>Information RGPD</strong> — Données traitées par Libertium Seclin Lestringuez dans le cadre de la relation commerciale (base légale : intérêt légitime, Art. 6.1.f RGPD). Durée de conservation : 3 ans. Droits d'accès, rectification et suppression : contact.seclin@libertium.fr — 03 20 32 25 99.
+
+  // Score badge
+  const scoreBg  = score>=80?'#1d4ed8':score>=55?'#166534':score>=30?'#b45309':'#64748b';
+  const scoreLbl = score>=80?'🔥 Chaud +':score>=55?'✅ Qualifié':score>=30?'⚡ En cours':'À qualifier';
+
+  // Reprise section
+  const repriseRows = d.reprise==='Oui' ? [
+    ['Gamme',          d.reprGamme],
+    ['Marque porteur', d.reprPorteur],
+    ['Équipementier',  d.reprEquip],
+    ['Modèle',         d.reprModele],
+    ['1ère MEC',       d.reprMec],
+    ['Kilométrage',    d.reprKm ? d.reprKm+' km' : ''],
+    ['Boîte',          d.reprBoite],
+    ['Énergie',        d.reprEnergie],
+    ['État général',   d.reprEtat],
+  ] : [];
+
+  return `
+<div style="${fontBase}max-width:780px;margin:0 auto;padding:0;">
+
+  <!-- EN-TÊTE -->
+  <table style="width:100%;border-collapse:collapse;margin-bottom:20px;border-bottom:3px solid #1A3557;padding-bottom:14px;">
+    <tr>
+      <td style="vertical-align:middle;width:100px;">
+        <img src="https://www.libertium.fr/sites/default/files/logo_libertium.svg"
+             style="width:90px;height:auto;display:block;" alt="Libertium" onerror="this.style.display='none'"/>
+      </td>
+      <td style="vertical-align:middle;padding-left:16px;">
+        <div style="font-size:16pt;font-weight:800;color:#1A3557;line-height:1.1;">Libertium Seclin Lestringuez</div>
+        <div style="font-size:10pt;color:#475569;margin-top:3px;">Fiche de découverte commerciale</div>
+        <div style="font-size:9pt;color:#94a3b8;margin-top:2px;">205 Avenue de la République · 59113 SECLIN · 03 20 32 25 99</div>
+      </td>
+      <td style="vertical-align:middle;text-align:right;white-space:nowrap;">
+        <div style="font-size:8.5pt;color:#94a3b8;margin-bottom:4px;">Établie le ${now}</div>
+        <div style="display:inline-block;background:${scoreBg};color:#fff;border-radius:6px;padding:5px 12px;font-size:10pt;font-weight:700;">${score}/100 — ${scoreLbl}</div>
+        ${d.vendeur?`<div style="font-size:9pt;color:#475569;margin-top:4px;">Vendeur : <strong>${d.vendeur}</strong></div>`:''}
+      </td>
+    </tr>
+  </table>
+
+  <!-- DEUX COLONNES : Client + Découverte -->
+  <table style="width:100%;border-collapse:collapse;margin-bottom:12px;">
+    <tr style="vertical-align:top;">
+      <td style="width:50%;padding-right:8px;">
+        ${sec('Client','','')}
+        <div style="${secWrap}">
+          <div style="${secHead}">👤 Identité &amp; Coordonnées</div>
+          <table style="width:100%;border-collapse:collapse;">
+            ${[
+              ['Civilité / Nom', [d.civilite,d.prenom,d.nom].filter(Boolean).join(' ')],
+              ['Téléphone',      d.telephone],
+              ['Mobile',         d.mobile],
+              ['Email',          d.email],
+              ['Adresse',        [d.adresse1,d.adresse2].filter(Boolean).join(', ')],
+              ['CP / Ville',     [d.codePostal,d.ville].filter(Boolean).join(' ')],
+            ].filter(([,v])=>v).map(([k,v])=>`<tr><td style="${cellK}">${k}</td><td style="${cellV}">${v}</td></tr>`).join('')}
+          </table>
+        </div>
+      </td>
+      <td style="width:50%;padding-left:8px;">
+        <div style="${secWrap}">
+          <div style="${secHead}">🚐 Projet véhicule</div>
+          <table style="width:100%;border-collapse:collapse;">
+            ${[
+              ['Type',           d.typeVehicle],
+              ['Budget',         d.budget],
+              ['Neuf / Occasion',d.achat],
+              ['Km max',         d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],
+              ['Année min',      d.anneeMin],
+              ['Voyageurs',      d.voyageurs],
+              ['Permis',         d.permis],
+              ['Porteur souhaité',d.porteurSouhaite],
+              ['Équipementier',  d.equipSouhaite],
+              ['Modèle souhaité',d.modeleSouhaite],
+            ].filter(([,v])=>v).map(([k,v])=>`<tr><td style="${cellK}">${k}</td><td style="${cellV}">${v}</td></tr>`).join('')}
+          </table>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- QUALIFICATION -->
+  ${sec('Qualification', [
+    ['Délai d\'achat', d.delai],
+    ['Reprise',        d.reprise],
+    ['Score',          score+'/100 — '+scoreLbl],
+  ], '📋')}
+
+  <!-- BESOIN EXPRIMÉ -->
+  ${(d.besoin||d.notes) ? `<div style="${secWrap}">
+    <div style="${secHead}">💬 Besoin exprimé &amp; notes</div>
+    <div style="padding:10px 12px;font-size:9.5pt;line-height:1.7;color:#0f172a;white-space:pre-wrap;">${
+      [d.besoin&&'<strong>Besoin :</strong> '+d.besoin, d.notes&&'<strong>Notes :</strong> '+d.notes].filter(Boolean).join('<br><br>')
+    }</div>
+  </div>` : ''}
+
+  <!-- REPRISE -->
+  ${repriseRows.length ? sec('Véhicule à reprendre', repriseRows, '🔄') : ''}
+
+  <!-- RGPD -->
+  <div style="margin-top:18px;padding:9px 12px;background:#f8faff;border:1px solid #d0d9e8;border-radius:6px;font-size:7.5pt;color:#64748b;line-height:1.6;">
+    🔒 <strong>Information RGPD</strong> — Données traitées par Libertium Seclin Lestringuez dans le cadre de la relation commerciale (base légale : intérêt légitime, Art. 6.1.f RGPD). Conservation : 3 ans. Droits d'accès, rectification, suppression : contact.seclin@libertium.fr · 03 20 32 25 99
   </div>
-  </div>`;
+
+</div>`;
 }
 
 function exportPDF(){
-  const win=window.open('','_blank');
-  if(!win){alert('Autorisez les popups.');return;}
-  win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Fiche client Libertium</title><style>*{box-sizing:border-box}@page{size:A4;margin:12mm}body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#172033;margin:0;padding:24px;font-size:10pt;line-height:1.45}@media print{body{padding:0}.toolbar{display:none!important}}.toolbar{display:flex;align-items:center;gap:10px;padding:14px 18px;background:#eef4ff;border-radius:10px;margin-bottom:22px;border:1px solid #c7d6f5}.toolbar button{border:0;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer}.btn-p{background:#0f62fe;color:#fff}.btn-c{background:#e8eef8;color:#172033}.toolbar p{margin:0;font-size:11px;color:#64748b;flex:1}</style></head><body><div class="toolbar"><button class="btn-p" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button><button class="btn-c" onclick="window.close()">✕ Fermer</button><p>Dans la boîte de dialogue, sélectionnez <strong>« Enregistrer en PDF »</strong>.</p></div>${buildPdfHtml()}</body></html>`);
+  const win = window.open('','_blank');
+  if(!win){ alert('Autorisez les popups pour cet export.'); return; }
+  win.document.write(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Fiche client Libertium</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  @page { size: A4; margin: 12mm 14mm; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fff;
+    color: #172033;
+    font-size: 10pt;
+    line-height: 1.45;
+    padding: 20px;
+  }
+  @media print {
+    body { padding: 0; }
+    .toolbar { display: none !important; }
+  }
+  .toolbar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; background: #eef4ff;
+    border-radius: 8px; margin-bottom: 20px;
+    border: 1px solid #c7d6f5;
+  }
+  .toolbar button {
+    border: 0; border-radius: 6px; padding: 8px 18px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+  }
+  .btn-p { background: #1A3557; color: #fff; }
+  .btn-c { background: #e8eef8; color: #172033; }
+  .toolbar p { margin: 0; font-size: 11px; color: #64748b; flex: 1; }
+  table { border-collapse: collapse; }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button class="btn-p" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button>
+  <button class="btn-c" onclick="window.close()">✕ Fermer</button>
+  <p>Dans la boîte de dialogue d'impression, sélectionnez <strong>« Enregistrer en PDF »</strong> comme destination.</p>
+</div>
+${buildPdfHtml()}
+</body>
+</html>`);
   win.document.close();
 }
 
