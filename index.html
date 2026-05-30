@@ -237,6 +237,45 @@
 </head>
 <body>
 
+<div id="lock-screen" style="position:fixed;inset:0;background:#0f1117;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column">
+  <div style="background:#1a1d27;border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:36px 40px;width:320px;text-align:center">
+    <div style="width:44px;height:44px;border-radius:10px;background:#1A3557;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+      <span style="font-size:22px">🔒</span>
+    </div>
+    <div style="font-size:16px;font-weight:500;color:#e8e8e8;margin-bottom:6px">Accès restreint</div>
+    <div style="font-size:13px;color:#666;margin-bottom:24px">Libertium Seclin · Widget découverte</div>
+    <input type="password" id="pwd-input" placeholder="Mot de passe" autofocus
+      style="width:100%;padding:10px 14px;font-size:14px;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.05);color:#e8e8e8;outline:none;margin-bottom:10px;font-family:inherit;box-sizing:border-box"
+      onkeydown="if(event.key==='Enter')checkPwd()">
+    <div id="pwd-error" style="font-size:12px;color:#e24b4a;min-height:16px;margin-bottom:8px"></div>
+    <button onclick="checkPwd()"
+      style="width:100%;padding:10px;font-size:14px;font-weight:500;border-radius:8px;border:none;background:#2A6032;color:white;cursor:pointer;font-family:inherit">
+      Accéder
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  function h(s){let n=0;for(let i=0;i<s.length;i++){n=((n<<5)-n)+s.charCodeAt(i);n|=0;}return Math.abs(n).toString(16).padStart(8,'0');}
+  const PWD_HASH=h('LIB%SEC%');
+  if(sessionStorage.getItem('lib_widget_auth')===PWD_HASH){
+    document.getElementById('lock-screen').style.display='none';
+  }
+  window.checkPwd=function(){
+    const v=document.getElementById('pwd-input').value;
+    if(h(v)===PWD_HASH){
+      sessionStorage.setItem('lib_widget_auth',PWD_HASH);
+      document.getElementById('lock-screen').style.display='none';
+    } else {
+      document.getElementById('pwd-error').textContent='Mot de passe incorrect';
+      document.getElementById('pwd-input').value='';
+      document.getElementById('pwd-input').focus();
+    }
+  };
+})();
+</script>
+
 <!-- ══ TOPBAR ══ -->
 <div class="topbar">
   <div class="brand">
@@ -342,6 +381,11 @@
     </div>
   </div>
 </form>
+
+<!-- ══ MENTION RGPD FORMULAIRE ══ -->
+<div style="margin-top:8px;padding:10px 14px;background:#f8faff;border:1px solid #e2e8f0;border-radius:10px;font-size:11px;color:#64748b;line-height:1.6">
+  🔒 <strong>Données personnelles</strong> — Les informations saisies sont traitées par Libertium Seclin Lestringuez dans le cadre de la relation commerciale (base : intérêt légitime, Art. 6.1.f RGPD). Conservation : 3 ans. Droits d'accès, rectification et suppression : <a href="mailto:contact.seclin@libertium.fr" style="color:#0f62fe">contact.seclin@libertium.fr</a>
+</div>
 
 <!-- ══ COLONNE DROITE ══ -->
 <div class="card right-sticky" id="summaryBlock">
@@ -491,6 +535,37 @@
     <div class="modal-actions">
       <button type="button" class="btn-secondary" onclick="copyEmailBody()">📋 Copier</button>
       <button type="button" class="btn-primary" onclick="sendEmailMailto()">📨 Ouvrir dans mon mail</button>
+    </div>
+  </div>
+</div>
+<!-- ══ MODAL RGPD ══ -->
+<div class="modal-overlay" id="modalRgpd">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head">
+      <h3>🔒 Information sur la collecte de données</h3>
+    </div>
+    <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:16px">
+      <p style="margin-bottom:10px">Dans le cadre de votre démarche commerciale, <strong>Libertium Seclin Lestringuez</strong> collecte les informations que vous avez saisies (coordonnées, projet véhicule, reprise éventuelle) afin de :</p>
+      <ul style="padding-left:18px;margin-bottom:10px">
+        <li>Vous proposer des véhicules adaptés à votre projet</li>
+        <li>Vous recontacter dans le cadre de la relation commerciale</li>
+        <li>Établir une proposition commerciale personnalisée</li>
+      </ul>
+      <p style="margin-bottom:10px"><strong>Base légale :</strong> intérêt légitime (Art. 6.1.f RGPD) — traitement nécessaire à la relation commerciale.</p>
+      <p style="margin-bottom:10px"><strong>Durée de conservation :</strong> 3 ans à compter du dernier contact, conformément aux recommandations CNIL pour les prospects.</p>
+      <p style="margin-bottom:10px"><strong>Destinataires :</strong> équipe commerciale Libertium Seclin. Données hébergées sur Google Workspace (Union Européenne).</p>
+      <p style="margin-bottom:14px"><strong>Vos droits :</strong> accès, rectification, suppression, opposition, limitation — à exercer à <a href="mailto:contact.seclin@libertium.fr" style="color:var(--primary)">contact.seclin@libertium.fr</a> ou au 03 20 32 25 99.</p>
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px 14px">
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:400">
+          <input type="checkbox" id="rgpdConsent" style="width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:#16a34a;cursor:pointer"/>
+          <span style="font-size:13px;color:#166534">J'ai informé le client de l'utilisation de ses données et il ne s'y est pas opposé. <strong>La fiche peut être enregistrée.</strong></span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" onclick="closeModal('modalRgpd')">Annuler</button>
+      <button type="button" class="btn-primary" id="btnRgpdConfirm" onclick="confirmSave()" disabled
+        style="background:#16a34a;opacity:0.5;cursor:not-allowed">💾 Confirmer et sauvegarder</button>
     </div>
   </div>
 </div>
@@ -1259,6 +1334,9 @@ function buildPdfHtml(){
     ${repriseHtml}
     <div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden"><div style="${H}">Recommandations véhicule</div><div style="padding:12px">${recoHtml}</div></div>
     ${(d.besoin||d.notes)?`<div style="border:1px dashed #c7d6f5;border-radius:10px;padding:12px;background:#f8fbff"><div style="font-weight:700;color:#163a6b;margin-bottom:6px;font-size:10.5pt">Résumé commercial</div><div style="white-space:pre-wrap;font-size:9.5pt;line-height:1.6">${[d.besoin&&'Besoin : '+d.besoin,d.notes&&'Notes : '+d.notes,d.delai&&'Délai : '+d.delai].filter(Boolean).join('\n\n')}</div></div>`:''}
+  <div style="margin-top:16px;padding:10px 14px;background:#f8faff;border:1px solid #d8e1ee;border-radius:8px;font-size:8.5pt;color:#64748b;line-height:1.6">
+    🔒 <strong>Information RGPD</strong> — Données traitées par Libertium Seclin Lestringuez dans le cadre de la relation commerciale (base légale : intérêt légitime, Art. 6.1.f RGPD). Durée de conservation : 3 ans. Droits d'accès, rectification et suppression : contact.seclin@libertium.fr — 03 20 32 25 99.
+  </div>
   </div>`;
 }
 
@@ -1273,6 +1351,25 @@ function exportPDF(){
 // SAUVEGARDE GOOGLE SHEETS
 // ══════════════════════════════════════════════════════════
 const SHEETS_URL='https://script.google.com/macros/s/AKfycbzoqQtVOWMPRC6ndPaYeAF-zVUw5rwB7Wn1kgXlWvlbntBXZSZCIFIRY68BWk1kTX85/exec';
+
+function showRgpdModal(){
+  // Vérifier qu'au moins nom ou email est renseigné
+  const d=read();
+  if(!d.nom && !d.prenom && !d.email && !d.telephone && !d.mobile){
+    alert('Veuillez renseigner au moins le nom ou les coordonnées du client avant de sauvegarder.');
+    return;
+  }
+  document.getElementById('rgpdConsent').checked=false;
+  const btn=document.getElementById('btnRgpdConfirm');
+  btn.disabled=true;btn.style.opacity='0.5';btn.style.cursor='not-allowed';
+  document.getElementById('modalRgpd').classList.add('open');
+}
+
+function confirmSave(){
+  if(!document.getElementById('rgpdConsent').checked) return;
+  closeModal('modalRgpd');
+  saveToSheet();
+}
 
 async function saveToSheet(){
   const btn=document.getElementById('btnSave');
@@ -1397,7 +1494,14 @@ function parseBudgetMax(budget){
 // ══════════════════════════════════════════════════════════
 function bind(){
   document.getElementById('btnPdf').addEventListener('click',exportPDF);
-  document.getElementById('btnSave').addEventListener('click',saveToSheet);
+  document.getElementById('btnSave').addEventListener('click',showRgpdModal);
+  document.getElementById('rgpdConsent').addEventListener('change',function(){
+    const btn=document.getElementById('btnRgpdConfirm');
+    btn.disabled=!this.checked;
+    btn.style.opacity=this.checked?'1':'0.5';
+    btn.style.cursor=this.checked?'pointer':'not-allowed';
+  });
+  document.getElementById('modalRgpd').addEventListener('click',function(e){if(e.target===this)closeModal('modalRgpd');});
   document.getElementById('btnEmail').addEventListener('click',openEmailModal);
   document.getElementById('btnReset').addEventListener('click',()=>{
     document.getElementById('leadForm').reset();
