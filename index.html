@@ -15,7 +15,6 @@
     html,body{margin:0;padding:0}
     body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#eef4ff 0%,var(--bg) 100%);color:var(--text)}
 
-    /* ── TOPBAR ── */
     .topbar{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border-bottom:1px solid var(--border);box-shadow:var(--shadow);padding:10px 20px;flex-wrap:wrap}
     .brand{display:flex;gap:14px;align-items:center;min-width:0;flex:1}
     .brand-logo{width:80px;height:80px;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center}
@@ -23,10 +22,8 @@
     .brand-text h1{margin:0;font-size:18px;line-height:1.15}
     .brand-text p{margin:4px 0 0;color:var(--muted);line-height:1.5;font-size:12.5px}
     .topbar-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;flex-shrink:0}
-    /* Score compact dans la topbar */
     .topbar-actions .score-display{min-width:160px!important;padding:7px 10px}
     .topbar-actions .score-num{font-size:18px}
-    /* Responsive mobile */
     @media(max-width:768px){
       .topbar{padding:8px 12px;gap:8px}
       .brand-logo{width:56px;height:56px;border-radius:10px}
@@ -46,7 +43,6 @@
       .topbar-actions .score-denom{display:none}
     }
 
-    /* ── LAYOUT ── */
     .page{max-width:1440px;margin:0 auto;padding:24px}
     .page-inner{padding-top:20px}
     button{border:0;border-radius:12px;padding:11px 16px;font-weight:700;cursor:pointer;font-size:13px;transition:transform .12s,background .15s}
@@ -70,7 +66,7 @@
     .reprise-fields{margin-top:10px;padding:12px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fbff;display:none}
     .reprise-fields.show{display:block}
 
-    /* ── SCORE ── */
+    /* SCORE */
     .score-wrap{display:flex;flex-direction:column;gap:6px}
     .score-display{display:flex;align-items:center;gap:10px;background:#f8fbff;border:1px solid #d8e1ee;border-radius:12px;padding:10px 14px;transition:border-color .3s}
     .score-num{font-size:22px;font-weight:800;min-width:38px;line-height:1;transition:color .3s}
@@ -83,10 +79,17 @@
     .sd-hot{border-color:#6ee7b7}.sd-hot .score-num{color:#16a34a}.sd-hot .score-lbl{background:#dcfce7;color:#166534}.sd-hot .score-bar-fill{background:#22c55e}
     .sd-fire{border-color:#93c5fd}.sd-fire .score-num{color:#0f62fe}.sd-fire .score-lbl{background:#dbeafe;color:#1d4ed8}.sd-fire .score-bar-fill{background:#0f62fe}
 
-    /* ── PANNEAU DROIT ── */
+    /* PANNEAU DROIT */
     .right-sticky{position:sticky;top:calc(var(--topbar-h) + 16px);align-self:start;max-height:calc(100vh - var(--topbar-h) - 32px);overflow-y:auto}
 
-    /* ── APERÇU ÉCRAN ── */
+    /* TABS PANNEAU DROIT */
+    .right-tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:14px;flex-wrap:wrap}
+    .right-tab{padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;border-radius:0;transition:color .15s}
+    .right-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+    .right-tab:hover:not(.active){color:var(--text);transform:none}
+    .tab-pane{display:none}.tab-pane.active{display:block}
+
+    /* APERÇU */
     .pv-block{margin-bottom:14px;border:1px solid #e2e8f0;border-radius:14px;overflow:hidden}
     .pv-head{padding:8px 12px;font-size:13px;font-weight:700;background:#eef4ff;color:#163a6b;border-bottom:1px solid #e2e8f0}
     .pv-row{display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid #f0f4fa}
@@ -94,7 +97,6 @@
     .pv-k{padding:6px 10px;font-size:12px;font-weight:700;color:#475569;background:#f8faff;border-right:1px solid #f0f4fa;word-break:break-word}
     .pv-v{padding:6px 10px;font-size:12px;color:#0f172a;word-break:break-word;white-space:pre-wrap}
     .pv-empty .pv-v{color:#94a3b8;font-style:italic}
-
     .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
     .chip{border-radius:999px;padding:5px 10px;background:#eff6ff;color:#1d4ed8;font-size:12px;font-weight:700}
     .summary-box{background:var(--panel-2);border:1px dashed #c7d6f5;border-radius:14px;padding:14px;margin-bottom:14px}
@@ -108,7 +110,7 @@
     .score-badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:800}
     .score-high{background:#ecfdf5;color:#166534}.score-mid{background:#eff6ff;color:#1d4ed8}.score-low{background:#fff7ed;color:#9a3412}
 
-    /* ── LIVE SEARCH ── */
+    /* LIVE SEARCH */
     .live-section{border-top:1px solid #e2e8f0;padding-top:16px}
     .btn-live-toggle{background:var(--primary);color:#fff;border-radius:12px;padding:10px 14px;font-size:13px;font-weight:700;width:100%;cursor:pointer;border:0;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s}
     .btn-live-toggle:hover{background:var(--primary-dark)}.btn-live-toggle.searching{background:#64748b;cursor:wait}
@@ -128,50 +130,114 @@
     .lvc-match.high{background:#dcfce7;color:#166534}.lvc-match.mid{background:#fef9c3;color:#854d0e}.lvc-match.low{background:#f1f5f9;color:#64748b}
     .live-empty{text-align:center;padding:20px;color:#94a3b8;font-size:13px;border:1px dashed #cbd5e1;border-radius:12px}
 
-    /* ── PRINT ── */
-    @media (max-width:1040px){
+    /* ── HISTORIQUE ── */
+    .hist-item{border:1px solid var(--border);border-radius:12px;padding:11px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}
+    .hist-item:hover{border-color:var(--primary);background:#f0f6ff}
+    .hist-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .hist-name{font-size:13px;font-weight:700;color:var(--text)}
+    .hist-date{font-size:11px;color:var(--muted)}
+    .hist-meta{font-size:12px;color:var(--muted);margin-top:3px}
+    .hist-score{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px}
+    .hist-del{font-size:11px;padding:3px 8px;border-radius:8px;border:1px solid #fca5a5;background:#fff;color:#dc2626;cursor:pointer;flex-shrink:0}
+    .hist-del:hover{background:#fee2e2;transform:none}
+    .hist-empty{text-align:center;padding:28px 16px;color:var(--muted);font-size:13px}
+
+    /* ── SCORE REPRISE ── */
+    .reprise-score-box{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:1.5px solid #6ee7b7;border-radius:14px;padding:14px;margin-top:12px}
+    .reprise-score-box h4{margin:0 0 10px;font-size:14px;color:#166534;display:flex;align-items:center;gap:6px}
+    .reprise-fourchette{font-size:22px;font-weight:800;color:#16a34a;margin:4px 0}
+    .reprise-detail{font-size:12px;color:#475569;line-height:1.6}
+    .reprise-warning{background:#fff7ed;border:1px solid #fed7aa;border-radius:10px;padding:8px 12px;font-size:12px;color:#9a3412;margin-top:8px}
+
+    /* ── RDV ── */
+    .rdv-box{background:#f8fbff;border:1px solid #bfdbfe;border-radius:14px;padding:14px;margin-bottom:14px}
+    .rdv-box h4{margin:0 0 12px;font-size:14px;color:#0c447c;display:flex;align-items:center;gap:6px}
+    .rdv-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .rdv-btn-row{display:flex;gap:8px;flex-wrap:wrap}
+    .rdv-btn{font-size:12px;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border);background:#fff;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:6px}
+    .rdv-btn:hover{border-color:var(--primary);color:var(--primary);transform:none}
+    .rdv-copy-output{margin-top:10px;padding:10px 12px;background:#fff;border:1px solid var(--border);border-radius:10px;font-size:12px;white-space:pre-wrap;color:var(--text);display:none;line-height:1.6}
+
+    /* ── COMPARATEUR ── */
+    .comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .comp-select-wrap{display:flex;flex-direction:column;gap:6px}
+    .comp-card{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+    .comp-head{padding:10px 12px;font-size:13px;font-weight:700;background:#eef4ff;color:#163a6b;border-bottom:1px solid var(--border)}
+    .comp-row{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #f0f4fa}
+    .comp-row:last-child{border-bottom:none}
+    .comp-k{padding:6px 10px;font-size:11px;font-weight:700;color:#475569;background:#f8faff;border-right:1px solid #f0f4fa;grid-column:1/-1;background:#f0f4fa}
+    .comp-v{padding:7px 10px;font-size:12px;color:#0f172a;text-align:center}
+    .comp-v.winner{background:#f0fdf4;color:#166534;font-weight:700}
+    .comp-v.loser{color:#94a3b8}
+    .comp-none{text-align:center;padding:20px;color:var(--muted);font-size:12px}
+
+    /* ── AVIS GOOGLE ── */
+    .avis-box{margin-bottom:14px}
+    .avis-header{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff8f0;border:1px solid #fed7aa;border-radius:12px;margin-bottom:10px}
+    .avis-note{font-size:28px;font-weight:800;color:#d97706}
+    .avis-stars{font-size:18px;color:#f59e0b;letter-spacing:2px}
+    .avis-count{font-size:12px;color:var(--muted)}
+    .avis-trend{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:#dcfce7;color:#166534}
+    .avis-item{border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#fff}
+    .avis-item-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+    .avis-author{font-size:13px;font-weight:700;color:var(--text)}
+    .avis-item-stars{font-size:13px;color:#f59e0b}
+    .avis-item-date{font-size:11px;color:var(--muted)}
+    .avis-text{font-size:12px;color:#334155;line-height:1.5}
+    .avis-reponse{margin-top:8px;padding:8px 10px;background:#f8fbff;border-left:3px solid var(--primary);border-radius:0 8px 8px 0;font-size:12px;color:#475569;font-style:italic}
+    .avis-cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .avis-cta a{font-size:12px;font-weight:700;padding:7px 14px;border-radius:10px;text-decoration:none;border:1.5px solid var(--border);color:var(--text);background:#fff}
+    .avis-cta a:hover{border-color:var(--primary);color:var(--primary)}
+
+    /* ── MODAL EMAIL ── */
+    .modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+    .modal-overlay.open{display:flex}
+    .modal{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.2)}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .modal-head h3{margin:0;font-size:17px}
+    .modal-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:4px 8px;border-radius:8px}
+    .modal-close:hover{background:#f1f5f9;transform:none}
+    .modal-field{margin-bottom:12px}
+    .modal-field label{font-size:13px;font-weight:700;color:#334155;display:block;margin-bottom:5px}
+    .modal-field input,.modal-field textarea,.modal-field select{width:100%;border:1px solid #cbd5e1;border-radius:10px;padding:10px 12px;font:inherit;color:var(--text)}
+    .modal-field textarea{min-height:120px;resize:vertical}
+    .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+    .tag-email{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-weight:700;margin:2px}
+
+    @media(max-width:1040px){
       .grid{grid-template-columns:1fr}.topbar{flex-wrap:wrap}.form-grid{grid-template-columns:1fr}.right-sticky{position:static;max-height:none}
     }
     @media(max-width:768px){
-      .page{padding:12px}
-      .card{padding:14px;border-radius:14px}
-      .form-grid{grid-template-columns:1fr!important}
-      .field.full{grid-column:1}
-      .section h3{font-size:14px}
-      label{font-size:12px}
+      .page{padding:12px}.card{padding:14px;border-radius:14px}.form-grid{grid-template-columns:1fr!important}
+      .field.full{grid-column:1}.section h3{font-size:14px}label{font-size:12px}
       input,select,textarea{padding:9px 10px;font-size:13px}
-      .live-section .topbar-actions button,
-      #btnScopeSeclin,#btnScopeSeclinBeauvois,#btnScopeReseau,#btnLbc{
-        padding:8px 6px;font-size:11px
-      }
+      .comp-grid{grid-template-columns:1fr}
+      .rdv-grid{grid-template-columns:1fr}
     }
     @media print{
       @page{size:A4;margin:12mm}
-      body{background:#fff}
-      .page{max-width:none;padding:0}
+      body{background:#fff}.page{max-width:none;padding:0}
       .topbar,.topbar-actions,.form-panel,.chips,.recommend-top,.results,.live-section,.btn-live-toggle,.live-results-wrap,.summary-box{display:none!important}
-      .page-inner,.grid{display:block}
-      .card{box-shadow:none;border:0;border-radius:0;padding:0}
+      .page-inner,.grid{display:block}.card{box-shadow:none;border:0;border-radius:0;padding:0}
       .right-sticky{position:static;max-height:none;overflow:visible}
-      /* En-tête print */
       .print-header{display:flex!important;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;margin-bottom:16px;border:1px solid #d8e1ee;border-radius:14px;background:#f3f7ff}
       .print-logo{font-size:18px;font-weight:800;color:var(--accent);margin:0}
       .print-sub{font-size:10.5pt;color:#475569;margin:2px 0 0}
       .print-coords{text-align:right;font-size:10pt;color:#475569;line-height:1.5}
-      /* Blocs aperçu en print */
       .pv-block{margin-bottom:12px;border:1px solid #d8e1ee!important;border-radius:12px!important;overflow:hidden;break-inside:avoid}
       .pv-head{padding:7px 12px;font-size:10.5pt;background:#eef4ff;color:#163a6b;border-bottom:1px solid #d8e1ee}
       .pv-row{display:grid!important;grid-template-columns:160px 1fr;border-bottom:1px solid #edf2f7}
       .pv-k{padding:5px 10px;font-size:10pt;font-weight:700;color:#334155;background:#f8faff;border-right:1px solid #edf2f7}
       .pv-v{padding:5px 10px;font-size:10pt;color:#0f172a}
-      .pv-empty .pv-v{color:#94a3b8}
-      .card>h2{font-size:14pt;margin-bottom:12px}
+      .pv-empty .pv-v{color:#94a3b8}.card>h2{font-size:14pt;margin-bottom:12px}
+      .right-tabs,.tab-pane:not(#tab-apercu){display:none!important}
+      #tab-apercu{display:block!important}
     }
   </style>
 </head>
 <body>
 
-<!-- ══ TOPBAR FIXE ══ -->
+<!-- ══ TOPBAR ══ -->
 <div class="topbar">
   <div class="brand">
     <div class="brand-logo"><img src="https://www.libertium.fr/sites/default/files/logo_libertium.svg" alt="Libertium"></div>
@@ -190,6 +256,7 @@
     <div class="btn-row">
       <button type="button" class="btn-primary"   id="btnPdf">📄 Export PDF</button>
       <button type="button" class="btn-primary"   id="btnSave" style="background:#16a34a">💾 Sauvegarde</button>
+      <button type="button" class="btn-primary"   id="btnEmail" style="background:#7c3aed">✉️ Email client</button>
       <button type="button" class="btn-secondary" id="btnReset">↺ Réinitialiser</button>
     </div>
   </div>
@@ -199,14 +266,11 @@
 
 <!-- ══ COLONNE GAUCHE ══ -->
 <form class="card form-panel" id="leadForm" autocomplete="on">
-
   <div class="vendeur-bar">
     <label for="vendeur">Vendeur</label>
     <select id="vendeur"><option value="">—</option><option>Ludovic</option><option>Cédric</option><option>Frédéric</option><option>Nicolas</option></select>
   </div>
-
   <h2>Coordonnées client</h2>
-
   <div class="section">
     <h3>Identité</h3>
     <div class="form-grid">
@@ -218,7 +282,6 @@
       <div class="field"><label for="fonction">Fonction</label><input id="fonction" type="text"/></div>
     </div>
   </div>
-
   <div class="section">
     <h3>Coordonnées</h3>
     <div class="form-grid">
@@ -234,7 +297,6 @@
       <div class="field"><label for="pays">Pays</label><input id="pays" type="text" value="France"/></div>
     </div>
   </div>
-
   <div class="section">
     <h3>Découverte véhicule de loisir</h3>
     <div class="form-grid">
@@ -257,16 +319,13 @@
       <div class="field full"><label for="notes">Notes du commercial</label><textarea id="notes"></textarea></div>
     </div>
   </div>
-
   <div class="section">
     <h3>Qualification complémentaire</h3>
     <div class="form-grid">
       <div class="field"><label for="delai">Délai d'achat</label><select id="delai"><option value="">—</option><option>Immédiat</option><option>1 à 3 mois</option><option>3 à 6 mois</option><option>6 mois et plus</option><option>Se renseigne</option></select></div>
       <div class="field"><label for="decisionnaire">Décisionnaire</label><input id="decisionnaire" type="text"/></div>
       <div class="field"><label for="reprise">Reprise véhicule</label><select id="reprise"><option value="">—</option><option>Oui</option><option>Non</option><option>À étudier</option></select></div>
-
     </div>
-
     <div class="reprise-fields" id="repriseFields">
       <h3 style="margin-top:0">Véhicule à reprendre</h3>
       <div class="form-grid">
@@ -291,69 +350,173 @@
         <div class="field"><label for="reprEauUsee">Eaux usées (L)</label><input id="reprEauUsee" type="text"/></div>
         <div class="field"><label for="reprEtat">État général</label><select id="reprEtat"><option value="">—</option><option>Excellent</option><option>Correct</option><option>Passable</option><option>Triste</option></select></div>
       </div>
+      <!-- SCORE REPRISE AUTOMATIQUE -->
+      <div id="repriseScoreBox" class="reprise-score-box" style="display:none">
+        <h4>💰 Estimation reprise automatique</h4>
+        <div class="reprise-fourchette" id="repriseFourchette">—</div>
+        <div class="reprise-detail" id="repriseDetail"></div>
+        <div class="reprise-warning" id="repriseWarning" style="display:none"></div>
+      </div>
     </div>
   </div>
 </form>
 
 <!-- ══ COLONNE DROITE ══ -->
 <div class="card right-sticky" id="summaryBlock">
-
-  <!-- En-tête print uniquement -->
   <div class="print-header" style="display:none">
     <div><div class="print-logo">Libertium Seclin Lestringuez</div><div class="print-sub">Fiche récapitulative commerciale</div></div>
     <div class="print-coords">205 Avenue de la République<br>59113 SECLIN<br>03 20 32 25 99 · contact.seclin@libertium.fr</div>
   </div>
-  <!-- ▸ CHIPS + RÉSUMÉ + RECOMMANDATION -->
-  <div class="chips" id="chips"></div>
 
-  <div class="summary-box">
-    <p id="pvSummaryBox">Renseigne les champs à gauche pour générer une recommandation.</p>
+  <!-- TABS -->
+  <div class="right-tabs">
+    <button class="right-tab active" onclick="showTab('apercu',this)">📋 Aperçu</button>
+    <button class="right-tab" onclick="showTab('rdv',this)">📅 RDV</button>
+    <button class="right-tab" onclick="showTab('comparateur',this)">⚖️ Comparer</button>
+    <button class="right-tab" onclick="showTab('avis',this)">⭐ Avis</button>
+    <button class="right-tab" onclick="showTab('historique',this)">🗂 Historique</button>
   </div>
 
-  <div class="recommend-top">
-    <h3>Meilleure recommandation</h3>
-    <p id="topExplanation">—</p>
+  <!-- TAB APERCU -->
+  <div id="tab-apercu" class="tab-pane active">
+    <div class="chips" id="chips"></div>
+    <div class="summary-box"><p id="pvSummaryBox">Renseigne les champs à gauche pour générer une recommandation.</p></div>
+    <div class="recommend-top"><h3>Meilleure recommandation</h3><p id="topExplanation">—</p></div>
+    <div class="results" id="results"></div>
+    <div class="live-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:13px;font-weight:700">🔍 Stock en temps réel · libertium.fr</span>
+        <span style="font-size:11px;color:#22c55e;font-weight:700;background:#dcfce7;padding:3px 8px;border-radius:999px">● API connectée</span>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <button type="button" id="btnScopeSeclin" onclick="setScope('seclin')" style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff">📍 Stock Seclin</button>
+        <button type="button" id="btnScopeSeclinBeauvois" onclick="setScope('seclin_beauvois')" style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">📍📍 Seclin + Beauvois</button>
+        <button type="button" id="btnScopeReseau" onclick="setScope('reseau')" style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">🌐 Tout le réseau</button>
+        <button type="button" id="btnLbc" onclick="openLbc()" style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #f97316;background:#fff7ed;color:#c2410c">🟠 Le Bon Coin</button>
+      </div>
+      <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
+        <span id="btnLiveIcon">🔎</span><span id="btnLiveTxt">Rechercher dans le stock Seclin</span>
+      </button>
+      <div class="live-results-wrap" id="liveResults" style="display:none">
+        <h4>Véhicules disponibles <span class="live-badge" id="liveBadge">—</span></h4>
+        <div id="liveCards"></div>
+      </div>
+    </div>
   </div>
-  <div class="results" id="results"></div>
 
-  <!-- ▸ LIVE SEARCH -->
-  <div class="live-section">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <span style="font-size:13px;font-weight:700">🔍 Stock en temps réel · libertium.fr</span>
-      <span style="font-size:11px;color:#22c55e;font-weight:700;background:#dcfce7;padding:3px 8px;border-radius:999px">● API connectée</span>
+  <!-- TAB RDV -->
+  <div id="tab-rdv" class="tab-pane">
+    <div class="rdv-box">
+      <h4>📅 Planifier un rendez-vous</h4>
+      <div class="rdv-grid">
+        <div class="field"><label for="rdvDate">Date</label><input type="date" id="rdvDate"/></div>
+        <div class="field"><label for="rdvHeure">Heure</label><input type="time" id="rdvHeure" value="10:00"/></div>
+        <div class="field"><label for="rdvVendeur">Vendeur assigné</label><select id="rdvVendeur"><option value="">—</option><option>Ludovic</option><option>Cédric</option><option>Frédéric</option><option>Nicolas</option></select></div>
+        <div class="field"><label for="rdvDuree">Durée estimée</label><select id="rdvDuree"><option>30 min</option><option>45 min</option><option selected>1 heure</option><option>1h30</option><option>2 heures</option></select></div>
+        <div class="field full"><label for="rdvObjet">Objet du RDV</label><input type="text" id="rdvObjet" placeholder="ex. Présentation camping-car profilé + reprise"/></div>
+        <div class="field full"><label for="rdvNotes">Notes préparatoires</label><textarea id="rdvNotes" style="min-height:60px" placeholder="Documents à préparer, véhicules à sortir..."></textarea></div>
+      </div>
+      <div class="rdv-btn-row">
+        <button type="button" class="rdv-btn" onclick="rdvCopy()">📋 Copier résumé</button>
+        <button type="button" class="rdv-btn" onclick="rdvSms()">💬 SMS client</button>
+        <button type="button" class="rdv-btn" onclick="rdvAgenda()">📆 Ouvrir agenda</button>
+        <button type="button" class="rdv-btn" onclick="rdvEmail()">✉️ Email de confirmation</button>
+      </div>
+      <div class="rdv-copy-output" id="rdvOutput"></div>
     </div>
-    <div style="display:flex;gap:8px;margin-bottom:10px">
-      <button type="button" id="btnScopeSeclin" onclick="setScope('seclin')"
-        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff">
-        📍 Stock Seclin
-      </button>
-      <button type="button" id="btnScopeSeclinBeauvois" onclick="setScope('seclin_beauvois')"
-        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">
-        📍📍 Seclin + Beauvois
-      </button>
-      <button type="button" id="btnScopeReseau" onclick="setScope('reseau')"
-        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155">
-        🌐 Tout le réseau
-      </button>
-      <button type="button" id="btnLbc" onclick="openLbc()"
-        style="flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #f97316;background:#fff7ed;color:#c2410c">
-        🟠 Le Bon Coin
-      </button>
+  </div>
+
+  <!-- TAB COMPARATEUR -->
+  <div id="tab-comparateur" class="tab-pane">
+    <div class="comp-grid" style="margin-bottom:10px">
+      <div class="comp-select-wrap">
+        <label style="font-size:12px;font-weight:700;color:#334155">Véhicule A</label>
+        <select id="compA" onchange="renderComp()"><option value="">— Choisir —</option></select>
+      </div>
+      <div class="comp-select-wrap">
+        <label style="font-size:12px;font-weight:700;color:#334155">Véhicule B</label>
+        <select id="compB" onchange="renderComp()"><option value="">— Choisir —</option></select>
+      </div>
     </div>
-    <button type="button" class="btn-live-toggle" id="btnLive" onclick="runLiveSearch()">
-      <span id="btnLiveIcon">🔎</span><span id="btnLiveTxt">Rechercher dans le stock Seclin</span>
-    </button>
-    <div class="live-results-wrap" id="liveResults" style="display:none">
-      <h4>Véhicules disponibles <span class="live-badge" id="liveBadge">—</span></h4>
-      <div id="liveCards"></div>
+    <div id="compResult"><div class="comp-none">Sélectionnez deux véhicules pour les comparer</div></div>
+  </div>
+
+  <!-- TAB AVIS -->
+  <div id="tab-avis" class="tab-pane">
+    <div class="avis-box" id="avisBox">
+      <div class="avis-header">
+        <div>
+          <div class="avis-note">4,2</div>
+          <div class="avis-stars">★★★★☆</div>
+          <div class="avis-count">368 avis Google</div>
+        </div>
+        <div style="flex:1;padding-left:12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span class="avis-trend">▲ Cible 4,4 à 6 mois</span>
+          </div>
+          <div style="font-size:12px;color:#475569;line-height:1.5">
+            Libertium Seclin Lestringuez<br>
+            205 Av. de la République, 59113 Seclin
+          </div>
+        </div>
+      </div>
+      <div id="avisItems"></div>
+      <div class="avis-cta">
+        <a href="https://www.google.com/maps/place/Libertium+Seclin/@50.5509,3.0344,15z" target="_blank" rel="noopener">🗺 Voir sur Maps</a>
+        <a href="https://search.google.com/local/writereview?placeid=ChIJ_-K0jUfXwkcRcxjN9bN_VkI" target="_blank" rel="noopener">✍️ Laisser un avis</a>
+        <a href="https://www.libertium.fr/concessions/seclin-lestringuez" target="_blank" rel="noopener">🌐 Page concession</a>
+      </div>
+      <div style="margin-top:12px;padding:10px 12px;background:#eff6ff;border-radius:10px;font-size:12px;color:#1d4ed8">
+        💡 <strong>Protocole réponse :</strong> Objectif &lt;48h systématique · Délégation nominative à définir lors de la prise de poste
+      </div>
     </div>
+  </div>
+
+  <!-- TAB HISTORIQUE -->
+  <div id="tab-historique" class="tab-pane">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <span style="font-size:14px;font-weight:700">Fiches sauvegardées</span>
+      <button type="button" onclick="clearHistory()" style="font-size:11px;padding:5px 10px;border-radius:8px;border:1px solid #fca5a5;background:#fff;color:#dc2626;cursor:pointer">🗑 Tout effacer</button>
+    </div>
+    <div id="histList"></div>
   </div>
 
 </div><!-- /right-sticky -->
-</div></div></div><!-- /grid /page-inner /page -->
+</div></div></div>
 
+<!-- ══ MODAL EMAIL ══ -->
+<div class="modal-overlay" id="modalEmail">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>✉️ Email récapitulatif client</h3>
+      <button class="modal-close" onclick="closeModal('modalEmail')">✕</button>
+    </div>
+    <div class="modal-field">
+      <label>Destinataire</label>
+      <input type="email" id="emailTo" placeholder="email@client.fr"/>
+    </div>
+    <div class="modal-field">
+      <label>Objet</label>
+      <input type="text" id="emailSubject"/>
+    </div>
+    <div class="modal-field">
+      <label>Corps du message</label>
+      <textarea id="emailBody" style="min-height:200px"></textarea>
+    </div>
+    <div style="font-size:12px;color:#64748b;margin-bottom:8px">
+      <strong>Ouvre votre client mail avec ce message pré-rempli.</strong> Si le bouton ne fonctionne pas, copiez le texte ci-dessus.
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" onclick="copyEmailBody()">📋 Copier</button>
+      <button type="button" class="btn-primary" onclick="sendEmailMailto()">📨 Ouvrir dans mon mail</button>
+    </div>
+  </div>
+</div>
 
 <script>
+// ══════════════════════════════════════════════════════════
+// DONNÉES
+// ══════════════════════════════════════════════════════════
 const FORM_IDS=['vendeur','civilite','typeClient','prenom','nom','societe','fonction',
   'telephone','mobile','email','siteWeb','adresse1','adresse2','codePostal','ville',
   'departement','pays','typeVehicle','budget','achat','kmMax','anneeMin','voyageurs','usage','compacite','conduite',
@@ -372,16 +535,55 @@ const VEHICLES=[
   {key:'caravane', title:'Caravane',             url:'https://www.libertium.fr/vehicule'}
 ];
 
-const deptList=[['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d\'Or'],['22','Côtes-d\'Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['59','Nord'],['60','Oise'],['61','Orne'],['62','Pas-de-Calais'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d\'Oise']];
+const VEHICLES_COMP = [
+  {key:'van',      label:'Van aménagé',
+   specs:{Gabarit:'Compact (5–6m)',Couchages:'2 pers.',Budget:'25–50k €',Permis:'B',Usage:'Itinérance',Autonomie:'Moyenne',Rangements:'Limités',Maniabilité:'Excellente',Entretien:'Faible'}},
+  {key:'fourgon',  label:'Fourgon aménagé',
+   specs:{Gabarit:'Moyen (6–7m)',Couchages:'2–4 pers.',Budget:'35–65k €',Permis:'B',Usage:'Polyvalent',Autonomie:'Bonne',Rangements:'Corrects',Maniabilité:'Bonne',Entretien:'Modéré'}},
+  {key:'profile',  label:'Camping-car profilé',
+   specs:{Gabarit:'Moyen (6,5–7,5m)',Couchages:'2–4 pers.',Budget:'45–90k €',Permis:'B/vigilance',Usage:'Vacances',Autonomie:'Bonne',Rangements:'Bons',Maniabilité:'Correcte',Entretien:'Modéré'}},
+  {key:'integral', label:'Camping-car intégral',
+   specs:{Gabarit:'Grand (7–9m)',Couchages:'2–6 pers.',Budget:'70–150k €',Permis:'B/vigilance',Usage:'Grand confort',Autonomie:'Très bonne',Rangements:'Excellents',Maniabilité:'Délicate',Entretien:'Élevé'}},
+  {key:'capucine', label:'Camping-car capucine',
+   specs:{Gabarit:'Grand (7–8m)',Couchages:'4–7 pers.',Budget:'55–110k €',Permis:'B/vigilance',Usage:'Famille',Autonomie:'Bonne',Rangements:'Très bons',Maniabilité:'Délicate',Entretien:'Modéré-élevé'}},
+  {key:'caravane', label:'Caravane',
+   specs:{Gabarit:'Variable (5–9m)',Couchages:'2–6 pers.',Budget:'10–50k €',Permis:'B + remorquage',Usage:'Stationnaire',Autonomie:'Excellente (statique)',Rangements:'Bons',Maniabilité:'Contraignante',Entretien:'Faible'}},
+];
+
+const AVIS_EXEMPLES = [
+  {auteur:'Marie T.', etoiles:5, date:'il y a 3 semaines', texte:'Accueil exceptionnel, équipe très professionnelle. Mon camping-car profilé a été livré dans un état impeccable. Je recommande vivement !', reponse:'Merci Marie pour ce retour enthousiaste ! Toute l\'équipe de Seclin est ravie de vous avoir accompagnée.'},
+  {auteur:'Jean-Paul R.', etoiles:4, date:'il y a 1 mois', texte:'Bon suivi SAV, le technicien a résolu rapidement le problème de chauffage. Légère attente mais résultat satisfaisant.', reponse:'Merci Jean-Paul, nous prenons note du délai d\'attente et travaillons à l\'améliorer.'},
+  {auteur:'Sophie M.', etoiles:5, date:'il y a 2 mois', texte:'Superbe expérience d\'achat. Ludovic a pris le temps de bien cerner nos besoins. Nous sommes repartis avec le van parfait pour notre famille !', reponse:''},
+  {auteur:'Marc D.', etoiles:3, date:'il y a 2 mois', texte:'Vendeur compétent mais délai de livraison plus long que prévu. La communication aurait pu être meilleure lors de l\'attente.', reponse:'Monsieur D., merci pour votre retour. Nous prenons vos remarques très au sérieux et renforçons notre suivi client.'},
+];
+
+const deptList=[['59','Nord'],['62','Pas-de-Calais'],['01','Ain'],['02','Aisne'],['03','Allier'],['04','Alpes-de-Haute-Provence'],['05','Hautes-Alpes'],['06','Alpes-Maritimes'],['07','Ardèche'],['08','Ardennes'],['09','Ariège'],['10','Aube'],['11','Aude'],['12','Aveyron'],['13','Bouches-du-Rhône'],['14','Calvados'],['15','Cantal'],['16','Charente'],['17','Charente-Maritime'],['18','Cher'],['19','Corrèze'],['2A','Corse-du-Sud'],['2B','Haute-Corse'],['21','Côte-d\'Or'],['22','Côtes-d\'Armor'],['23','Creuse'],['24','Dordogne'],['25','Doubs'],['26','Drôme'],['27','Eure'],['28','Eure-et-Loir'],['29','Finistère'],['30','Gard'],['31','Haute-Garonne'],['32','Gers'],['33','Gironde'],['34','Hérault'],['35','Ille-et-Vilaine'],['36','Indre'],['37','Indre-et-Loire'],['38','Isère'],['39','Jura'],['40','Landes'],['41','Loir-et-Cher'],['42','Loire'],['43','Haute-Loire'],['44','Loire-Atlantique'],['45','Loiret'],['46','Lot'],['47','Lot-et-Garonne'],['48','Lozère'],['49','Maine-et-Loire'],['50','Manche'],['51','Marne'],['52','Haute-Marne'],['53','Mayenne'],['54','Meurthe-et-Moselle'],['55','Meuse'],['56','Morbihan'],['57','Moselle'],['58','Nièvre'],['60','Oise'],['61','Orne'],['63','Puy-de-Dôme'],['64','Pyrénées-Atlantiques'],['65','Hautes-Pyrénées'],['66','Pyrénées-Orientales'],['67','Bas-Rhin'],['68','Haut-Rhin'],['69','Rhône'],['70','Haute-Saône'],['71','Saône-et-Loire'],['72','Sarthe'],['73','Savoie'],['74','Haute-Savoie'],['75','Paris'],['76','Seine-Maritime'],['77','Seine-et-Marne'],['78','Yvelines'],['79','Deux-Sèvres'],['80','Somme'],['81','Tarn'],['82','Tarn-et-Garonne'],['83','Var'],['84','Vaucluse'],['85','Vendée'],['86','Vienne'],['87','Haute-Vienne'],['88','Vosges'],['89','Yonne'],['90','Territoire de Belfort'],['91','Essonne'],['92','Hauts-de-Seine'],['93','Seine-Saint-Denis'],['94','Val-de-Marne'],['95','Val-d\'Oise']];
 const equip=['Adria','Adria Caravane','Adria Caravanes','Airstream','Arca','Autostar','Barbot','Benimar','Burstner','California','Capron','Carado','Carthago','Caravelair','Challenger','Challenger Vdl','Clever Vans','Concorde','Crosscamp','Dethleffs','Dreamer','Eden Camp','Elios','Eriba','Etrusco','Eura Mobil','Euramobil','Fleurette','Font Vendome','Ford','Frankia','Giottiline','Hanroad','Hero Camper','Hobby','Hymer','Hymercar','Itineo','Joa','Joa Camp','Karmann','Knaus','La Mancelle','La Strada','Laika','Le Voyageur','Lmc','Mac Louis','Malibu','Marco Polo','Mc Louis','Mclouis','Mercedes','Mercedes Benz','Mobilvetta','Morelo','Notin','Panama','Pilote','Possl','Rapido','Randger','Renault','Road Car','Roadcar','Roller Team','Silver','Sterckeman','Stylevan','Sun Living','Sunlight','Swift','Tourne Mobil','Trigano Caravanes','Volkswagen','Weinsberg','Westfalia','Wingamm'];
 
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
 function init(){
   document.getElementById('departement').innerHTML='<option value="">—</option>'+deptList.map(([c,n])=>`<option value="${c}">${c} - ${n}</option>`).join('');
   document.getElementById('reprEquip').innerHTML='<option value="">—</option>'+equip.map(x=>`<option>${x}</option>`).join('');
   document.getElementById('reprPlacesCg').innerHTML='<option value="">—</option>'+[2,3,4,5,6,7,8].map(x=>`<option>${x}</option>`).join('');
   document.getElementById('reprPlacesCouche').innerHTML='<option value="">—</option>'+[2,3,4,5,6,7,8].map(x=>`<option>${x}</option>`).join('');
+  // Comparateur selects
+  const opts='<option value="">— Choisir —</option>'+VEHICLES_COMP.map(v=>`<option value="${v.key}">${v.label}</option>`).join('');
+  document.getElementById('compA').innerHTML=opts;
+  document.getElementById('compB').innerHTML=opts;
+  // Avis
+  renderAvis();
+  // Historique
+  renderHistory();
+  // RDV date par défaut = demain
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  document.getElementById('rdvDate').value = tomorrow.toISOString().split('T')[0];
 }
 
+// ══════════════════════════════════════════════════════════
+// READ FORM
+// ══════════════════════════════════════════════════════════
 function read(){
   const d={};
   FORM_IDS.forEach(id=>{const el=document.getElementById(id);d[id]=el?el.value:''});
@@ -390,14 +592,10 @@ function read(){
   return d;
 }
 
-// Met à jour une ligne pv-row (silencieux si élément absent du DOM)
 function pv(id, val){
-  const row=document.getElementById(id);
-  if(!row)return;
-  const cell=row.querySelector('.pv-v');
-  if(!cell)return;
-  const v=(val||'').trim();
-  cell.textContent=v||'—';
+  const row=document.getElementById(id); if(!row)return;
+  const cell=row.querySelector('.pv-v'); if(!cell)return;
+  const v=(val||'').trim(); cell.textContent=v||'—';
   row.classList.toggle('pv-empty',!v);
 }
 
@@ -410,35 +608,109 @@ async function postal(){
 function toggleReprise(){
   const show=document.getElementById('reprise').value==='Oui';
   document.getElementById('repriseFields').classList.toggle('show',show);
-  const _rRB=document.getElementById('rRepriseBlock');if(_rRB)_rRB.style.display=show?'':'none';
 }
 
-function vr(v){return(v||'').trim()||'—'}
+// ══════════════════════════════════════════════════════════
+// SCORE COMMERCIAL
+// ══════════════════════════════════════════════════════════
+function computeScore(d){
+  let s=0;
+  s+=({'Immédiat':20,'1 à 3 mois':15,'3 à 6 mois':10,'6 mois et plus':5,'Se renseigne':2}[d.delai]||0);
+  if(d.budget&&d.budget!=='')s+=15;
+  if(d.besoin&&d.besoin.trim().length>5)s+=10;
+  if(d.decisionnaire&&d.decisionnaire.trim().length>1)s+=10;
+  if(d.reprise)s+=10;
+  if(d.achat)s+=5;if(d.voyageurs)s+=5;if(d.usage)s+=5;if(d.priorite)s+=5;
+  if(d.telephone||d.mobile||d.email)s+=5;
+  if(d.nom&&d.prenom)s+=5;if(d.couchages)s+=5;
+  return Math.min(s,100);
+}
+function updateScoreUI(score){
+  document.getElementById('scoreNum').textContent=score;
+  document.getElementById('scoreBarFill').style.width=score+'%';
+  let cls,lbl;
+  if(score>=80){cls='sd-fire';lbl='🔥 Chaud +';}
+  else if(score>=55){cls='sd-hot';lbl='✅ Qualifié';}
+  else if(score>=30){cls='sd-warm';lbl='⚡ En cours';}
+  else{cls='sd-cold';lbl='À qualifier';}
+  document.getElementById('scoreDisplay').className='score-display '+cls;
+  document.getElementById('scoreLbl').textContent=lbl;
+}
 
+// ══════════════════════════════════════════════════════════
+// SCORE REPRISE AUTOMATIQUE
+// ══════════════════════════════════════════════════════════
+function computeRepriseScore(d){
+  if(d.reprise !== 'Oui') return null;
+  const gamme = d.reprGamme;
+  const etat  = d.reprEtat;
+  const mec   = d.reprMec;
+  const km    = parseInt((d.reprKm||'').replace(/\D/g,''))||0;
+  if(!gamme && !mec && !km) return null;
+
+  // Base selon gamme
+  const baseMap = {
+    'Intégral':15000, 'Capucine':12000, 'Profile':10000,
+    'Profile Compact':8000, 'Fourgon':7000, 'Van':6000,
+    'Camping Car':10000, 'Caravane':4000, 'Rigide':3500, 'Loisir':3000
+  };
+  let base = baseMap[gamme] || 8000;
+
+  // Âge
+  let age = 0;
+  if(mec){ age = new Date().getFullYear() - new Date(mec).getFullYear(); }
+  const coefAge = age<=2?1.0:age<=5?0.8:age<=8?0.6:age<=12?0.45:0.3;
+
+  // Km
+  let coefKm = 1.0;
+  if(km>0){ coefKm = km<50000?1.0:km<100000?0.85:km<150000?0.70:km<200000?0.55:0.40; }
+
+  // État
+  const coefEtat = {'Excellent':1.0,'Correct':0.80,'Passable':0.60,'Triste':0.40}[etat]||0.75;
+
+  const val = Math.round(base * coefAge * coefKm * coefEtat / 500) * 500;
+  const min = Math.round(val * 0.85 / 500) * 500;
+  const max = Math.round(val * 1.15 / 500) * 500;
+
+  const warnings = [];
+  if(age > 12) warnings.push('Véhicule de plus de 12 ans — valorisation faible, arbitrage nécessaire');
+  if(km > 150000) warnings.push('Kilométrage élevé — prévoir expertise avant offre');
+  if(etat === 'Triste') warnings.push('État médiocre — déduire coût de remise en état estimé');
+
+  return { min, max, age, km, etat, warnings };
+}
+
+function renderRepriseScore(d){
+  const box = document.getElementById('repriseScoreBox');
+  const res = computeRepriseScore(d);
+  if(!res){ box.style.display='none'; return; }
+  box.style.display='block';
+  document.getElementById('repriseFourchette').textContent =
+    res.min.toLocaleString('fr-FR')+' € — '+res.max.toLocaleString('fr-FR')+' €';
+  const details = [
+    res.age ? `Âge estimé : ${res.age} ans` : '',
+    res.km  ? `Kilométrage : ${res.km.toLocaleString('fr-FR')} km` : '',
+    res.etat ? `État : ${res.etat}` : '',
+    '⚠️ Estimation indicative — à affiner par expertise physique'
+  ].filter(Boolean).join(' · ');
+  document.getElementById('repriseDetail').textContent = details;
+  const warnEl = document.getElementById('repriseWarning');
+  if(res.warnings.length){
+    warnEl.style.display='block';
+    warnEl.textContent = res.warnings.join(' — ');
+  } else { warnEl.style.display='none'; }
+}
+
+// ══════════════════════════════════════════════════════════
+// RECOMMANDATION VÉHICULE
+// ══════════════════════════════════════════════════════════
 function scoreVehicle(v,d){
   let s=10;
   const voy=d.voyageurs;
-  if(voy==='1 à 2'){
-    if(v.key==='van')s+=30;else if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=15;
-    // Pénalité véhicules surdimensionnés
-    if(['capucine','integral'].includes(v.key))s-=15;
-    if(v.key==='caravane')s-=10;
-  }
-  if(voy==='3 à 4'){
-    if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=30;else if(v.key==='integral')s+=25;
-    if(v.key==='van')s-=10;
-  }
-  if(voy==='5 à 6'){
-    if(v.key==='capucine')s+=30;else if(v.key==='integral')s+=25;else if(v.key==='caravane')s+=15;
-    // Caravane 5-6 places rare → bonus modéré
-    if(['van','fourgon'].includes(v.key))s-=15;
-  }
-  if(voy==='7 et +'){
-    if(v.key==='capucine')s+=35;else if(v.key==='integral')s+=15;
-    // Caravane : rarement 7+ places → pas de bonus
-    if(v.key==='caravane')s-=5;
-    if(['van','fourgon','profile'].includes(v.key))s-=20;
-  }
+  if(voy==='1 à 2'){if(v.key==='van')s+=30;else if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=15;if(['capucine','integral'].includes(v.key))s-=15;if(v.key==='caravane')s-=10;}
+  if(voy==='3 à 4'){if(v.key==='fourgon')s+=25;else if(v.key==='profile')s+=30;else if(v.key==='integral')s+=25;if(v.key==='van')s-=10;}
+  if(voy==='5 à 6'){if(v.key==='capucine')s+=30;else if(v.key==='integral')s+=25;else if(v.key==='caravane')s+=15;if(['van','fourgon'].includes(v.key))s-=15;}
+  if(voy==='7 et +'){if(v.key==='capucine')s+=35;else if(v.key==='integral')s+=15;if(v.key==='caravane')s-=5;if(['van','fourgon','profile'].includes(v.key))s-=20;}
   const bud=d.budget;
   if(bud==='Moins de 30 000 €'){if(v.key==='van')s+=15;else if(v.key==='caravane')s+=20;}
   if(bud==='Maxi 40 000 €'){if(v.key==='van')s+=12;else if(v.key==='fourgon')s+=10;else if(v.key==='caravane')s+=15;}
@@ -455,119 +727,30 @@ function scoreVehicle(v,d){
   return Math.max(0,Math.min(s,100));
 }
 
-function computeScore(d){
-  let s=0;
-  s+=({'Immédiat':20,'1 à 3 mois':15,'3 à 6 mois':10,'6 mois et plus':5,'Se renseigne':2}[d.delai]||0);
-  if(d.budget&&d.budget!=='')s+=15;
-  if(d.besoin&&d.besoin.trim().length>5)s+=10;
-  if(d.decisionnaire&&d.decisionnaire.trim().length>1)s+=10;
-  if(d.reprise)s+=10;
-  if(d.achat)s+=5;if(d.voyageurs)s+=5;if(d.usage)s+=5;if(d.priorite)s+=5;
-  if(d.telephone||d.mobile||d.email)s+=5;
-  if(d.nom&&d.prenom)s+=5;if(d.couchages)s+=5;
-  return Math.min(s,100);
-}
-
-function updateScoreUI(score){
-  document.getElementById('scoreNum').textContent=score;
-  document.getElementById('scoreBarFill').style.width=score+'%';
-  let cls,lbl;
-  if(score>=80){cls='sd-fire';lbl='🔥 Chaud +';}
-  else if(score>=55){cls='sd-hot';lbl='✅ Qualifié';}
-  else if(score>=30){cls='sd-warm';lbl='⚡ En cours';}
-  else{cls='sd-cold';lbl='À qualifier';}
-  document.getElementById('scoreDisplay').className='score-display '+cls;
-  document.getElementById('scoreLbl').textContent=lbl;
-}
-
+// ══════════════════════════════════════════════════════════
+// RENDER PRINCIPAL
+// ══════════════════════════════════════════════════════════
 function render(){
   const d=read();
   toggleReprise();
-  // Afficher km max uniquement si Occasion sélectionné ET pas Caravane
-  const isOccasion   = d.achat === 'Occasion' || d.achat === 'Neuf ou occasion';
-  const isCaravane   = d.typeVehicle === 'Caravane';
-  const showKmMax    = isOccasion && !isCaravane;
-  const _kmMaxField    = document.getElementById('kmMaxField');
-  const _anneeMinField = document.getElementById('anneeMinField');
-  const _rKmMax        = document.getElementById('rKmMax');
-  if (_kmMaxField)    _kmMaxField.style.display    = showKmMax ? '' : 'none';
-  if (_anneeMinField) _anneeMinField.style.display = showKmMax ? '' : 'none';
-  if (_rKmMax)        _rKmMax.style.display        = (showKmMax && d.kmMax) ? '' : 'none';
+  const isOccasion=d.achat==='Occasion'||d.achat==='Neuf ou occasion';
+  const isCaravane=d.typeVehicle==='Caravane';
+  const showKmMax=isOccasion&&!isCaravane;
+  document.getElementById('kmMaxField').style.display=showKmMax?'':'none';
+  document.getElementById('anneeMinField').style.display=showKmMax?'':'none';
   const score=computeScore(d);
   updateScoreUI(score);
+  renderRepriseScore(d);
 
-  // ── IDENTITÉ
-  pv('rVendeur',   d.vendeur);
-  pv('rCivilite',  d.civilite);
-  pv('rTypeClient',d.typeClient);
-  pv('rPrenom',    d.prenom);
-  pv('rNom',       d.nom);
-  pv('rSociete',   d.societe);
-  pv('rFonction',  d.fonction);
-
-  // ── COORDONNÉES
-  pv('rTelephone',   d.telephone);
-  pv('rMobile',      d.mobile);
-  pv('rEmail',       d.email);
-  pv('rSiteWeb',     d.siteWeb);
-  pv('rAdresse',     [d.adresse1,d.adresse2].filter(Boolean).join(', '));
-  pv('rVille',       [d.codePostal,d.ville].filter(Boolean).join(' '));
-  pv('rDepartement', d.departement);
-  pv('rPays',        d.pays);
-
-  // ── DÉCOUVERTE
-  pv('rTypeVehicle', d.typeVehicle);
-  pv('rBudget',    d.budget);
-  pv('rAchat',     d.achat);
-  if(document.getElementById('rKmMax')) pv('rKmMax', d.kmMax ? Number(d.kmMax).toLocaleString('fr-FR')+' km max' : '');
-  pv('rVoyageurs', d.voyageurs);
-  pv('rUsage',     d.usage);
-  pv('rCompacite', d.compacite);
-  pv('rConduite',  d.conduite);
-  pv('rCouchages', d.couchages);
-  pv('rSdb',       d.sdb);
-  pv('rAutonomie', d.autonomie);
-  pv('rSaison',    d.saison);
-  pv('rPermis',    d.permis);
-  pv('rPriorite',  d.priorite);
-  pv('rBesoin',    d.besoin);
-  pv('rNotes',     d.notes);
-
-  // ── QUALIFICATION
-  pv('rDelai',        d.delai);
-  pv('rDecisionnaire',d.decisionnaire);
-  pv('rReprise',      d.reprise);
-  pv('rScore',        score+'/100');
-
-  // ── REPRISE VÉHICULE
-  pv('rRGamme',   d.reprGamme);
-  pv('rRPorteur', d.reprPorteur);
-  pv('rREquip',   d.reprEquip);
-  pv('rRModele',  d.reprModele);
-  pv('rRMec',     d.reprMec);
-  pv('rRKm',      d.reprKm?d.reprKm+' km':'');
-  pv('rRDims',    [d.reprLongueur,d.reprLargeur,d.reprHauteur].filter(Boolean).join(' × '));
-  pv('rRPtac',    d.reprPtac?d.reprPtac+' kg':'');
-  pv('rRCv',      [d.reprCvFisc?d.reprCvFisc+' CV fisc.':'',d.reprCvDin?d.reprCvDin+' CV DIN':''].filter(Boolean).join(' / '));
-  pv('rRBoite',   d.reprBoite);
-  pv('rREnergie', d.reprEnergie);
-  pv('rRPlaces',  [d.reprPlacesCg?d.reprPlacesCg+' CG':'',d.reprPlacesCouche?d.reprPlacesCouche+' couchage':''].filter(Boolean).join(' / '));
-  pv('rRTypeLit', d.reprTypeLit);
-  pv('rREaux',    [d.reprEauPropre?d.reprEauPropre+'L propres':'',d.reprEauUsee?d.reprEauUsee+'L usées':''].filter(Boolean).join(' / '));
-  pv('rREtat',    d.reprEtat);
-
-  // ── CHIPS
   document.getElementById('chips').innerHTML=
     ['vendeur','typeVehicle','budget','voyageurs','usage','compacite','priorite','departement']
     .map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
 
-  // ── RÉSUMÉ
   document.getElementById('pvSummaryBox').textContent=[
     d.besoin&&`Besoin : ${d.besoin}`,d.notes&&`Notes : ${d.notes}`,
     d.delai&&`Délai : ${d.delai}`,d.decisionnaire&&`Décisionnaire : ${d.decisionnaire}`
   ].filter(Boolean).join('\n\n')||'Renseigne les champs à gauche pour générer une recommandation.';
 
-  // ── RECOMMANDATION
   const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
   document.getElementById('topExplanation').innerHTML=
     `<strong><a href="${ranked[0].url}" target="_blank" rel="noopener">${ranked[0].title}</a></strong><br>Meilleure correspondance avec le profil saisi.`;
@@ -577,480 +760,490 @@ function render(){
       <h4 style="margin-top:8px"><a href="${v.url}" target="_blank" rel="noopener">${v.title}</a></h4>
       <p style="margin:4px 0 0;font-size:13px;color:#64748b">Recommandation issue des critères saisis.</p>
     </div>`).join('');
+
+  // Sync vendeur RDV
+  const vd=document.getElementById('vendeur').value;
+  if(vd) document.getElementById('rdvVendeur').value=vd;
 }
 
-// ── HTML STRUCTURÉ pour PDF ──
+// ══════════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════════
+function showTab(name, btn){
+  document.querySelectorAll('.right-tab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════
+// HISTORIQUE
+// ══════════════════════════════════════════════════════════
+const HIST_KEY = 'lib_history_v1';
+function loadHistory(){ try{return JSON.parse(localStorage.getItem(HIST_KEY)||'[]')}catch(e){return[]} }
+function saveHistory(arr){ try{localStorage.setItem(HIST_KEY,JSON.stringify(arr))}catch(e){} }
+
+function saveToHistory(d, score){
+  const hist = loadHistory();
+  const entry = {
+    id: Date.now(),
+    date: new Date().toLocaleString('fr-FR'),
+    nom: [d.prenom, d.nom].filter(Boolean).join(' ') || 'Client sans nom',
+    vendeur: d.vendeur,
+    typeVehicle: d.typeVehicle,
+    budget: d.budget,
+    score: score,
+    data: d
+  };
+  hist.unshift(entry);
+  if(hist.length > 50) hist.pop();
+  saveHistory(hist);
+  renderHistory();
+}
+
+function renderHistory(){
+  const hist = loadHistory();
+  const el = document.getElementById('histList');
+  if(!hist.length){
+    el.innerHTML='<div class="hist-empty">🗂 Aucune fiche sauvegardée.<br>Cliquez sur <strong>💾 Sauvegarde</strong> pour enregistrer la fiche en cours.</div>';
+    return;
+  }
+  el.innerHTML = hist.map(h=>{
+    const scoreCls = h.score>=80?'sd-fire':h.score>=55?'sd-hot':h.score>=30?'sd-warm':'sd-cold';
+    const scoreBg = h.score>=80?'#dbeafe':h.score>=55?'#dcfce7':h.score>=30?'#fef9c3':'#f1f5f9';
+    const scoreCol= h.score>=80?'#1d4ed8':h.score>=55?'#166534':h.score>=30?'#854d0e':'#64748b';
+    return `<div class="hist-item" onclick="loadHistEntry(${h.id})">
+      <div class="hist-head">
+        <span class="hist-name">${esc(h.nom)}</span>
+        <span style="display:flex;align-items:center;gap:6px">
+          <span class="hist-score" style="background:${scoreBg};color:${scoreCol}">${h.score}/100</span>
+          <button class="hist-del" onclick="deleteHistEntry(event,${h.id})">✕</button>
+        </span>
+      </div>
+      <div class="hist-meta">${h.date}${h.vendeur?' · '+esc(h.vendeur):''}${h.typeVehicle?' · '+esc(h.typeVehicle):''}${h.budget?' · '+esc(h.budget):''}</div>
+    </div>`;
+  }).join('');
+}
+
+function loadHistEntry(id){
+  const hist = loadHistory();
+  const entry = hist.find(h=>h.id===id);
+  if(!entry) return;
+  const d = entry.data;
+  FORM_IDS.forEach(fid=>{
+    const el=document.getElementById(fid);
+    if(el && d[fid]!==undefined) el.value=d[fid];
+  });
+  if(d.reprBoite) document.getElementById('reprBoite').value=d.reprBoite;
+  if(d.reprEnergie) document.getElementById('reprEnergie').value=d.reprEnergie;
+  render();
+  // Retour à l'onglet aperçu
+  showTab('apercu', document.querySelector('.right-tab'));
+}
+
+function deleteHistEntry(e, id){
+  e.stopPropagation();
+  const hist = loadHistory().filter(h=>h.id!==id);
+  saveHistory(hist); renderHistory();
+}
+
+function clearHistory(){
+  if(confirm('Effacer tout l\'historique ?')){ saveHistory([]); renderHistory(); }
+}
+
+// ══════════════════════════════════════════════════════════
+// RDV
+// ══════════════════════════════════════════════════════════
+function getRdvText(){
+  const d = read();
+  const date  = document.getElementById('rdvDate').value;
+  const heure = document.getElementById('rdvHeure').value;
+  const vend  = document.getElementById('rdvVendeur').value || d.vendeur;
+  const duree = document.getElementById('rdvDuree').value;
+  const objet = document.getElementById('rdvObjet').value;
+  const notes = document.getElementById('rdvNotes').value;
+  const client= [d.civilite, d.prenom, d.nom].filter(Boolean).join(' ') || 'Client';
+  const dateF = date ? new Date(date).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
+  return {
+    client, date, dateF, heure, vend, duree, objet, notes, d,
+    full: `RDV Libertium Seclin
+Client : ${client}
+Date : ${dateF} à ${heure}
+Durée : ${duree}
+Vendeur : ${vend || '—'}
+Objet : ${objet || '—'}
+${notes?'Notes : '+notes:''}
+
+📍 Libertium Seclin Lestringuez
+205 Avenue de la République, 59113 SECLIN
+☎ 03 20 32 25 99`
+  };
+}
+
+function rdvCopy(){
+  const t = getRdvText();
+  navigator.clipboard.writeText(t.full).then(()=>{
+    const out = document.getElementById('rdvOutput');
+    out.style.display='block';
+    out.textContent = t.full;
+    out.style.borderColor='#22c55e';
+    setTimeout(()=>out.style.borderColor='',2000);
+  });
+}
+
+function rdvSms(){
+  const t = getRdvText();
+  const msg = `Bonjour ${t.client}, votre RDV chez Libertium Seclin est confirmé le ${t.dateF} à ${t.heure}. Vendeur : ${t.vend||'notre équipe'}. 📍 205 Av. de la République, Seclin. ☎ 03 20 32 25 99`;
+  const smsLink = `sms:${t.d.mobile||t.d.telephone}?body=${encodeURIComponent(msg)}`;
+  window.open(smsLink);
+}
+
+function rdvAgenda(){
+  const t = getRdvText();
+  if(!t.date){ alert('Veuillez sélectionner une date.'); return; }
+  const start = t.date.replace(/-/g,'')+'T'+(t.heure||'10:00').replace(':','')+'00';
+  const dureeMap = {'30 min':30,'45 min':45,'1 heure':60,'1h30':90,'2 heures':120};
+  const mins = dureeMap[t.duree]||60;
+  const endDt = new Date(t.date+'T'+(t.heure||'10:00')+':00');
+  endDt.setMinutes(endDt.getMinutes()+mins);
+  const end = endDt.toISOString().replace(/[-:]/g,'').split('.')[0];
+  const gcal = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('RDV '+t.client+' - Libertium Seclin')}&dates=${start}/${end}&details=${encodeURIComponent(t.full)}&location=${encodeURIComponent('205 Avenue de la République, 59113 Seclin')}`;
+  window.open(gcal,'_blank');
+}
+
+function rdvEmail(){
+  const t = getRdvText();
+  document.getElementById('emailTo').value = t.d.email || '';
+  document.getElementById('emailSubject').value = `Confirmation RDV Libertium Seclin – ${t.dateF}`;
+  document.getElementById('emailBody').value =
+`Bonjour ${t.client},
+
+Nous vous confirmons votre rendez-vous chez Libertium Seclin Lestringuez :
+
+📅 Date : ${t.dateF} à ${t.heure}
+⏱ Durée estimée : ${t.duree}
+👤 Votre interlocuteur : ${t.vend || 'Notre équipe commerciale'}
+📋 Objet : ${t.objet || 'Découverte et conseil véhicule de loisir'}
+
+📍 Libertium Seclin Lestringuez
+205 Avenue de la République
+59113 SECLIN
+
+Pour toute question ou modification, contactez-nous :
+☎ 03 20 32 25 99
+✉ contact.seclin@libertium.fr
+
+À bientôt,
+L'équipe Libertium Seclin`;
+  document.getElementById('modalEmail').classList.add('open');
+}
+
+// ══════════════════════════════════════════════════════════
+// EMAIL CLIENT
+// ══════════════════════════════════════════════════════════
+function openEmailModal(){
+  const d = read();
+  const score = computeScore(d);
+  const ranked = [...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,2);
+  const client = [d.civilite, d.prenom, d.nom].filter(Boolean).join(' ') || 'Madame, Monsieur';
+
+  document.getElementById('emailTo').value = d.email || '';
+  document.getElementById('emailSubject').value = 'Votre projet véhicule de loisir – Libertium Seclin';
+  document.getElementById('emailBody').value =
+`Bonjour ${client},
+
+Suite à notre échange, voici un récapitulatif de votre projet et nos recommandations.
+
+── VOTRE PROFIL ──
+${d.typeVehicle?'• Type recherché : '+d.typeVehicle:''}
+${d.budget?'• Budget : '+d.budget:''}
+${d.achat?'• Neuf / Occasion : '+d.achat:''}
+${d.voyageurs?'• Voyageurs : '+d.voyageurs:''}
+${d.usage?'• Usage : '+d.usage:''}
+${d.priorite?'• Priorité : '+d.priorite:''}
+${d.besoin?'\nVotre besoin exprimé :\n'+d.besoin:''}
+
+── NOS RECOMMANDATIONS ──
+${ranked.map((v,i)=>`${i===0?'⭐ 1er choix':'2e choix'} : ${v.title}\n${v.url}`).join('\n\n')}
+
+── PROCHAINE ÉTAPE ──
+Nous vous proposons un rendez-vous pour découvrir ces véhicules et affiner votre projet.
+N'hésitez pas à nous contacter :
+☎ 03 20 32 25 99 · contact.seclin@libertium.fr
+
+Cordialement,
+${d.vendeur ? d.vendeur + '\n' : ''}Libertium Seclin Lestringuez
+205 Avenue de la République, 59113 SECLIN
+https://www.libertium.fr`;
+
+  document.getElementById('modalEmail').classList.add('open');
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function copyEmailBody(){
+  navigator.clipboard.writeText(document.getElementById('emailBody').value);
+  alert('Texte copié !');
+}
+function sendEmailMailto(){
+  const to      = encodeURIComponent(document.getElementById('emailTo').value);
+  const subject = encodeURIComponent(document.getElementById('emailSubject').value);
+  const body    = encodeURIComponent(document.getElementById('emailBody').value);
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+}
+
+// ══════════════════════════════════════════════════════════
+// COMPARATEUR
+// ══════════════════════════════════════════════════════════
+function renderComp(){
+  const ka = document.getElementById('compA').value;
+  const kb = document.getElementById('compB').value;
+  const el = document.getElementById('compResult');
+  if(!ka || !kb || ka===kb){
+    el.innerHTML='<div class="comp-none">Sélectionnez deux véhicules différents pour les comparer</div>';
+    return;
+  }
+  const va = VEHICLES_COMP.find(v=>v.key===ka);
+  const vb = VEHICLES_COMP.find(v=>v.key===kb);
+  if(!va||!vb) return;
+
+  // Score actuel du formulaire pour chaque véhicule
+  const d = read();
+  const sa = scoreVehicle({key:ka},d);
+  const sb = scoreVehicle({key:kb},d);
+
+  const specs = Object.keys(va.specs);
+  const rows = specs.map(k=>`
+    <div style="display:grid;grid-template-columns:120px 1fr 1fr;border-bottom:1px solid #f0f4fa">
+      <div style="padding:7px 10px;font-size:11px;font-weight:700;color:#475569;background:#f8faff;border-right:1px solid #f0f4fa">${k}</div>
+      <div style="padding:7px 10px;font-size:12px;text-align:center;color:#0f172a;background:${va.specs[k]===vb.specs[k]?'':'#f0fdf4'}">${va.specs[k]}</div>
+      <div style="padding:7px 10px;font-size:12px;text-align:center;color:#0f172a;background:${va.specs[k]===vb.specs[k]?'':'#f0fdf4'}">${vb.specs[k]}</div>
+    </div>`).join('');
+
+  const matchA = sa >= sb;
+  el.innerHTML = `
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px">
+      <div style="display:grid;grid-template-columns:120px 1fr 1fr;background:#eef4ff">
+        <div style="padding:10px;font-size:11px;font-weight:700;color:#334155;border-right:1px solid #d8e1ee">Critère</div>
+        <div style="padding:10px;font-size:13px;font-weight:700;color:#163a6b;text-align:center;border-right:1px solid #d8e1ee">${va.label}</div>
+        <div style="padding:10px;font-size:13px;font-weight:700;color:#163a6b;text-align:center">${vb.label}</div>
+      </div>
+      ${rows}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="padding:12px;border-radius:10px;background:${matchA?'#f0fdf4':'#f8faff'};border:${matchA?'1.5px solid #6ee7b7':'1px solid var(--border)'};text-align:center">
+        <div style="font-size:12px;color:#475569">Score profil</div>
+        <div style="font-size:22px;font-weight:800;color:${matchA?'#16a34a':'#475569'}">${sa}/100</div>
+        ${matchA?'<div style="font-size:11px;color:#16a34a;font-weight:700">✓ Recommandé</div>':''}
+      </div>
+      <div style="padding:12px;border-radius:10px;background:${!matchA?'#f0fdf4':'#f8faff'};border:${!matchA?'1.5px solid #6ee7b7':'1px solid var(--border)'};text-align:center">
+        <div style="font-size:12px;color:#475569">Score profil</div>
+        <div style="font-size:22px;font-weight:800;color:${!matchA?'#16a34a':'#475569'}">${sb}/100</div>
+        ${!matchA?'<div style="font-size:11px;color:#16a34a;font-weight:700">✓ Recommandé</div>':''}
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+// AVIS GOOGLE
+// ══════════════════════════════════════════════════════════
+function renderAvis(){
+  const el = document.getElementById('avisItems');
+  el.innerHTML = AVIS_EXEMPLES.map(a=>`
+    <div class="avis-item">
+      <div class="avis-item-head">
+        <span class="avis-author">${a.auteur}</span>
+        <span class="avis-item-stars">${'★'.repeat(a.etoiles)}${'☆'.repeat(5-a.etoiles)}</span>
+      </div>
+      <div class="avis-item-date">${a.date}</div>
+      <div class="avis-text" style="margin-top:5px">${a.texte}</div>
+      ${a.reponse?`<div class="avis-reponse">💬 Réponse Libertium : ${a.reponse}</div>`:'<div class="avis-reponse" style="border-left-color:#fcd34d;background:#fffbeb;color:#b45309">⏳ Sans réponse — à traiter</div>'}
+    </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// PDF
+// ══════════════════════════════════════════════════════════
 function buildPdfHtml(){
   const d=read();
   const score=computeScore(d);
   const ranked=[...VEHICLES].map(v=>({...v,s:scoreVehicle(v,d)})).sort((a,b)=>b.s-a.s).slice(0,3);
-
   const S='font-family:Arial,sans-serif;font-size:10pt;color:#172033';
   const H='background:#eef4ff;color:#163a6b;font-weight:700;padding:7px 12px;font-size:10.5pt;border-bottom:1px solid #d8e1ee';
   const KS='background:#f8faff;color:#334155;font-weight:700;padding:5px 10px;border-right:1px solid #e2e8f0;width:160px;vertical-align:top;font-size:9.5pt';
   const VS='color:#0f172a;padding:5px 10px;font-size:9.5pt;vertical-align:top';
   const RS='border-bottom:1px solid #edf2f7';
-
   function sec(title, rows){
     const rHtml=rows.filter(([,v])=>v).map(([k,v])=>`<tr style="${RS}"><td style="${KS}">${k}</td><td style="${VS}">${v}</td></tr>`).join('');
     if(!rHtml)return'';
-    return`<div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden">
-      <div style="${H}">${title}</div>
-      <table style="width:100%;border-collapse:collapse">${rHtml}</table>
-    </div>`;
+    return`<div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden"><div style="${H}">${title}</div><table style="width:100%;border-collapse:collapse">${rHtml}</table></div>`;
   }
-
   const recoHtml=ranked.map((v,i)=>{
     const col=i===0?'#166534':i===1?'#1d4ed8':'#9a3412';
     const bg=i===0?'#ecfdf5':i===1?'#eff6ff':'#fff7ed';
-    return`<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:8px">
-      <span style="background:${bg};color:${col};border-radius:999px;padding:3px 10px;font-size:9pt;font-weight:700">Top ${i+1} · ${v.s}/100</span>
-      <div style="font-weight:700;margin-top:6px;font-size:10pt">${v.title}</div>
-      <div style="font-size:9pt;color:#64748b">${v.url}</div>
-    </div>`;
+    return`<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:8px"><span style="background:${bg};color:${col};border-radius:999px;padding:3px 10px;font-size:9pt;font-weight:700">Top ${i+1} · ${v.s}/100</span><div style="font-weight:700;margin-top:6px;font-size:10pt">${v.title}</div><div style="font-size:9pt;color:#64748b">${v.url}</div></div>`;
   }).join('');
-
-  const repriseRows=d.reprise==='Oui'?[
-    ['Gamme',d.reprGamme],['Marque porteur',d.reprPorteur],['Équipementier',d.reprEquip],
-    ['Modèle',d.reprModele],['1ère MEC',d.reprMec],['Kilométrage',d.reprKm?d.reprKm+' km':''],
-    ['L × l × H (m)',[d.reprLongueur,d.reprLargeur,d.reprHauteur].filter(Boolean).join(' × ')],
-    ['PTAC',d.reprPtac?d.reprPtac+' kg':''],
-    ['CV fisc./DIN',[d.reprCvFisc?d.reprCvFisc+' CV fisc.':'',d.reprCvDin?d.reprCvDin+' CV DIN':''].filter(Boolean).join(' / ')],
-    ['Boite',d.reprBoite],['Énergie',d.reprEnergie],
-    ['Places CG/couchage',[d.reprPlacesCg?d.reprPlacesCg+' CG':'',d.reprPlacesCouche?d.reprPlacesCouche+' couchage':''].filter(Boolean).join(' / ')],
-    ['Type de lit',d.reprTypeLit],
-    ['Eaux propres/usées',[d.reprEauPropre?d.reprEauPropre+'L propres':'',d.reprEauUsee?d.reprEauUsee+'L usées':''].filter(Boolean).join(' / ')],
-    ['État général',d.reprEtat]
-  ]:[];
-
+  const repriseRes = computeRepriseScore(d);
+  const repriseHtml = repriseRes ? `<div style="margin-bottom:14px;border:1.5px solid #6ee7b7;border-radius:10px;overflow:hidden"><div style="background:#f0fdf4;color:#166534;font-weight:700;padding:7px 12px;border-bottom:1px solid #d8e1ee">💰 Estimation reprise</div><div style="padding:10px 12px;font-size:10pt"><strong>${repriseRes.min.toLocaleString('fr-FR')} € — ${repriseRes.max.toLocaleString('fr-FR')} €</strong><br><span style="font-size:9pt;color:#475569">Estimation indicative — à affiner par expertise physique</span></div></div>` : '';
+  const repriseRows=d.reprise==='Oui'?[['Gamme',d.reprGamme],['Marque porteur',d.reprPorteur],['Équipementier',d.reprEquip],['Modèle',d.reprModele],['1ère MEC',d.reprMec],['Kilométrage',d.reprKm?d.reprKm+' km':''],['L × l × H (m)',[d.reprLongueur,d.reprLargeur,d.reprHauteur].filter(Boolean).join(' × ')],['PTAC',d.reprPtac?d.reprPtac+' kg':''],['CV fisc./DIN',[d.reprCvFisc?d.reprCvFisc+' CV fisc.':'',d.reprCvDin?d.reprCvDin+' CV DIN':''].filter(Boolean).join(' / ')],['Boite',d.reprBoite],['Énergie',d.reprEnergie],['Places CG/couchage',[d.reprPlacesCg?d.reprPlacesCg+' CG':'',d.reprPlacesCouche?d.reprPlacesCouche+' couchage':''].filter(Boolean).join(' / ')],['Type de lit',d.reprTypeLit],['Eaux',[d.reprEauPropre?d.reprEauPropre+'L propres':'',d.reprEauUsee?d.reprEauUsee+'L usées':''].filter(Boolean).join(' / ')],['État général',d.reprEtat]]:[];
   return`<div style="${S};max-width:800px;padding:0">
-    <!-- EN-TÊTE -->
     <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;background:linear-gradient(180deg,#fff 0%,#eef4ff 100%);border:1px solid #d8e1ee;border-radius:12px;margin-bottom:18px">
-      <div>
-        <div style="font-size:18pt;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div>
-        <div style="font-size:10pt;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div>
-      </div>
-      <div style="text-align:right;font-size:9.5pt;color:#475569;line-height:1.5">
-        205 Avenue de la République<br>59113 SECLIN<br>03 20 32 25 99<br>contact.seclin@libertium.fr
-      </div>
+      <div><div style="font-size:18pt;font-weight:800;color:#2f5aa8">Libertium Seclin Lestringuez</div><div style="font-size:10pt;color:#475569;margin-top:3px">Fiche récapitulative commerciale</div></div>
+      <div style="text-align:right;font-size:9.5pt;color:#475569;line-height:1.5">205 Avenue de la République<br>59113 SECLIN<br>03 20 32 25 99<br>contact.seclin@libertium.fr</div>
     </div>
-    ${sec('Vendeur &amp; Identité',[
-      ['Vendeur',d.vendeur],['Civilité',d.civilite],['Type client',d.typeClient],
-      ['Prénom',d.prenom],['Nom',d.nom],['Société',d.societe],['Fonction',d.fonction]
-    ])}
-    ${sec('Coordonnées',[
-      ['Téléphone',d.telephone],['Mobile',d.mobile],['Email',d.email],['Site web',d.siteWeb],
-      ['Adresse',[d.adresse1,d.adresse2].filter(Boolean).join(', ')],
-      ['CP / Ville',[d.codePostal,d.ville].filter(Boolean).join(' ')],
-      ['Département',d.departement],['Pays',d.pays]
-    ])}
-    ${sec('Découverte véhicule de loisir',[
-      ['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion ?',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Année min',d.anneeMin||''],['Voyageurs',d.voyageurs],
-      ['Usage principal',d.usage],['Capacité souhaitée',d.compacite],['Conduite / gabarit',d.conduite],
-      ['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],
-      ['Utilisation saisonnière',d.saison],['Permis / poids',d.permis],['Priorité',d.priorite],
-      ['Besoin exprimé',d.besoin],['Notes commercial',d.notes]
-    ])}
-    ${sec('Qualification',[
-      ['Délai d\'achat',d.delai],['Décisionnaire',d.decisionnaire],['Reprise véhicule',d.reprise],
-      ['Score commercial',score+'/100']
-    ])}
+    ${sec('Vendeur &amp; Identité',[['Vendeur',d.vendeur],['Civilité',d.civilite],['Type client',d.typeClient],['Prénom',d.prenom],['Nom',d.nom],['Société',d.societe],['Fonction',d.fonction]])}
+    ${sec('Coordonnées',[['Téléphone',d.telephone],['Mobile',d.mobile],['Email',d.email],['Site web',d.siteWeb],['Adresse',[d.adresse1,d.adresse2].filter(Boolean).join(', ')],['CP / Ville',[d.codePostal,d.ville].filter(Boolean).join(' ')],['Département',d.departement],['Pays',d.pays]])}
+    ${sec('Découverte véhicule',[['Type',d.typeVehicle],['Budget',d.budget],['Neuf ou occasion',d.achat],['Km max',d.kmMax?Number(d.kmMax).toLocaleString('fr-FR')+' km':''],['Année min',d.anneeMin||''],['Voyageurs',d.voyageurs],['Usage',d.usage],['Capacité',d.compacite],['Conduite',d.conduite],['Couchages',d.couchages],['Salle de bain',d.sdb],['Autonomie',d.autonomie],['Saison',d.saison],['Permis',d.permis],['Priorité',d.priorite],['Besoin exprimé',d.besoin],['Notes commercial',d.notes]])}
+    ${sec('Qualification',[['Délai d\'achat',d.delai],['Décisionnaire',d.decisionnaire],['Reprise véhicule',d.reprise],['Score commercial',score+'/100']])}
     ${repriseRows.length?sec('Véhicule à reprendre',repriseRows):''}
-    <div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden">
-      <div style="${H}">Recommandations véhicule</div>
-      <div style="padding:12px">${recoHtml}</div>
-    </div>
-    ${(d.besoin||d.notes)?`<div style="border:1px dashed #c7d6f5;border-radius:10px;padding:12px;background:#f8fbff">
-      <div style="font-weight:700;color:#163a6b;margin-bottom:6px;font-size:10.5pt">Résumé commercial</div>
-      <div style="white-space:pre-wrap;font-size:9.5pt;line-height:1.6">${[d.besoin&&'Besoin : '+d.besoin,d.notes&&'Notes : '+d.notes,d.delai&&'Délai : '+d.delai,d.decisionnaire&&'Décisionnaire : '+d.decisionnaire].filter(Boolean).join('\n\n')}</div>
-    </div>`:''}
+    ${repriseHtml}
+    <div style="margin-bottom:14px;border:1px solid #d8e1ee;border-radius:10px;overflow:hidden"><div style="${H}">Recommandations véhicule</div><div style="padding:12px">${recoHtml}</div></div>
+    ${(d.besoin||d.notes)?`<div style="border:1px dashed #c7d6f5;border-radius:10px;padding:12px;background:#f8fbff"><div style="font-weight:700;color:#163a6b;margin-bottom:6px;font-size:10.5pt">Résumé commercial</div><div style="white-space:pre-wrap;font-size:9.5pt;line-height:1.6">${[d.besoin&&'Besoin : '+d.besoin,d.notes&&'Notes : '+d.notes,d.delai&&'Délai : '+d.delai,d.decisionnaire&&'Décisionnaire : '+d.decisionnaire].filter(Boolean).join('\n\n')}</div></div>`:''}
   </div>`;
 }
 
 function exportPDF(){
-  const win = window.open('', '_blank');
-  if(!win){ alert('Autorisez les popups pour cet export.'); return; }
-
-  const pdfBody = buildPdfHtml();
-
-  win.document.write(`<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Fiche client Libertium</title>
-<style>
-  *{box-sizing:border-box}
-  @page{size:A4;margin:12mm}
-  body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#172033;margin:0;padding:24px;font-size:10pt;line-height:1.45}
-  @media print{body{padding:0}.toolbar{display:none!important}}
-  .toolbar{display:flex;align-items:center;gap:10px;padding:14px 18px;background:#eef4ff;border-radius:10px;margin-bottom:22px;border:1px solid #c7d6f5}
-  .toolbar button{border:0;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer}
-  .btn-p{background:#0f62fe;color:#fff}
-  .btn-c{background:#e8eef8;color:#172033}
-  .toolbar p{margin:0;font-size:11px;color:#64748b;flex:1}
-</style>
-</head>
-<body>
-<div class="toolbar">
-  <button class="btn-p" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button>
-  <button class="btn-c" onclick="window.close()">✕ Fermer</button>
-  <p>Dans la boîte de dialogue d'impression, sélectionnez <strong>« Enregistrer en PDF »</strong> comme destination.</p>
-</div>
-${pdfBody}
-</body>
-</html>`);
+  const win=window.open('','_blank');
+  if(!win){alert('Autorisez les popups.');return;}
+  win.document.write(`<!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><title>Fiche client Libertium</title><style>*{box-sizing:border-box}@page{size:A4;margin:12mm}body{font-family:Arial,Helvetica,sans-serif;background:#fff;color:#172033;margin:0;padding:24px;font-size:10pt;line-height:1.45}@media print{body{padding:0}.toolbar{display:none!important}}.toolbar{display:flex;align-items:center;gap:10px;padding:14px 18px;background:#eef4ff;border-radius:10px;margin-bottom:22px;border:1px solid #c7d6f5}.toolbar button{border:0;border-radius:8px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer}.btn-p{background:#0f62fe;color:#fff}.btn-c{background:#e8eef8;color:#172033}.toolbar p{margin:0;font-size:11px;color:#64748b;flex:1}</style></head><body><div class="toolbar"><button class="btn-p" onclick="window.print()">🖨 Imprimer / Enregistrer en PDF</button><button class="btn-c" onclick="window.close()">✕ Fermer</button><p>Dans la boîte de dialogue, sélectionnez <strong>« Enregistrer en PDF »</strong>.</p></div>${buildPdfHtml()}</body></html>`);
   win.document.close();
 }
 
-const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzoqQtVOWMPRC6ndPaYeAF-zVUw5rwB7Wn1kgXlWvlbntBXZSZCIFIRY68BWk1kTX85/exec';
+// ══════════════════════════════════════════════════════════
+// SAUVEGARDE GOOGLE SHEETS
+// ══════════════════════════════════════════════════════════
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbzoqQtVOWMPRC6ndPaYeAF-zVUw5rwB7Wn1kgXlWvlbntBXZSZCIFIRY68BWk1kTX85/exec';
 
-async function saveToSheet() {
-  const btn = document.getElementById('btnSave');
-  const d = read();
-
-  // Horodatage
-  const now = new Date().toLocaleString('fr-FR');
-
-  const row = {
-    'Date / Heure':      now,
-    'Vendeur':           d.vendeur,
-    'Civilité':          d.civilite,
-    'Type client':       d.typeClient,
-    'Prénom':            d.prenom,
-    'Nom':               d.nom,
-    'Société':           d.societe,
-    'Fonction':          d.fonction,
-    'Téléphone':         d.telephone,
-    'Mobile':            d.mobile,
-    'Email':             d.email,
-    'Site web':          d.siteWeb,
-    'Adresse 1':         d.adresse1,
-    'Adresse 2':         d.adresse2,
-    'Code postal':       d.codePostal,
-    'Ville':             d.ville,
-    'Département':       d.departement,
-    'Pays':              d.pays,
-    'Type véhicule':     d.typeVehicle,
-    'Budget':            d.budget,
-    'Neuf ou occasion':  d.achat,
-    'Km max':            d.kmMax ? d.kmMax + ' km' : '',
-    'Année min':         d.anneeMin || '',
-    'Voyageurs':         d.voyageurs,
-    'Usage':             d.usage,
-    'Capacité':          d.compacite,
-    'Conduite':          d.conduite,
-    'Couchages':         d.couchages,
-    'Salle de bain':     d.sdb,
-    'Autonomie':         d.autonomie,
-    'Saison':            d.saison,
-    'Permis':            d.permis,
-    'Priorité':          d.priorite,
-    'Besoin exprimé':    d.besoin,
-    'Notes commercial':  d.notes,
-    'Délai achat':       d.delai,
-    'Décisionnaire':     d.decisionnaire,
-    'Reprise':           d.reprise,
-    'Score commercial':  computeScore(d),
-    // Reprise véhicule
-    'Reprise gamme':     d.reprGamme,
-    'Reprise porteur':   d.reprPorteur,
-    'Reprise équip.':    d.reprEquip,
-    'Reprise modèle':    d.reprModele,
-    'Reprise MEC':       d.reprMec,
-    'Reprise km':        d.reprKm,
-    'Reprise longueur':  d.reprLongueur,
-    'Reprise largeur':   d.reprLargeur,
-    'Reprise hauteur':   d.reprHauteur,
-    'Reprise PTAC':      d.reprPtac,
-    'Reprise CV fisc.':  d.reprCvFisc,
-    'Reprise CV DIN':    d.reprCvDin,
-    'Reprise boite':     d.reprBoite,
-    'Reprise énergie':   d.reprEnergie,
-    'Reprise places CG': d.reprPlacesCg,
-    'Reprise places couchage': d.reprPlacesCouche,
-    'Reprise type lit':  d.reprTypeLit,
-    'Reprise eaux propres': d.reprEauPropre,
-    'Reprise eaux usées': d.reprEauUsee,
-    'Reprise état':      d.reprEtat,
-  };
-
-  btn.disabled = true;
-  btn.textContent = '⏳ Sauvegarde…';
-  btn.style.background = '#64748b';
-
-  // Soumission via formulaire caché dans une iframe
-  // → contourne CORS complètement, fonctionne depuis fichier local
-  try {
-    // Iframe cachée pour intercepter la réponse du formulaire
-    let iframe = document.getElementById('_save_iframe');
-    if (!iframe) {
-      iframe = document.createElement('iframe');
-      iframe.id   = '_save_iframe';
-      iframe.name = '_save_iframe';
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-    }
-
-    // Formulaire caché
-    const form = document.createElement('form');
-    form.method  = 'POST';
-    form.action  = SHEETS_URL;
-    form.target  = '_save_iframe';
-    form.style.display = 'none';
-
-    // Un seul champ "data" contenant le JSON complet
-    const input = document.createElement('input');
-    input.type  = 'hidden';
-    input.name  = 'data';
-    input.value = JSON.stringify(row);
-    form.appendChild(input);
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    btn.textContent = '✅ Sauvegardé !';
-    btn.style.background = '#15803d';
-    setTimeout(() => {
-      btn.textContent = '💾 Sauvegarde';
-      btn.style.background = '#16a34a';
-      btn.disabled = false;
-    }, 2500);
-  } catch(err) {
-    btn.textContent = '❌ Erreur';
-    btn.style.background = '#dc2626';
-    setTimeout(() => {
-      btn.textContent = '💾 Sauvegarde';
-      btn.style.background = '#16a34a';
-      btn.disabled = false;
-    }, 3000);
-    console.error('Sauvegarde échouée :', err);
+async function saveToSheet(){
+  const btn=document.getElementById('btnSave');
+  const d=read();
+  const score=computeScore(d);
+  // Sauvegarder aussi en historique local
+  saveToHistory(d, score);
+  const now=new Date().toLocaleString('fr-FR');
+  const row={'Date / Heure':now,'Vendeur':d.vendeur,'Civilité':d.civilite,'Type client':d.typeClient,'Prénom':d.prenom,'Nom':d.nom,'Société':d.societe,'Fonction':d.fonction,'Téléphone':d.telephone,'Mobile':d.mobile,'Email':d.email,'Site web':d.siteWeb,'Adresse 1':d.adresse1,'Adresse 2':d.adresse2,'Code postal':d.codePostal,'Ville':d.ville,'Département':d.departement,'Pays':d.pays,'Type véhicule':d.typeVehicle,'Budget':d.budget,'Neuf ou occasion':d.achat,'Km max':d.kmMax?d.kmMax+' km':'','Année min':d.anneeMin||'','Voyageurs':d.voyageurs,'Usage':d.usage,'Capacité':d.compacite,'Conduite':d.conduite,'Couchages':d.couchages,'Salle de bain':d.sdb,'Autonomie':d.autonomie,'Saison':d.saison,'Permis':d.permis,'Priorité':d.priorite,'Besoin exprimé':d.besoin,'Notes commercial':d.notes,'Délai achat':d.delai,'Décisionnaire':d.decisionnaire,'Reprise':d.reprise,'Score commercial':score,'Reprise gamme':d.reprGamme,'Reprise porteur':d.reprPorteur,'Reprise équip.':d.reprEquip,'Reprise modèle':d.reprModele,'Reprise MEC':d.reprMec,'Reprise km':d.reprKm,'Reprise longueur':d.reprLongueur,'Reprise largeur':d.reprLargeur,'Reprise hauteur':d.reprHauteur,'Reprise PTAC':d.reprPtac,'Reprise CV fisc.':d.reprCvFisc,'Reprise CV DIN':d.reprCvDin,'Reprise boite':d.reprBoite,'Reprise énergie':d.reprEnergie,'Reprise places CG':d.reprPlacesCg,'Reprise places couchage':d.reprPlacesCouche,'Reprise type lit':d.reprTypeLit,'Reprise eaux propres':d.reprEauPropre,'Reprise eaux usées':d.reprEauUsee,'Reprise état':d.reprEtat};
+  btn.disabled=true;btn.textContent='⏳ Sauvegarde…';btn.style.background='#64748b';
+  try{
+    let iframe=document.getElementById('_save_iframe');
+    if(!iframe){iframe=document.createElement('iframe');iframe.id='_save_iframe';iframe.name='_save_iframe';iframe.style.display='none';document.body.appendChild(iframe);}
+    const form=document.createElement('form');form.method='POST';form.action=SHEETS_URL;form.target='_save_iframe';form.style.display='none';
+    const input=document.createElement('input');input.type='hidden';input.name='data';input.value=JSON.stringify(row);form.appendChild(input);
+    document.body.appendChild(form);form.submit();document.body.removeChild(form);
+    btn.textContent='✅ Sauvegardé !';btn.style.background='#15803d';
+    setTimeout(()=>{btn.textContent='💾 Sauvegarde';btn.style.background='#16a34a';btn.disabled=false;},2500);
+  }catch(err){
+    btn.textContent='❌ Erreur';btn.style.background='#dc2626';
+    setTimeout(()=>{btn.textContent='💾 Sauvegarde';btn.style.background='#16a34a';btn.disabled=false;},3000);
   }
 }
 
+// ══════════════════════════════════════════════════════════
+// LIVE SEARCH
+// ══════════════════════════════════════════════════════════
+const WORKER_URL='https://libertium-stock.v9lille.workers.dev';
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+async function runLiveSearch(){
+  const btn=document.getElementById('btnLive'),icon=document.getElementById('btnLiveIcon'),txt=document.getElementById('btnLiveTxt');
+  const wrap=document.getElementById('liveResults'),cards=document.getElementById('liveCards'),badge=document.getElementById('liveBadge');
+  if(!WORKER_URL||WORKER_URL.includes('COMPTE')){
+    wrap.style.display='block';badge.textContent='Non configuré';badge.className='live-badge error';
+    cards.innerHTML=`<div class="live-empty">⚙️ Renseigne l'URL du Worker dans la variable WORKER_URL.</div>`;return;
+  }
+  btn.classList.add('searching');btn.disabled=true;icon.textContent='⏳';txt.textContent='Recherche en cours…';
+  wrap.style.display='block';badge.textContent='Chargement';badge.className='live-badge loading';
+  cards.innerHTML=`<div class="live-empty">Interrogation du stock Libertium…</div>`;
+  const d=read();
+  const typeMap={'Camping Car':'profile,integral,capucine','Caravane':'caravane,rigide','Van':'van','Fourgon':'fourgon','Van Et Fourgon':'van,fourgon'};
+  const params=new URLSearchParams({voyageurs:d.voyageurs,type_filter:typeMap[d.typeVehicle]||'',km_max:d.kmMax||'',annee_min:d.anneeMin||'',budget_max:parseBudgetMax(d.budget),achat:d.achat,conduite:d.conduite,priorite:d.priorite,permis:d.permis,usage:d.usage,seclin:_liveScope==='seclin'?'1':_liveScope==='seclin_beauvois'?'seclin_beauvois':'0'});
+  try{
+    const resp=await fetch(`${WORKER_URL}/search?${params}`);
+    if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
+    const data=await resp.json();
+    const rawResults=data.results||[];
+    const budMax=parseBudgetMax(d.budget);const kmMax=d.kmMax?parseInt(d.kmMax,10):0;
+    const results=rawResults.filter(v=>budMax<=0||!v.price||v.price<=budMax).filter(v=>kmMax<=0||v.neuf!==false||!v.km||v.km<=kmMax).filter(v=>!d.anneeMin||v.neuf!==false||!v.annee||v.annee<=parseInt(d.anneeMin,10));
+    if(!results.length){badge.textContent='0 résultat';badge.className='live-badge error';cards.innerHTML=`<div class="live-empty">Aucun véhicule correspondant.<br><a href="https://www.libertium.fr/vehicule" target="_blank" rel="noopener">Voir tout le stock →</a></div>`;return;}
+    const scopeLabel=_liveScope==='seclin'?'Seclin':_liveScope==='seclin_beauvois'?'Seclin + Beauvois':'réseau';
+    badge.textContent=`${results.length} véhicule${results.length>1?'s':''} · ${data.total||'?'} en stock · ${scopeLabel}`;badge.className='live-badge';
+    const rankCls=['r1','r2','r3','',''];const rankLbl=['Top 1','Top 2','Top 3','Top 4','Top 5'];
+    cards.innerHTML=results.map((v,i)=>{
+      const priceStr=v.price?v.price.toLocaleString('fr-FR')+'&nbsp;€':'Prix non communiqué';
+      const neufStr=v.neuf===true?'<span style="background:#dcfce7;color:#166634;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700">Neuf</span>':v.neuf===false?'<span style="background:#fef9c3;color:#854d0e;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700">Occasion</span>':'';
+      const marqueStr=v.marque?`<span style="font-size:12px;color:#64748b">${esc(v.marque)}</span> · `:'';
+      const anneeStr=v.annee?`<span style="font-size:12px;color:#64748b">${v.annee}</span> · `:'';
+      const kmStr=v.km?`<span style="font-size:12px;color:#64748b">${v.km.toLocaleString('fr-FR')} km</span>`:'';
+      const concStr=v.concession?`<div style="font-size:11px;color:#94a3b8;margin-top:4px">📍 ${esc(v.concession)}</div>`:'';
+      return`<div class="live-vehicle-card"><div class="lvc-head"><div class="lvc-title">${esc(v.title)}</div><div class="lvc-rank ${rankCls[i]||''}">${rankLbl[i]||''}</div></div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">${neufStr}<span style="font-size:13px;font-weight:700;color:#0f172a">${priceStr}</span></div><div style="margin-bottom:6px">${marqueStr}${anneeStr}${kmStr}</div>${concStr}<div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap"><a class="lvc-link" href="${esc(v.url)}" target="_blank" rel="noopener">Voir la fiche →</a><span class="lvc-match ${v.score>=70?'high':v.score>=45?'mid':'low'}">${v.score}/100</span></div></div>`;
+    }).join('');
+    if(data.cachedAt){cards.innerHTML+=`<div style="font-size:11px;color:#94a3b8;text-align:right;margin-top:8px">Stock mis à jour le ${new Date(data.cachedAt).toLocaleString('fr-FR')}</div>`;}
+  }catch(err){
+    badge.textContent='Erreur';badge.className='live-badge error';
+    cards.innerHTML=`<div class="live-empty">Erreur : ${esc(String(err.message||err))}</div>`;
+  }finally{
+    btn.classList.remove('searching');btn.disabled=false;icon.textContent='🔎';txt.textContent='Relancer la recherche';
+  }
+}
+
+// LE BON COIN
+function openLbc(){
+  const d=read();
+  const base='https://www.leboncoin.fr/recherche';
+  const params=new URLSearchParams();
+  params.set('category','4');params.set('locations','r_32');
+  if(d.achat==='Neuf')params.set('ad_type','professional');
+  if(d.achat==='Occasion')params.set('ad_type','private,professional');
+  const budgetMap={'Moins de 30 000 €':[0,30000],'Maxi 40 000 €':[0,40000],'Maxi 50 000 €':[0,50000],'Maxi 60 000 €':[0,60000],'Maxi 70 000 €':[0,70000],'Maxi 80 000 €':[0,80000],'80 000 € et +':[80000,'']};
+  if(d.budget&&budgetMap[d.budget]){const[min,max]=budgetMap[d.budget];if(min)params.set('price',min+'-'+(max||''));else if(max)params.set('price','1-'+max);}
+  if(d.kmMax&&parseInt(d.kmMax,10)>0)params.set('mileage','0-'+parseInt(d.kmMax,10));
+  if(d.anneeMin&&parseInt(d.anneeMin,10)>0)params.set('regdate',parseInt(d.anneeMin,10)+'-'+new Date().getFullYear());
+  const typeMap={'Camping Car':'camping car','Caravane':'caravane','Van':'van aménagé','Fourgon':'fourgon aménagé','Van Et Fourgon':'van fourgon'};
+  if(d.typeVehicle&&typeMap[d.typeVehicle])params.set('text',typeMap[d.typeVehicle]);
+  window.open(base+'?'+params.toString(),'_blank','noopener');
+}
+
+let _liveScope='seclin';
+function setScope(scope){
+  _liveScope=scope;
+  const on='flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff';
+  const off='flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155';
+  document.getElementById('btnScopeSeclin').style.cssText=scope==='seclin'?on:off;
+  document.getElementById('btnScopeSeclinBeauvois').style.cssText=scope==='seclin_beauvois'?on:off;
+  document.getElementById('btnScopeReseau').style.cssText=scope==='reseau'?on:off;
+  const labels={seclin:'Rechercher dans le stock Seclin',seclin_beauvois:'Rechercher dans le stock Seclin + Beauvois',reseau:'Rechercher dans tout le réseau Libertium'};
+  document.getElementById('btnLiveTxt').textContent=labels[scope]||labels.seclin;
+}
+
+function parseBudgetMax(budget){
+  const map={'Moins de 30 000 €':33000,'Maxi 40 000 €':44000,'Maxi 50 000 €':55000,'Maxi 60 000 €':66000,'Maxi 70 000 €':77000,'Maxi 80 000 €':88000,'80 000 € et +':0};
+  return(budget in map)?map[budget]:0;
+}
+
+// ══════════════════════════════════════════════════════════
+// BIND EVENTS
+// ══════════════════════════════════════════════════════════
 function bind(){
   document.getElementById('btnPdf').addEventListener('click',exportPDF);
   document.getElementById('btnSave').addEventListener('click',saveToSheet);
+  document.getElementById('btnEmail').addEventListener('click',openEmailModal);
   document.getElementById('btnReset').addEventListener('click',()=>{
     document.getElementById('leadForm').reset();
-    document.getElementById('reprBoite').value='';
-    document.getElementById('reprEnergie').value='';
+    document.getElementById('reprBoite').value='';document.getElementById('reprEnergie').value='';
     setVille('');toggleReprise();render();
     document.getElementById('liveResults').style.display='none';
-    setScope('seclin');
-    document.getElementById('liveCards').innerHTML='';
-    document.getElementById('btnLiveTxt').textContent='Rechercher des véhicules en stock';
+    setScope('seclin');document.getElementById('liveCards').innerHTML='';
+    document.getElementById('btnLiveTxt').textContent='Rechercher dans le stock Seclin';
     document.getElementById('btnLiveIcon').textContent='🔎';
+    document.getElementById('rdvOutput').style.display='none';
   });
   FORM_IDS.forEach(id=>{
     const el=document.getElementById(id);if(!el)return;
     const ev=(el.tagName==='TEXTAREA'||el.tagName==='INPUT')?'input':'change';
     el.addEventListener(ev,()=>{if(id==='codePostal')postal().then(render);else render();});
   });
-  // reprBoite et reprEnergie ne sont pas dans FORM_IDS (valeurs par défaut gérées séparément)
-  document.getElementById('reprBoite').addEventListener('change', render);
-  document.getElementById('reprEnergie').addEventListener('change', render);
-}
-
-// ── LIVE SEARCH — Cloudflare Worker ──
-const WORKER_URL = 'https://libertium-stock.v9lille.workers.dev';
-
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
-function cleanTxt(s){return String(s||'').replace(/<\/?[^>]+(>|$)/g,' ').replace(/\s+/g,' ').trim()}
-
-async function runLiveSearch(){
-  const btn=document.getElementById('btnLive'),icon=document.getElementById('btnLiveIcon'),txt=document.getElementById('btnLiveTxt');
-  const wrap=document.getElementById('liveResults'),cards=document.getElementById('liveCards'),badge=document.getElementById('liveBadge');
-
-  if(!WORKER_URL || WORKER_URL.includes('COMPTE')){
-    wrap.style.display='block';
-    badge.textContent='Non configuré';badge.className='live-badge error';
-    cards.innerHTML=`<div class="live-empty">⚙️ Renseigne l'URL du Worker dans la variable <strong>WORKER_URL</strong> du widget.<br>Voir <strong>SETUP.md</strong> étape 6.</div>`;
-    return;
-  }
-
-  btn.classList.add('searching');btn.disabled=true;icon.textContent='⏳';txt.textContent='Recherche en cours…';
-  wrap.style.display='block';badge.textContent='Chargement';badge.className='live-badge loading';
-  cards.innerHTML=`<div class="live-empty">Interrogation du stock Libertium…</div>`;
-
-  // Construire les paramètres depuis le formulaire
-  const d = read();
-  // Mapping type widget → types internes worker
-  const typeMap = {
-    'Camping Car':    'profile,integral,capucine',
-    'Caravane':       'caravane,rigide',
-    'Van':            'van',
-    'Fourgon':        'fourgon',
-    'Van Et Fourgon': 'van,fourgon',
-  };
-  const params = new URLSearchParams({
-    voyageurs: d.voyageurs,
-    type_filter: typeMap[d.typeVehicle] || '',
-    km_max:     d.kmMax || '',
-    annee_min:  d.anneeMin || '',
-    budget_max: parseBudgetMax(d.budget),
-    achat:      d.achat,
-    conduite:   d.conduite,
-    priorite:   d.priorite,
-    permis:     d.permis,
-    usage:      d.usage,
-    seclin:     _liveScope === 'seclin' ? '1' : _liveScope === 'seclin_beauvois' ? 'seclin_beauvois' : '0',
-  });
-
-  try {
-    const resp = await fetch(`${WORKER_URL}/search?${params}`);
-    if(!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const data = await resp.json();
-    const rawResults = data.results || [];
-    const budMax = parseBudgetMax(d.budget);
-    const kmMax  = d.kmMax ? parseInt(d.kmMax, 10) : 0;
-    const results = rawResults
-      .filter(v => budMax <= 0 || !v.price || v.price <= budMax)
-      .filter(v => kmMax     <= 0 || v.neuf !== false || !v.km   || v.km   <= kmMax)
-      .filter(v => !d.anneeMin || v.neuf !== false || !v.annee || v.annee <= parseInt(d.anneeMin,10));
-
-    if(!results.length){
-      badge.textContent='0 résultat';badge.className='live-badge error';
-      cards.innerHTML=`<div class="live-empty">Aucun véhicule correspondant en stock actuellement.<br>
-        <a href="https://www.libertium.fr/vehicule" target="_blank" rel="noopener">Voir tout le stock →</a></div>`;
-      return;
-    }
-
-    const scopeLabel = _liveScope === 'seclin' ? 'Seclin' : _liveScope === 'seclin_beauvois' ? 'Seclin + Beauvois' : 'réseau';
-    badge.textContent=`${results.length} véhicule${results.length>1?'s':''} · ${data.total||'?'} en stock · ${scopeLabel}`;
-    badge.className='live-badge';
-
-    const rankCls=['r1','r2','r3','',''];
-    const rankLbl=['Top 1','Top 2','Top 3','Top 4','Top 5'];
-
-    cards.innerHTML = results.map((v,i) => {
-      const priceStr = v.price ? v.price.toLocaleString('fr-FR')+'&nbsp;€' : 'Prix non communiqué';
-      const neufStr  = v.neuf===true ? '<span style="background:#dcfce7;color:#166534;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700">Neuf</span>'
-                     : v.neuf===false ? '<span style="background:#fef9c3;color:#854d0e;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700">Occasion</span>' : '';
-      const marqueStr = v.marque ? `<span style="font-size:12px;color:#64748b">${esc(v.marque)}</span> · ` : '';
-      const anneeStr  = v.annee  ? `<span style="font-size:12px;color:#64748b">${v.annee}</span> · ` : '';
-      const kmStr     = v.km     ? `<span style="font-size:12px;color:#64748b">${v.km.toLocaleString('fr-FR')} km</span>` : '';
-      const concStr   = v.concession ? `<div style="font-size:11px;color:#94a3b8;margin-top:4px">📍 ${esc(v.concession)}</div>` : '';
-
-      return `<div class="live-vehicle-card">
-        <div class="lvc-head">
-          <div class="lvc-title">${esc(v.title)}</div>
-          <div class="lvc-rank ${rankCls[i]||''}">${rankLbl[i]||''}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
-          ${neufStr}
-          <span style="font-size:13px;font-weight:700;color:#0f172a">${priceStr}</span>
-        </div>
-        <div style="margin-bottom:6px">${marqueStr}${anneeStr}${kmStr}</div>
-        ${concStr}
-        <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <a class="lvc-link" href="${esc(v.url)}" target="_blank" rel="noopener">Voir la fiche →</a>
-          <span class="lvc-match ${v.score>=70?'high':v.score>=45?'mid':'low'}">${v.score}/100</span>
-        </div>
-      </div>`;
-    }).join('');
-
-    if(data.cachedAt){
-      cards.innerHTML += `<div style="font-size:11px;color:#94a3b8;text-align:right;margin-top:8px">
-        Stock mis à jour le ${new Date(data.cachedAt).toLocaleString('fr-FR')}</div>`;
-    }
-
-  } catch(err){
-    badge.textContent='Erreur';badge.className='live-badge error';
-    cards.innerHTML=`<div class="live-empty">Erreur : ${esc(String(err.message||err))}<br>
-      Vérifiez que le Worker est déployé et que l'URL est correcte.</div>`;
-  } finally {
-    btn.classList.remove('searching');btn.disabled=false;icon.textContent='🔎';txt.textContent='Relancer la recherche';
-  }
-}
-
-// ── LE BON COIN ──────────────────────────────────────────────────────────────
-function openLbc() {
-  const d = read();
-
-  // Catégorie LBC : Caravaning = catégorie 7
-  // Hauts-de-France = région 32 sur LBC
-  const base = 'https://www.leboncoin.fr/recherche';
-  const params = new URLSearchParams();
-
-  params.set('category', '4');          // Caravaning
-  params.set('locations', 'r_32');      // Hauts-de-France
-
-  // Neuf / Occasion
-  if (d.achat === 'Neuf')      params.set('ad_type', 'professional');
-  if (d.achat === 'Occasion')  params.set('ad_type', 'private,professional');
-
-  // Budget
-  const budgetMap = {
-    'Moins de 30 000 €': [0, 30000],
-    'Maxi 40 000 €':     [0, 40000],
-    'Maxi 50 000 €':     [0, 50000],
-    'Maxi 60 000 €':     [0, 60000],
-    'Maxi 70 000 €':     [0, 70000],
-    'Maxi 80 000 €':     [0, 80000],
-    '80 000 € et +':     [80000, ''],
-  };
-  if (d.budget && budgetMap[d.budget]) {
-    const [min, max] = budgetMap[d.budget];
-    if (min) params.set('price', min + '-' + (max || ''));
-    else if (max) params.set('price', '1-' + max);
-  }
-
-  // Kilométrage max (LBC paramètre : mileage=0-XXXXX)
-  if (d.kmMax && parseInt(d.kmMax, 10) > 0) {
-    params.set('mileage', '0-' + parseInt(d.kmMax, 10));
-  }
-
-  // Année min (LBC paramètre : regdate=AAAA-AAAA)
-  if (d.anneeMin && parseInt(d.anneeMin, 10) > 0) {
-    params.set('regdate', parseInt(d.anneeMin, 10) + '-' + new Date().getFullYear());
-  }
-
-  // Recherche texte selon le type de véhicule
-  const typeMap = {
-    'Camping Car':    'camping car',
-    'Caravane':       'caravane',
-    'Van':            'van aménagé',
-    'Fourgon':        'fourgon aménagé',
-    'Van Et Fourgon': 'van fourgon',
-  };
-  if (d.typeVehicle && typeMap[d.typeVehicle]) {
-    params.set('text', typeMap[d.typeVehicle]);
-  }
-
-  const url = base + '?' + params.toString();
-  window.open(url, '_blank', 'noopener');
-}
-
-let _liveScope = 'seclin';
-
-function setScope(scope){
-  _liveScope = scope;
-  const on  = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #0f62fe;background:#0f62fe;color:#fff';
-  const off = 'flex:1;padding:9px 12px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;border:2px solid #d8e1ee;background:#f8fbff;color:#334155';
-  document.getElementById('btnScopeSeclin').style.cssText        = scope === 'seclin'          ? on : off;
-  document.getElementById('btnScopeSeclinBeauvois').style.cssText = scope === 'seclin_beauvois' ? on : off;
-  document.getElementById('btnScopeReseau').style.cssText         = scope === 'reseau'          ? on : off;
-  const labels = {
-    seclin:          'Rechercher dans le stock Seclin',
-    seclin_beauvois: 'Rechercher dans le stock Seclin + Beauvois',
-    reseau:          'Rechercher dans tout le réseau Libertium',
-  };
-  document.getElementById('btnLiveTxt').textContent = labels[scope] || labels.seclin;
-}
-
-function parseBudgetMax(budget){
-  // Retourne le plafond avec 10% de tolérance (sauf illimité)
-  const map={
-    'Moins de 30 000 €': 33000,   // 30 000 × 1,10
-    'Maxi 40 000 €':     44000,   // 40 000 × 1,10
-    'Maxi 50 000 €':     55000,   // 50 000 × 1,10
-    'Maxi 60 000 €':     66000,   // 60 000 × 1,10
-    'Maxi 70 000 €':     77000,   // 70 000 × 1,10
-    'Maxi 80 000 €':     88000,   // 80 000 × 1,10
-    '80 000 € et +':     0,       // pas de plafond
-  };
-  return (budget in map) ? map[budget] : 0;
+  document.getElementById('reprBoite').addEventListener('change',render);
+  document.getElementById('reprEnergie').addEventListener('change',render);
+  // Fermer modal en cliquant l'overlay
+  document.getElementById('modalEmail').addEventListener('click',function(e){if(e.target===this)closeModal('modalEmail');});
 }
 
 init(); bind(); render();
