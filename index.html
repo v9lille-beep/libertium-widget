@@ -373,6 +373,7 @@
     <div class="form-grid">
       <div class="field"><label for="delai">Délai d'achat</label><select id="delai"><option value="">—</option><option>Immédiat</option><option>1 à 3 mois</option><option>3 à 6 mois</option><option>6 mois et plus</option><option>Se renseigne</option></select></div>
       <div class="field"><label for="reprise">Reprise véhicule</label><select id="reprise"><option value="">—</option><option>Oui</option><option>Non</option><option>À étudier</option></select></div>
+      <div class="field"><label for="origine">Origine du contact</label><select id="origine"><option value="">—</option><option>Recommandation (ami / famille)</option><option>Client fidèle / déjà venu</option><option>Client SAV</option><option>Passage en concession</option><option>Site web Libertium</option><option>Le Bon Coin</option><option>Salon / événement</option><option>Réseaux sociaux</option><option>Autre</option></select></div>
     </div>
     <div class="reprise-fields" id="repriseFields">
       <h3 style="margin-top:0">Véhicule à reprendre</h3>
@@ -599,7 +600,7 @@
 const FORM_IDS=['vendeur','civilite','prenom','nom',
   'telephone','mobile','email','adresse1','adresse2','codePostal','ville',
   'typeVehicle','budget','achat','kmMax','anneeMin','voyageurs','permis','porteurSouhaite','equipSouhaite','modeleSouhaite','besoin','notes',
-  'delai','reprise',
+  'delai','reprise','origine',
   'reprGamme','reprPorteur','reprEquip','reprModele','reprMec','reprKm','reprEtat'];
 
 const VEHICLES=[
@@ -1014,11 +1015,15 @@ function computeSoncas(d){
   if(d.kmMax && parseInt(d.kmMax) > 80000) scores.A += 10;
   if(/budget|prix|moins cher|économ|rapport|occasion|bonne affaire|financement/i.test(d.besoin+d.notes)) scores.A += 30;
 
-  // Sympathie — renseignements complets, recommandation, notes personnelles
-  if(d.nom && d.prenom) scores.S2 += 15;
-  if(d.email || d.mobile) scores.S2 += 10;
-  if(d.besoin && d.besoin.length > 30) scores.S2 += 15;
-  if(/recommandé|ami|famille|voisin|conseil|confiance|sympa|accueil/i.test(d.besoin+d.notes)) scores.S2 += 30;
+  // Sympathie — basé sur l'origine du contact (signal comportemental fiable)
+  const origine = d.origine || '';
+  if(origine === 'Recommandation (ami / famille)')  scores.S2 += 60;
+  if(origine === 'Client fidèle / déjà venu')       scores.S2 += 55;
+  if(origine === 'Client SAV')                      scores.S2 += 45;
+  if(origine === 'Salon / événement')               scores.S2 += 20;
+  if(origine === 'Passage en concession')           scores.S2 += 15;
+  // Signaux textuels secondaires dans besoin/notes
+  if(/recommandé|ami|famille|voisin|conseil|confiance|sympa|accueil|déjà client|revenu/i.test(d.besoin+d.notes)) scores.S2 += 25;
 
   // Normaliser sur 100
   const max = Math.max(...Object.values(scores), 1);
@@ -1149,7 +1154,7 @@ function render(){
   renderSoncas(d);
 
   document.getElementById('chips').innerHTML=
-    ['vendeur','typeVehicle','budget','voyageurs','porteurSouhaite','equipSouhaite','modeleSouhaite']
+    ['vendeur','typeVehicle','budget','voyageurs','porteurSouhaite','equipSouhaite','modeleSouhaite','origine']
     .map(k=>d[k]).filter(Boolean).map(x=>`<span class="chip">${x}</span>`).join('');
 
   document.getElementById('pvSummaryBox').textContent=[
@@ -1612,6 +1617,7 @@ function buildPdfHtml(){
   <!-- QUALIFICATION -->
   ${sec('Qualification', [
     ['Délai d\'achat', d.delai],
+    ['Origine contact', d.origine],
     ['Reprise',        d.reprise],
     ['Score',          score+'/100 — '+scoreLbl],
   ], '📋')}
@@ -1716,7 +1722,7 @@ async function saveToSheet(){
   // Sauvegarder aussi en historique local
   saveToHistory(d, score);
   const now=new Date().toLocaleString('fr-FR');
-  const row={'Date / Heure':now,'Vendeur':d.vendeur,'Civilité':d.civilite,'Prénom':d.prenom,'Nom':d.nom,'Téléphone':d.telephone,'Mobile':d.mobile,'Email':d.email,'Adresse 1':d.adresse1,'Adresse 2':d.adresse2,'Code postal':d.codePostal,'Ville':d.ville,'Type véhicule':d.typeVehicle,'Budget':d.budget,'Neuf ou occasion':d.achat,'Km max':d.kmMax?d.kmMax+' km':'','Année min':d.anneeMin||'','Voyageurs':d.voyageurs,'Permis':d.permis,'Porteur souhaité':d.porteurSouhaite,'Équipementier souhaité':d.equipSouhaite,'Modèle souhaité':d.modeleSouhaite,'Besoin exprimé':d.besoin,'Notes commercial':d.notes,'Délai achat':d.delai,'Reprise':d.reprise,'Score commercial':score,'Reprise gamme':d.reprGamme,'Reprise porteur':d.reprPorteur,'Reprise équip.':d.reprEquip,'Reprise modèle':d.reprModele,'Reprise MEC':d.reprMec,'Reprise km':d.reprKm,'Reprise boite':d.reprBoite,'Reprise énergie':d.reprEnergie,'Reprise état':d.reprEtat};
+  const row={'Date / Heure':now,'Vendeur':d.vendeur,'Civilité':d.civilite,'Prénom':d.prenom,'Nom':d.nom,'Téléphone':d.telephone,'Mobile':d.mobile,'Email':d.email,'Adresse 1':d.adresse1,'Adresse 2':d.adresse2,'Code postal':d.codePostal,'Ville':d.ville,'Type véhicule':d.typeVehicle,'Budget':d.budget,'Neuf ou occasion':d.achat,'Km max':d.kmMax?d.kmMax+' km':'','Année min':d.anneeMin||'','Voyageurs':d.voyageurs,'Permis':d.permis,'Porteur souhaité':d.porteurSouhaite,'Équipementier souhaité':d.equipSouhaite,'Modèle souhaité':d.modeleSouhaite,'Besoin exprimé':d.besoin,'Notes commercial':d.notes,'Délai achat':d.delai,'Origine contact':d.origine,'Reprise':d.reprise,'Score commercial':score,'Reprise gamme':d.reprGamme,'Reprise porteur':d.reprPorteur,'Reprise équip.':d.reprEquip,'Reprise modèle':d.reprModele,'Reprise MEC':d.reprMec,'Reprise km':d.reprKm,'Reprise boite':d.reprBoite,'Reprise énergie':d.reprEnergie,'Reprise état':d.reprEtat};
   btn.disabled=true;btn.textContent='⏳ Sauvegarde…';btn.style.background='#64748b';
   try{
     let iframe=document.getElementById('_save_iframe');
