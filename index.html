@@ -130,6 +130,23 @@
     .lvc-match.high{background:#dcfce7;color:#166534}.lvc-match.mid{background:#fef9c3;color:#854d0e}.lvc-match.low{background:#f1f5f9;color:#64748b}
     .live-empty{text-align:center;padding:20px;color:#94a3b8;font-size:13px;border:1px dashed #cbd5e1;border-radius:12px}
 
+
+    /* ── SONCAS ── */
+    .soncas-box{margin-bottom:14px;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+    .soncas-head{padding:9px 14px;background:linear-gradient(90deg,#1A3557,#2f5aa8);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .soncas-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+    .soncas-cell{padding:8px 10px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:default;transition:background .15s}
+    .soncas-cell:nth-child(3n){border-right:none}
+    .soncas-cell:nth-last-child(-n+3){border-bottom:none}
+    .soncas-cell.active{background:#eff6ff}
+    .soncas-cell.dominant{background:#dbeafe;border:2px solid #0f62fe}
+    .soncas-letter{font-size:18px;font-weight:800;line-height:1}
+    .soncas-label{font-size:11px;font-weight:700;margin-top:1px}
+    .soncas-score{font-size:10px;color:var(--muted);margin-top:2px}
+    .soncas-bar{height:3px;border-radius:2px;margin-top:4px;background:#e2e8f0;overflow:hidden}
+    .soncas-fill{height:100%;border-radius:2px;transition:width .4s}
+    .soncas-tip{padding:10px 14px;background:#f8fbff;border-top:1px solid var(--border);font-size:12px;color:#334155;line-height:1.6;display:none}
+    .soncas-tip.show{display:block}
     /* ── HISTORIQUE ── */
     .hist-item{border:1px solid var(--border);border-radius:12px;padding:11px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .15s,background .15s}
     .hist-item:hover{border-color:var(--primary);background:#f0f6ff}
@@ -406,6 +423,11 @@
   <!-- TAB APERCU -->
   <div id="tab-apercu" class="tab-pane active">
     <div class="chips" id="chips"></div>
+    <div class="soncas-box" id="soncasBox" style="display:none">
+      <div class="soncas-head">🧠 Profil SONCAS <span id="soncasDominant" style="margin-left:auto;font-size:11px;font-weight:400;opacity:.8"></span></div>
+      <div class="soncas-grid" id="soncasGrid"></div>
+      <div class="soncas-tip" id="soncasTip"></div>
+    </div>
     <div class="summary-box"><p id="pvSummaryBox">Renseigne les champs à gauche pour générer le résumé du projet client.</p></div>
     <div id="results" style="display:none"></div>
     <div id="topExplanation" style="display:none"></div>
@@ -924,6 +946,143 @@ function scoreVehicle(v,d){
 }
 
 // ══════════════════════════════════════════════════════════
+// SONCAS — Détection automatique du profil
+// ══════════════════════════════════════════════════════════
+const SONCAS_DEF = {
+  S: {
+    label:'Sécurité', color:'#1d4ed8', bg:'#dbeafe', emoji:'🛡',
+    tip:'Ce client a besoin d\'être rassuré. Insistez sur les garanties, le SAV, la réputation Libertium (55 ans, 368 avis), la livraison préparée. Évitez de brusquer la décision.',
+    args:['Garantie constructeur','SAV Libertium réactif','55 ans d\'ancienneté Lestringuez','368 avis Google 4,2/5','Livraison contrôlée et préparée']
+  },
+  O: {
+    label:'Orgueil', color:'#7c3aed', bg:'#ede9fe', emoji:'👑',
+    tip:'Ce client veut se distinguer et valoriser son choix. Parlez de "connaisseur", valorisez les finitions premium, les modèles haut de gamme. "Vous avez raison de regarder cet intégral."',
+    args:['Finitions premium','Modèles exclusifs','Marque reconnue','Équipements haut de gamme','Statut du propriétaire']
+  },
+  N: {
+    label:'Nouveauté', color:'#0369a1', bg:'#e0f2fe', emoji:'✨',
+    tip:'Ce client est attiré par l\'innovation et les dernières sorties. Mettez en avant le millésime en cours, les nouvelles fonctionnalités, les évolutions techniques récentes.',
+    args:['Dernières technologies','Millésime actuel','Nouvelles fonctionnalités','Évolutions série']
+  },
+  C: {
+    label:'Confort', color:'#166534', bg:'#dcfce7', emoji:'🛋',
+    tip:'Ce client veut de la praticité et éviter les complications. Insistez sur la prise en main facile, la livraison clé en main, le RDV en ligne, la simplicité du SAV.',
+    args:['Prise en main facile','Livraison clé en main','RDV atelier en ligne','Intérieur spacieux','Équipements pratiques']
+  },
+  A: {
+    label:'Argent', color:'#b45309', bg:'#fef3c7', emoji:'💰',
+    tip:'Ce client optimise son budget. Démontrez la valeur (pas le prix), comparez au coût hôtel/location, valorisez la reprise. Ne bradez pas — cela décrédibilise le véhicule.',
+    args:['Rapport qualité/prix','Financement avantageux','Valorisation reprise','Coût vs hôtel/location','Occasion certifiée']
+  },
+  S2: {
+    label:'Sympathie', color:'#0f766e', bg:'#ccfbf1', emoji:'🤝',
+    tip:'Ce client achète la relation avant le produit. Soyez humain, intéressez-vous à son projet de vie, retenez les détails personnels. Ce profil est le plus fidèle — et le plus sensible à un mauvais accueil.',
+    args:['Accueil chaleureux','Suivi personnalisé','Recommandation client','Relation de confiance','Après-vente attentif']
+  }
+};
+
+function computeSoncas(d){
+  const scores = { S:0, O:0, N:0, C:0, A:0, S2:0 };
+
+  // Sécurité — client prudent, délai long, occasion, reprise, SAV
+  if(d.delai === 'Se renseigne') scores.S += 25;
+  if(d.delai === '6 mois et plus') scores.S += 15;
+  if(d.achat === 'Occasion') scores.S += 10;
+  if(d.reprise === 'Oui' || d.reprise === 'À étudier') scores.S += 15;
+  if(d.reprEtat === 'Passable' || d.reprEtat === 'Triste') scores.S += 10;
+  if(/garanti|sécuri|fiable|assur|peur|inqui|sûr|tranquil/i.test(d.besoin+d.notes)) scores.S += 30;
+
+  // Orgueil — budget élevé, intégral, grand confort, marque premium
+  if(['80 000 € et +','Maxi 80 000 €','Maxi 70 000 €'].includes(d.budget)) scores.O += 20;
+  if(d.typeVehicle === 'Camping Car') scores.O += 10;
+  if(['Carthago','Concorde','Morelo','Le Voyageur','Frankia'].includes(d.equipSouhaite)) scores.O += 25;
+  if(/meilleur|premium|haut de gamme|luxe|prestig|qualité|premier|exclusif/i.test(d.besoin+d.notes)) scores.O += 30;
+
+  // Nouveauté — neuf, modèle récent, année min récente
+  if(d.achat === 'Neuf') scores.N += 30;
+  if(d.anneeMin >= 2023) scores.N += 20;
+  if(/nouveau|récent|dernier|noveau|modern|innovation|2024|2025|2026/i.test(d.besoin+d.notes)) scores.N += 30;
+
+  // Confort — grand confort, voyageurs nombreux, salle de bain, capucine/intégral
+  if(d.voyageurs === '5 à 6' || d.voyageurs === '7 et +') scores.C += 20;
+  if(['Maxi 60 000 €','Maxi 70 000 €','Maxi 80 000 €','80 000 € et +'].includes(d.budget)) scores.C += 10;
+  if(/confort|spacieux|pratique|facile|simple|bien-être|espace|grand/i.test(d.besoin+d.notes)) scores.C += 30;
+
+  // Argent — budget serré, occasion, km élevé, recherche bonne affaire
+  if(['Moins de 30 000 €','Maxi 40 000 €','Maxi 50 000 €'].includes(d.budget)) scores.A += 25;
+  if(d.achat === 'Occasion') scores.A += 15;
+  if(d.kmMax && parseInt(d.kmMax) > 80000) scores.A += 10;
+  if(/budget|prix|moins cher|économ|rapport|occasion|bonne affaire|financement/i.test(d.besoin+d.notes)) scores.A += 30;
+
+  // Sympathie — renseignements complets, recommandation, notes personnelles
+  if(d.nom && d.prenom) scores.S2 += 15;
+  if(d.email || d.mobile) scores.S2 += 10;
+  if(d.besoin && d.besoin.length > 30) scores.S2 += 15;
+  if(/recommandé|ami|famille|voisin|conseil|confiance|sympa|accueil/i.test(d.besoin+d.notes)) scores.S2 += 30;
+
+  // Normaliser sur 100
+  const max = Math.max(...Object.values(scores), 1);
+  Object.keys(scores).forEach(k => scores[k] = Math.round(scores[k] / max * 100));
+  return scores;
+}
+
+function renderSoncas(d){
+  const box = document.getElementById('soncasBox');
+  // Afficher seulement si au moins un champ pertinent est renseigné
+  const hasData = d.budget||d.achat||d.voyageurs||d.besoin||d.notes||d.delai||d.typeVehicle||d.equipSouhaite;
+  if(!hasData){ box.style.display='none'; return; }
+  box.style.display='block';
+
+  const scores = computeSoncas(d);
+  const keys = ['S','O','N','C','A','S2'];
+  const sorted = [...keys].sort((a,b)=>scores[b]-scores[a]);
+  const dominant = sorted[0];
+  const second = sorted[1];
+
+  document.getElementById('soncasDominant').textContent =
+    `Dominant : ${SONCAS_DEF[dominant].label}${scores[second]>60?' + '+SONCAS_DEF[second].label:''}`;
+
+  const grid = document.getElementById('soncasGrid');
+  grid.innerHTML = keys.map(k => {
+    const def = SONCAS_DEF[k];
+    const sc = scores[k];
+    const isDom = k === dominant;
+    const isActive = sc >= 40;
+    return `<div class="soncas-cell${isDom?' dominant':isActive?' active':''}"
+      onclick="toggleSoncasTip('${k}')"
+      style="${isDom?'border:2px solid '+def.color+';background:'+def.bg+';':''}"
+      title="Cliquez pour les arguments ${def.label}">
+      <div class="soncas-letter" style="color:${def.color}">${def.emoji} ${k==='S2'?'S':k}</div>
+      <div class="soncas-label" style="color:${def.color}">${def.label}</div>
+      <div class="soncas-score">${sc}/100</div>
+      <div class="soncas-bar"><div class="soncas-fill" style="width:${sc}%;background:${def.color}"></div></div>
+    </div>`;
+  }).join('');
+
+  // Afficher le tip du profil dominant automatiquement
+  showSoncasTip(dominant);
+}
+
+let _soncasActive = null;
+function toggleSoncasTip(key){
+  if(_soncasActive === key){ hideSoncasTip(); return; }
+  showSoncasTip(key);
+}
+function showSoncasTip(key){
+  _soncasActive = key;
+  const def = SONCAS_DEF[key];
+  const tip = document.getElementById('soncasTip');
+  tip.innerHTML = `<strong style="color:${def.color}">${def.emoji} ${def.label} — Arguments clés :</strong><br>
+    ${def.args.map(a=>`<span style="display:inline-block;margin:3px 4px 0 0;padding:2px 8px;background:${def.bg};color:${def.color};border-radius:999px;font-size:11px;font-weight:700">${a}</span>`).join('')}
+    <div style="margin-top:8px;font-size:12px;color:#475569;line-height:1.6">${def.tip}</div>`;
+  tip.classList.add('show');
+}
+function hideSoncasTip(){
+  _soncasActive = null;
+  document.getElementById('soncasTip').classList.remove('show');
+}
+
+// ══════════════════════════════════════════════════════════
 // RENDER PRINCIPAL
 // ══════════════════════════════════════════════════════════
 function render(){
@@ -987,6 +1146,7 @@ function render(){
   const score=computeScore(d);
   updateScoreUI(score);
   renderRepriseScore(d);
+  renderSoncas(d);
 
   document.getElementById('chips').innerHTML=
     ['vendeur','typeVehicle','budget','voyageurs','porteurSouhaite','equipSouhaite','modeleSouhaite']
